@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>أحتساب الراتب لتواريخ محددة</title>
+  <title>أحتساب راتب لفترة محددة</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -85,29 +85,17 @@
     .approval-section {
       display: flex;
       justify-content: space-between;
-      margin-top: 30px;
-    }
-    .approval-box {
-      text-align: center;
-      padding: 15px;
-      border: 1px solid #8B0000;
-      border-radius: 5px;
-      width: 45%;
-    }
-    .approval-line {
-      font-weight: bold;
       margin-top: 40px;
+      padding: 15px;
+      border-top: 2px dashed #8B0000;
     }
-    .footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: #8B0000;
-      color: white;
-      text-align: center;
-      padding: 10px;
-      font-size: 16px;
+    .approval-left {
+      text-align: left;
+      direction: ltr;
+      font-weight: bold;
+    }
+    .approval-right {
+      text-align: right;
       font-weight: bold;
     }
     .print-btn {
@@ -147,17 +135,13 @@
       .print-btn {
         display: none;
       }
-      .footer {
+      .approval-section {
         position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: white;
-        color: black;
-        border-top: 2px solid #8B0000;
-      }
-      .approval-box {
-        page-break-inside: avoid;
+        bottom: 20mm;
+        left: 10mm;
+        right: 10mm;
+        border-top: 2px dashed #8B0000;
+        padding-top: 10mm;
       }
     }
   </style>
@@ -226,33 +210,26 @@
     <div class="result">
       عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
       إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
-      المجموع المستحق للفترةالمحتسبة: <span id="totalPeriod">0</span><br>
+      المجموع المستحق للفترة المحتسبة: <span id="totalPeriod">0</span><br>
       أستقطاع اشتراكات صندوق الحماية الاجتماعية (8%): <span id="deduction">0</span><br>
       ✅ صافي المستحق: <span id="net">0</span>
     </div>
 
     <div class="approval-section">
-      <div class="approval-box" style="text-align: left; direction: ltr;">
-        <div class="approval-line">اعتماد مدير الدائرة:</div>
-        <div style="margin-top: 60px;">_________________________</div>
-        <div>الاسم: _________________________</div>
-        <div>التاريخ: _________________________</div>
+      <div class="approval-left">
+        اعداد ومراجعة: __________________
       </div>
-      
-      <div class="approval-box" style="text-align: right;">
-        <div class="approval-line">مراجعة رئيس القسم:</div>
-        <div style="margin-top: 60px;">_________________________</div>
-        <div>الاسم: _________________________</div>
-        <div>التاريخ: _________________________</div>
+      <div class="approval-right">
+        اعتمده: __________________
       </div>
     </div>
 
     <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
   </div>
-
-  <div class="footer">
+  
+‏  <div class="footer">
     إعداد الموظف: محمد جعبوب - قسم الرواتب والمصروفات - دائرة الشؤون المالية
-  </div>
+‏  </div>
 
   <script>
     const startDate = document.getElementById("startDate");
