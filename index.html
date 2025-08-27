@@ -5,16 +5,21 @@
   <title>أحتساب راتب لفترة محددة</title>
   <style>
     body {
-      font-family:  Arial, sans-serif;
+      font-family: Arial, sans-serif;
       direction: rtl;
       margin: 40px;
-      background: #fff;
+      background: #f9f9f9;
     }
     .header {
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 20px;
+      text-align: center;
+      padding: 15px;
+      background: linear-gradient(to left, #f8f8f8, #e8e8e8);
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     .header img {
       width: 80px;
@@ -22,60 +27,108 @@
       margin-left: 20px;
     }
     .header-text {
-      text-align: center;
       font-weight: bold;
       font-size: 18px;
       line-height: 1.8;
+    }
+    .header-line {
+      font-weight: 900; /* خط سميك جدًا */
+      color: #8B0000; /* أحمر غامق */
+      margin: 5px 0;
+      font-size: 20px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+    .separator {
+      border-top: 2px solid #8B0000;
+      margin: 15px 0;
+      width: 80%;
+    }
+    .approval-line {
+      margin-top: 20px;
+      font-weight: bold;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border-radius: 5px;
+      border: 1px dashed #8B0000;
+      width: 60%;
+      margin-left: auto;
+      margin-right: auto;
     }
     label {
       display: inline-block;
       width: 180px;
       margin: 5px 0;
+      font-weight: bold;
     }
     input {
-      padding: 5px;
+      padding: 8px;
       width: 200px;
-      margin: 3px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    input[readonly] {
+      background-color: #f5f5f5;
+      color: #333;
     }
     .result {
-      margin-top: 15px;
+      margin-top: 20px;
       font-weight: bold;
       color: green;
       line-height: 1.8;
+      padding: 15px;
+      background-color: #f0f9f0;
+      border-radius: 5px;
+      border: 1px solid #c3e6c3;
     }
     .container {
-      padding: 20px;
-      border: 1px solid #000;
-      border-radius: 8px;
-      width: 700px;
+      padding: 25px;
+      border: 2px solid #8B0000;
+      border-radius: 10px;
+      width: 750px;
       margin: auto;
+      background: white;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
     .footer {
-      position: fixed;
-      bottom: 20px;
-      left: 40px;
+      margin-top: 30px;
+      text-align: center;
       font-size: 14px;
       font-weight: bold;
+      padding: 10px;
+      border-top: 1px solid #ccc;
     }
     .print-btn {
       margin-top: 20px;
-      padding: 10px 20px;
+      padding: 12px 25px;
       font-size: 16px;
-      background: #4CAF50;
+      background: #8B0000;
       color: white;
       border: none;
       cursor: pointer;
       border-radius: 5px;
+      transition: background 0.3s;
     }
     .print-btn:hover {
-      background: #45a049;
+      background: #700000;
+    }
+    h3 {
+      text-align: center;
+      color: #8B0000;
+      margin-bottom: 20px;
+      font-size: 24px;
     }
     @media print {
       .print-btn {
         display: none;
       }
       body {
-        margin: 20mm;
+        margin: 10mm;
+        background: white;
+      }
+      .container {
+        border: none;
+        box-shadow: none;
       }
     }
   </style>
@@ -84,9 +137,9 @@
 
   <div class="header">
     <div class="header-text">
-      <div>وزارة الصحة سلطنة عمان</div>
-      <div>المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
-      <div>دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
+      <div class="header-line">وزارة الصحة سلطنة عمان</div>
+      <div class="header-line">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
+      <div class="header-line">دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
     </div>
   </div>
 
@@ -139,7 +192,7 @@
       <input type="text" id="costLivingResult" readonly><br>
     </div>
 
-    <hr>
+    <div class="separator"></div>
 
     <div class="result">
       عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
@@ -149,16 +202,30 @@
       ✅ صافي المستحق: <span id="net">0</span>
     </div>
 
-    <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
+    <div class="approval-line">
+      اعتماد مدير الدائرة: _________________________
+    </div>
+
+    <div style="text-align: center;">
+      <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
+    </div>
   </div>
 
   <div class="footer">
-    إعداد الموظف : محمد جعبوب - قسم الرواتب
+    إعداد الموظف: محمد جعبوب - قسم الرواتب
   </div>
 
   <script>
     const startDate = document.getElementById("startDate");
     const endDate = document.getElementById("endDate");
+
+    // تعيين التواريخ الافتراضية لتكون الشهر الحالي
+    const today = new Date();
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    
+    startDate.valueAsDate = firstDayOfMonth;
+    endDate.valueAsDate = lastDayOfMonth;
 
     const allowances = [
       {id:"basic", result:"basicResult"},
@@ -232,11 +299,24 @@
       net.textContent = netValue.toFixed(3);
     }
 
+    // إضافة قيم افتراضية للبدلات لتجربة البرنامج
+    document.getElementById("basic").value = 1000;
+    document.getElementById("housing").value = 300;
+    document.getElementById("electricity").value = 50;
+    document.getElementById("water").value = 30;
+    document.getElementById("phone").value = 20;
+    document.getElementById("transport").value = 100;
+    document.getElementById("professional").value = 200;
+    document.getElementById("costLiving").value = 150;
+
     startDate.addEventListener("change", calculate);
     endDate.addEventListener("change", calculate);
     allowances.forEach(item=>{
       document.getElementById(item.id).addEventListener("input", calculate);
     });
+
+    // حساب القيم عند تحميل الصفحة
+    window.onload = calculate;
   </script>
 
 </body>
