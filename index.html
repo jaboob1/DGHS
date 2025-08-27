@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>أحتساب الراتب للفترة</title>
+  <title>أحتساب راتب لفترة محددة</title>
   <style>
     body {
       font-family:  Arial, sans-serif;
@@ -12,9 +11,20 @@
       background: #fff;
     }
     .header {
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin-bottom: 20px;
+    }
+    .header img {
+      width: 80px;
+      height: 80px;
+      margin-left: 20px;
+    }
+    .header-text {
+      text-align: center;
       font-weight: bold;
+      font-size: 18px;
       line-height: 1.8;
     }
     label {
@@ -73,13 +83,16 @@
 <body>
 
   <div class="header">
-    <div>وزارة الصحة سلطنة عمان</div>
-    <div>المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
-    <div>دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Emblem_of_Oman.svg/1200px-Emblem_of_Oman.svg.png" alt="شعار وزارة الصحة">
+    <div class="header-text">
+      <div>وزارة الصحة سلطنة عمان</div>
+      <div>المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
+      <div>دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
+    </div>
   </div>
 
   <div class="container">
-    <h3>حساب البدلات للفترة</h3>
+    <h3>أحتساب رواتب لفترة محددة</h3>
 
     <label>اسم الموظف:</label>
     <input type="text" id="employeeName" placeholder="الاسم الرباعي"><br>
@@ -131,9 +144,9 @@
 
     <div class="result">
       عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
-      مجموع البدلات: <span id="totalAllowances">0</span><br>
-      المجموع المستحق للفترة: <span id="totalPeriod">0</span><br>
-      اشتراكات صندوق الحماية الاجتماعية (8%): <span id="deduction">0</span><br>
+      إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
+      المجموع المستحق للفترةالمحتسبة: <span id="totalPeriod">0</span><br>
+      أستقطاع اشتراكات صندوق الحماية الاجتماعية (8%): <span id="deduction">0</span><br>
       ✅ صافي المستحق: <span id="net">0</span>
     </div>
 
@@ -206,18 +219,18 @@
           current.setDate(current.getDate() + 1);
         }
 
-        resultBox.value = sum.toFixed(2);
+        resultBox.value = sum.toFixed(3);  // 👈 3 منازل عشرية
         totalCalc += sum;
       });
 
-      totalAllowances.textContent = totalBase.toFixed(2);
-      totalPeriod.textContent = totalCalc.toFixed(2);
+      totalAllowances.textContent = totalBase.toFixed(3);
+      totalPeriod.textContent = totalCalc.toFixed(3);
 
       let ded = totalCalc * 0.08;
-      deduction.textContent = ded.toFixed(2);
+      deduction.textContent = ded.toFixed(3);
 
       let netValue = totalCalc - ded;
-      net.textContent = netValue.toFixed(2);
+      net.textContent = netValue.toFixed(3);
     }
 
     startDate.addEventListener("change", calculate);
