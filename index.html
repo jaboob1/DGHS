@@ -2,13 +2,16 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>أحتساب راتب لفترة محددة</title>
+  <title>أحتساب الراتب لتواريخ محددة</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       direction: rtl;
-      margin: 40px;
+      margin: 0;
+      padding: 20px;
       background: #f9f9f9;
+      position: relative;
+      min-height: 100vh;
     }
     .header {
       display: flex;
@@ -32,27 +35,20 @@
       line-height: 1.8;
     }
     .header-line {
-      font-weight: 900; /* خط سميك جدًا */
-      color: #8B0000; /* أحمر غامق */
+      font-weight: 900;
+      color: #8B0000;
       margin: 5px 0;
       font-size: 20px;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
-    .separator {
-      border-top: 2px solid #8B0000;
-      margin: 15px 0;
-      width: 80%;
-    }
-    .approval-line {
-      margin-top: 20px;
-      font-weight: bold;
-      padding: 10px;
-      background-color: #f0f0f0;
-      border-radius: 5px;
-      border: 1px dashed #8B0000;
-      width: 60%;
-      margin-left: auto;
-      margin-right: auto;
+    .container {
+      padding: 25px;
+      border: 2px solid #8B0000;
+      border-radius: 10px;
+      max-width: 800px;
+      margin: 0 auto 80px auto;
+      background: white;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
     label {
       display: inline-block;
@@ -81,25 +77,42 @@
       border-radius: 5px;
       border: 1px solid #c3e6c3;
     }
-    .container {
-      padding: 25px;
-      border: 2px solid #8B0000;
-      border-radius: 10px;
-      width: 750px;
-      margin: auto;
-      background: white;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    .separator {
+      border-top: 2px solid #8B0000;
+      margin: 20px 0;
+      width: 100%;
+    }
+    .approval-section {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    .approval-box {
+      text-align: center;
+      padding: 15px;
+      border: 1px solid #8B0000;
+      border-radius: 5px;
+      width: 45%;
+    }
+    .approval-line {
+      font-weight: bold;
+      margin-top: 40px;
     }
     .footer {
-      margin-top: 30px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #8B0000;
+      color: white;
       text-align: center;
-      font-size: 14px;
-      font-weight: bold;
       padding: 10px;
-      border-top: 1px solid #ccc;
+      font-size: 16px;
+      font-weight: bold;
     }
     .print-btn {
-      margin-top: 20px;
+      display: block;
+      margin: 20px auto;
       padding: 12px 25px;
       font-size: 16px;
       background: #8B0000;
@@ -119,16 +132,32 @@
       font-size: 24px;
     }
     @media print {
-      .print-btn {
-        display: none;
-      }
       body {
         margin: 10mm;
         background: white;
+        padding: 0;
       }
       .container {
         border: none;
         box-shadow: none;
+        margin-bottom: 0;
+        width: 100%;
+        max-width: 100%;
+      }
+      .print-btn {
+        display: none;
+      }
+      .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: white;
+        color: black;
+        border-top: 2px solid #8B0000;
+      }
+      .approval-box {
+        page-break-inside: avoid;
       }
     }
   </style>
@@ -202,17 +231,27 @@
       ✅ صافي المستحق: <span id="net">0</span>
     </div>
 
-    <div class="approval-line">
-      اعتماد مدير الدائرة: _________________________
+    <div class="approval-section">
+      <div class="approval-box" style="text-align: left; direction: ltr;">
+        <div class="approval-line">اعتماد مدير الدائرة:</div>
+        <div style="margin-top: 60px;">_________________________</div>
+        <div>الاسم: _________________________</div>
+        <div>التاريخ: _________________________</div>
+      </div>
+      
+      <div class="approval-box" style="text-align: right;">
+        <div class="approval-line">مراجعة رئيس القسم:</div>
+        <div style="margin-top: 60px;">_________________________</div>
+        <div>الاسم: _________________________</div>
+        <div>التاريخ: _________________________</div>
+      </div>
     </div>
 
-    <div style="text-align: center;">
-      <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
-    </div>
+    <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
   </div>
 
   <div class="footer">
-    إعداد الموظف: محمد جعبوب - قسم الرواتب
+    إعداد الموظف: محمد جعبوب - قسم الرواتب والمصروفات - دائرة الشؤون المالية
   </div>
 
   <script>
@@ -224,8 +263,16 @@
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
     
-    startDate.valueAsDate = firstDayOfMonth;
-    endDate.valueAsDate = lastDayOfMonth;
+    // تنسيق التاريخ بشكل صحيح للعناصر input[type="date"]
+    function formatDate(date) {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+    
+    startDate.value = formatDate(firstDayOfMonth);
+    endDate.value = formatDate(lastDayOfMonth);
 
     const allowances = [
       {id:"basic", result:"basicResult"},
@@ -265,8 +312,8 @@
       let days = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
       daysCount.textContent = days;
 
-      let totalBase = 0;   // مجموع البدلات الشهرية
-      let totalCalc = 0;   // مجموع الفترة
+      let totalBase = 0;
+      let totalCalc = 0;
 
       allowances.forEach(item => {
         let input = document.getElementById(item.id);
@@ -285,7 +332,7 @@
           current.setDate(current.getDate() + 1);
         }
 
-        resultBox.value = sum.toFixed(3);  // 👈 3 منازل عشرية
+        resultBox.value = sum.toFixed(3);
         totalCalc += sum;
       });
 
