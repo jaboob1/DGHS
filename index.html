@@ -7,8 +7,12 @@
     body {
       font-family: Arial, sans-serif;
       direction: rtl;
-      margin: 40px;
+      margin: 0;
+      padding: 20px;
       background: #f9f9f9;
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 50px; /* مساحة للتذييل */
     }
     .header {
       display: flex;
@@ -32,27 +36,20 @@
       line-height: 1.8;
     }
     .header-line {
-      font-weight: 900; /* خط سميك جدًا */
-      color: #8B0000; /* أحمر غامق */
+      font-weight: 900;
+      color: #8B0000;
       margin: 5px 0;
       font-size: 20px;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
-    .separator {
-      border-top: 2px solid #8B0000;
-      margin: 15px 0;
-      width: 80%;
-    }
-    .approval-line {
-      margin-top: 20px;
-      font-weight: bold;
-      padding: 10px;
-      background-color: #f0f0f0;
-      border-radius: 5px;
-      border: 1px dashed #8B0000;
-      width: 60%;
-      margin-left: auto;
-      margin-right: auto;
+    .container {
+      padding: 25px;
+      border: 2px solid #8B0000;
+      border-radius: 10px;
+      max-width: 800px;
+      margin: 0 auto 80px auto;
+      background: white;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
     label {
       display: inline-block;
@@ -81,25 +78,30 @@
       border-radius: 5px;
       border: 1px solid #c3e6c3;
     }
-    .container {
-      padding: 25px;
-      border: 2px solid #8B0000;
-      border-radius: 10px;
-      width: 750px;
-      margin: auto;
-      background: white;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    .separator {
+      border-top: 2px solid #8B0000;
+      margin: 20px 0;
+      width: 100%;
     }
-    .footer {
-      margin-top: 30px;
-      text-align: center;
-      font-size: 14px;
+    .approval-section {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 40px;
+      padding: 15px;
+      border-top: 2px dashed #8B0000;
+    }
+    .approval-left {
+      text-align: left;
+      direction: ltr;
       font-weight: bold;
-      padding: 10px;
-      border-top: 1px solid #ccc;
+    }
+    .approval-right {
+      text-align: right;
+      font-weight: bold;
     }
     .print-btn {
-      margin-top: 20px;
+      display: block;
+      margin: 20px auto;
       padding: 12px 25px;
       font-size: 16px;
       background: #8B0000;
@@ -118,17 +120,66 @@
       margin-bottom: 20px;
       font-size: 24px;
     }
+    
+    /* تذييل الصفحة المتحرك */
+    .footer-animation {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #8B0000; /* أحمر غامق */
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+      overflow: hidden;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+    .marquee {
+      display: block;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .marquee span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 15s linear infinite;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    @keyframes marquee {
+      0%   { transform: translate(0, 0); }
+      100% { transform: translate(-100%, 0); }
+    }
+    
     @media print {
-      .print-btn {
-        display: none;
-      }
       body {
         margin: 10mm;
         background: white;
+        padding: 0;
       }
       .container {
         border: none;
         box-shadow: none;
+        margin-bottom: 0;
+        width: 100%;
+        max-width: 100%;
+      }
+      .print-btn {
+        display: none;
+      }
+      .approval-section {
+        position: fixed;
+        bottom: 20mm;
+        left: 10mm;
+        right: 10mm;
+        border-top: 2px dashed #8B0000;
+        padding-top: 10mm;
+      }
+      .footer-animation {
+        display: none; /* إخفاء التذييل عند الطباعة */
       }
     }
   </style>
@@ -197,22 +248,28 @@
     <div class="result">
       عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
       إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
-      المجموع المستحق للفترةالمحتسبة: <span id="totalPeriod">0</span><br>
+      المجموع المستحق للفترة المحتسبة: <span id="totalPeriod">0</span><br>
       أستقطاع اشتراكات صندوق الحماية الاجتماعية (8%): <span id="deduction">0</span><br>
       ✅ صافي المستحق: <span id="net">0</span>
     </div>
 
-    <div class="approval-line">
-      اعتماد مدير الدائرة: _________________________
+    <div class="approval-section">
+      <div class="approval-left">
+        اعتماد مدير الدائرة: _________________________
+      </div>
+      <div class="approval-right">
+        إعداد ومراجعة: محمد جعبوب
+      </div>
     </div>
 
-    <div style="text-align: center;">
-      <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
-    </div>
+    <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
   </div>
 
-  <div class="footer">
-    إعداد الموظف: محمد جعبوب - قسم الرواتب
+  <!-- تذييل الصفحة المتحرك -->
+  <div class="footer-animation">
+    <div class="marquee">
+      <span>حقوق الصفحة محفوظة للموظف محمد جعبوب - قسم الرواتب - دائرة الشؤون المالية</span>
+    </div>
   </div>
 
   <script>
@@ -224,8 +281,16 @@
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
     
-    startDate.valueAsDate = firstDayOfMonth;
-    endDate.valueAsDate = lastDayOfMonth;
+    // تنسيق التاريخ بشكل صحيح للعناصر input[type="date"]
+    function formatDate(date) {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+    
+    startDate.value = formatDate(firstDayOfMonth);
+    endDate.value = formatDate(lastDayOfMonth);
 
     const allowances = [
       {id:"basic", result:"basicResult"},
@@ -265,8 +330,8 @@
       let days = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
       daysCount.textContent = days;
 
-      let totalBase = 0;   // مجموع البدلات الشهرية
-      let totalCalc = 0;   // مجموع الفترة
+      let totalBase = 0;
+      let totalCalc = 0;
 
       allowances.forEach(item => {
         let input = document.getElementById(item.id);
@@ -285,7 +350,7 @@
           current.setDate(current.getDate() + 1);
         }
 
-        resultBox.value = sum.toFixed(3);  // 👈 3 منازل عشرية
+        resultBox.value = sum.toFixed(3);
         totalCalc += sum;
       });
 
