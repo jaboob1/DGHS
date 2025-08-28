@@ -13,10 +13,11 @@
       position: relative;
       min-height: 100vh;
       padding-bottom: 30px; /* مساحة للتذييل */
+      font-size: 14px;
     }
     
     .container {
-      padding: 25px;
+      padding: 20px;
       border: 2px solid #8B0000;
       border-radius: 10px;
       max-width: 800px;
@@ -31,7 +32,7 @@
       font-weight: bold;
     }
     input {
-      padding: 8px;
+      padding: 6px;
       width: 120px;
       margin: 5px;
       border: 1px solid #ccc;
@@ -42,14 +43,15 @@
       color: #333;
     }
     .result {
-      margin-top: 2px;
+      margin-top: 5px;
       font-weight: bold;
       color: green;
-      line-height: 1.8;
-      padding: 2px;
+      line-height: 1.6;
+      padding: 5px;              
+      font-size: 16px;           
       background-color: #f0f9f0;
-      border-radius: 1px;
-      border: 1px solid #c3e6c3;
+      border-radius: 3px;
+      border: 1px solid #c3e6c3; 
     }
     .separator {
       border-top: 2px solid #8B0000;
@@ -59,18 +61,20 @@
     .approval-section {
       display: flex;
       justify-content: space-between;
-      margin-top: 10px;
-      padding: 5px;
+      margin-top: 15px;
+      padding: 10px 0;
       border-top: 2px dashed #8B0000;
-    }
-    .approval-left {
-      text-align: left;
-      direction: ltr;
+      font-size: 14px;
       font-weight: bold;
     }
     .approval-right {
       text-align: right;
-      font-weight: bold;
+      flex: 1;
+    }
+    .approval-left {
+      text-align: left;
+      flex: 1;
+      direction: ltr;
     }
     .print-btn {
       display: block;
@@ -90,7 +94,7 @@
     h3 {
       text-align: center;
       color: #8B0000;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       font-size: 16px;
     }
     
@@ -100,7 +104,7 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      background-color: #8B0000; /* أحمر غامق */
+      background-color: #8B0000; 
       color: white;
       padding: 10px 0;
       text-align: center;
@@ -127,36 +131,38 @@
       100% { transform: translate(-100%, 0); }
     }
     
-    @media print @media print {
-  .result {
-    font-size: 16px; 
-    padding: 3px;   /* تقليص أكبر عند الطباعة */
-    line-height: 1.4;
-  }
-  .container {
-    padding: 15px;  /* تقليل الحواف العامة */
-  }
-  body {
-    font-size: 14px; /* جعل باقي النص أصغر قليلاً */
-  }
-}
+    /* إعدادات الطباعة */
+    @media print {
+      body {
+        margin: 10mm;
+        background: white;
+        padding: 0;
+        font-size: 13px;
+      }
       .container {
         border: none;
         box-shadow: none;
         margin-bottom: 0;
         width: 100%;
         max-width: 100%;
+        padding: 10px;
+      }
+      .result {
+        font-size: 16px; 
+        padding: 3px;   
+        line-height: 1.4;
       }
       .print-btn {
-        display: none;
+        display: none; /* إخفاء زر الطباعة عند الطباعة */
       }
       .approval-section {
-        position: fixed;
-        bottom: 20mm;
-        left: 10mm;
-        right: 10mm;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        padding-top: 10px;
         border-top: 2px dashed #8B0000;
-        padding-top: 10mm;
+        font-size: 14px;
+        font-weight: bold;
       }
       .footer-animation {
         display: none; /* إخفاء التذييل عند الطباعة */
@@ -165,12 +171,6 @@
   </style>
 </head>
 <body>
-
-  <div class="header">
-    <div class="header-text">
-    
-    </div>
-  </div>
 
   <div class="container">
     <h3> دائرة الشؤون المالية - قسم الرواتب والمصروفات </h3>
@@ -234,10 +234,10 @@
 
     <div class="approval-section">
       <div class="approval-right">
-        إعداد ومراجعة: _____________      
+        إعداد ومراجعة: _______________      
       </div>
       <div class="approval-right">
-        اعتماد مدير الدائرة: _____________      
+        اعتماد مدير الدائرة: _______________      
       </div>
     </div>
 
@@ -260,7 +260,6 @@
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
     
-    // تنسيق التاريخ بشكل صحيح للعناصر input[type="date"]
     function formatDate(date) {
       const year = date.getFullYear();
       const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -304,7 +303,6 @@
         return;
       }
 
-      // حساب عدد الأيام
       let diffTime = end - start;
       let days = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
       daysCount.textContent = days;
@@ -343,7 +341,6 @@
       net.textContent = netValue.toFixed(3);
     }
 
-    // إضافة قيم افتراضية للبدلات لتجربة البرنامج
     document.getElementById("basic").value = 1000;
     document.getElementById("housing").value = 300;
     document.getElementById("electricity").value = 50;
@@ -359,7 +356,6 @@
       document.getElementById(item.id).addEventListener("input", calculate);
     });
 
-    // حساب القيم عند تحميل الصفحة
     window.onload = calculate;
   </script>
 
