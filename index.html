@@ -91,7 +91,7 @@
       margin-top: 20px;
       flex-wrap: wrap;
     }
-    .print-btn, .reset-btn, .report-btn {
+    .print-btn, .reset-btn {
       padding: 10px 25px;
       font-size: 16px;
       color: white;
@@ -111,12 +111,6 @@
     }
     .reset-btn:hover {
       background: #267349;
-    }
-    .report-btn {
-      background: #1E90FF;
-    }
-    .report-btn:hover {
-      background: #0070E0;
     }
     h3 {
       text-align: center;
@@ -179,7 +173,7 @@
         padding: 3px;   
         line-height: 1.4;
       }
-      .print-btn, .reset-btn, .report-btn {
+      .print-btn, .reset-btn {
         display: none;
       }
       .approval-section {
@@ -294,8 +288,7 @@
 
     <div class="button-container">
       <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
-      <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ الحقول</button>
-      <button class="report-btn" onclick="openReportsPage()">📊 فتح التقارير</button>
+      <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ جميع الحقول</button>
     </div>
   </div>
 
@@ -455,32 +448,28 @@
       updateContractDisplay();
     }
 
-    // دالة تفريغ الحقول
+    // دالة تفريغ الحقول - معدلة لتفريغ جميع الحقول
     function resetForm() {
       // تفريغ حقول النص
       document.getElementById("employeeName").value = "";
       document.getElementById("employeeNumber").value = "";
       
-      // إعادة تعيين التواريخ إلى الشهر الحالي
-      const today = new Date();
-      const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-      const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      // تفريغ حقول التواريخ
+      document.getElementById("startDate").value = "";
+      document.getElementById("endDate").value = "";
       
-      startDate.value = formatDate(firstDayOfMonth);
-      endDate.value = formatDate(lastDayOfMonth);
+      // تفريغ حقول البدلات
+      document.getElementById("basic").value = "";
+      document.getElementById("basicNextYear").value = "";
+      document.getElementById("housing").value = "";
+      document.getElementById("electricity").value = "";
+      document.getElementById("water").value = "";
+      document.getElementById("phone").value = "";
+      document.getElementById("transport").value = "";
+      document.getElementById("professional").value = "";
+      document.getElementById("costLiving").value = "";
       
-      // إعادة تعيين القيم الافتراضية للبدلات
-      document.getElementById("basic").value = 1000;
-      document.getElementById("basicNextYear").value = 1050;
-      document.getElementById("housing").value = 300;
-      document.getElementById("electricity").value = 50;
-      document.getElementById("water").value = 30;
-      document.getElementById("phone").value = 20;
-      document.getElementById("transport").value = 100;
-      document.getElementById("professional").value = 200;
-      document.getElementById("costLiving").value = 150;
-      
-      // إعادة تعيين القائمة المنسدلة
+      // إعادة تعيين القائمة المنسدلة للسنوات
       document.getElementById("nextYearSelect").value = "2024";
       
       // إعادة تعيين نوع العقد إلى الدائمة
@@ -499,27 +488,9 @@
       net.textContent = "0";
       daysCount.textContent = "0";
       
-      // إعادة الحساب وتحديث العرض
-      calculate();
+      // تحديث العرض حسب نوع العقد
       updateContractDisplay();
     }
-
-    // دالة لفتح صفحة التقارير
-    function openReportsPage() {
-      // يمكنك تغيير هذا الرابط إلى رابط الصفحة التي تريد فتحها
-      window.open('reports.html', '_blank');
-    }
-
-    // تعيين القيم الافتراضية
-    document.getElementById("basic").value = 1000;
-    document.getElementById("basicNextYear").value = 1050;
-    document.getElementById("housing").value = 300;
-    document.getElementById("electricity").value = 50;
-    document.getElementById("water").value = 30;
-    document.getElementById("phone").value = 20;
-    document.getElementById("transport").value = 100;
-    document.getElementById("professional").value = 200;
-    document.getElementById("costLiving").value = 150;
 
     // إضافة مستمعي الأحداث
     startDate.addEventListener("change", calculate);
