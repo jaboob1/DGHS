@@ -89,4 +89,339 @@
       margin: 15px auto;
       padding: 10px 25px;
       font-size: 16px;
-      background: #8B0000
+      background: #8B0000;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    .print-btn:hover {
+      background: #700000;
+    }
+    h3 {
+      text-align: center;
+      color: #8B0000;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+    
+    /* تذييل الصفحة المتحرك */
+    .footer-animation {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #8B0000; 
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+      overflow: hidden;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+    .marquee {
+      display: block;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .marquee span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 15s linear infinite;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    @keyframes marquee {
+      0%   { transform: translate(0, 0); }
+      100% { transform: translate(-100%, 0); }
+    }
+    
+    /* إعدادات الطباعة */
+    @media print {
+      body {
+        margin: 10mm;
+        background: white;
+        padding: 0;
+        font-size: 13px;
+      }
+      .container {
+        border: none;
+        box-shadow: none;
+        margin-bottom: 0;
+        width: 100%;
+        max-width: 100%;
+        padding: 10px;
+      }
+      .result {
+        font-size: 16px; 
+        padding: 3px;   
+        line-height: 1.4;
+      }
+      .print-btn {
+        display: none;
+      }
+      .approval-section {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        padding-top: 10px;
+        border-top: 2px dashed #8B0000;
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .footer-animation {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h3> دائرة الشؤون المالية - قسم الرواتب والمصروفات </h3>
+    <h3>حاسبة رواتب</h3>
+
+    <label>اسم الموظف:</label>
+    <input type="text" id="employeeName" class="employee-input" placeholder="أسم الموظف"><br>
+
+    <label>رقم الموظف:</label>
+    <input type="text" id="employeeNumber" class="employee-input" placeholder="رقم الموظف"><br><br>
+
+    <label>تاريخ البداية:</label>
+    <input type="date" id="startDate"><br>
+
+    <label>تاريخ النهاية:</label>
+    <input type="date" id="endDate"><br><br>
+
+    <div>
+      <label>البدل الأساسي:</label>
+      <input type="number" id="basic" class="amount-input" placeholder="أدخل المبلغ">
+      <input type="text" id="basicResult" readonly><br>
+
+      <label>بدل الأساسي للسنة التالية:</label>
+      <input type="number" id="basicNextYear" class="amount-input" placeholder="أدخل المبلغ">
+      <select id="nextYearSelect" class="year-select">
+        <option value="2024">2024</option>
+        <option value="2025">2025</option>
+        <option value="2026">2026</option>
+        <option value="2027">2027</option>
+        <option value="2028">2028</option>
+        <option value="2029">2029</option>
+        <option value="2030">2030</option>
+      </select><br>
+
+      <label>بدل السكن:</label>
+      <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
+      <input type="text" id="housingResult" readonly><br>
+
+      <label>بدل الكهرباء:</label>
+      <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
+      <input type="text" id="electricityResult" readonly><br>
+
+      <label>بدل الماء:</label>
+      <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
+      <input type="text" id="waterResult" readonly><br>
+
+      <label>بدل الهاتف:</label>
+      <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
+      <input type="text" id="phoneResult" readonly><br>
+
+      <label>بدل النقل:</label>
+      <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
+      <input type="text" id="transportResult" readonly><br>
+
+      <label>بدل مهني:</label>
+      <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
+      <input type="text" id="professionalResult" readonly><br>
+
+      <label>بدل غلاء معيشة:</label>
+      <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
+      <input type="text" id="costLivingResult" readonly><br>
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="result">
+      عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
+      إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
+      إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
+      نسبة 12.5% من إجمالي الاستحقاق: <span id="twelvePercent">0</span><br>
+      أستقطاع اشتراكات صندوق الحماية الاجتماعية (8%): <span id="deduction">0</span><br>
+      ✅ صافي المستحق: <span id="net">0</span>
+    </div>
+
+    <div class="approval-section">
+      <div class="approval-right">
+        إعداد ومراجعة: _______________      
+      </div>
+      <div class="approval-right">
+        اعتماد مدير الدائرة: _______________      
+      </div>
+    </div>
+
+    <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
+  </div>
+
+  <!-- تذييل الصفحة المتحرك -->
+  <div class="footer-animation">
+    <div class="marquee">
+      <span>جميع الحقوق محفوظة للموظف محمد جعبوب - قسم الرواتب - دائرة الشؤون المالية</span>
+    </div>
+  </div>
+
+  <script>
+    const startDate = document.getElementById("startDate");
+    const endDate = document.getElementById("endDate");
+
+    // تعيين التواريخ الافتراضية لتكون الشهر الحالي
+    const today = new Date();
+    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    
+    function formatDate(date) {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+    
+    startDate.value = formatDate(firstDayOfMonth);
+    endDate.value = formatDate(lastDayOfMonth);
+
+    const allowances = [
+      {id:"basic", result:"basicResult"},
+      {id:"housing", result:"housingResult"},
+      {id:"electricity", result:"electricityResult"},
+      {id:"water", result:"waterResult"},         
+      {id:"phone", result:"phoneResult"},
+      {id:"transport", result:"transportResult"},
+      {id:"professional", result:"professionalResult"},
+      {id:"costLiving", result:"costLivingResult"}
+    ];
+
+    const totalAllowances = document.getElementById("totalAllowances");
+    const totalPeriod = document.getElementById("totalPeriod");
+    const twelvePercent = document.getElementById("twelvePercent");
+    const deduction = document.getElementById("deduction");
+    const net = document.getElementById("net");
+    const daysCount = document.getElementById("daysCount");
+
+    function daysInMonth(year, month) {
+      return new Date(year, month + 1, 0).getDate();
+    }
+
+    function calculate() {
+      if (!(startDate.value && endDate.value)) return;
+
+      let start = new Date(startDate.value);
+      let end = new Date(endDate.value);
+
+      if (end < start) {
+        totalPeriod.textContent = "❌ تاريخ النهاية قبل البداية";
+        daysCount.textContent = "0";
+        return;
+      }
+
+      let diffTime = end - start;
+      let days = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+      daysCount.textContent = days;
+
+      let totalBase = 0;
+      let totalCalc = 0;
+
+      // حساب السنة المحددة من القائمة المنسدلة
+      const selectedYear = parseInt(document.getElementById("nextYearSelect").value);
+      const basicNextYearValue = parseFloat(document.getElementById("basicNextYear").value) || 0;
+
+      allowances.forEach(item => {
+        let input = document.getElementById(item.id);
+        let resultBox = document.getElementById(item.result);
+        let monthly = parseFloat(input.value) || 0;
+        
+        // إذا كان هذا هو البدل الأساسي، نحتاج إلى معالجته بشكل مختلف
+        if (item.id === "basic") {
+          totalBase += monthly; // نضيف إلى الإجمالي الأساسي
+          
+          let current = new Date(start);
+          let sum = 0;
+          while (current <= end) {
+            let year = current.getFullYear();
+            let month = current.getMonth();
+            let daysInThisMonth = daysInMonth(year, month);
+            
+            // تحديد قيمة البدل الأساسي حسب السنة
+            let dailyValue = 0;
+            if (year < selectedYear) {
+              dailyValue = monthly / daysInThisMonth;
+            } else {
+              dailyValue = basicNextYearValue / daysInThisMonth;
+            }
+            
+            sum += dailyValue;
+            current.setDate(current.getDate() + 1);
+          }
+          
+          resultBox.value = sum.toFixed(3);
+          totalCalc += sum;
+        } else {
+          totalBase += monthly;
+          
+          let current = new Date(start);
+          let sum = 0;
+          while (current <= end) {
+            let year = current.getFullYear();
+            let month = current.getMonth();
+            let daysInThisMonth = daysInMonth(year, month);
+            let daily = monthly / daysInThisMonth;
+            sum += daily;
+            current.setDate(current.getDate() + 1);
+          }
+          
+          resultBox.value = sum.toFixed(3);
+          totalCalc += sum;
+        }
+      });
+
+      totalAllowances.textContent = totalBase.toFixed(3);
+      totalPeriod.textContent = totalCalc.toFixed(3);
+      
+      // حساب نسبة 12.5% من إجمالي الاستحقاق
+      let twelvePercentValue = totalCalc * 0.125;
+      twelvePercent.textContent = twelvePercentValue.toFixed(3);
+
+      let ded = totalCalc * 0.08;
+      deduction.textContent = ded.toFixed(3);
+
+      let netValue = totalCalc - ded;
+      net.textContent = netValue.toFixed(3);
+    }
+
+    // تعيين القيم الافتراضية
+    document.getElementById("basic").value = 1000;
+    document.getElementById("basicNextYear").value = 1050;
+    document.getElementById("housing").value = 300;
+    document.getElementById("electricity").value = 50;
+    document.getElementById("water").value = 30;
+    document.getElementById("phone").value = 20;
+    document.getElementById("transport").value = 100;
+    document.getElementById("professional").value = 200;
+    document.getElementById("costLiving").value = 150;
+
+    // إضافة مستمعي الأحداث
+    startDate.addEventListener("change", calculate);
+    endDate.addEventListener("change", calculate);
+    document.getElementById("nextYearSelect").addEventListener("change", calculate);
+    document.getElementById("basicNextYear").addEventListener("input", calculate);
+    
+    allowances.forEach(item => {
+      document.getElementById(item.id).addEventListener("input", calculate);
+    });
+
+    window.onload = calculate;
+  </script>
+
+</body>
+</html>
