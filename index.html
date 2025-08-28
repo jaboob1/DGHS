@@ -127,12 +127,19 @@
       100% { transform: translate(-100%, 0); }
     }
     
-    @media print {
-      body {
-        margin: 10mm;
-        background: white;
-        padding: 0;
-      }
+    @media print @media print {
+  .result {
+    font-size: 16px; 
+    padding: 3px;   /* تقليص أكبر عند الطباعة */
+    line-height: 1.4;
+  }
+  .container {
+    padding: 15px;  /* تقليل الحواف العامة */
+  }
+  body {
+    font-size: 14px; /* جعل باقي النص أصغر قليلاً */
+  }
+}
       .container {
         border: none;
         box-shadow: none;
