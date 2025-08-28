@@ -292,9 +292,9 @@
       عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
       إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
       إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
-      حصةالحكومة لاشتراكات صندوق الحماية الاجتماعية(12.5%): <span id="twelvePercent">0</span><br>
-      أستقطاع اشتراكات صندوق الحماية الاجتماعية (8%): <span id="deduction">0</span><br>
-      ✅ صافي المستحق: <span id="net">0</span>
+      <span id="governmentShareRow">حصةالحكومة لاشتراكات صندوق الحماية الاجتماعية(12.5%): <span id="twelvePercent">0</span><br></span>
+      <span id="deductionRow">أستقطاع اشتراكات صندوق الحماية الاجتماعية (8%): <span id="deduction">0</span><br></span>
+      <span id="netRow">✅ صافي المستحق: <span id="net">0</span></span>
     </div>
 
     <div class="approval-section">
@@ -352,6 +352,11 @@
     const deduction = document.getElementById("deduction");
     const net = document.getElementById("net");
     const daysCount = document.getElementById("daysCount");
+
+    // عناصر النتائج التي سيتم إخفاؤها
+    const governmentShareRow = document.getElementById("governmentShareRow");
+    const deductionRow = document.getElementById("deductionRow");
+    const netRow = document.getElementById("netRow");
 
     function daysInMonth(year, month) {
       return new Date(year, month + 1, 0).getDate();
@@ -466,17 +471,17 @@
 
     // وظائف الأزرار الجديدة
     document.getElementById("hideResults").addEventListener("click", function() {
-      document.getElementById("resultsSection").style.display = "none";
-      allowances.forEach(item => {
-        document.getElementById(item.result).style.display = "none";
-      });
+      // إخفاء آخر ثلاث نتائج فقط
+      governmentShareRow.style.display = "none";
+      deductionRow.style.display = "none";
+      netRow.style.display = "none";
     });
 
     document.getElementById("showResults").addEventListener("click", function() {
-      document.getElementById("resultsSection").style.display = "block";
-      allowances.forEach(item => {
-        document.getElementById(item.result).style.display = "inline-block";
-      });
+      // إظهار جميع النتائج
+      governmentShareRow.style.display = "block";
+      deductionRow.style.display = "block";
+      netRow.style.display = "block";
     });
 
     document.getElementById("clearFields").addEventListener("click", function() {
