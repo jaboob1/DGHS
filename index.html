@@ -143,6 +143,11 @@
       background: #ec971f;
     }
     
+    /* تنسيق لإخفاء العناصر */
+    .hidden {
+      display: none !important;
+    }
+    
     /* تذييل الصفحة المتحرك */
     .footer-animation {
       position: fixed;
@@ -212,6 +217,9 @@
       .footer-animation {
         display: none;
       }
+      .hidden {
+        display: block !important;
+      }
     }
   </style>
 </head>
@@ -224,7 +232,7 @@
     <!-- أزرار التحكم الجديدة -->
     <div class="control-buttons">
       <button class="control-btn hide-btn" id="hideResults">العقود المؤقتة</button>
-      <button class="control-btn show-btn" id="showResults">إظهار النتائج</button>
+      <button class="control-btn show-btn" id="showResults">العقود الدائمة</button>
       <button class="control-btn clear-btn" id="clearFields">تفريغ الحقول</button>
     </div>
 
@@ -245,45 +253,61 @@
       <input type="number" id="basic" class="amount-input" placeholder="أدخل المبلغ">
       <input type="text" id="basicResult" readonly><br>
 
-      <label>بدل الأساسي للسنة التالية:</label>
-      <input type="number" id="basicNextYear" class="amount-input" placeholder="أدخل المبلغ">
-      <select id="nextYearSelect" class="year-select">
-        <option value="2024">2024</option>
-        <option value="2025">2025</option>
-        <option value="2026">2026</option>
-        <option value="2027">2027</option>
-        <option value="2028">2028</option>
-        <option value="2029">2029</option>
-        <option value="2030">2030</option>
-      </select><br>
+      <div id="nextYearSection">
+        <label>بدل الأساسي للسنة التالية:</label>
+        <input type="number" id="basicNextYear" class="amount-input" placeholder="أدخل المبلغ">
+        <select id="nextYearSelect" class="year-select">
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+          <option value="2027">2027</option>
+          <option value="2028">2028</option>
+          <option value="2029">2029</option>
+          <option value="2030">2030</option>
+        </select><br>
+      </div>
 
-      <label>بدل السكن:</label>
-      <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="housingResult" readonly><br>
+      <div class="allowance-section">
+        <label>بدل السكن:</label>
+        <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="housingResult" readonly><br>
+      </div>
 
-      <label>بدل الكهرباء:</label>
-      <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="electricityResult" readonly><br>
+      <div class="allowance-section">
+        <label>بدل الكهرباء:</label>
+        <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="electricityResult" readonly><br>
+      </div>
 
-      <label>بدل الماء:</label>
-      <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="waterResult" readonly><br>
+      <div class="allowance-section">
+        <label>بدل الماء:</label>
+        <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="waterResult" readonly><br>
+      </div>
 
-      <label>بدل الهاتف:</label>
-      <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="phoneResult" readonly><br>
+      <div class="allowance-section">
+        <label>بدل الهاتف:</label>
+        <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="phoneResult" readonly><br>
+      </div>
 
-      <label>بدل النقل:</label>
-      <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="transportResult" readonly><br>
+      <div class="allowance-section">
+        <label>بدل النقل:</label>
+        <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="transportResult" readonly><br>
+      </div>
 
-      <label>بدل مهني:</label>
-      <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="professionalResult" readonly><br>
+      <div class="allowance-section">
+        <label>بدل مهنی:</label>
+        <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="professionalResult" readonly><br>
+      </div>
 
-      <label>بدل غلاء معيشة:</label>
-      <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="costLivingResult" readonly><br>
+      <div class="allowance-section">
+        <label>بدل غلاء معيشة:</label>
+        <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="costLivingResult" readonly><br>
+      </div>
     </div>
 
     <div class="separator"></div>
@@ -357,6 +381,10 @@
     const governmentShareRow = document.getElementById("governmentShareRow");
     const deductionRow = document.getElementById("deductionRow");
     const netRow = document.getElementById("netRow");
+
+    // عناصر الحقول التي سيتم إخفاؤها
+    const nextYearSection = document.getElementById("nextYearSection");
+    const allowanceSections = document.querySelectorAll('.allowance-section');
 
     function daysInMonth(year, month) {
       return new Date(year, month + 1, 0).getDate();
@@ -471,17 +499,33 @@
 
     // وظائف الأزرار الجديدة
     document.getElementById("hideResults").addEventListener("click", function() {
+      // إخفاء القائمة المنسدلة للسنوات
+      nextYearSection.classList.add('hidden');
+      
+      // إخفاء جميع البدلات الأخرى
+      allowanceSections.forEach(section => {
+        section.classList.add('hidden');
+      });
+      
       // إخفاء آخر ثلاث نتائج فقط
-      governmentShareRow.style.display = "none";
-      deductionRow.style.display = "none";
-      netRow.style.display = "none";
+      governmentShareRow.classList.add('hidden');
+      deductionRow.classList.add('hidden');
+      netRow.classList.add('hidden');
     });
 
     document.getElementById("showResults").addEventListener("click", function() {
+      // إظهار القائمة المنسدلة للسنوات
+      nextYearSection.classList.remove('hidden');
+      
+      // إظهار جميع البدلات الأخرى
+      allowanceSections.forEach(section => {
+        section.classList.remove('hidden');
+      });
+      
       // إظهار جميع النتائج
-      governmentShareRow.style.display = "block";
-      deductionRow.style.display = "block";
-      netRow.style.display = "block";
+      governmentShareRow.classList.remove('hidden');
+      deductionRow.classList.remove('hidden');
+      netRow.classList.remove('hidden');
     });
 
     document.getElementById("clearFields").addEventListener("click", function() {
