@@ -558,7 +558,7 @@
               <h2>النتائج النهائية</h2>
               <p><strong>إجمالي الراتب الشهري:</strong> ${totalAllowances.textContent}</p>
               <p><strong>إجمالي الاستحقاق لفترة الاحتساب:</strong> ${totalPeriod.textContent}</p>
-              <p><strong>نسبة 12.5% من إجمالي الاستحقاق:</strong> ${twelvePercent.textContent}</p>
+              <p><strong>نسبة حصة الكومة 12.5% من إجمالي الاستحقاق:</strong> ${twelvePercent.textContent}</p>
               <p><strong>استقطاع اشتراكات صندوق الحماية الاجتماعية (8%):</strong> ${deduction.textContent}</p>
               <p><strong>صافي المستحق:</strong> ${net.textContent}</p>
             </div>
