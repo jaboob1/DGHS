@@ -133,28 +133,46 @@
     
     /* إعدادات الطباعة */
     @media print {
-      body {
-        margin: 10mm;
-        background: white;
-        padding: 0;
-        font-size: 13px;
-      }
-      .container {
-        border: none;
-        box-shadow: none;
-        margin-bottom: 0;
-        width: 100%;
-        max-width: 100%;
-        padding: 10px;
-      }
-      .result {
-        font-size: 16px; 
-        padding: 3px;   
-        line-height: 1.4;
-      }
-      .print-btn {
-        display: none; /* إخفاء زر الطباعة عند الطباعة */
-      }
+  @page {
+    size: A4;       /* حجم الورقة */
+    margin: 10mm;   /* الهوامش */
+  }
+
+  html, body {
+    height: auto !important; 
+    overflow: visible !important;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: white;
+    font-size: 13px;
+  }
+
+  .container {
+    page-break-after: avoid; /* منع انقسام الصفحة */
+    page-break-before: avoid;
+    page-break-inside: avoid;
+    border: none;
+    box-shadow: none;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .result {
+    font-size: 16px; 
+    padding: 3px;   
+    line-height: 1.4;
+  }
+
+  .print-btn,
+  .footer-animation {
+    display: none !important; /* إخفاء زر الطباعة والتذييل */
+  }
+}
       .approval-section {
         display: flex;
         justify-content: space-between;
