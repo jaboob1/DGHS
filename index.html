@@ -43,7 +43,7 @@
     input.amount-input {
       width: 120px;
     }
-    select.year-select, select.contract-type {
+    select.year-select {
       padding: 6px;
       width: 130px;
       margin: 5px;
@@ -84,39 +84,63 @@
       text-align: right;
       flex: 1;
     }
-    .button-container {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-    .print-btn, .reset-btn {
+    .print-btn {
+      display: block;
+      margin: 15px auto;
       padding: 10px 25px;
       font-size: 16px;
+      background: #8B0000;
       color: white;
       border: none;
       cursor: pointer;
       border-radius: 5px;
       transition: background 0.3s;
     }
-    .print-btn {
-      background: #8B0000;
-    }
     .print-btn:hover {
       background: #700000;
-    }
-    .reset-btn {
-      background: #2E8B57;
-    }
-    .reset-btn:hover {
-      background: #267349;
     }
     h3 {
       text-align: center;
       color: #8B0000;
       margin-bottom: 15px;
       font-size: 16px;
+    }
+    
+    /* أزرار التحكم */
+    .control-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px 0;
+    }
+    .control-btn {
+      padding: 8px 15px;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .hide-btn {
+      background: #d9534f;
+      color: white;
+    }
+    .hide-btn:hover {
+      background: #c9302c;
+    }
+    .show-btn {
+      background: #5cb85c;
+      color: white;
+    }
+    .show-btn:hover {
+      background: #449d44;
+    }
+    .clear-btn {
+      background: #f0ad4e;
+      color: white;
+    }
+    .clear-btn:hover {
+      background: #ec971f;
     }
     
     /* تذييل الصفحة المتحرك */
@@ -173,7 +197,7 @@
         padding: 3px;   
         line-height: 1.4;
       }
-      .print-btn, .reset-btn {
+      .print-btn, .control-buttons {
         display: none;
       }
       .approval-section {
@@ -189,11 +213,6 @@
         display: none;
       }
     }
-
-    /* عناصر مخفية للعقود المؤقتة */
-    .temporary-hide {
-      display: block;
-    }
   </style>
 </head>
 <body>
@@ -202,17 +221,18 @@
     <h3> دائرة الشؤون المالية - قسم الرواتب والمصروفات </h3>
     <h3>حاسبة رواتب</h3>
 
+    <!-- أزرار التحكم الجديدة -->
+    <div class="control-buttons">
+      <button class="control-btn hide-btn" id="hideResults">العقود المؤقتة</button>
+      <button class="control-btn show-btn" id="showResults">إظهار النتائج</button>
+      <button class="control-btn clear-btn" id="clearFields">تفريغ الحقول</button>
+    </div>
+
     <label>اسم الموظف:</label>
     <input type="text" id="employeeName" class="employee-input" placeholder="أسم الموظف"><br>
 
     <label>رقم الموظف:</label>
-    <input type="text" id="employeeNumber" class="employee-input" placeholder="رقم الموظف"><br>
-
-    <label>نوع العقد:</label>
-    <select id="contractType" class="contract-type">
-      <option value="permanent">عقود دائمة</option>
-      <option value="temporary">عقود موقتة</option>
-    </select><br><br>
+    <input type="text" id="employeeNumber" class="employee-input" placeholder="رقم الموظف"><br><br>
 
     <label>تاريخ البداية:</label>
     <input type="date" id="startDate"><br>
@@ -268,13 +288,13 @@
 
     <div class="separator"></div>
 
-    <div class="result">
+    <div class="result" id="resultsSection">
       عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
       إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
       إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
-      <span id="twelvePercentLine">نسبة 12.5% من إجمالي الاستحقاق: <span id="twelvePercent">0</span><br></span>
-      <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية (8%): <span id="deduction">0</span><br></span>
-      <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
+      حصةالحكومة لاشتراكات صندوق الحماية الاجتماعية(12.5%): <span id="twelvePercent">0</span><br>
+      أستقطاع اشتراكات صندوق الحماية الاجتماعية (8%): <span id="deduction">0</span><br>
+      ✅ صافي المستحق: <span id="net">0</span>
     </div>
 
     <div class="approval-section">
@@ -286,10 +306,7 @@
       </div>
     </div>
 
-    <div class="button-container">
-      <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
-      <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ جميع الحقول</button>
-    </div>
+    <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
   </div>
 
   <!-- تذييل الصفحة المتحرك -->
@@ -302,7 +319,6 @@
   <script>
     const startDate = document.getElementById("startDate");
     const endDate = document.getElementById("endDate");
-    const contractType = document.getElementById("contractType");
 
     // تعيين التواريخ الافتراضية لتكون الشهر الحالي
     const today = new Date();
@@ -337,26 +353,8 @@
     const net = document.getElementById("net");
     const daysCount = document.getElementById("daysCount");
 
-    // عناصر لإخفائها عند اختيار عقود موقتة
-    const twelvePercentLine = document.getElementById("twelvePercentLine");
-    const deductionLine = document.getElementById("deductionLine");
-    const netLine = document.getElementById("netLine");
-
     function daysInMonth(year, month) {
       return new Date(year, month + 1, 0).getDate();
-    }
-
-    // دالة للتحقق من نوع العقد وتحديث العرض
-    function updateContractDisplay() {
-      if (contractType.value === "temporary") {
-        twelvePercentLine.style.display = "none";
-        deductionLine.style.display = "none";
-        netLine.style.display = "none";
-      } else {
-        twelvePercentLine.style.display = "block";
-        deductionLine.style.display = "block";
-        netLine.style.display = "block";
-      }
     }
 
     function calculate() {
@@ -443,22 +441,54 @@
 
       let netValue = totalCalc - ded;
       net.textContent = netValue.toFixed(3);
-
-      // تحديث العرض حسب نوع العقد
-      updateContractDisplay();
     }
 
-    // دالة تفريغ الحقول - معدلة لتفريغ جميع الحقول
-    function resetForm() {
-      // تفريغ حقول النص
+    // تعيين القيم الافتراضية
+    document.getElementById("basic").value = 1000;
+    document.getElementById("basicNextYear").value = 1050;
+    document.getElementById("housing").value = 300;
+    document.getElementById("electricity").value = 50;
+    document.getElementById("water").value = 30;
+    document.getElementById("phone").value = 20;
+    document.getElementById("transport").value = 100;
+    document.getElementById("professional").value = 200;
+    document.getElementById("costLiving").value = 150;
+
+    // إضافة مستمعي الأحداث
+    startDate.addEventListener("change", calculate);
+    endDate.addEventListener("change", calculate);
+    document.getElementById("nextYearSelect").addEventListener("change", calculate);
+    document.getElementById("basicNextYear").addEventListener("input", calculate);
+    
+    allowances.forEach(item => {
+      document.getElementById(item.id).addEventListener("input", calculate);
+    });
+
+    // وظائف الأزرار الجديدة
+    document.getElementById("hideResults").addEventListener("click", function() {
+      document.getElementById("resultsSection").style.display = "none";
+      allowances.forEach(item => {
+        document.getElementById(item.result).style.display = "none";
+      });
+    });
+
+    document.getElementById("showResults").addEventListener("click", function() {
+      document.getElementById("resultsSection").style.display = "block";
+      allowances.forEach(item => {
+        document.getElementById(item.result).style.display = "inline-block";
+      });
+    });
+
+    document.getElementById("clearFields").addEventListener("click", function() {
+      // مسح حقول الإدخال
       document.getElementById("employeeName").value = "";
       document.getElementById("employeeNumber").value = "";
       
-      // تفريغ حقول التواريخ
-      document.getElementById("startDate").value = "";
-      document.getElementById("endDate").value = "";
+      // إعادة تعيين التواريخ
+      startDate.value = formatDate(firstDayOfMonth);
+      endDate.value = formatDate(lastDayOfMonth);
       
-      // تفريغ حقول البدلات
+      // مسح حقول المبالغ
       document.getElementById("basic").value = "";
       document.getElementById("basicNextYear").value = "";
       document.getElementById("housing").value = "";
@@ -469,44 +499,21 @@
       document.getElementById("professional").value = "";
       document.getElementById("costLiving").value = "";
       
-      // إعادة تعيين القائمة المنسدلة للسنوات
-      document.getElementById("nextYearSelect").value = "2024";
-      
-      // إعادة تعيين نوع العقد إلى الدائمة
-      contractType.value = "permanent";
-      
-      // تفريغ حقول النتائج
+      // مسح النتائج
       allowances.forEach(item => {
         document.getElementById(item.result).value = "";
       });
       
-      // إعادة تعيين النتائج
+      // مسح نتائج الحساب
       totalAllowances.textContent = "0";
       totalPeriod.textContent = "0";
       twelvePercent.textContent = "0";
       deduction.textContent = "0";
       net.textContent = "0";
       daysCount.textContent = "0";
-      
-      // تحديث العرض حسب نوع العقد
-      updateContractDisplay();
-    }
-
-    // إضافة مستمعي الأحداث
-    startDate.addEventListener("change", calculate);
-    endDate.addEventListener("change", calculate);
-    contractType.addEventListener("change", updateContractDisplay);
-    document.getElementById("nextYearSelect").addEventListener("change", calculate);
-    document.getElementById("basicNextYear").addEventListener("input", calculate);
-    
-    allowances.forEach(item => {
-      document.getElementById(item.id).addEventListener("input", calculate);
     });
 
-    window.onload = function() {
-      calculate();
-      updateContractDisplay();
-    };
+    window.onload = calculate;
   </script>
 
 </body>
