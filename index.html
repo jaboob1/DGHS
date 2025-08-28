@@ -43,7 +43,7 @@
     input.amount-input {
       width: 120px;
     }
-    select.year-select {
+    select.year-select, select.contract-type {
       padding: 6px;
       width: 130px;
       margin: 5px;
@@ -68,14 +68,14 @@
     }
     .separator {
       border-top: 2px solid #8B0000;
-      margin: 10px 0;
+      margin: 20px 0;
       width: 100%;
     }
     .approval-section {
       display: flex;
       justify-content: space-between;
-      margin-top: 15px;
-      padding: 10px 0;
+      margin-top: 40px;
+      padding: 20px 0;
       border-top: 2px dashed #8B0000;
       font-size: 14px;
       font-weight: bold;
@@ -84,20 +84,33 @@
       text-align: right;
       flex: 1;
     }
-    .print-btn {
-      display: block;
-      margin: 15px auto;
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    .print-btn, .reset-btn {
       padding: 10px 25px;
       font-size: 16px;
-      background: #8B0000;
       color: white;
       border: none;
       cursor: pointer;
       border-radius: 5px;
       transition: background 0.3s;
     }
+    .print-btn {
+      background: #8B0000;
+    }
     .print-btn:hover {
       background: #700000;
+    }
+    .reset-btn {
+      background: #2E8B57;
+    }
+    .reset-btn:hover {
+      background: #267349;
     }
     h3 {
       text-align: center;
@@ -160,7 +173,7 @@
         padding: 3px;   
         line-height: 1.4;
       }
-      .print-btn {
+      .print-btn, .reset-btn {
         display: none;
       }
       .approval-section {
@@ -176,6 +189,11 @@
         display: none;
       }
     }
+
+    /* عناصر مخفية للعقود المؤقتة */
+    .temporary-hide {
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -188,7 +206,13 @@
     <input type="text" id="employeeName" class="employee-input" placeholder="أسم الموظف"><br>
 
     <label>رقم الموظف:</label>
-    <input type="text" id="employeeNumber" class="employee-input" placeholder="رقم الموظف"><br><br>
+    <input type="text" id="employeeNumber" class="employee-input" placeholder="رقم الموظف"><br>
+
+    <label>نوع العقد:</label>
+    <select id="contractType" class="contract-type">
+      <option value="permanent">عقود دائمة</option>
+      <option value="temporary">عقود موقتة</option>
+    </select><br><br>
 
     <label>تاريخ البداية:</label>
     <input type="date" id="startDate"><br>
@@ -248,9 +272,14 @@
       عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
       إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
       إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
-      نسبة 12.5% من إجمالي الاستحقاق: <span id="twelvePercent">0</span><br>
-      أستقطاع اشتراكات صندوق الحماية الاجتماعية (8%): <span id="deduction">0</span><br>
-      ✅ صافي المستحق: <span id="net">0</span>
+      <span id="twelvePercentLine">نسبة 12.5% من إجمالي الاستحقاق: <span id="twelvePercent">0</span><br></span>
+      <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية (8%): <span id="deduction">0</span><br></span>
+      <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
+    </div>
+
+    <div class="button-container">
+      <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
+      <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ جميع الحقول</button>
     </div>
 
     <div class="approval-section">
@@ -261,8 +290,6 @@
         اعتماد مدير الدائرة: _______________      
       </div>
     </div>
-
-    <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
   </div>
 
   <!-- تذييل الصفحة المتحرك -->
@@ -275,6 +302,7 @@
   <script>
     const startDate = document.getElementById("startDate");
     const endDate = document.getElementById("endDate");
+    const contractType = document.getElementById("contractType");
 
     // تعيين التواريخ الافتراضية لتكون الشهر الحالي
     const today = new Date();
@@ -309,8 +337,26 @@
     const net = document.getElementById("net");
     const daysCount = document.getElementById("daysCount");
 
+    // عناصر لإخفائها عند اختيار عقود موقتة
+    const twelvePercentLine = document.getElementById("twelvePercentLine");
+    const deductionLine = document.getElementById("deductionLine");
+    const netLine = document.getElementById("netLine");
+
     function daysInMonth(year, month) {
       return new Date(year, month + 1, 0).getDate();
+    }
+
+    // دالة للتحقق من نوع العقد وتحديث العرض
+    function updateContractDisplay() {
+      if (contractType.value === "temporary") {
+        twelvePercentLine.style.display = "none";
+        deductionLine.style.display = "none";
+        netLine.style.display = "none";
+      } else {
+        twelvePercentLine.style.display = "block";
+        deductionLine.style.display = "block";
+        netLine.style.display = "block";
+      }
     }
 
     function calculate() {
@@ -388,7 +434,7 @@
       totalAllowances.textContent = totalBase.toFixed(3);
       totalPeriod.textContent = totalCalc.toFixed(3);
       
-      // حساب نسبة 12.5% من إجمالي الاستحقاق
+      // اشتراكات صندوق الحماية الاجتماعية حصة الحكومة 12.5% 
       let twelvePercentValue = totalCalc * 0.125;
       twelvePercent.textContent = twelvePercentValue.toFixed(3);
 
@@ -397,22 +443,56 @@
 
       let netValue = totalCalc - ded;
       net.textContent = netValue.toFixed(3);
+
+      // تحديث العرض حسب نوع العقد
+      updateContractDisplay();
     }
 
-    // تعيين القيم الافتراضية
-    document.getElementById("basic").value = 1000;
-    document.getElementById("basicNextYear").value = 1050;
-    document.getElementById("housing").value = 300;
-    document.getElementById("electricity").value = 50;
-    document.getElementById("water").value = 30;
-    document.getElementById("phone").value = 20;
-    document.getElementById("transport").value = 100;
-    document.getElementById("professional").value = 200;
-    document.getElementById("costLiving").value = 150;
+    // دالة تفريغ الحقول - معدلة لتفريغ جميع الحقول مع استثناء قائمة السنوات
+    function resetForm() {
+      // تفريغ حقول النص
+      document.getElementById("employeeName").value = "";
+      document.getElementById("employeeNumber").value = "";
+      
+      // تفريغ حقول التواريخ
+      document.getElementById("startDate").value = "";
+      document.getElementById("endDate").value = "";
+      
+      // تفريغ حقول البدلات (مع استثناء قائمة السنوات)
+      document.getElementById("basic").value = "";
+      document.getElementById("basicNextYear").value = "";
+      document.getElementById("housing").value = "";
+      document.getElementById("electricity").value = "";
+      document.getElementById("water").value = "";
+      document.getElementById("phone").value = "";
+      document.getElementById("transport").value = "";
+      document.getElementById("professional").value = "";
+      document.getElementById("costLiving").value = "";
+      
+      // إعادة تعيين نوع العقد إلى الدائمة
+      contractType.value = "permanent";
+      
+      // تفريغ حقول النتائج
+      allowances.forEach(item => {
+        document.getElementById(item.result).value = "";
+      });
+      
+      // إعادة تعيين النتائج
+      totalAllowances.textContent = "0";
+      totalPeriod.textContent = "0";
+      twelvePercent.textContent = "0";
+      deduction.textContent = "0";
+      net.textContent = "0";
+      daysCount.textContent = "0";
+      
+      // تحديث العرض حسب نوع العقد
+      updateContractDisplay();
+    }
 
     // إضافة مستمعي الأحداث
     startDate.addEventListener("change", calculate);
     endDate.addEventListener("change", calculate);
+    contractType.addEventListener("change", updateContractDisplay);
     document.getElementById("nextYearSelect").addEventListener("change", calculate);
     document.getElementById("basicNextYear").addEventListener("input", calculate);
     
@@ -420,7 +500,10 @@
       document.getElementById(item.id).addEventListener("input", calculate);
     });
 
-    window.onload = calculate;
+    window.onload = function() {
+      calculate();
+      updateContractDisplay();
+    };
   </script>
 
 </body>
