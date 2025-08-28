@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -12,7 +13,7 @@
       background: #f9f9f9;
       position: relative;
       min-height: 100vh;
-      padding-bottom: 30px;
+      padding-bottom: 30px; /* مساحة للتذييل */
       font-size: 14px;
     }
     
@@ -38,17 +39,10 @@
       border-radius: 4px;
     }
     input.employee-input {
-      width: 250px;
+      width: 250px; /* عرض أكبر لاسم الموظف */
     }
     input.amount-input {
-      width: 120px;
-    }
-    select.year-select {
-      padding: 6px;
-      width: 130px;
-      margin: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      width: 120px; /* عرض حقول المبالغ */
     }
     input[readonly] {
       background-color: #f5f5f5;
@@ -84,6 +78,11 @@
       text-align: right;
       flex: 1;
     }
+    .approval-left {
+      text-align: left;
+      flex: 1;
+      direction: ltr;
+    }
     .print-btn {
       display: block;
       margin: 15px auto;
@@ -106,49 +105,7 @@
       font-size: 16px;
     }
     
-    /* أزرار التحكم */
-    .control-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin: 15px 0;
-    }
-    .control-btn {
-      padding: 8px 15px;
-      font-size: 14px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .hide-btn {
-      background: #d9534f;
-      color: white;
-    }
-    .hide-btn:hover {
-      background: #c9302c;
-    }
-    .show-btn {
-      background: #5cb85c;
-      color: white;
-    }
-    .show-btn:hover {
-      background: #449d44;
-    }
-    .clear-btn {
-      background: #f0ad4e;
-      color: white;
-    }
-    .clear-btn:hover {
-      background: #ec971f;
-    }
-    
-    /* تنسيق لإخفاء العناصر */
-    .hidden {
-      display: none !important;
-    }
-    
-    /* تذييل الصفحة المتحرك */
+‎    /* تذييل الصفحة المتحرك */
     .footer-animation {
       position: fixed;
       bottom: 0;
@@ -181,7 +138,7 @@
       100% { transform: translate(-100%, 0); }
     }
     
-    /* إعدادات الطباعة */
+‎    /* إعدادات الطباعة */
     @media print {
       body {
         margin: 10mm;
@@ -202,8 +159,8 @@
         padding: 3px;   
         line-height: 1.4;
       }
-      .print-btn, .control-buttons {
-        display: none;
+      .print-btn {
+        display: none; /* إخفاء زر الطباعة عند الطباعة */
       }
       .approval-section {
         display: flex;
@@ -215,10 +172,7 @@
         font-weight: bold;
       }
       .footer-animation {
-        display: none;
-      }
-      .hidden {
-        display: block !important;
+        display: none; /* إخفاء التذييل عند الطباعة */
       }
     }
   </style>
@@ -228,13 +182,6 @@
   <div class="container">
     <h3> دائرة الشؤون المالية - قسم الرواتب والمصروفات </h3>
     <h3>حاسبة رواتب</h3>
-
-    <!-- أزرار التحكم الجديدة -->
-    <div class="control-buttons">
-      <button class="control-btn hide-btn" id="hideResults">العقود المؤقتة</button>
-      <button class="control-btn show-btn" id="showResults">العقود الدائمة</button>
-      <button class="control-btn clear-btn" id="clearFields">تفريغ الحقول</button>
-    </div>
 
     <label>اسم الموظف:</label>
     <input type="text" id="employeeName" class="employee-input" placeholder="أسم الموظف"><br>
@@ -253,87 +200,59 @@
       <input type="number" id="basic" class="amount-input" placeholder="أدخل المبلغ">
       <input type="text" id="basicResult" readonly><br>
 
-      <div id="nextYearSection">
-        <label>بدل الأساسي للسنة التالية:</label>
-        <input type="number" id="basicNextYear" class="amount-input" placeholder="أدخل المبلغ">
-        <select id="nextYearSelect" class="year-select">
-          <option value="2024">2024</option>
-          <option value="2025">2025</option>
-          <option value="2026">2026</option>
-          <option value="2027">2027</option>
-          <option value="2028">2028</option>
-          <option value="2029">2029</option>
-          <option value="2030">2030</option>
-        </select><br>
-      </div>
+      <label>بدل السكن:</label>
+      <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
+      <input type="text" id="housingResult" readonly><br>
 
-      <div class="allowance-section">
-        <label>بدل السكن:</label>
-        <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
-        <input type="text" id="housingResult" readonly><br>
-      </div>
+      <label>بدل الكهرباء:</label>
+      <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
+      <input type="text" id="electricityResult" readonly><br>
 
-      <div class="allowance-section">
-        <label>بدل الكهرباء:</label>
-        <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
-        <input type="text" id="electricityResult" readonly><br>
-      </div>
+      <label>بدل الماء:</label>
+      <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
+      <input type="text" id="waterResult" readonly><br>
 
-      <div class="allowance-section">
-        <label>بدل الماء:</label>
-        <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
-        <input type="text" id="waterResult" readonly><br>
-      </div>
+      <label>بدل الهاتف:</label>
+      <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
+      <input type="text" id="phoneResult" readonly><br>
 
-      <div class="allowance-section">
-        <label>بدل الهاتف:</label>
-        <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
-        <input type="text" id="phoneResult" readonly><br>
-      </div>
+      <label>بدل النقل:</label>
+      <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
+      <input type="text" id="transportResult" readonly><br>
 
-      <div class="allowance-section">
-        <label>بدل النقل:</label>
-        <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
-        <input type="text" id="transportResult" readonly><br>
-      </div>
+      <label>بدل مهني:</label>
+      <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
+      <input type="text" id="professionalResult" readonly><br>
 
-      <div class="allowance-section">
-        <label>بدل مهنی:</label>
-        <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
-        <input type="text" id="professionalResult" readonly><br>
-      </div>
-
-      <div class="allowance-section">
-        <label>بدل غلاء معيشة:</label>
-        <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
-        <input type="text" id="costLivingResult" readonly><br>
-      </div>
+      <label>بدل غلاء معيشة:</label>
+      <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
+      <input type="text" id="costLivingResult" readonly><br>
     </div>
 
     <div class="separator"></div>
 
-    <div class="result" id="resultsSection">
-      عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
-      إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
-      إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
-      <span id="governmentShareRow">حصةالحكومة لاشتراكات صندوق الحماية الاجتماعية(12.5%): <span id="twelvePercent">0</span><br></span>
-      <span id="deductionRow">أستقطاع اشتراكات صندوق الحماية الاجتماعية (8%): <span id="deduction">0</span><br></span>
-      <span id="netRow">✅ صافي المستحق: <span id="net">0</span></span>
+    <div class="result">
+‎      عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
+‎      إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
+‎      إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
+‎      نسبة 12.5% من إجمالي الاستحقاق: <span id="twelvePercent">0</span><br>
+‎      أستقطاع اشتراكات صندوق الحماية الاجتماعية (8%): <span id="deduction">0</span><br>
+‎      ✅ صافي المستحق: <span id="net">0</span>
     </div>
 
     <div class="approval-section">
       <div class="approval-right">
-        إعداد ومراجعة: _______________      
+‎        إعداد ومراجعة: _______________      
       </div>
       <div class="approval-right">
-        اعتماد مدير الدائرة: _______________      
+‎        اعتماد مدير الدائرة: _______________      
       </div>
     </div>
 
     <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
   </div>
 
-  <!-- تذييل الصفحة المتحرك -->
+‎  <!-- تذييل الصفحة المتحرك -->
   <div class="footer-animation">
     <div class="marquee">
       <span>جميع الحقوق محفوظة للموظف محمد جعبوب - قسم الرواتب - دائرة الشؤون المالية</span>
@@ -344,7 +263,7 @@
     const startDate = document.getElementById("startDate");
     const endDate = document.getElementById("endDate");
 
-    // تعيين التواريخ الافتراضية لتكون الشهر الحالي
+‎    // تعيين التواريخ الافتراضية لتكون الشهر الحالي
     const today = new Date();
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
@@ -377,15 +296,6 @@
     const net = document.getElementById("net");
     const daysCount = document.getElementById("daysCount");
 
-    // عناصر النتائج التي سيتم إخفاؤها
-    const governmentShareRow = document.getElementById("governmentShareRow");
-    const deductionRow = document.getElementById("deductionRow");
-    const netRow = document.getElementById("netRow");
-
-    // عناصر الحقول التي سيتم إخفاؤها
-    const nextYearSection = document.getElementById("nextYearSection");
-    const allowanceSections = document.querySelectorAll('.allowance-section');
-
     function daysInMonth(year, month) {
       return new Date(year, month + 1, 0).getDate();
     }
@@ -409,63 +319,31 @@
       let totalBase = 0;
       let totalCalc = 0;
 
-      // حساب السنة المحددة من القائمة المنسدلة
-      const selectedYear = parseInt(document.getElementById("nextYearSelect").value);
-      const basicNextYearValue = parseFloat(document.getElementById("basicNextYear").value) || 0;
-
       allowances.forEach(item => {
         let input = document.getElementById(item.id);
         let resultBox = document.getElementById(item.result);
         let monthly = parseFloat(input.value) || 0;
-        
-        // إذا كان هذا هو البدل الأساسي، نحتاج إلى معالجته بشكل مختلف
-        if (item.id === "basic") {
-          totalBase += monthly; // نضيف إلى الإجمالي الأساسي
-          
-          let current = new Date(start);
-          let sum = 0;
-          while (current <= end) {
-            let year = current.getFullYear();
-            let month = current.getMonth();
-            let daysInThisMonth = daysInMonth(year, month);
-            
-            // تحديد قيمة البدل الأساسي حسب السنة
-            let dailyValue = 0;
-            if (year < selectedYear) {
-              dailyValue = monthly / daysInThisMonth;
-            } else {
-              dailyValue = basicNextYearValue / daysInThisMonth;
-            }
-            
-            sum += dailyValue;
-            current.setDate(current.getDate() + 1);
-          }
-          
-          resultBox.value = sum.toFixed(3);
-          totalCalc += sum;
-        } else {
-          totalBase += monthly;
-          
-          let current = new Date(start);
-          let sum = 0;
-          while (current <= end) {
-            let year = current.getFullYear();
-            let month = current.getMonth();
-            let daysInThisMonth = daysInMonth(year, month);
-            let daily = monthly / daysInThisMonth;
-            sum += daily;
-            current.setDate(current.getDate() + 1);
-          }
-          
-          resultBox.value = sum.toFixed(3);
-          totalCalc += sum;
+        totalBase += monthly;
+
+        let current = new Date(start);
+        let sum = 0;
+        while (current <= end) {
+          let year = current.getFullYear();
+          let month = current.getMonth();
+          let daysInThisMonth = daysInMonth(year, month);
+          let daily = monthly / daysInThisMonth;
+          sum += daily;
+          current.setDate(current.getDate() + 1);
         }
+
+        resultBox.value = sum.toFixed(3);
+        totalCalc += sum;
       });
 
       totalAllowances.textContent = totalBase.toFixed(3);
       totalPeriod.textContent = totalCalc.toFixed(3);
       
-      // حساب نسبة 12.5% من إجمالي الاستحقاق
+‎      // حساب نسبة 12.5% من إجمالي الاستحقاق
       let twelvePercentValue = totalCalc * 0.125;
       twelvePercent.textContent = twelvePercentValue.toFixed(3);
 
@@ -476,9 +354,7 @@
       net.textContent = netValue.toFixed(3);
     }
 
-    // تعيين القيم الافتراضية
     document.getElementById("basic").value = 1000;
-    document.getElementById("basicNextYear").value = 1050;
     document.getElementById("housing").value = 300;
     document.getElementById("electricity").value = 50;
     document.getElementById("water").value = 30;
@@ -487,79 +363,10 @@
     document.getElementById("professional").value = 200;
     document.getElementById("costLiving").value = 150;
 
-    // إضافة مستمعي الأحداث
     startDate.addEventListener("change", calculate);
     endDate.addEventListener("change", calculate);
-    document.getElementById("nextYearSelect").addEventListener("change", calculate);
-    document.getElementById("basicNextYear").addEventListener("input", calculate);
-    
-    allowances.forEach(item => {
+    allowances.forEach(item=>{
       document.getElementById(item.id).addEventListener("input", calculate);
-    });
-
-    // وظائف الأزرار الجديدة
-    document.getElementById("hideResults").addEventListener("click", function() {
-      // إخفاء القائمة المنسدلة للسنوات
-      nextYearSection.classList.add('hidden');
-      
-      // إخفاء جميع البدلات الأخرى
-      allowanceSections.forEach(section => {
-        section.classList.add('hidden');
-      });
-      
-      // إخفاء آخر ثلاث نتائج فقط
-      governmentShareRow.classList.add('hidden');
-      deductionRow.classList.add('hidden');
-      netRow.classList.add('hidden');
-    });
-
-    document.getElementById("showResults").addEventListener("click", function() {
-      // إظهار القائمة المنسدلة للسنوات
-      nextYearSection.classList.remove('hidden');
-      
-      // إظهار جميع البدلات الأخرى
-      allowanceSections.forEach(section => {
-        section.classList.remove('hidden');
-      });
-      
-      // إظهار جميع النتائج
-      governmentShareRow.classList.remove('hidden');
-      deductionRow.classList.remove('hidden');
-      netRow.classList.remove('hidden');
-    });
-
-    document.getElementById("clearFields").addEventListener("click", function() {
-      // مسح حقول الإدخال
-      document.getElementById("employeeName").value = "";
-      document.getElementById("employeeNumber").value = "";
-      
-      // إعادة تعيين التواريخ
-      startDate.value = formatDate(firstDayOfMonth);
-      endDate.value = formatDate(lastDayOfMonth);
-      
-      // مسح حقول المبالغ
-      document.getElementById("basic").value = "";
-      document.getElementById("basicNextYear").value = "";
-      document.getElementById("housing").value = "";
-      document.getElementById("electricity").value = "";
-      document.getElementById("water").value = "";
-      document.getElementById("phone").value = "";
-      document.getElementById("transport").value = "";
-      document.getElementById("professional").value = "";
-      document.getElementById("costLiving").value = "";
-      
-      // مسح النتائج
-      allowances.forEach(item => {
-        document.getElementById(item.result).value = "";
-      });
-      
-      // مسح نتائج الحساب
-      totalAllowances.textContent = "0";
-      totalPeriod.textContent = "0";
-      twelvePercent.textContent = "0";
-      deduction.textContent = "0";
-      net.textContent = "0";
-      daysCount.textContent = "0";
     });
 
     window.onload = calculate;
