@@ -75,8 +75,8 @@
     .approval-section {
       display: flex;
       justify-content: space-between;
-      margin-top: 30px; /* تم تقليل المسافة من الأعلى */
-      padding: 15px 0 5px 0; /* تم تعديل الحشوة */
+      margin-top: 30px;
+      padding: 15px 0 5px 0;
       border-top: 2px dashed #8B0000;
       font-size: 14px;
       font-weight: bold;
@@ -89,7 +89,7 @@
       display: flex;
       justify-content: center;
       gap: 15px;
-      margin-top: 20px; /* تم تقليل المسافة من الأعلى */
+      margin-top: 20px;
       flex-wrap: wrap;
     }
     .print-btn, .reset-btn {
@@ -120,7 +120,6 @@
       font-size: 16px;
     }
     
-    /* تذييل الصفحة المتحرك */
     .footer-animation {
       position: fixed;
       bottom: 0;
@@ -153,7 +152,6 @@
       100% { transform: translate(-100%, 0); }
     }
     
-    /* إعدادات الطباعة المحسنة */
     @media print {
       body {
         margin: 0;
@@ -184,7 +182,7 @@
       .approval-section {
         display: flex;
         justify-content: space-between;
-        margin-top: 15px; /* مسافة أقل في الطباعة */
+        margin-top: 15px;
         padding-top: 10px;
         border-top: 2px dashed #8B0000;
         font-size: 14px;
@@ -194,14 +192,11 @@
       .footer-animation {
         display: none;
       }
-      /* منع تقسيم المحتوى بين صفحات الطباعة */
       .button-container, .separator {
         page-break-before: avoid;
         page-break-after: avoid;
       }
     }
-
-    /* عناصر مخفية للعقود المؤقتة */
     .temporary-hide {
       display: block;
     }
@@ -239,7 +234,6 @@
       <label>بدل الأساسي للسنة التالية:</label>
       <input type="number" id="basicNextYear" class="amount-input" placeholder="أدخل المبلغ">
       <select id="nextYearSelect" class="year-select">
-        
         <option value="2026">2026</option>
         <option value="2027">2027</option>
         <option value="2028">2028</option>
@@ -282,12 +276,12 @@
       عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
       إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
       إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
-      <span id="twelvePercentLine">  اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (12.5‎‎%‎) : <span id="twelvePercent">0</span><br></span>
+      <span id="twelvePercentLine">اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (12.5‎%‎): <span id="twelvePercent">0</span><br></span>
       <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
+      <span id="totalSocialLine">إجمالي الاشتراكات لصندوق الحماية الاجتماعية (في حال إجازة غير مدفوعة الراتب): <span id="totalSocial">0</span><br></span>
       <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
     </div>
 
-    <!-- تم نقل قسم الموافقات إلى هنا ليكون أقرب إلى النتائج -->
     <div class="approval-section">
       <div class="approval-right">
         إعداد ومراجعة: _______________      
@@ -303,7 +297,6 @@
     </div>
   </div>
 
-  <!-- تذييل الصفحة المتحرك -->
   <div class="footer-animation">
     <div class="marquee">
       <span>جميع الحقوق محفوظة للموظف محمد جعبوب - قسم الرواتب - دائرة الشؤون المالية</span>
@@ -315,7 +308,6 @@
     const endDate = document.getElementById("endDate");
     const contractType = document.getElementById("contractType");
 
-    // تعيين التواريخ الافتراضية لتكون الشهر الحالي
     const today = new Date();
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
@@ -345,27 +337,29 @@
     const totalPeriod = document.getElementById("totalPeriod");
     const twelvePercent = document.getElementById("twelvePercent");
     const deduction = document.getElementById("deduction");
+    const totalSocial = document.getElementById("totalSocial");
     const net = document.getElementById("net");
     const daysCount = document.getElementById("daysCount");
 
-    // عناصر لإخفائها عند اختيار عقود موقتة
     const twelvePercentLine = document.getElementById("twelvePercentLine");
     const deductionLine = document.getElementById("deductionLine");
+    const totalSocialLine = document.getElementById("totalSocialLine");
     const netLine = document.getElementById("netLine");
 
     function daysInMonth(year, month) {
       return new Date(year, month + 1, 0).getDate();
     }
 
-    // دالة للتحقق من نوع العقد وتحديث العرض
     function updateContractDisplay() {
       if (contractType.value === "temporary") {
         twelvePercentLine.style.display = "none";
         deductionLine.style.display = "none";
+        totalSocialLine.style.display = "none";
         netLine.style.display = "none";
       } else {
         twelvePercentLine.style.display = "block";
         deductionLine.style.display = "block";
+        totalSocialLine.style.display = "block";
         netLine.style.display = "block";
       }
     }
@@ -389,7 +383,6 @@
       let totalBase = 0;
       let totalCalc = 0;
 
-      // حساب السنة المحددة من القائمة المنسدلة
       const selectedYear = parseInt(document.getElementById("nextYearSelect").value);
       const basicNextYearValue = parseFloat(document.getElementById("basicNextYear").value) || 0;
 
@@ -398,34 +391,22 @@
         let resultBox = document.getElementById(item.result);
         let monthly = parseFloat(input.value) || 0;
         
-        // إذا كان هذا هو البدل الأساسي، نحتاج إلى معالجته بشكل مختلف
         if (item.id === "basic") {
-          totalBase += monthly; // نضيف إلى الإجمالي الأساسي
-          
+          totalBase += monthly;
           let current = new Date(start);
           let sum = 0;
           while (current <= end) {
             let year = current.getFullYear();
             let month = current.getMonth();
             let daysInThisMonth = daysInMonth(year, month);
-            
-            // تحديد قيمة البدل الأساسي حسب السنة
-            let dailyValue = 0;
-            if (year < selectedYear) {
-              dailyValue = monthly / daysInThisMonth;
-            } else {
-              dailyValue = basicNextYearValue / daysInThisMonth;
-            }
-            
+            let dailyValue = (year < selectedYear) ? (monthly / daysInThisMonth) : (basicNextYearValue / daysInThisMonth);
             sum += dailyValue;
             current.setDate(current.getDate() + 1);
           }
-          
           resultBox.value = sum.toFixed(3);
           totalCalc += sum;
         } else {
           totalBase += monthly;
-          
           let current = new Date(start);
           let sum = 0;
           while (current <= end) {
@@ -436,7 +417,6 @@
             sum += daily;
             current.setDate(current.getDate() + 1);
           }
-          
           resultBox.value = sum.toFixed(3);
           totalCalc += sum;
         }
@@ -445,31 +425,26 @@
       totalAllowances.textContent = totalBase.toFixed(3);
       totalPeriod.textContent = totalCalc.toFixed(3);
       
-      // اشتراكات صندوق الحماية الاجتماعية حصة الحكومة 12.5% 
       let twelvePercentValue = totalCalc * 0.125;
       twelvePercent.textContent = twelvePercentValue.toFixed(3);
 
       let ded = totalCalc * 0.08;
       deduction.textContent = ded.toFixed(3);
 
+      let totalSocialValue = twelvePercentValue + ded;
+      totalSocial.textContent = totalSocialValue.toFixed(3);
+
       let netValue = totalCalc - ded;
       net.textContent = netValue.toFixed(3);
 
-      // تحديث العرض حسب نوع العقد
       updateContractDisplay();
     }
 
-    // دالة تفريغ الحقول - معدلة لتفريغ جميع الحقول مع استثناء قائمة السنوات
     function resetForm() {
-      // تفريغ حقول النص
       document.getElementById("employeeName").value = "";
       document.getElementById("employeeNumber").value = "";
-      
-      // تفريغ حقول التواريخ
       document.getElementById("startDate").value = "";
       document.getElementById("endDate").value = "";
-      
-      // تفريغ حقول البدلات (مع استثناء قائمة السنوات)
       document.getElementById("basic").value = "";
       document.getElementById("basicNextYear").value = "";
       document.getElementById("housing").value = "";
@@ -479,28 +454,20 @@
       document.getElementById("transport").value = "";
       document.getElementById("professional").value = "";
       document.getElementById("costLiving").value = "";
-      
-      // إعادة تعيين نوع العقد إلى الدائمة
       contractType.value = "permanent";
-      
-      // تفريغ حقول النتائج
       allowances.forEach(item => {
         document.getElementById(item.result).value = "";
       });
-      
-      // إعادة تعيين النتائج
       totalAllowances.textContent = "0";
       totalPeriod.textContent = "0";
       twelvePercent.textContent = "0";
       deduction.textContent = "0";
+      totalSocial.textContent = "0";
       net.textContent = "0";
       daysCount.textContent = "0";
-      
-      // تحديث العرض حسب نوع العقد
       updateContractDisplay();
     }
 
-    // إضافة مستمعي الأحداث
     startDate.addEventListener("change", calculate);
     endDate.addEventListener("change", calculate);
     contractType.addEventListener("change", updateContractDisplay);
@@ -511,11 +478,4 @@
       document.getElementById(item.id).addEventListener("input", calculate);
     });
 
-    window.onload = function() {
-      calculate();
-      updateContractDisplay();
-    };
-  </script>
-
-</body>
-</html>
+    window.onload = function()
