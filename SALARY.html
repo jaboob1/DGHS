@@ -52,6 +52,7 @@
       font-size: 14px;
       color: #8B0000;
       margin: 0 15px;
+      line-height: 1.6;
     }
     
     .container {
@@ -254,10 +255,21 @@
         page-break-before: avoid;
         page-break-after: avoid;
       }
+      .disclaimer {
+        display: none !important;
+      }
     }
 
-    .temporary-hide {
-      display: block;
+    .disclaimer {
+      text-align: center;
+      margin-top: 25px;
+      padding: 10px;
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 5px;
+      color: #856404;
+      font-size: 13px;
+      direction: rtl;
     }
   </style>
 </head>
@@ -265,17 +277,19 @@
 
   <!-- رأس الصفحة مع اللوجوهات والعنوان -->
   <div class="header-logos">
+    <!-- تم عكس أماكن الشعارات -->
     <div class="logo-left">
-      <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="Oman Vision Logo">
+      <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="Ministry of Health Logo">
     </div>
     
     <div class="header-title">
-      المديرية العامة للشؤون المالية<br>
-      دائرة الشؤون المالية - قسم الرواتب والمصروفات
+      المديرية العامة للخدمات الصحية لمحافظة ظفار<br>
+      دائرة الشؤون المالية<br>
+      قسم الرواتب والمصروفات
     </div>
     
     <div class="logo-right">
-      <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="Ministry of Health Logo">
+      <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="Oman Vision Logo">
     </div>
   </div>
 
@@ -367,6 +381,11 @@
     <div class="button-container">
       <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
       <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ جميع الحقول</button>
+    </div>
+    
+    <!-- إضافة التنويه المطلوب -->
+    <div class="disclaimer">
+      تنويه: هذه الصفحة غير رسمية بالوزارة تم اعدادها وتطويرها من دائرة الشؤون المالية بظفار
     </div>
   </div>
 
