@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <title>حاسبة رواتب</title>
   <style>
+    @font-face {
+      font-family: 'Diwani';
+      src: url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
+      font-weight: normal;
+      font-style: normal;
+    }
+    
     body {
       font-family: Arial, sans-serif;
       direction: rtl;
@@ -16,12 +23,43 @@
       font-size: 14px;
     }
     
+    .header-logos {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: white;
+      border: 2px solid #8B0000;
+      border-radius: 10px;
+      max-width: 800px;
+      margin: 0 auto 20px auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    
+    .logo-left, .logo-right {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo-left img, .logo-right img {
+      height: 80px;
+      width: auto;
+    }
+    
+    .header-title {
+      text-align: center;
+      font-family: 'Diwani', 'Lateef', serif;
+      font-size: 14px;
+      color: #8B0000;
+      margin: 0 15px;
+    }
+    
     .container {
       padding: 20px;
       border: 2px solid #8B0000;
       border-radius: 10px;
       max-width: 800px;
-      margin: 120px auto 50px auto; /* تم تعديل الهامش لترك مساحة للوغوهات */
+      margin: 0 auto 50px auto;
       background: white;
       box-shadow: 0 0 15px rgba(0,0,0,0.1);
       position: relative;
@@ -154,23 +192,6 @@
       100% { transform: translate(-100%, 0); }
     }
 
-    /* اللوجوهات أعلى الصفحة */
-    .logo-left, .logo-right {
-      position: absolute;
-      top: 10px;
-      z-index: 200;
-    }
-    .logo-left {
-      left: 50px;
-    }
-    .logo-right {
-      right: 50px;
-    }
-    .logo-left img, .logo-right img {
-      height: 120px;
-      width: auto;
-    }
-    
     /* إعدادات الطباعة */
     @media print {
       body {
@@ -180,10 +201,26 @@
         font-size: 13px;
         height: auto;
       }
+      .header-logos {
+        border: none;
+        box-shadow: none;
+        margin: 0 auto 10px auto;
+        padding: 5px;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        page-break-inside: avoid;
+      }
+      .header-logos img {
+        height: 70px;
+      }
+      .header-title {
+        font-size: 13px;
+      }
       .container {
         border: none;
         box-shadow: none;
-        margin: 100px 0 0 0;
+        margin: 0 auto;
         padding: 10px;
         width: 100%;
         max-width: 100%;
@@ -217,10 +254,6 @@
         page-break-before: avoid;
         page-break-after: avoid;
       }
-      /* اللوجوهات تظهر أيضًا في الطباعة */
-      .logo-left, .logo-right {
-        display: block;
-      }
     }
 
     .temporary-hide {
@@ -230,18 +263,23 @@
 </head>
 <body>
 
-  <!-- لوجو عمان فيجن يسار -->
-  <div class="logo-left">
-    <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="Oman Vision Logo">
-  </div>
-
-  <!-- لوجو وزارة الصحة يمين -->
-  <div class="logo-right">
-    <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="Ministry of Health Logo">
+  <!-- رأس الصفحة مع اللوجوهات والعنوان -->
+  <div class="header-logos">
+    <div class="logo-left">
+      <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="Oman Vision Logo">
+    </div>
+    
+    <div class="header-title">
+      المديرية العامة للشؤون المالية<br>
+      دائرة الشؤون المالية - قسم الرواتب والمصروفات
+    </div>
+    
+    <div class="logo-right">
+      <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="Ministry of Health Logo">
+    </div>
   </div>
 
   <div class="container">
-    <h3> دائرة الشؤون المالية - قسم الرواتب والمصروفات </h3>
     <h3>حاسبة رواتب</h3>
 
     <label>اسم الموظف:</label>
@@ -503,7 +541,6 @@
       totalPeriod.textContent = "0";
       twelvePercent.textContent = "0";
       deduction.textContent = "0";
-      totalSocial.textContent = "0";
       net.textContent = "0";
       daysCount.textContent = "0";
       updateContractDisplay();
