@@ -24,7 +24,7 @@
     }
     
     .container {
-      padding: 35px;
+      padding: 20px;
       border: 2px solid #8B0000;
       border-radius: 10px;
       max-width: 800px;
@@ -36,26 +36,10 @@
 
     /* رأس الصفحة داخل الإطار */
     .inner-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      text-align: center;
       margin-bottom: 20px;
       padding-bottom: 15px;
       border-bottom: 2px solid #8B0000;
-    }
-    
-    .inner-logo {
-      flex: 0 0 auto;
-    }
-    
-    .inner-logo img {
-      height: 70px;
-      width: auto;
-    }
-    
-    .inner-title {
-      text-align: center;
-      flex: 1;
     }
     
     .directorate-title {
@@ -236,9 +220,6 @@
         height: auto;
         page-break-inside: avoid;
       }
-      .inner-logo img {
-        height: 60px;
-      }
       .directorate-title {
         font-size: 16px;
       }
@@ -277,7 +258,7 @@
       .footer-animation {
         display: none;
       }
-      /* منع تقسيم المحتوى بين صفحات الطباعة */
+      /* منع تقسيم المحتوى между صفحات الطباعة */
       .button-container, .separator {
         page-break-before: avoid;
         page-break-after: avoid;
@@ -291,20 +272,10 @@
 <body>
 
   <div class="container">
-    <!-- رأس الصفحة داخل الإطار -->
+    <!-- رأس الصفحة داخل الإطار بدون شعارات -->
     <div class="inner-header">
-      <div class="inner-logo">
-        <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="Ministry of Health Logo">
-      </div>
-      
-      <div class="inner-title">
-        <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
-        <div class="department-title">دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
-      </div>
-      
-      <div class="inner-logo">
-        <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="Oman Vision Logo">
-      </div>
+      <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
+      <div class="department-title">دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
     </div>
 
     <h3>حاسبة رواتب</h3>
@@ -379,6 +350,8 @@
       إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
       <span id="twelvePercentLine">  اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (12.5‎‎%‎) : <span id="twelvePercent">0</span><br></span>
       <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
+      <!-- السطر المضاف -->
+      <span id="totalSocialLine">إجمالي الاشتراكات في حالة إجازة بدون راتب: <span id="totalSocial">0</span><br></span>
       <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
     </div>
 
@@ -444,10 +417,12 @@
     const deduction = document.getElementById("deduction");
     const net = document.getElementById("net");
     const daysCount = document.getElementById("daysCount");
+    const totalSocial = document.getElementById("totalSocial"); // العنصر المضاف
 
     const twelvePercentLine = document.getElementById("twelvePercentLine");
     const deductionLine = document.getElementById("deductionLine");
     const netLine = document.getElementById("netLine");
+    const totalSocialLine = document.getElementById("totalSocialLine"); // العنصر المضاف
 
     function daysInMonth(year, month) {
       return new Date(year, month + 1, 0).getDate();
@@ -457,10 +432,12 @@
       if (contractType.value === "temporary") {
         twelvePercentLine.style.display = "none";
         deductionLine.style.display = "none";
+        totalSocialLine.style.display = "none"; // إخفاء السطر المضاف
         netLine.style.display = "none";
       } else {
         twelvePercentLine.style.display = "block";
         deductionLine.style.display = "block";
+        totalSocialLine.style.display = "block"; // إظهار السطر المضاف
         netLine.style.display = "block";
       }
     }
@@ -543,6 +520,10 @@
       let ded = totalCalc * 0.08;
       deduction.textContent = ded.toFixed(3);
 
+      // حساب إجمالي الاشتراكات (حصة الحكومة + حصة الموظف)
+      let totalSocialValue = twelvePercentValue + ded;
+      totalSocial.textContent = totalSocialValue.toFixed(3);
+
       let netValue = totalCalc - ded;
       net.textContent = netValue.toFixed(3);
 
@@ -573,6 +554,7 @@
       totalPeriod.textContent = "0";
       twelvePercent.textContent = "0";
       deduction.textContent = "0";
+      totalSocial.textContent = "0"; // إعادة تعيين السطر المضاف
       net.textContent = "0";
       daysCount.textContent = "0";
       updateContractDisplay();
