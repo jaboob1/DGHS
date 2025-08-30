@@ -11,7 +11,6 @@
       font-style: normal;
     }
     
-    /* تطبيق box-sizing على جميع العناصر لتحسين التحكم في الأحجام */
     * {
       box-sizing: border-box;
     }
@@ -200,14 +199,14 @@
     }
     .marquee span {
       display: inline-block;
-      padding-right: 100%; /* تغيير من padding-left إلى padding-right */
+      padding-right: 100%;
       animation: marquee 15s linear infinite;
       font-weight: bold;
       font-size: 14px;
     }
     @keyframes marquee {
       0%   { transform: translate(0, 0); }
-      100% { transform: translate(100%, 0); } /* تغيير من -100% إلى 100% */
+      100% { transform: translate(100%, 0); }
     }
 
     .disclaimer {
@@ -222,110 +221,72 @@
       direction: rtl;
     }
 
-    /* إعدادات الطباعة المحسنة */
+    /* إعدادات الطباعة المحسنة لصفحة واحدة */
     @media print {
       /* إعدادات الصفحة الأساسية */
       @page {
-        margin: 0.5cm; /* هوامش صغيرة للصفحة */
-        size: portrait; /* اتجاه الصفحة */
-      }
-      
-      * {
-        box-sizing: border-box;
+        margin: 0.3cm; /* هوامش صغيرة جداً */
+        size: portrait;
       }
       
       body {
         margin: 0;
+        padding: 0;
         background: white;
-        padding: 5mm; /* تقليل الهوامش الداخلية */
-        font-size: 13px;
-        height: auto;
+        font-size: 11px; /* تقليل حجم الخط العام */
         width: 100%;
+        height: auto;
       }
       
       .container {
-        border: 2px solid #8B0000 !important; /* التأكد من ظهور الإطار */
+        border: 2px solid #8B0000 !important;
         box-shadow: none;
-        margin: 0 auto;
-        padding: 10px;
+        margin: 0;
+        padding: 8px;
         width: 100%;
         max-width: 100%;
-        height: auto;
         page-break-inside: avoid;
+        break-inside: avoid;
       }
       
       .inner-header {
-        border: none;
-        box-shadow: none;
-        margin: 0 auto 10px auto;
-        padding: 5px;
-        width: 100%;
-        max-width: 100%;
-        height: auto;
+        margin-bottom: 10px;
+        padding-bottom: 8px;
         page-break-inside: avoid;
       }
       
       .inner-logo img {
-        height: 60px;
+        height: 50px; /* تصغير الشعارات */
       }
       
       .directorate-title {
-        font-size: 16px;
+        font-size: 14px;
       }
       
       .department-title {
-        font-size: 12px;
+        font-size: 11px;
       }
       
       h3 {
-        font-size: 18px;
-        margin: 10px 0;
-        padding: 8px;
+        font-size: 16px;
+        margin: 5px 0 10px 0;
+        padding: 5px;
       }
       
-      .result {
-        font-size: 14px; 
-        padding: 3px;   
-        line-height: 1.4;
-        margin-bottom: 10px;
-      }
-      
-      .print-btn, .reset-btn {
-        display: none;
-      }
-      
-      .approval-section {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 15px;
-        padding-top: 10px;
-        border-top: 2px dashed #8B0000;
-        font-size: 14px;
-        font-weight: bold;
-        page-break-inside: avoid;
-      }
-      
-      .footer-animation {
-        display: none;
-      }
-      
-      /* منع تقسيم المحتوى بين صفحات الطباعة */
-      .button-container, .separator {
-        page-break-before: avoid;
-        page-break-after: avoid;
-      }
-      
-      .disclaimer {
-        display: none !important;
-      }
-      
-      /* تحسين عرض العناصر في الطباعة */
       label {
-        width: 140px;
+        width: 130px;
+        margin: 3px 0;
+        font-size: 12px;
+      }
+      
+      input, select {
+        padding: 4px;
+        margin: 3px;
+        font-size: 11px;
       }
       
       input.employee-input {
-        width: 220px;
+        width: 200px;
       }
       
       input.amount-input {
@@ -338,6 +299,48 @@
       
       input[readonly] {
         width: 100px;
+      }
+      
+      .result {
+        font-size: 12px;
+        padding: 3px;
+        line-height: 1.4;
+        margin: 3px 0;
+      }
+      
+      .separator {
+        margin: 10px 0;
+      }
+      
+      .approval-section {
+        margin-top: 15px;
+        padding-top: 8px;
+        font-size: 12px;
+        page-break-inside: avoid;
+      }
+      
+      .button-container {
+        display: none;
+      }
+      
+      .footer-animation {
+        display: none;
+      }
+      
+      .disclaimer {
+        display: none !important;
+      }
+      
+      /* منع أي تقسيم للمحتوى */
+      .container, .inner-header, .result, .approval-section {
+        page-break-before: avoid;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+      
+      /* تحسين التباعد بين الأسطر */
+      br {
+        line-height: 0.8;
       }
     }
   </style>
@@ -434,7 +437,7 @@
       <span id="twelvePercentLine">  اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (12.5‎‎%‎) : <span id="twelvePercent">0</span><br></span>
       <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
       <!-- السطر المضاف -->
-      <span id="totalSocialLine">إجمالي الاشتراكات في حالة إجازة بدون راتب: <span id="totalSocial">0</span><br></span>
+      <span id="totalSocialLine">إجمالي الاشتراكات في حالة خروج الموظف لإجازة بدون راتب: <span id="totalSocial">0</span><br></span>
       <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
     </div>
 
@@ -454,13 +457,13 @@
     
     <!-- التنويه -->
     <div class="disclaimer">
-      للتنويه: هذه الصفحة لا تعتبر رسمية  تم إنشائها وتطويرها من قبل دائرة الشؤون المالية بمحافظة ظفار
+      لتنويه: الموقع غير رسمي، تم أنشاء الاداة وتطويرها من قبل دائرة الشؤون المالية بمحافظة ظفار
     </div>
   </div>
 
   <div class="footer-animation">
     <div class="marquee">
-      <span>جميع الحقوق محفوظة لمالك الموقع ( محمد جعبوب ) - قسم الرواتب - دائرة الشؤون المالية</span>
+      <span>جميع الحقوق محفوظة لمالك الموقع (محمد جعبوب) - قسم الرواتب - دائرة الشؤون المالية</span>
     </div>
   </div>
 
@@ -500,12 +503,12 @@
     const deduction = document.getElementById("deduction");
     const net = document.getElementById("net");
     const daysCount = document.getElementById("daysCount");
-    const totalSocial = document.getElementById("totalSocial"); // العنصر المضاف
+    const totalSocial = document.getElementById("totalSocial");
 
     const twelvePercentLine = document.getElementById("twelvePercentLine");
     const deductionLine = document.getElementById("deductionLine");
     const netLine = document.getElementById("netLine");
-    const totalSocialLine = document.getElementById("totalSocialLine"); // العنصر المضاف
+    const totalSocialLine = document.getElementById("totalSocialLine");
 
     function daysInMonth(year, month) {
       return new Date(year, month + 1, 0).getDate();
@@ -515,12 +518,12 @@
       if (contractType.value === "temporary") {
         twelvePercentLine.style.display = "none";
         deductionLine.style.display = "none";
-        totalSocialLine.style.display = "none"; // إخفاء السطر المضاف
+        totalSocialLine.style.display = "none";
         netLine.style.display = "none";
       } else {
         twelvePercentLine.style.display = "block";
         deductionLine.style.display = "block";
-        totalSocialLine.style.display = "block"; // إظهار السطر المضاف
+        totalSocialLine.style.display = "block";
         netLine.style.display = "block";
       }
     }
@@ -603,7 +606,6 @@
       let ded = totalCalc * 0.08;
       deduction.textContent = ded.toFixed(3);
 
-      // حساب إجمالي الاشتراكات (حصة الحكومة + حصة الموظف)
       let totalSocialValue = twelvePercentValue + ded;
       totalSocial.textContent = totalSocialValue.toFixed(3);
 
@@ -637,7 +639,7 @@
       totalPeriod.textContent = "0";
       twelvePercent.textContent = "0";
       deduction.textContent = "0";
-      totalSocial.textContent = "0"; // إعادة تعيين السطر المضاف
+      totalSocial.textContent = "0";
       net.textContent = "0";
       daysCount.textContent = "0";
       updateContractDisplay();
