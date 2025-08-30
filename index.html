@@ -34,12 +34,28 @@
       position: relative;
     }
 
-    /* رأس الصفحة داخل الإطار */
+    /* رأس الصفحة داخل الإطار مع الشعارات */
     .inner-header {
-      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 20px;
       padding-bottom: 15px;
       border-bottom: 2px solid #8B0000;
+    }
+    
+    .inner-logo {
+      flex: 0 0 auto;
+    }
+    
+    .inner-logo img {
+      height: 70px;
+      width: auto;
+    }
+    
+    .inner-title {
+      text-align: center;
+      flex: 1;
     }
     
     .directorate-title {
@@ -220,6 +236,9 @@
         height: auto;
         page-break-inside: avoid;
       }
+      .inner-logo img {
+        height: 60px;
+      }
       .directorate-title {
         font-size: 16px;
       }
@@ -258,7 +277,7 @@
       .footer-animation {
         display: none;
       }
-      /* منع تقسيم المحتوى между صفحات الطباعة */
+      /* منع تقسيم المحتوى بين صفحات الطباعة */
       .button-container, .separator {
         page-break-before: avoid;
         page-break-after: avoid;
@@ -272,10 +291,20 @@
 <body>
 
   <div class="container">
-    <!-- رأس الصفحة داخل الإطار بدون شعارات -->
+    <!-- رأس الصفحة داخل الإطار مع الشعارات -->
     <div class="inner-header">
-      <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
-      <div class="department-title">دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
+      <div class="inner-logo">
+        <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="شعار وزارة الصحة">
+      </div>
+      
+      <div class="inner-title">
+        <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
+        <div class="department-title">دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
+      </div>
+      
+      <div class="inner-logo">
+        <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="شعار عمان فيجن">
+      </div>
     </div>
 
     <h3>حاسبة رواتب</h3>
@@ -371,7 +400,7 @@
     
     <!-- التنويه -->
     <div class="disclaimer">
-      تنويه: هذه الصفحة غير رسمية بالوزارة تم اعدادها وتطويرها من دائرة الشؤون المالية بظفار
+      تنويه: هذه الصفحة غير مرتبطة بموقع الوزارة تم اعدادها وتطويرها من دائرة الشؤون المالية بظفار
     </div>
   </div>
 
