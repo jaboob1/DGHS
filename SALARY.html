@@ -23,38 +23,6 @@
       font-size: 14px;
     }
     
-    .header-logos {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      background: white;
-      border: 2px solid #8B0000;
-      border-radius: 10px;
-      max-width: 800px;
-      margin: 0 auto 20px auto;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    }
-    
-    .logo-left, .logo-right {
-      display: flex;
-      align-items: center;
-    }
-    
-    .logo-left img, .logo-right img {
-      height: 80px;
-      width: auto;
-    }
-    
-    .header-title {
-      text-align: center;
-      font-family: 'Diwani', 'Lateef', serif;
-      font-size: 14px;
-      color: #8B0000;
-      margin: 0 15px;
-      line-height: 1.6;
-    }
-    
     .container {
       padding: 20px;
       border: 2px solid #8B0000;
@@ -64,6 +32,56 @@
       background: white;
       box-shadow: 0 0 15px rgba(0,0,0,0.1);
       position: relative;
+    }
+
+    /* رأس الصفحة داخل الإطار */
+    .inner-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #8B0000;
+    }
+    
+    .inner-logo {
+      flex: 0 0 auto;
+    }
+    
+    .inner-logo img {
+      height: 70px;
+      width: auto;
+    }
+    
+    .inner-title {
+      text-align: center;
+      flex: 1;
+    }
+    
+    .directorate-title {
+      font-family: 'Diwani', 'Lateef', serif;
+      font-size: 18px;
+      color: #8B0000;
+      margin: 0;
+      font-weight: bold;
+    }
+    
+    .department-title {
+      font-family: 'Diwani', 'Lateef', serif;
+      font-size: 14px;
+      color: #8B0000;
+      margin: 5px 0 0 0;
+    }
+
+    h3 {
+      text-align: center;
+      color: #8B0000;
+      margin: 0 0 15px 0;
+      font-size: 20px;
+      padding: 10px;
+      background-color: #f8f8f8;
+      border-radius: 5px;
+      border: 1px solid #8B0000;
     }
 
     label {
@@ -153,12 +171,6 @@
     .reset-btn:hover {
       background: #267349;
     }
-    h3 {
-      text-align: center;
-      color: #8B0000;
-      margin-bottom: 15px;
-      font-size: 16px;
-    }
     
     /* تذييل الصفحة المتحرك */
     .footer-animation {
@@ -193,6 +205,18 @@
       100% { transform: translate(-100%, 0); }
     }
 
+    .disclaimer {
+      text-align: center;
+      margin-top: 25px;
+      padding: 10px;
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 5px;
+      color: #856404;
+      font-size: 13px;
+      direction: rtl;
+    }
+
     /* إعدادات الطباعة */
     @media print {
       body {
@@ -202,7 +226,7 @@
         font-size: 13px;
         height: auto;
       }
-      .header-logos {
+      .inner-header {
         border: none;
         box-shadow: none;
         margin: 0 auto 10px auto;
@@ -212,11 +236,14 @@
         height: auto;
         page-break-inside: avoid;
       }
-      .header-logos img {
-        height: 70px;
+      .inner-logo img {
+        height: 60px;
       }
-      .header-title {
-        font-size: 13px;
+      .directorate-title {
+        font-size: 16px;
+      }
+      .department-title {
+        font-size: 12px;
       }
       .container {
         border: none;
@@ -259,41 +286,27 @@
         display: none !important;
       }
     }
-
-    .disclaimer {
-      text-align: center;
-      margin-top: 25px;
-      padding: 10px;
-      background-color: #fff3cd;
-      border: 1px solid #ffeaa7;
-      border-radius: 5px;
-      color: #856404;
-      font-size: 13px;
-      direction: rtl;
-    }
   </style>
 </head>
 <body>
 
-  <!-- رأس الصفحة مع اللوجوهات والعنوان -->
-  <div class="header-logos">
-    <!-- تم عكس أماكن الشعارات -->
-    <div class="logo-left">
-      <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="Ministry of Health Logo">
-    </div>
-    
-    <div class="header-title">
-      المديرية العامة للخدمات الصحية لمحافظة ظفار<br>
-      دائرة الشؤون المالية<br>
-      قسم الرواتب والمصروفات
-    </div>
-    
-    <div class="logo-right">
-      <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="Oman Vision Logo">
-    </div>
-  </div>
-
   <div class="container">
+    <!-- رأس الصفحة داخل الإطار -->
+    <div class="inner-header">
+      <div class="inner-logo">
+        <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="Ministry of Health Logo">
+      </div>
+      
+      <div class="inner-title">
+        <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
+        <div class="department-title">دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
+      </div>
+      
+      <div class="inner-logo">
+        <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="Oman Vision Logo">
+      </div>
+    </div>
+
     <h3>حاسبة رواتب</h3>
 
     <label>اسم الموظف:</label>
@@ -383,7 +396,7 @@
       <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ جميع الحقول</button>
     </div>
     
-    <!-- إضافة التنويه المطلوب -->
+    <!-- التنويه -->
     <div class="disclaimer">
       تنويه: هذه الصفحة غير رسمية بالوزارة تم اعدادها وتطويرها من دائرة الشؤون المالية بظفار
     </div>
