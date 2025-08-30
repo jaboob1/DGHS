@@ -508,3 +508,39 @@
       document.getElementById("housing").value = "";
       document.getElementById("electricity").value = "";
       document.getElementById("water").value = "";
+      document.getElementById("phone").value = "";
+      document.getElementById("transport").value = "";
+      document.getElementById("professional").value = "";
+      document.getElementById("costLiving").value = "";
+      contractType.value = "permanent";
+      allowances.forEach(item => {
+        document.getElementById(item.result).value = "";
+      });
+      totalAllowances.textContent = "0";
+      totalPeriod.textContent = "0";
+      twelvePercent.textContent = "0";
+      deduction.textContent = "0";
+      totalSocial.textContent = "0";
+      net.textContent = "0";
+      daysCount.textContent = "0";
+      updateContractDisplay();
+    }
+
+    startDate.addEventListener("change", calculate);
+    endDate.addEventListener("change", calculate);
+    contractType.addEventListener("change", updateContractDisplay);
+    document.getElementById("nextYearSelect").addEventListener("change", calculate);
+    document.getElementById("basicNextYear").addEventListener("input", calculate);
+    
+    allowances.forEach(item => {
+      document.getElementById(item.id).addEventListener("input", calculate);
+    });
+
+    window.onload = function() {
+      calculate();
+      updateContractDisplay();
+    };
+  </script>
+
+</body>
+</html>
