@@ -21,31 +21,10 @@
       border: 2px solid #8B0000;
       border-radius: 10px;
       max-width: 800px;
-      margin: 0 auto 50px auto;
+      margin: 120px auto 50px auto; /* تم تعديل الهامش لترك مساحة للوغوهات */
       background: white;
       box-shadow: 0 0 15px rgba(0,0,0,0.1);
       position: relative;
-    }
-
-    /* رأس الصفحة: لوجو يسار + نص يمين */
-    .header-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-
-    .header-section .logo img {
-      max-width: 150px;
-      height: auto;
-    }
-
-    .header-section .header-text {
-      text-align: right;
-      font-weight: bold;
-      line-height: 1.6;
-      font-size: 18px;
-      color: #8B0000;
     }
 
     label {
@@ -174,8 +153,25 @@
       0%   { transform: translate(0, 0); }
       100% { transform: translate(-100%, 0); }
     }
+
+    /* اللوجوهات أعلى الصفحة */
+    .logo-left, .logo-right {
+      position: absolute;
+      top: 10px;
+      z-index: 200;
+    }
+    .logo-left {
+      left: 10px;
+    }
+    .logo-right {
+      right: 10px;
+    }
+    .logo-left img, .logo-right img {
+      height: 80px;
+      width: auto;
+    }
     
-    /* إعدادات الطباعة المحسنة */
+    /* إعدادات الطباعة */
     @media print {
       body {
         margin: 0;
@@ -187,7 +183,7 @@
       .container {
         border: none;
         box-shadow: none;
-        margin: 0;
+        margin: 100px 0 0 0;
         padding: 10px;
         width: 100%;
         max-width: 100%;
@@ -221,21 +217,12 @@
         page-break-before: avoid;
         page-break-after: avoid;
       }
-
-      /* رأس الصفحة للطباعة */
-      .header-section {
-        margin-bottom: 10px;
-        page-break-inside: avoid;
-      }
-      .header-section .logo img {
-        max-width: 80px;
-      }
-      .header-section .header-text {
-        font-size: 14px;
+      /* اللوجوهات تظهر أيضًا في الطباعة */
+      .logo-left, .logo-right {
+        display: block;
       }
     }
 
-    /* عناصر مخفية للعقود المؤقتة */
     .temporary-hide {
       display: block;
     }
@@ -243,19 +230,17 @@
 </head>
 <body>
 
+  <!-- لوجو عمان فيجن يسار -->
+  <div class="logo-left">
+    <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="Oman Vision Logo">
+  </div>
+
+  <!-- لوجو وزارة الصحة يمين -->
+  <div class="logo-right">
+    <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="Ministry of Health Logo">
+  </div>
+
   <div class="container">
-
-    <!-- رأس الصفحة -->
-    <div class="header-section">
-      <div class="logo">
-        <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="شعار عمان">
-      </div>
-      <div class="header-text">
-        <div>وزارة الصحة - سلطنة عمان</div>
-        <div>المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
-      </div>
-    </div>
-
     <h3> دائرة الشؤون المالية - قسم الرواتب والمصروفات </h3>
     <h3>حاسبة رواتب</h3>
 
@@ -332,7 +317,6 @@
       <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
     </div>
 
-    <!-- قسم الموافقات -->
     <div class="approval-section">
       <div class="approval-right">
         إعداد ومراجعة: _______________      
@@ -348,7 +332,6 @@
     </div>
   </div>
 
-  <!-- تذييل الصفحة المتحرك -->
   <div class="footer-animation">
     <div class="marquee">
       <span>جميع الحقوق محفوظة للموظف محمد جعبوب - قسم الرواتب - دائرة الشؤون المالية</span>
@@ -360,7 +343,6 @@
     const endDate = document.getElementById("endDate");
     const contractType = document.getElementById("contractType");
 
-    // تعيين التواريخ الافتراضية
     const today = new Date();
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
@@ -393,7 +375,6 @@
     const net = document.getElementById("net");
     const daysCount = document.getElementById("daysCount");
 
-    // عناصر لإخفائها عند اختيار عقود موقتة
     const twelvePercentLine = document.getElementById("twelvePercentLine");
     const deductionLine = document.getElementById("deductionLine");
     const netLine = document.getElementById("netLine");
@@ -513,9 +494,11 @@
       document.getElementById("professional").value = "";
       document.getElementById("costLiving").value = "";
       contractType.value = "permanent";
+      
       allowances.forEach(item => {
         document.getElementById(item.result).value = "";
       });
+      
       totalAllowances.textContent = "0";
       totalPeriod.textContent = "0";
       twelvePercent.textContent = "0";
