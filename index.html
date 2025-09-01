@@ -38,7 +38,7 @@
       position: relative;
     }
 
-    /* رأس الصفحة داخل الإطار مع الشعارات */
+    /* رأس الصفحة داخل الإطار مع الشعارات - تمت إزاحته بمقدار 3 أسطر */
     .inner-header {
       display: flex;
       justify-content: space-between;
@@ -46,6 +46,7 @@
       margin-bottom: 20px;
       padding-bottom: 15px;
       border-bottom: 2px solid #8B0000;
+      margin-top: 50px; /* إزاحة الهيدر بمقدار 3 أسطر */
     }
     
     .inner-logo {
@@ -134,18 +135,24 @@
       margin: 20px 0;
       width: 100%;
     }
+    /* توسيع قسم الإعداد والمراجعة بمقدار 3 أسطر */
     .approval-section {
       display: flex;
       justify-content: space-between;
       margin-top: 30px;
-      padding: 15px 0 5px 0;
-      border-top: 2px solid #8B0000; /* تغيير الخط المنقط إلى خط عادي */
+      padding: 30px 0 20px 0; /* زيادة المساحة الداخلية */
+      border-top: 2px solid #8B0000;
       font-size: 14px;
       font-weight: bold;
+      min-height: 120px; /* زيادة الارتفاع بمقدار 3 أسطر */
     }
     .approval-right {
       text-align: right;
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 10px;
     }
     .button-container {
       display: flex;
@@ -253,6 +260,7 @@
         margin-bottom: 10px;
         padding-bottom: 8px;
         page-break-inside: avoid;
+        margin-top: 20px; /* تعديل الإزاحة للطباعة */
       }
       
       .inner-logo img {
@@ -314,9 +322,10 @@
       
       .approval-section {
         margin-top: 15px;
-        padding-top: 8px;
+        padding-top: 20px;
         font-size: 12px;
         page-break-inside: avoid;
+        min-height: 100px; /* تعديل للطباعة */
       }
       
       .button-container {
@@ -465,12 +474,15 @@
       <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
     </div>
 
+    <!-- قسم الإعداد والمراجعة الموسع -->
     <div class="approval-section">
       <div class="approval-right">
-        إعداد ومراجعة: _______________      
+        إعداد ومراجعة: _______________<br>
+        <span style="font-size: 12px;">(التوقيع والختم)</span>      
       </div>
       <div class="approval-right">
-        اعتماد مدير الدائرة: _______________      
+        اعتماد مدير الدائرة: _______________<br>
+        <span style="font-size: 12px;">(التوقيع والختم)</span>      
       </div>
     </div>
 
@@ -547,7 +559,7 @@
           el.style.display = "none";
         });
         
-        // إخفاء حسابات الصندوق الاجتماعي
+        // إخفاء حسابات الصندوق اجتماعي
         twelvePercentLine.style.display = "none";
         deductionLine.style.display = "none";
         totalSocialLine.style.display = "none";
