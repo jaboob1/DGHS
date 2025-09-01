@@ -139,7 +139,7 @@
       justify-content: space-between;
       margin-top: 30px;
       padding: 15px 0 5px 0;
-      border-top: 2px dashed #8B0000;
+      border-top: 2px solid #8B0000; /* تغيير الخط المنقط إلى خط عادي */
       font-size: 14px;
       font-weight: bold;
     }
@@ -343,6 +343,16 @@
         line-height: 0.8;
       }
     }
+
+    /* أنماط جديدة للإخفاء والإظهار */
+    .temporary-hide {
+      display: block;
+    }
+    
+    .contract-spacer {
+      height: 15px;
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -399,33 +409,39 @@
         <option value="2030">2030</option>
       </select><br>
 
-      <label>بدل السكن:</label>
-      <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="housingResult" readonly><br>
+      <!-- إضافة مسافة بين أنواع العقود -->
+      <div id="contractSpacer" class="contract-spacer"></div>
 
-      <label>بدل الكهرباء:</label>
-      <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="electricityResult" readonly><br>
+      <!-- الحقول التي سيتم إخفاؤها عند اختيار عقود موقتة -->
+      <div class="temporary-hide">
+        <label>بدل السكن:</label>
+        <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="housingResult" readonly><br>
 
-      <label>بدل الماء:</label>
-      <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="waterResult" readonly><br>
+        <label>بدل الكهرباء:</label>
+        <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="electricityResult" readonly><br>
 
-      <label>بدل الهاتف:</label>
-      <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="phoneResult" readonly><br>
+        <label>بدل الماء:</label>
+        <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="waterResult" readonly><br>
 
-      <label>بدل النقل:</label>
-      <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="transportResult" readonly><br>
+        <label>بدل الهاتف:</label>
+        <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="phoneResult" readonly><br>
 
-      <label>بدل مهني:</label>
-      <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="professionalResult" readonly><br>
+        <label>بدل النقل:</label>
+        <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="transportResult" readonly><br>
 
-      <label>بدل غلاء معيشة:</label>
-      <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="costLivingResult" readonly><br>
+        <label>بدل مهني:</label>
+        <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="professionalResult" readonly><br>
+
+        <label>بدل غلاء معيشة:</label>
+        <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="costLivingResult" readonly><br>
+      </div>
     </div>
 
     <div class="separator"></div>
@@ -471,6 +487,8 @@
     const startDate = document.getElementById("startDate");
     const endDate = document.getElementById("endDate");
     const contractType = document.getElementById("contractType");
+    const contractSpacer = document.getElementById("contractSpacer");
+    const temporaryHideElements = document.querySelectorAll('.temporary-hide');
 
     const today = new Date();
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -516,15 +534,33 @@
 
     function updateContractDisplay() {
       if (contractType.value === "temporary") {
+        // إخفاء الحقول غير المرغوبة في عقود موقتة
+        temporaryHideElements.forEach(el => {
+          el.style.display = "none";
+        });
+        
+        // إخفاء حسابات الصندوق الاجتماعي
         twelvePercentLine.style.display = "none";
         deductionLine.style.display = "none";
         totalSocialLine.style.display = "none";
         netLine.style.display = "none";
+        
+        // إخفاء المسافة الإضافية
+        contractSpacer.style.display = "none";
       } else {
+        // إظهار جميع الحقول في عقود دائمة
+        temporaryHideElements.forEach(el => {
+          el.style.display = "block";
+        });
+        
+        // إظهار حسابات الصندوق الاجتماعي
         twelvePercentLine.style.display = "block";
         deductionLine.style.display = "block";
         totalSocialLine.style.display = "block";
         netLine.style.display = "block";
+        
+        // إظهار المسافة الإضافية
+        contractSpacer.style.display = "block";
       }
     }
 
@@ -554,6 +590,12 @@
         let input = document.getElementById(item.id);
         let resultBox = document.getElementById(item.result);
         let monthly = parseFloat(input.value) || 0;
+        
+        // إذا كان نوع العقد موقتاً، نتجاهل الحقول المخفية في الحساب
+        if (contractType.value === "temporary" && 
+            (item.id !== "basic" && item.id !== "basicNextYear")) {
+          return; // تخطي هذا الحقل
+        }
         
         if (item.id === "basic") {
           totalBase += monthly; 
@@ -600,17 +642,25 @@
       totalAllowances.textContent = totalBase.toFixed(3);
       totalPeriod.textContent = totalCalc.toFixed(3);
       
-      let twelvePercentValue = totalCalc * 0.125;
-      twelvePercent.textContent = twelvePercentValue.toFixed(3);
+      // حساب اشتراكات الصندوق الاجتماعي فقط للعقود الدائمة
+      if (contractType.value === "permanent") {
+        let twelvePercentValue = totalCalc * 0.125;
+        twelvePercent.textContent = twelvePercentValue.toFixed(3);
 
-      let ded = totalCalc * 0.08;
-      deduction.textContent = ded.toFixed(3);
+        let ded = totalCalc * 0.08;
+        deduction.textContent = ded.toFixed(3);
 
-      let totalSocialValue = twelvePercentValue + ded;
-      totalSocial.textContent = totalSocialValue.toFixed(3);
+        let totalSocialValue = twelvePercentValue + ded;
+        totalSocial.textContent = totalSocialValue.toFixed(3);
 
-      let netValue = totalCalc - ded;
-      net.textContent = netValue.toFixed(3);
+        let netValue = totalCalc - ded;
+        net.textContent = netValue.toFixed(3);
+      } else {
+        twelvePercent.textContent = "0";
+        deduction.textContent = "0";
+        totalSocial.textContent = "0";
+        net.textContent = totalCalc.toFixed(3);
+      }
 
       updateContractDisplay();
     }
