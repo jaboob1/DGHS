@@ -19,16 +19,16 @@
       font-family: Arial, sans-serif;
       direction: rtl;
       margin: 0;
-      padding: 30px;
+      padding: 20px;
       background: #f9f9f9;
       position: relative;
       min-height: 100vh;
-      padding-bottom: 20px;
+      padding-bottom: 30px;
       font-size: 14px;
     }
     
     .container {
-      padding: 30px;
+      padding: 20px;
       border: 2px solid #8B0000;
       border-radius: 10px;
       max-width: 800px;
@@ -38,15 +38,14 @@
       position: relative;
     }
 
-    /* رأس الصفحة داخل الإطار مع الشعارات - تمت إزاحته بمقدار 3 أسطر */
+    /* رأس الصفحة داخل الإطار مع الشعارات */
     .inner-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
-      padding-bottom: 30px;
+      padding-bottom: 15px;
       border-bottom: 2px solid #8B0000;
-      margin-top: 50px; /* إزاحة الهيدر بمقدار 3 أسطر */
     }
     
     .inner-logo {
@@ -135,30 +134,26 @@
       margin: 20px 0;
       width: 100%;
     }
-    /* توسيع قسم الإعداد والمراجعة بمقدار 3 أسطر */
+    /* تقليص قسم التوقيع ليتناسب مع الطباعة */
     .approval-section {
       display: flex;
       justify-content: space-between;
-      margin-top: 30px;
-      padding: 30px 0 30px 0; /* زيادة المساحة الداخلية */
+      margin-top: 20px;
+      padding: 15px 0 5px 0;
       border-top: 2px solid #8B0000;
       font-size: 14px;
       font-weight: bold;
-      min-height: 90px; /* زيادة الارتفاع بمقدار 3 أسطر */
+      min-height: 60px; /* تقليل الارتفاع */
     }
     .approval-right {
       text-align: right;
       flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding-bottom: 30px;
     }
     .button-container {
       display: flex;
       justify-content: center;
       gap: 15px;
-      margin-top: 30px;
+      margin-top: 20px;
       flex-wrap: wrap;
     }
     .print-btn, .reset-btn {
@@ -183,7 +178,7 @@
       background: #267349;
     }
     
-    /* تذييل الصفحة المتحرك - تم تعديل الاتجاه */
+    /* تذييل الصفحة المتحرك */
     .footer-animation {
       position: fixed;
       bottom: 0;
@@ -232,7 +227,7 @@
     @media print {
       /* إعدادات الصفحة الأساسية */
       @page {
-        margin: 0.5cm; /* هوامش صغيرة جداً */
+        margin: 0.5cm; /* هوامش مناسبة للطباعة */
         size: portrait;
       }
       
@@ -240,7 +235,7 @@
         margin: 0;
         padding: 0;
         background: white;
-        font-size: 12px; /* تقليل حجم الخط العام */
+        font-size: 12px;
         width: 100%;
         height: auto;
       }
@@ -249,7 +244,7 @@
         border: 2px solid #8B0000 !important;
         box-shadow: none;
         margin: 0;
-        padding: 8px;
+        padding: 10px;
         width: 100%;
         max-width: 100%;
         page-break-inside: avoid;
@@ -257,28 +252,27 @@
       }
       
       .inner-header {
-        margin-bottom: 15px;
-        padding-bottom: 10px;
+        margin-bottom: 10px;
+        padding-bottom: 8px;
         page-break-inside: avoid;
-        margin-top: 30px; /* تعديل الإزاحة للطباعة */
       }
       
       .inner-logo img {
-        height: 50px; /* تصغير الشعارات */
+        height: 50px;
       }
       
       .directorate-title {
-        font-size: 14px;
+        font-size: 16px;
       }
       
       .department-title {
-        font-size: 11px;
+        font-size: 12px;
       }
       
       h3 {
-        font-size: 16px;
-        margin: 6px 0 11px 0;
-        padding: 6px;
+        font-size: 18px;
+        margin: 5px 0 10px 0;
+        padding: 8px;
       }
       
       label {
@@ -311,9 +305,9 @@
       
       .result {
         font-size: 12px;
-        padding: 2px;
+        padding: 3px;
         line-height: 1.4;
-        margin: 2px 0;
+        margin: 3px 0;
       }
       
       .separator {
@@ -322,10 +316,10 @@
       
       .approval-section {
         margin-top: 15px;
-        padding-top: 15px;
+        padding-top: 10px;
         font-size: 12px;
         page-break-inside: avoid;
-        min-height: 100px; /* تعديل للطباعة */
+        min-height: 50px;
       }
       
       .button-container {
@@ -346,11 +340,6 @@
         page-break-after: avoid;
         page-break-inside: avoid;
       }
-      
-      /* تحسين التباعد بين الأسطر */
-      br {
-        line-height: 0.8;
-      }
     }
 
     /* أنماط جديدة للإخفاء والإظهار */
@@ -361,11 +350,6 @@
     .contract-spacer {
       height: 15px;
       display: block;
-    }
-    
-    /* إزاحة المحتوى بمقدار سطرين */
-    .content-offset {
-      margin-top: 40px; /* زيادة الهامش العلوي بمقدار سطرين */
     }
   </style>
 </head>
@@ -379,7 +363,7 @@
       </div>
       
       <div class="inner-title">
-        <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
+        <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفар</div>
         <div class="department-title">دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
       </div>
       
@@ -389,9 +373,6 @@
     </div>
 
     <h3>حاسبة رواتب</h3>
-
-    <!-- إضافة مسافة بمقدار سطرين قبل المحتوى -->
-    <div style="height: 40px;"></div>
 
     <label>اسم الموظف:</label>
     <input type="text" id="employeeName" class="employee-input" placeholder="أسم الموظف"><br>
@@ -474,15 +455,13 @@
       <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
     </div>
 
-    <!-- قسم الإعداد والمراجعة الموسع -->
+    <!-- قسم الإعداد والمراجعة المعدل -->
     <div class="approval-section">
       <div class="approval-right">
-        إعداد ومراجعة: _______________<br>
-        <span style="font-size: 12px;"></span>      
+        إعداد ومراجعة: _______________      
       </div>
       <div class="approval-right">
-        اعتماد مدير الدائرة: _______________<br>
-        <span style="font-size: 12px;"></span>      
+        اعتماد مدير الدائرة: _______________      
       </div>
     </div>
 
@@ -559,7 +538,7 @@
           el.style.display = "none";
         });
         
-        // إخفاء حسابات الصندوق اجتماعي
+        // إخفاء حسابات الصندوق الاجتماعي
         twelvePercentLine.style.display = "none";
         deductionLine.style.display = "none";
         totalSocialLine.style.display = "none";
