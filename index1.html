@@ -134,14 +134,16 @@
       margin: 20px 0;
       width: 100%;
     }
+    /* تقليص قسم التوقيع ليتناسب مع الطباعة */
     .approval-section {
       display: flex;
       justify-content: space-between;
-      margin-top: 30px;
+      margin-top: 20px;
       padding: 15px 0 5px 0;
-      border-top: 2px dashed #8B0000;
+      border-top: 2px solid #8B0000;
       font-size: 14px;
       font-weight: bold;
+      min-height: 60px; /* تقليل الارتفاع */
     }
     .approval-right {
       text-align: right;
@@ -176,7 +178,7 @@
       background: #267349;
     }
     
-    /* تذييل الصفحة المتحرك - تم تعديل الاتجاه */
+    /* تذييل الصفحة المتحرك */
     .footer-animation {
       position: fixed;
       bottom: 0;
@@ -202,7 +204,7 @@
       padding-right: 100%;
       animation: marquee 20s linear infinite;
       font-weight: bold;
-      font-size: 18px;
+      font-size: 20px;
     }
     @keyframes marquee {
       0%   { transform: translate(0, 0); }
@@ -225,7 +227,7 @@
     @media print {
       /* إعدادات الصفحة الأساسية */
       @page {
-        margin: 0.3cm; /* هوامش صغيرة جداً */
+        margin: 0.5cm; /* هوامش مناسبة للطباعة */
         size: portrait;
       }
       
@@ -233,7 +235,7 @@
         margin: 0;
         padding: 0;
         background: white;
-        font-size: 11px; /* تقليل حجم الخط العام */
+        font-size: 12px;
         width: 100%;
         height: auto;
       }
@@ -242,7 +244,7 @@
         border: 2px solid #8B0000 !important;
         box-shadow: none;
         margin: 0;
-        padding: 8px;
+        padding: 10px;
         width: 100%;
         max-width: 100%;
         page-break-inside: avoid;
@@ -256,21 +258,21 @@
       }
       
       .inner-logo img {
-        height: 50px; /* تصغير الشعارات */
+        height: 50px;
       }
       
       .directorate-title {
-        font-size: 14px;
+        font-size: 16px;
       }
       
       .department-title {
-        font-size: 11px;
+        font-size: 12px;
       }
       
       h3 {
-        font-size: 16px;
+        font-size: 18px;
         margin: 5px 0 10px 0;
-        padding: 5px;
+        padding: 8px;
       }
       
       label {
@@ -314,9 +316,10 @@
       
       .approval-section {
         margin-top: 15px;
-        padding-top: 8px;
+        padding-top: 10px;
         font-size: 12px;
         page-break-inside: avoid;
+        min-height: 50px;
       }
       
       .button-container {
@@ -337,10 +340,49 @@
         page-break-after: avoid;
         page-break-inside: avoid;
       }
-      
-      /* تحسين التباعد بين الأسطر */
-      br {
-        line-height: 0.8;
+    }
+
+    /* أنماط جديدة للإخفاء والإظهار */
+    .temporary-hide {
+      display: block;
+    }
+    
+    .contract-spacer {
+      height: 15px;
+      display: block;
+    }
+    
+    /* أنماط الملاحظة الجديدة */
+    .note-container {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    
+    .note-label {
+      display: inline-block;
+      width: 150px;
+      margin: 5px 0;
+      font-weight: bold;
+    }
+    
+    .note-text {
+      color: #8B0000;
+      font-size: 12px;
+      margin: 5px 10px;
+      padding: 5px;
+      background-color: #fff3cd;
+      border-right: 3px solid #ffeaa7;
+      border-radius: 3px;
+      line-height: 1.4;
+      max-width: 400px;
+    }
+    
+    @media print {
+      .note-text {
+        font-size: 11px;
+        background-color: transparent;
+        border-right: 2px solid #ffeaa7;
       }
     }
   </style>
@@ -389,7 +431,11 @@
       <input type="number" id="basic" class="amount-input" placeholder="أدخل المبلغ">
       <input type="text" id="basicResult" readonly><br>
 
-      <label>بدل الأساسي للسنة التالية:</label>
+      <!-- الملاحظة المضافة -->
+      <div class="note-container">
+        <div class="note-label">بدل الأساسي للسنة التالية:</div>
+        <div class="note-text">ملاحظة: تدرج العلاوة الدورية لمعرفة الاشتراكات لسنتين متداخلة</div>
+      </div>
       <input type="number" id="basicNextYear" class="amount-input" placeholder="أدخل المبلغ">
       <select id="nextYearSelect" class="year-select">
         <option value="2026">2026</option>
@@ -399,33 +445,39 @@
         <option value="2030">2030</option>
       </select><br>
 
-      <label>بدل السكن:</label>
-      <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="housingResult" readonly><br>
+      <!-- إضافة مسافة بين أنواع العقود -->
+      <div id="contractSpacer" class="contract-spacer"></div>
 
-      <label>بدل الكهرباء:</label>
-      <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="electricityResult" readonly><br>
+      <!-- الحقول التي سيتم إخفاؤها عند اختيار عقود موقتة -->
+      <div class="temporary-hide">
+        <label>بدل السكن:</label>
+        <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="housingResult" readonly><br>
 
-      <label>بدل الماء:</label>
-      <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="waterResult" readonly><br>
+        <label>بدل الكهرباء:</label>
+        <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="electricityResult" readonly><br>
 
-      <label>بدل الهاتف:</label>
-      <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="phoneResult" readonly><br>
+        <label>بدل الماء:</label>
+        <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="waterResult" readonly><br>
 
-      <label>بدل النقل:</label>
-      <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="transportResult" readonly><br>
+        <label>بدل الهاتف:</label>
+        <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="phoneResult" readonly><br>
 
-      <label>بدل مهني:</label>
-      <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="professionalResult" readonly><br>
+        <label>بدل النقل:</label>
+        <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="transportResult" readonly><br>
 
-      <label>بدل غلاء معيشة:</label>
-      <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="costLivingResult" readonly><br>
+        <label>بدل مهني:</label>
+        <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="professionalResult" readonly><br>
+
+        <label>بدل غلاء معيشة:</label>
+        <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="costLivingResult" readonly><br>
+      </div>
     </div>
 
     <div class="separator"></div>
@@ -437,10 +489,11 @@
       <span id="twelvePercentLine">  اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (12.5‎‎%‎) : <span id="twelvePercent">0</span><br></span>
       <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
       <!-- السطر المضاف -->
-      <span id="totalSocialLine">إجمالي الاشتراكات في حالة إجازة بدون راتب: <span id="totalSocial">0</span><br></span>
+      <span id="totalSocialLine">إجمالي الاشتراكات في حالة خروج الموظف لإجازة بدون راتب: <span id="totalSocial">0</span><br></span>
       <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
     </div>
 
+    <!-- قسم الإعداد والمراجعة المعدل -->
     <div class="approval-section">
       <div class="approval-right">
         إعداد ومراجعة: _______________      
@@ -457,13 +510,13 @@
     
     <!-- التنويه -->
     <div class="disclaimer">
-      تنويه: هذه الصفحة غير رسمية بالوزارة تم اعدادها وتطويرها من دائرة الشؤون المالية بظفار
+      للتنويه:  محتوى الصفحة لا يتبع وزارة الصحة ،تم أنشاء هذي الاداة وتطويرها بمبادرة فردية 
     </div>
   </div>
 
   <div class="footer-animation">
     <div class="marquee">
-      <span>جميع الحقوق محفوظة للموظف محمد جعبوب - قسم الرواتب - دائرة الشؤون المالية</span>
+      <span> جميع الحقوق محفوظة © 2025  محمد جعبوب - قسم الرواتب - دائرة الشؤون المالية</span>
     </div>
   </div>
 
@@ -471,6 +524,8 @@
     const startDate = document.getElementById("startDate");
     const endDate = document.getElementById("endDate");
     const contractType = document.getElementById("contractType");
+    const contractSpacer = document.getElementById("contractSpacer");
+    const temporaryHideElements = document.querySelectorAll('.temporary-hide');
 
     const today = new Date();
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -516,15 +571,33 @@
 
     function updateContractDisplay() {
       if (contractType.value === "temporary") {
+        // إخفاء الحقول غير المرغوبة في عقود موقتة
+        temporaryHideElements.forEach(el => {
+          el.style.display = "none";
+        });
+        
+        // إخفاء حسابات الصندوق الاجتماعي
         twelvePercentLine.style.display = "none";
         deductionLine.style.display = "none";
         totalSocialLine.style.display = "none";
         netLine.style.display = "none";
+        
+        // إخفاء المسافة الإضافية
+        contractSpacer.style.display = "none";
       } else {
+        // إظهار جميع الحقول في عقود دائمة
+        temporaryHideElements.forEach(el => {
+          el.style.display = "block";
+        });
+        
+        // إظهار حسابات الصندوق الاجتماعي
         twelvePercentLine.style.display = "block";
         deductionLine.style.display = "block";
         totalSocialLine.style.display = "block";
         netLine.style.display = "block";
+        
+        // إظهار المسافة الإضافية
+        contractSpacer.style.display = "block";
       }
     }
 
@@ -554,6 +627,12 @@
         let input = document.getElementById(item.id);
         let resultBox = document.getElementById(item.result);
         let monthly = parseFloat(input.value) || 0;
+        
+        // إذا كان نوع العقد موقتاً، نتجاهل الحقول المخفية في الحساب
+        if (contractType.value === "temporary" && 
+            (item.id !== "basic" && item.id !== "basicNextYear")) {
+          return; // تخطي هذا الحقل
+        }
         
         if (item.id === "basic") {
           totalBase += monthly; 
@@ -600,17 +679,25 @@
       totalAllowances.textContent = totalBase.toFixed(3);
       totalPeriod.textContent = totalCalc.toFixed(3);
       
-      let twelvePercentValue = totalCalc * 0.125;
-      twelvePercent.textContent = twelvePercentValue.toFixed(3);
+      // حساب اشتراكات الصندوق الاجتماعي فقط للعقود الدائمة
+      if (contractType.value === "permanent") {
+        let twelvePercentValue = totalCalc * 0.125;
+        twelvePercent.textContent = twelvePercentValue.toFixed(3);
 
-      let ded = totalCalc * 0.08;
-      deduction.textContent = ded.toFixed(3);
+        let ded = totalCalc * 0.08;
+        deduction.textContent = ded.toFixed(3);
 
-      let totalSocialValue = twelvePercentValue + ded;
-      totalSocial.textContent = totalSocialValue.toFixed(3);
+        let totalSocialValue = twelvePercentValue + ded;
+        totalSocial.textContent = totalSocialValue.toFixed(3);
 
-      let netValue = totalCalc - ded;
-      net.textContent = netValue.toFixed(3);
+        let netValue = totalCalc - ded;
+        net.textContent = netValue.toFixed(3);
+      } else {
+        twelvePercent.textContent = "0";
+        deduction.textContent = "0";
+        totalSocial.textContent = "0";
+        net.textContent = totalCalc.toFixed(3);
+      }
 
       updateContractDisplay();
     }
