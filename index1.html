@@ -340,6 +340,18 @@
         page-break-after: avoid;
         page-break-inside: avoid;
       }
+      
+      /* إعدادات الطباعة للإطار الجديد */
+      .next-year-container {
+        border: 2px solid #8B0000 !important;
+        background-color: white !important;
+      }
+      
+      .note-text {
+        font-size: 11px;
+        background-color: transparent !important;
+        border-right: 2px solid #ffeaa7;
+      }
     }
 
     /* أنماط جديدة للإخفاء والإظهار */
@@ -353,9 +365,18 @@
     }
     
     /* أنماط الملاحظة الجديدة */
-    .note-container {
+    .next-year-container {
+      border: 2px solid #8B0000;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      background-color: #fff9e6;
+    }
+    
+    .next-year-inputs {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
+      flex-wrap: wrap;
       margin-bottom: 10px;
     }
     
@@ -369,21 +390,13 @@
     .note-text {
       color: #8B0000;
       font-size: 12px;
-      margin: 5px 10px;
-      padding: 5px;
+      margin: 0;
+      padding: 8px;
       background-color: #fff3cd;
       border-right: 3px solid #ffeaa7;
-      border-radius: 3px;
-      line-height: 1.4;
-      max-width: 400px;
-    }
-    
-    @media print {
-      .note-text {
-        font-size: 11px;
-        background-color: transparent;
-        border-right: 2px solid #ffeaa7;
-      }
+      border-radius: 4px;
+      line-height: 1.5;
+      text-align: justify;
     }
   </style>
 </head>
@@ -431,19 +444,23 @@
       <input type="number" id="basic" class="amount-input" placeholder="أدخل المبلغ">
       <input type="text" id="basicResult" readonly><br>
 
-      <!-- الملاحظة المضافة -->
-      <div class="note-container">
-        <div class="note-label">بدل الأساسي للسنة التالية:</div>
-        <div class="note-text">ملاحظة: تدرج العلاوة الدورية لمعرفة الاشتراكات لسنتين متداخلة</div>
+      <!-- الإطار الجديد حول بدل الأساسي للسنة التالية والملاحظة -->
+      <div class="next-year-container">
+        <div class="next-year-inputs">
+          <label>بدل الأساسي للسنة التالية:</label>
+          <input type="number" id="basicNextYear" class="amount-input" placeholder="أدخل المبلغ">
+          <select id="nextYearSelect" class="year-select">
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+            <option value="2028">2028</option>
+            <option value="2029">2029</option>
+            <option value="2030">2030</option>
+          </select>
+        </div>
+        <div class="note-text">
+          ملاحظة: تدرج العلاوة الدورية لمعرفة الاشتراكات لسنتين متداخلة
+        </div>
       </div>
-      <input type="number" id="basicNextYear" class="amount-input" placeholder="أدخل المبلغ">
-      <select id="nextYearSelect" class="year-select">
-        <option value="2026">2026</option>
-        <option value="2027">2027</option>
-        <option value="2028">2028</option>
-        <option value="2029">2029</option>
-        <option value="2030">2030</option>
-      </select><br>
 
       <!-- إضافة مسافة بين أنواع العقود -->
       <div id="contractSpacer" class="contract-spacer"></div>
@@ -660,7 +677,7 @@
         } else {
           totalBase += monthly;
           
-          let current = new Date(start);
+          let current = = new Date(start);
           let sum = 0;
           while (current <= end) {
             let year = current.getFullYear();
