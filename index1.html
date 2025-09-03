@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>حاسبة رواتب</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     @font-face {
       font-family: 'Diwani';
@@ -197,7 +195,7 @@
       flex-wrap: wrap;
     }
     
-    .print-btn, .reset-btn, .pdf-btn {
+    .print-btn, .reset-btn {
       padding: 8px 16px;
       font-size: 13px;
       color: white;
@@ -221,14 +219,6 @@
     
     .reset-btn:hover {
       background: #267349;
-    }
-    
-    .pdf-btn {
-      background: #1E90FF;
-    }
-    
-    .pdf-btn:hover {
-      background: #0066CC;
     }
     
     /* تذييل الصفحة المتحرك */
@@ -555,7 +545,6 @@
 
     <div class="button-container">
       <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
-      <button class="pdf-btn" onclick="saveAsPDF()">📄 حفظ PDF</button>
       <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ الحقول</button>
     </div>
     
@@ -572,9 +561,6 @@
   </div>
 
   <script>
-    // تهيئة jsPDF
-    const { jsPDF } = window.jspdf;
-
     document.addEventListener('DOMContentLoaded', function() {
       const startDate = document.getElementById("startDate");
       const endDate = document.getElementById("endDate");
@@ -800,50 +786,7 @@
         updateContractDisplay();
       }
 
-      // دالة لحفظ المستند كملف PDF
-      function saveAsPDF() {
-        const element = document.querySelector('.container');
-        
-        // إخفاء الأزرار قبل التصدير
-        const buttonContainer = document.querySelector('.button-container');
-        const originalDisplay = buttonContainer.style.display;
-        buttonContainer.style.display = 'none';
-        
-        html2canvas(element, {
-          scale: 2,
-          useCORS: true,
-          logging: false
-        }).then(canvas => {
-          const imgData = canvas.toDataURL('image/png');
-          const pdf = new jsPDF('p', 'mm', 'a4');
-          const imgWidth = 210; // عرض A4 بالمليمترات
-          const pageHeight = 295; // ارتفاع A4 بالمليمترات
-          const imgHeight = canvas.height * imgWidth / canvas.width;
-          let heightLeft = imgHeight;
-          let position = 0;
-
-          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
-
-          // إضافة صفحات إضافية إذا كان المحتوى أطول من صفحة واحدة
-          while (heightLeft >= 0) {
-            position = heightLeft - imgHeight;
-            pdf.addPage();
-            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-          }
-
-          // استعادة عرض الأزرار
-          buttonContainer.style.display = originalDisplay;
-          
-          // حفظ الملف
-          const employeeName = document.getElementById('employeeName').value || 'حاسبة-رواتب';
-          pdf.save(`${employeeName}.pdf`);
-        });
-      }
-
       // جعل الدالة متاحة عالمياً
-      window.saveAsPDF = saveAsPDF;
       window.resetForm = resetForm;
 
       // إضافة مستمعي الأحداث
