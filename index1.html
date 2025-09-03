@@ -115,6 +115,7 @@
       margin-left: 15px;
       font-weight: bold;
       text-align: right;
+      padding-right: 35px; /* إزاحة بمقدار 7 أحرف تقريباً */
     }
     
     input {
@@ -265,33 +266,19 @@
       direction: rtl;
     }
 
-    /* إطار بدل الأساسي للسنة التالية */
-    .next-year-container {
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 15px;
-      margin: 15px 0;
-      background-color: #fafafa;
-      width: 100%;
-    }
-    
-    .next-year-inputs {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
-    }
-    
+    /* ملاحظة بدون إطار */
     .note-text {
       color: #666;
       font-size: 13px;
-      margin: 0;
-      padding: 10px;
-      background-color: #f0f0f0;
-      border-right: 3px solid #ddd;
+      margin: 5px 0 15px 0;
+      padding: 8px;
+      background-color: #f9f9f9;
+      border-right: 2px solid #ddd;
       border-radius: 4px;
       line-height: 1.5;
       text-align: justify;
+      width: 100%;
+      max-width: 600px;
     }
 
     /* إعدادات الطباعة المحسنة لصفحة واحدة */
@@ -319,11 +306,6 @@
       
       .button-container, .footer-animation, .disclaimer {
         display: none;
-      }
-      
-      .next-year-container {
-        border: 2px solid #ccc !important;
-        background-color: white !important;
       }
     }
 
@@ -394,22 +376,18 @@
         <input type="text" id="basicResult" readonly>
       </div>
 
-      <!-- الإطار الجديد حول بدل الأساسي للسنة التالية والملاحظة -->
-      <div class="next-year-container">
-        <div class="input-row">
-          <label for="basicNextYear">بدل الأساسي للسنة التالية:</label>
-          <input type="number" id="basicNextYear" class="amount-input" placeholder="أدخل المبلغ">
-          <select id="nextYearSelect" class="year-select">
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
-            <option value="2028">2028</option>
-            <option value="2029">2029</option>
-            <option value="2030">2030</option>
-          </select>
-        </div>
-        <div class="note-text">
-          ملاحظة: تدرج العلاوة الدورية لسنتين متداخلة
-        </div>
+      <!-- بدل الأساسي للسنة التالية بدون إطار -->
+      <div class="input-row">
+        <label for="basicNextYear">بدل الأساسي للسنة التالية:</label>
+        <input type="number" id="basicNextYear" class="amount-input" placeholder="أدخل المبلغ">
+        <select id="nextYearSelect" class="year-select">
+          <!-- سيتم ملء السنوات من 2015 إلى 2030 عبر الجافاسكريبت -->
+        </select>
+      </div>
+      
+      <!-- الملاحظة بدون إطار -->
+      <div class="note-text">
+        ملاحظة: تدرج العلاوة الدورية لسنتين متداخلة
       </div>
 
       <!-- إضافة مسافة بين أنواع العقود -->
@@ -507,11 +485,23 @@
       const contractType = document.getElementById("contractType");
       const contractSpacer = document.getElementById("contractSpacer");
       const temporaryHideElements = document.querySelectorAll('.temporary-hide');
+      const nextYearSelect = document.getElementById("nextYearSelect");
 
       // تعيين التواريخ الافتراضية
       const today = new Date();
       const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
       const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      
+      // تعبئة السنوات من 2015 إلى 2030
+      for (let year = 2015; year <= 2030; year++) {
+        const option = document.createElement("option");
+        option.value = year;
+        option.textContent = year;
+        nextYearSelect.appendChild(option);
+      }
+      
+      // تحديد السنة الحالية كقيمة افتراضية
+      nextYearSelect.value = today.getFullYear() + 1;
       
       function formatDate(date) {
         const year = date.getFullYear();
