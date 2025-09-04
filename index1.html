@@ -37,7 +37,7 @@
       border: 2px solid #8B0000;
       border-radius: 8px;
       width: 95%;
-      max-width: 900px;
+      max-width: 750px;
       margin: 10px auto;
       background: white;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -469,7 +469,7 @@
         <select id="nextYearSelect" class="year-select">
           <!-- سيتم ملء السنوات من 2015 إلى 2030 عبر الجافاسكريبت -->
         </select>
-        <span class="inline-note">تدرج العلاوة الدورية في حال وقع الاحتساب بين سنتين </span>
+        <span class="inline-note">تدرج العلاوة الدورية لسنتين متداخلة</span>
       </div>
 
       <!-- إضافة مسافة بين أنواع العقود -->
@@ -526,9 +526,10 @@
     <div class="result">
       عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
       إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
+      راتب الاشتراك: <span id="subscriptionSalary">0</span><br>
       إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
-      <span id="twelvePercentLine">اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (12.5‎‎%‎) : <span id="twelvePercent">0</span><br></span>
-      <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
+      <span id="twelvePercentLine">اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (17.7‎‎%‎) : <span id="twelvePercent">0</span><br></span>
+      <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (7%): <span id="deduction">0</span><br></span>
       <span id="totalSocialLine">إجمالي الاشتراكات في حالة خروج الموظف لإجازة بدون راتب: <span id="totalSocial">0</span><br></span>
       <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
     </div>
@@ -608,6 +609,7 @@
 
       const totalAllowances = document.getElementById("totalAllowances");
       const totalPeriod = document.getElementById("totalPeriod");
+      const subscriptionSalaryElement = document.getElementById("subscriptionSalary");
       const twelvePercent = document.getElementById("twelvePercent");
       const deduction = document.getElementById("deduction");
       const net = document.getElementById("net");
@@ -673,6 +675,7 @@
 
         let totalBase = 0;
         let totalCalc = 0;
+        let subscriptionSalaryTotal = 0;
 
         const selectedYear = parseInt(document.getElementById("nextYearSelect").value);
         const basicNextYearValue = parseFloat(document.getElementById("basicNextYear").value) || 0;
@@ -711,6 +714,7 @@
             
             resultBox.value = sum.toFixed(3);
             totalCalc += sum;
+            subscriptionSalaryTotal += sum;
           } else {
             totalBase += monthly;
             
@@ -727,24 +731,30 @@
             
             resultBox.value = sum.toFixed(3);
             totalCalc += sum;
+            
+            // حساب راتب الاشتراك (75% من بدلات السكن والكهرباء والماء)
+            if (item.id === "housing" || item.id === "electricity" || item.id === "water") {
+              subscriptionSalaryTotal += sum * 0.75;
+            }
           }
         });
 
         totalAllowances.textContent = totalBase.toFixed(3);
         totalPeriod.textContent = totalCalc.toFixed(3);
+        subscriptionSalaryElement.textContent = subscriptionSalaryTotal.toFixed(3);
         
         // حساب اشتراكات الصندوق الاجتماعي فقط للعقود الدائمة
         if (contractType.value === "permanent") {
-          let twelvePercentValue = totalCalc * 0.125;
-          twelvePercent.textContent = twelvePercentValue.toFixed(3);
+          let governmentShare = subscriptionSalaryTotal * 0.177;
+          twelvePercent.textContent = governmentShare.toFixed(3);
 
-          let ded = totalCalc * 0.08;
-          deduction.textContent = ded.toFixed(3);
+          let employeeShare = subscriptionSalaryTotal * 0.07;
+          deduction.textContent = employeeShare.toFixed(3);
 
-          let totalSocialValue = twelvePercentValue + ded;
+          let totalSocialValue = governmentShare + employeeShare;
           totalSocial.textContent = totalSocialValue.toFixed(3);
 
-          let netValue = totalCalc - ded;
+          let netValue = totalCalc - employeeShare;
           net.textContent = netValue.toFixed(3);
         } else {
           twelvePercent.textContent = "0";
@@ -778,6 +788,7 @@
         
         totalAllowances.textContent = "0";
         totalPeriod.textContent = "0";
+        subscriptionSalaryElement.textContent = "0";
         twelvePercent.textContent = "0";
         deduction.textContent = "0";
         totalSocial.textContent = "0";
