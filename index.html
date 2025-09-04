@@ -1,286 +1,809 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>نظام الصفحات</title>
+  <title>حاسبة رواتب</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    @font-face {
+      font-family: 'Diwani';
+      src: url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      direction: rtl;
-      background: #f5f5f5;
     }
-    /* شريط التنقل */
-    .navbar {
-      background-color: #333;
-      overflow: hidden;
-      position: fixed;
-      top: 0;
+    
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      margin: 0;
+      padding: 10px;
+      background: #f5f5f5;
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 25px;
+      font-size: 13px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .container {
+      padding: 15px;
+      border: 2px solid #8B0000;
+      border-radius: 8px;
+      width: 95%;
+      max-width: 700px;
+      margin: 10px auto;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    /* رأس الصفحة داخل الإطار مع الشعارات */
+    .inner-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #8B0000;
+    }
+    
+    .inner-logo {
+      flex: 0 0 auto;
+    }
+    
+    .inner-logo img {
+      height: 50px;
+      width: auto;
+    }
+    
+    .inner-title {
+      text-align: center;
+      flex: 1;
+    }
+    
+    .directorate-title {
+      font-family: 'Diwani', 'Lateef', serif;
+      font-size: 16px;
+      color: #8B0000;
+      margin: 0;
+      font-weight: bold;
+    }
+    
+    .department-title {
+      font-family: 'Diwani', 'Lateef', serif;
+      font-size: 13px;
+      color: #8B0000;
+      margin: 2px 0 0 0;
+    }
+
+    h3 {
+      text-align: center;
+      color: #8B0000;
+      margin: 0 0 12px 0;
+      font-size: 18px;
+      padding: 8px;
+      background-color: #f8f8f8;
+      border-radius: 4px;
+      border: 1px solid #8B0000;
+    }
+
+    .input-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
       width: 100%;
+      margin-bottom: 8px;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+      width: 100%;
+    }
+
+    label {
+      display: inline-block;
+      width: 160px;
+      margin-left: 8px;
+      font-weight: bold;
+      text-align: right;
+      padding-right: 25px;
+      font-size: 13px;
+    }
+    
+    input {
+      padding: 5px;
+      margin: 3px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+      height: 30px;
+    }
+    
+    input.employee-input {
+      width: 210px;
+    }
+    
+    input.amount-input {
+      width: 110px;
+    }
+    
+    select.year-select, select.contract-type {
+      padding: 5px;
+      width: 120px;
+      margin: 3px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+      height: 30px;
+    }
+    
+    input[readonly] {
+      background-color: #f5f5f5;
+      color: #333;
+      width: 110px;
+    }
+    
+    .result {
+      margin-top: 10px;
+      font-weight: bold;
+      color: green;
+      line-height: 1.5;
+      padding: 8px;              
+      font-size: 14px;           
+      background-color: #f0f9f0;
+      border-radius: 4px;
+      border: 1px solid #c3e6c3; 
+    }
+    
+    .separator {
+      border-top: 2px solid #8B0000;
+      margin: 12px 0;
+      width: 100%;
+    }
+    
+    /* تقليص قسم التوقيع ليتناسب مع الطباعة */
+    .approval-section {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      padding: 10px 0 2px 0;
+      border-top: 2px solid #8B0000;
+      font-size: 13px;
+      font-weight: bold;
+      min-height: 45px;
+    }
+    
+    .approval-right {
+      text-align: right;
+      flex: 1;
+    }
+    
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .print-btn, .reset-btn {
+      padding: 8px 16px;
+      font-size: 13px;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    
+    .print-btn {
+      background: #8B0000;
+    }
+    
+    .print-btn:hover {
+      background: #700000;
+    }
+    
+    .reset-btn {
+      background: #2E8B57;
+    }
+    
+    .reset-btn:hover {
+      background: #267349;
+    }
+    
+    /* تذييل الصفحة المتحرك */
+    .footer-animation {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #8B0000; 
+      color: white;
+      padding: 6px 0;
+      text-align: center;
+      overflow: hidden;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
       z-index: 1000;
     }
-    .navbar button {
-      background-color: #333;
-      border: none;
-      color: white;
-      padding: 14px 20px;
-      cursor: pointer;
+    
+    .marquee {
+      display: block;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    
+    .marquee span {
+      display: inline-block;
+      padding-right: 100%;
+      animation: marquee 20s linear infinite;
+      font-weight: bold;
       font-size: 16px;
     }
-    .navbar button:hover {
-      background-color: #555;
+    
+    @keyframes marquee {
+      0%   { transform: translate(0, 0); }
+      100% { transform: translate(100%, 0); }
     }
-    .content {
-      margin-top: 70px;
-      padding: 15px;
+
+    .disclaimer {
+      text-align: center;
+      margin-top: 15px;
+      padding: 6px;
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 4px;
+      color: #856404;
+      font-size: 11px;
+      direction: rtl;
+    }
+
+    /* ملاحظة على نفس السطر */
+    .inline-note {
+      color: #666;
+      font-size: 11px;
+      margin-right: 10px;
+      padding: 4px 7px;
+      background-color: #f9f9f9;
+      border-right: 2px solid #ddd;
+      border-radius: 3px;
+      line-height: 1.3;
+      white-space: nowrap;
+    }
+
+    /* إعدادات الطباعة المحسنة لصفحة واحدة */
+    @media print {
+      body {
+        margin: 0;
+        padding: 0;
+        background: white;
+        font-size: 10px;
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      
+      .container {
+        border: 2px solid #8B0000 !important;
+        box-shadow: none;
+        margin: 0;
+        padding: 5px;
+        width: 100%;
+        max-width: 100%;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      
+      .inner-header {
+        margin-bottom: 8px;
+        padding-bottom: 6px;
+      }
+      
+      .inner-logo img {
+        height: 40px;
+      }
+      
+      .directorate-title {
+        font-size: 14px;
+      }
+      
+      .department-title {
+        font-size: 11px;
+      }
+      
+      h3 {
+        font-size: 16px;
+        margin: 3px 0 8px 0;
+        padding: 6px;
+      }
+      
+      label {
+        width: 140px;
+        margin-left: 8px;
+        padding-right: 20px;
+        font-size: 11px;
+      }
+      
+      input, select {
+        padding: 3px;
+        margin: 2px;
+        font-size: 10px;
+        height: 26px;
+      }
+      
+      input.employee-input {
+        width: 180px;
+      }
+      
+      input.amount-input {
+        width: 90px;
+      }
+      
+      select.year-select, select.contract-type {
+        width: 100px;
+      }
+      
+      input[readonly] {
+        width: 90px;
+      }
+      
+      .result {
+        font-size: 11px;
+        padding: 6px;
+        line-height: 1.3;
+        margin: 8px 0;
+      }
+      
+      .separator {
+        margin: 8px 0;
+      }
+      
+      .approval-section {
+        margin-top: 12px;
+        padding-top: 8px;
+        font-size: 11px;
+        min-height: 40px;
+      }
+      
+      .button-container, .footer-animation, .disclaimer {
+        display: none;
+      }
+      
+      .inline-note {
+        font-size: 10px;
+        margin-right: 8px;
+        padding: 3px 6px;
+        background-color: transparent !important;
+      }
+      
+      /* ضمان عدم تقسيم المحتوى */
+      .container, .inner-header, .result, .approval-section, .input-row {
+        page-break-before: avoid;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+    }
+
+    /* أنماط جديدة للإخفاء والإظهار */
+    .temporary-hide {
+      display: block;
+    }
+    
+    .contract-spacer {
+      height: 10px;
+      display: block;
     }
   </style>
 </head>
 <body>
 
-  <!-- شريط التنقل -->
-  <div class="navbar">
-    <button onclick="goTo('home')">الرئيسية</button>
-    <button onclick="goTo('old')">الاحتساب القديم</button>
-    <button onclick="goTo('new')">الاحتساب الجديد</button>
+  <div class="container">
+    <!-- رأس الصفحة داخل الإطار مع الشعارات -->
+    <div class="inner-header">
+      <div class="inner-logo">
+        <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="شعار وزارة الصحة">
+      </div>
+      
+      <div class="inner-title">
+        <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
+        <div class="department-title">دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
+      </div>
+      
+      <div class="inner-logo">
+        <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="شعار عمان فيجن">
+      </div>
+    </div>
+
+    <h3>حاسبة رواتب</h3>
+
+    <div class="input-section">
+      <div class="input-row">
+        <label for="employeeName">اسم الموظف:</label>
+        <input type="text" id="employeeName" class="employee-input" placeholder="أسم الموظف">
+      </div>
+
+      <div class="input-row">
+        <label for="employeeNumber">رقم الموظف:</label>
+        <input type="text" id="employeeNumber" class="employee-input" placeholder="رقم الموظف">
+      </div>
+
+      <div class="input-row">
+        <label for="contractType">نوع العقد:</label>
+        <select id="contractType" class="contract-type">
+          <option value="permanent">عقود دائمة</option>
+          <option value="temporary">عقود موقتة</option>
+        </select>
+      </div>
+
+      <div class="input-row">
+        <label for="startDate">تاريخ البداية:</label>
+        <input type="date" id="startDate">
+      </div>
+
+      <div class="input-row">
+        <label for="endDate">تاريخ النهاية:</label>
+        <input type="date" id="endDate">
+      </div>
+
+      <div class="input-row">
+        <label for="basic">البدل الأساسي:</label>
+        <input type="number" id="basic" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="basicResult" readonly>
+      </div>
+
+      <!-- بدل الأساسي للسنة التالية مع الملاحظة على نفس السطر -->
+      <div class="input-row">
+        <label for="basicNextYear">بدل الأساسي للسنة التالية:</label>
+        <input type="number" id="basicNextYear" class="amount-input" placeholder="أدخل المبلغ">
+        <select id="nextYearSelect" class="year-select">
+          <!-- سيتم ملء السنوات من 2015 إلى 2030 عبر الجافاسكريبت -->
+        </select>
+        <span class="inline-note">تدرج العلاوة الدورية لسنتين متداخلة</span>
+      </div>
+
+      <!-- إضافة مسافة بين أنواع العقود -->
+      <div id="contractSpacer" class="contract-spacer"></div>
+
+      <!-- الحقول التي سيتم إخفاؤها عند اختيار عقود موقتة -->
+      <div class="temporary-hide">
+        <div class="input-row">
+          <label for="housing">بدل السكن:</label>
+          <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="housingResult" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="electricity">بدل الكهرباء:</label>
+          <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="electricityResult" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="water">بدل الماء:</label>
+          <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="waterResult" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="phone">بدل الهاتف:</label>
+          <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="phoneResult" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="transport">بدل النقل:</label>
+          <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="transportResult" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="professional">بدل مهني:</label>
+          <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="professionalResult" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="costLiving">بدل غلاء معيشة:</label>
+          <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="costLivingResult" readonly>
+        </div>
+      </div>
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="result">
+      عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
+      إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
+      إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
+      <span id="twelvePercentLine">اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (12.5‎‎%‎) : <span id="twelvePercent">0</span><br></span>
+      <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
+      <span id="totalSocialLine">إجمالي الاشتراكات في حالة خروج الموظف لإجازة بدون راتب: <span id="totalSocial">0</span><br></span>
+      <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
+    </div>
+
+    <!-- قسم الإعداد والمراجعة المعدل -->
+    <div class="approval-section">
+      <div class="approval-right">
+        إعداد ومراجعة: _______________      
+      </div>
+      <div class="approval-right">
+        اعتماد مدير الدائرة: _______________      
+      </div>
+    </div>
+
+    <div class="button-container">
+      <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
+      <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ الحقول</button>
+    </div>
+    
+    <!-- التنويه -->
+    <div class="disclaimer">
+      للتنويه: محتوى الصفحة لا يتبع وزارة الصحة ،تم أنشاء هذي الاداة وتطويرها بمبادرة فردية 
+    </div>
   </div>
 
-  <!-- المحتوى -->
-  <div class="content" id="content">
-    <h1>مرحبا</h1>
-    <p>هذه الصفحة الرئيسية.</p>
+  <div class="footer-animation">
+    <div class="marquee">
+      <span> جميع الحقوق محفوظة © 2025 محمد جعبوب - قسم الرواتب - دائرة الشؤون المالية</span>
+    </div>
   </div>
 
   <script>
-    function goTo(page) {
-      const content = document.getElementById("content");
-
-      if (page === "home") {
-        content.innerHTML = "<h1>مرحبا</h1><p>هذه الصفحة الرئيسية.</p>";
-      } 
-      else if (page === "old") {
-        content.innerHTML = getOldCalculatorHTML();
-        initOldCalculatorScripts();
-      } 
-      else if (page === "new") {
-        content.innerHTML = getNewCalculatorHTML();
-        initNewCalculatorScripts();
-      }
-    }
-
-    /* ----------------- الحاسبة القديمة ----------------- */
-    function getOldCalculatorHTML() {
-      return `
-      <style>
-        .old-container {
-          padding: 15px;
-          border: 2px solid #006699;
-          border-radius: 8px;
-          width: 90%;
-          max-width: 600px;
-          margin: 10px auto;
-          background: white;
-          box-shadow: 0 0 8px rgba(0,0,0,0.1);
-        }
-        .old-container h3 { text-align: center; color: #006699; }
-        .old-row { margin-bottom: 8px; }
-        .old-row label { display: inline-block; width: 150px; font-weight: bold; }
-        .old-row input { padding: 5px; }
-        .old-result { margin-top: 12px; font-weight: bold; color: green; text-align: center; }
-        .old-buttons { text-align: center; margin-top: 10px; }
-        .old-buttons button { padding: 6px 14px; margin: 0 5px; cursor: pointer; }
-      </style>
-
-      <div class="old-container">
-        <h3>الحاسبة القديمة</h3>
-        <div class="old-row">
-          <label>اسم الموظف:</label>
-          <input type="text" id="oldName">
-        </div>
-        <div class="old-row">
-          <label>رقم الموظف:</label>
-          <input type="text" id="oldNumber">
-        </div>
-        <div class="old-row">
-          <label>الراتب الأساسي:</label>
-          <input type="number" id="oldSalary">
-        </div>
-        <div class="old-row">
-          <label>عدد الأيام:</label>
-          <input type="number" id="oldDays">
-        </div>
-        <div class="old-result">صافي المستحق: <span id="oldNet">0</span></div>
-        <div class="old-buttons">
-          <button onclick="calcOld()">احسب</button>
-          <button onclick="resetOld()">تفريغ</button>
-          <button onclick="window.print()">🖨️ طباعة</button>
-        </div>
-      </div>
-      `;
-    }
-
-    function initOldCalculatorScripts() {
-      window.calcOld = function() {
-        let salary = parseFloat(document.getElementById("oldSalary").value) || 0;
-        let days = parseInt(document.getElementById("oldDays").value) || 0;
-        let daily = salary / 30;
-        let total = daily * days;
-        document.getElementById("oldNet").textContent = total.toFixed(2);
-      }
-
-      window.resetOld = function() {
-        document.getElementById("oldName").value = "";
-        document.getElementById("oldNumber").value = "";
-        document.getElementById("oldSalary").value = "";
-        document.getElementById("oldDays").value = "";
-        document.getElementById("oldNet").textContent = "0";
-      }
-    }
-
-    /* ----------------- الحاسبة الجديدة ----------------- */
-    function getNewCalculatorHTML() {
-      return `
-      <style>
-        .container {
-          padding: 15px;
-          border: 2px solid #8B0000;
-          border-radius: 8px;
-          width: 95%;
-          max-width: 750px;
-          margin: 10px auto;
-          background: white;
-          box-shadow: 0 0 10px rgba(0,0,0,0.1);
-          position: relative;
-          text-align: right;
-        }
-        .inner-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 12px;
-          padding-bottom: 8px;
-          border-bottom: 2px solid #8B0000;
-        }
-        .inner-logo img { height: 50px; }
-        .inner-title { flex: 1; text-align: center; }
-        .directorate-title { font-size: 16px; color: #8B0000; font-weight: bold; }
-        .department-title { font-size: 13px; color: #8B0000; }
-
-        h3 { text-align: center; color: #8B0000; margin-bottom: 12px; }
-
-        .input-row { display: flex; align-items: center; margin-bottom: 6px; }
-        label { width: 160px; font-weight: bold; }
-        input, select { padding: 5px; margin: 3px; border: 1px solid #ccc; border-radius: 3px; }
-        input.employee-input { width: 210px; }
-        input.amount-input { width: 110px; }
-        input[readonly] { background: #f5f5f5; }
-
-        .result {
-          margin-top: 10px;
-          font-weight: bold;
-          color: green;
-          padding: 8px;
-          background: #f0f9f0;
-          border: 1px solid #c3e6c3;
-          border-radius: 4px;
-        }
-        .approval-section { display: flex; justify-content: space-between; margin-top: 15px; padding: 10px 0; border-top: 2px solid #8B0000; }
-        .button-container { display: flex; justify-content: center; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
-        .print-btn, .reset-btn { padding: 8px 16px; border: none; color: white; border-radius: 4px; cursor: pointer; }
-        .print-btn { background: #8B0000; }
-        .reset-btn { background: #2E8B57; }
-        .disclaimer { text-align: center; margin-top: 15px; padding: 6px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px; color: #856404; font-size: 12px; }
-        .footer-animation { position: fixed; bottom: 0; left: 0; width: 100%; background: #8B0000; color: white; padding: 6px 0; text-align: center; }
-        .marquee span { display: inline-block; animation: marquee 20s linear infinite; }
-        @keyframes marquee { from { transform: translateX(100%);} to { transform: translateX(-100%);} }
-      </style>
-
-      <div class="container">
-        <div class="inner-header">
-          <div class="inner-logo"><img src="https://moh.gov.om/images/logo-ministry-en.png"></div>
-          <div class="inner-title">
-            <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
-            <div class="department-title">دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
-          </div>
-          <div class="inner-logo"><img src="https://moh.gov.om/images/Oman-Vision-Logo.png"></div>
-        </div>
-        <h3>حاسبة رواتب</h3>
-        <div class="input-row"><label>اسم الموظف:</label><input type="text" id="employeeName" class="employee-input"></div>
-        <div class="input-row"><label>رقم الموظف:</label><input type="text" id="employeeNumber" class="employee-input"></div>
-        <div class="input-row"><label>نوع العقد:</label>
-          <select id="contractType">
-            <option value="permanent">عقود دائمة</option>
-            <option value="temporary">عقود مؤقتة</option>
-          </select>
-        </div>
-        <div class="input-row"><label>تاريخ البداية:</label><input type="date" id="startDate"></div>
-        <div class="input-row"><label>تاريخ النهاية:</label><input type="date" id="endDate"></div>
-        <div class="input-row"><label>البدل الأساسي:</label>
-          <input type="number" id="basic" class="amount-input">
-          <input type="text" id="basicResult" readonly>
-        </div>
-        <div class="result">
-          عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
-          إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
-          ✅ صافي المستحق: <span id="net">0</span>
-        </div>
-        <div class="approval-section"><div>إعداد ومراجعة: ___________</div><div>اعتماد المدير: ___________</div></div>
-        <div class="button-container">
-          <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
-          <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ</button>
-        </div>
-        <div class="disclaimer">للتنويه: هذه الأداة للتجربة فقط</div>
-      </div>
-      <div class="footer-animation"><div class="marquee"><span>جميع الحقوق محفوظة © 2025</span></div></div>
-      `;
-    }
-
-    function initNewCalculatorScripts() {
+    document.addEventListener('DOMContentLoaded', function() {
       const startDate = document.getElementById("startDate");
       const endDate = document.getElementById("endDate");
-      const basic = document.getElementById("basic");
-      const basicResult = document.getElementById("basicResult");
+      const contractType = document.getElementById("contractType");
+      const contractSpacer = document.getElementById("contractSpacer");
+      const temporaryHideElements = document.querySelectorAll('.temporary-hide');
+      const nextYearSelect = document.getElementById("nextYearSelect");
+
+      // تعيين التواريخ الافتراضية
+      const today = new Date();
+      const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      
+      // تعبئة السنوات من 2015 إلى 2030
+      for (let year = 2015; year <= 2030; year++) {
+        const option = document.createElement("option");
+        option.value = year;
+        option.textContent = year;
+        nextYearSelect.appendChild(option);
+      }
+      
+      // تحديد السنة الحالية كقيمة افتراضية
+      nextYearSelect.value = today.getFullYear() + 1;
+      
+      function formatDate(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+      
+      startDate.value = formatDate(firstDayOfMonth);
+      endDate.value = formatDate(lastDayOfMonth);
+
+      const allowances = [
+        {id:"basic", result:"basicResult"},
+        {id:"housing", result:"housingResult"},
+        {id:"electricity", result:"electricityResult"},
+        {id:"water", result:"waterResult"},         
+        {id:"phone", result:"phoneResult"},
+        {id:"transport", result:"transportResult"},
+        {id:"professional", result:"professionalResult"},
+        {id:"costLiving", result:"costLivingResult"}
+      ];
+
       const totalAllowances = document.getElementById("totalAllowances");
+      const totalPeriod = document.getElementById("totalPeriod");
+      const twelvePercent = document.getElementById("twelvePercent");
+      const deduction = document.getElementById("deduction");
       const net = document.getElementById("net");
       const daysCount = document.getElementById("daysCount");
+      const totalSocial = document.getElementById("totalSocial");
+
+      const twelvePercentLine = document.getElementById("twelvePercentLine");
+      const deductionLine = document.getElementById("deductionLine");
+      const netLine = document.getElementById("netLine");
+      const totalSocialLine = document.getElementById("totalSocialLine");
+
+      function daysInMonth(year, month) {
+        return new Date(year, month + 1, 0).getDate();
+      }
+
+      function updateContractDisplay() {
+        if (contractType.value === "temporary") {
+          // إخفاء الحقول غير المرغوبة في عقود موقتة
+          temporaryHideElements.forEach(el => {
+            el.style.display = "none";
+          });
+          
+          // إخفاء حسابات الصندوق الاجتماعي
+          twelvePercentLine.style.display = "none";
+          deductionLine.style.display = "none";
+          totalSocialLine.style.display = "none";
+          netLine.style.display = "none";
+          
+          // إخفاء المسافة الإضافية
+          contractSpacer.style.display = "none";
+        } else {
+          // إظهار جميع الحقول في عقود دائمة
+          temporaryHideElements.forEach(el => {
+            el.style.display = "block";
+          });
+          
+          // إظهار حسابات الصندوق الاجتماعي
+          twelvePercentLine.style.display = "block";
+          deductionLine.style.display = "block";
+          totalSocialLine.style.display = "block";
+          netLine.style.display = "block";
+          
+          // إظهار المسافة الإضافية
+          contractSpacer.style.display = "block";
+        }
+      }
 
       function calculate() {
         if (!(startDate.value && endDate.value)) return;
+
         let start = new Date(startDate.value);
         let end = new Date(endDate.value);
-        if (end < start) return;
+
+        if (end < start) {
+          totalPeriod.textContent = "❌ تاريخ النهاية قبل البداية";
+          daysCount.textContent = "0";
+          return;
+        }
 
         let diffTime = end - start;
-        let days = Math.floor(diffTime / (1000*60*60*24)) + 1;
+        let days = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
         daysCount.textContent = days;
 
-        let salary = parseFloat(basic.value) || 0;
-        let daily = salary / 30;
-        let total = daily * days;
-        basicResult.value = total.toFixed(2);
-        totalAllowances.textContent = salary.toFixed(2);
-        net.textContent = total.toFixed(2);
+        let totalBase = 0;
+        let totalCalc = 0;
+
+        const selectedYear = parseInt(document.getElementById("nextYearSelect").value);
+        const basicNextYearValue = parseFloat(document.getElementById("basicNextYear").value) || 0;
+
+        allowances.forEach(item => {
+          let input = document.getElementById(item.id);
+          let resultBox = document.getElementById(item.result);
+          let monthly = parseFloat(input.value) || 0;
+          
+          // إذا كان نوع العقد موقتاً، نتجاهل الحقول المخفية في الحساب
+          if (contractType.value === "temporary" && 
+              (item.id !== "basic" && item.id !== "basicNextYear")) {
+            return; // تخطي هذا الحقل
+          }
+          
+          if (item.id === "basic") {
+            totalBase += monthly; 
+            
+            let current = new Date(start);
+            let sum = 0;
+            while (current <= end) {
+              let year = current.getFullYear();
+              let month = current.getMonth();
+              let daysInThisMonth = daysInMonth(year, month);
+              
+              let dailyValue = 0;
+              if (year < selectedYear) {
+                dailyValue = monthly / daysInThisMonth;
+              } else {
+                dailyValue = basicNextYearValue / daysInThisMonth;
+              }
+              
+              sum += dailyValue;
+              current.setDate(current.getDate() + 1);
+            }
+            
+            resultBox.value = sum.toFixed(3);
+            totalCalc += sum;
+          } else {
+            totalBase += monthly;
+            
+            let current = new Date(start);
+            let sum = 0;
+            while (current <= end) {
+              let year = current.getFullYear();
+              let month = current.getMonth();
+              let daysInThisMonth = daysInMonth(year, month);
+              let daily = monthly / daysInThisMonth;
+              sum += daily;
+              current.setDate(current.getDate() + 1);
+            }
+            
+            resultBox.value = sum.toFixed(3);
+            totalCalc += sum;
+          }
+        });
+
+        totalAllowances.textContent = totalBase.toFixed(3);
+        totalPeriod.textContent = totalCalc.toFixed(3);
+        
+        // حساب اشتراكات الصندوق الاجتماعي فقط للعقود الدائمة
+        if (contractType.value === "permanent") {
+          let twelvePercentValue = totalCalc * 0.125;
+          twelvePercent.textContent = twelvePercentValue.toFixed(3);
+
+          let ded = totalCalc * 0.08;
+          deduction.textContent = ded.toFixed(3);
+
+          let totalSocialValue = twelvePercentValue + ded;
+          totalSocial.textContent = totalSocialValue.toFixed(3);
+
+          let netValue = totalCalc - ded;
+          net.textContent = netValue.toFixed(3);
+        } else {
+          twelvePercent.textContent = "0";
+          deduction.textContent = "0";
+          totalSocial.textContent = "0";
+          net.textContent = totalCalc.toFixed(3);
+        }
+
+        updateContractDisplay();
       }
 
       function resetForm() {
         document.getElementById("employeeName").value = "";
         document.getElementById("employeeNumber").value = "";
-        startDate.value = "";
-        endDate.value = "";
-        basic.value = "";
-        basicResult.value = "";
+        document.getElementById("startDate").value = formatDate(firstDayOfMonth);
+        document.getElementById("endDate").value = formatDate(lastDayOfMonth);
+        document.getElementById("basic").value = "";
+        document.getElementById("basicNextYear").value = "";
+        document.getElementById("housing").value = "";
+        document.getElementById("electricity").value = "";
+        document.getElementById("water").value = "";
+        document.getElementById("phone").value = "";
+        document.getElementById("transport").value = "";
+        document.getElementById("professional").value = "";
+        document.getElementById("costLiving").value = "";
+        contractType.value = "permanent";
+        
+        allowances.forEach(item => {
+          document.getElementById(item.result).value = "";
+        });
+        
         totalAllowances.textContent = "0";
+        totalPeriod.textContent = "0";
+        twelvePercent.textContent = "0";
+        deduction.textContent = "0";
+        totalSocial.textContent = "0";
         net.textContent = "0";
         daysCount.textContent = "0";
+        updateContractDisplay();
       }
 
+      // جعل الدالة متاحة عالمياً
       window.resetForm = resetForm;
 
+      // إضافة مستمعي الأحداث
       startDate.addEventListener("change", calculate);
       endDate.addEventListener("change", calculate);
-      basic.addEventListener("input", calculate);
-    }
+      contractType.addEventListener("change", updateContractDisplay);
+      document.getElementById("nextYearSelect").addEventListener("change", calculate);
+      document.getElementById("basicNextYear").addEventListener("input", calculate);
+      
+      allowances.forEach(item => {
+        document.getElementById(item.id).addEventListener("input", calculate);
+      });
+
+      // التهيئة الأولية
+      calculate();
+      updateContractDisplay();
+    });
   </script>
 
 </body>
