@@ -2,6 +2,8 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
+  <!-- إضافة viewport meta tag للتحكم بعرض الصفحة على الهواتف -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>حاسبة رواتب</title>
   <style>
     @font-face {
@@ -37,7 +39,7 @@
       border: 2px solid #8B0000;
       border-radius: 8px;
       width: 95%;
-      max-width: 750px;
+      max-width: 700px;
       margin: 10px auto;
       background: white;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -52,6 +54,7 @@
       margin-bottom: 12px;
       padding-bottom: 8px;
       border-bottom: 2px solid #8B0000;
+      flex-wrap: wrap;
     }
     
     .inner-logo {
@@ -61,11 +64,14 @@
     .inner-logo img {
       height: 50px;
       width: auto;
+      max-width: 100%;
     }
     
     .inner-title {
       text-align: center;
       flex: 1;
+      min-width: 200px;
+      margin: 10px 0;
     }
     
     .directorate-title {
@@ -107,6 +113,7 @@
       align-items: center;
       margin-bottom: 6px;
       width: 100%;
+      flex-wrap: wrap;
     }
 
     label {
@@ -180,11 +187,14 @@
       font-size: 13px;
       font-weight: bold;
       min-height: 45px;
+      flex-wrap: wrap;
     }
     
     .approval-right {
       text-align: right;
       flex: 1;
+      min-width: 150px;
+      margin: 5px 0;
     }
     
     .button-container {
@@ -195,7 +205,7 @@
       flex-wrap: wrap;
     }
     
-    .print-btn, .reset-btn, .nav-btn {
+    .print-btn, .reset-btn {
       padding: 8px 16px;
       font-size: 13px;
       color: white;
@@ -219,15 +229,6 @@
     
     .reset-btn:hover {
       background: #267349;
-    }
-    
-    .nav-btn {
-      background: #1E90FF;
-      margin: 0 5px;
-    }
-    
-    .nav-btn:hover {
-      background: #0066CC;
     }
     
     /* تذييل الصفحة المتحرك */
@@ -289,14 +290,6 @@
       border-radius: 3px;
       line-height: 1.3;
       white-space: nowrap;
-    }
-
-    /* أزرار التنقل في الأعلى */
-    .nav-buttons {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 15px;
-      gap: 10px;
     }
 
     /* إعدادات الطباعة المحسنة لصفحة واحدة */
@@ -393,7 +386,7 @@
         min-height: 40px;
       }
       
-      .button-container, .footer-animation, .disclaimer, .nav-buttons {
+      .button-container, .footer-animation, .disclaimer {
         display: none;
       }
       
@@ -421,17 +414,165 @@
       height: 10px;
       display: block;
     }
+
+    /* استعلامات وسائط للشاشات الصغيرة */
+    @media (max-width: 768px) {
+      body {
+        padding: 5px;
+        font-size: 12px;
+      }
+      
+      .container {
+        padding: 10px;
+        width: 100%;
+        margin: 5px auto;
+      }
+      
+      .inner-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .inner-logo {
+        margin: 5px 0;
+      }
+      
+      .inner-logo img {
+        height: 40px;
+      }
+      
+      .directorate-title {
+        font-size: 14px;
+      }
+      
+      .department-title {
+        font-size: 12px;
+      }
+      
+      h3 {
+        font-size: 16px;
+        padding: 6px;
+      }
+      
+      .input-row {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 10px;
+      }
+      
+      label {
+        width: 100%;
+        text-align: right;
+        padding-right: 0;
+        margin-bottom: 5px;
+        margin-left: 0;
+      }
+      
+      input, select {
+        width: 100% !important;
+        margin: 2px 0;
+        font-size: 14px; /* زيادة حجم الخط ليكون أسهل في الاستخدام على الهواتف */
+        height: 35px;
+      }
+      
+      input.employee-input,
+      input.amount-input,
+      select.year-select, 
+      select.contract-type {
+        width: 100% !important;
+      }
+      
+      .inline-note {
+        width: 100%;
+        margin: 5px 0;
+        white-space: normal;
+        text-align: center;
+      }
+      
+      .approval-section {
+        flex-direction: column;
+      }
+      
+      .approval-right {
+        margin: 10px 0;
+        text-align: center;
+      }
+      
+      .result {
+        font-size: 13px;
+        padding: 10px;
+      }
+      
+      .button-container {
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .print-btn, .reset-btn {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+      }
+      
+      .footer-animation {
+        position: relative;
+        margin-top: 20px;
+      }
+      
+      .marquee span {
+        font-size: 14px;
+        white-space: normal;
+        animation: none;
+        padding-right: 0;
+      }
+    }
+
+    /* استعلامات وسائط للشاشات المتوسطة */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .container {
+        width: 90%;
+      }
+      
+      input.employee-input {
+        width: 180px;
+      }
+      
+      input.amount-input {
+        width: 100px;
+      }
+      
+      .inner-logo img {
+        height: 45px;
+      }
+    }
+
+    /* استعلامات وسائط للشاشات الصغيرة جدًا */
+    @media (max-width: 480px) {
+      .directorate-title {
+        font-size: 13px;
+      }
+      
+      .department-title {
+        font-size: 11px;
+      }
+      
+      h3 {
+        font-size: 14px;
+      }
+      
+      label {
+        font-size: 12px;
+      }
+      
+      .result {
+        font-size: 12px;
+      }
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <!-- أزرار التنقل الجديدة -->
-    <div class="nav-buttons">
-      <button class="nav-btn" onclick="window.location.href='https://www.jaboob.com'">الاحتساب الجديد</button>
-      <button class="nav-btn" onclick="window.location.href='https://www.jaboob.com/SALARY.html'">الاحتساب القديم</button>
-    </div>
-
     <!-- رأس الصفحة داخل الإطار مع الشعارات -->
     <div class="inner-header">
       <div class="inner-logo">
@@ -549,10 +690,9 @@
     <div class="result">
       عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
       إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
-      راتب الاشتراك: <span id="subscriptionSalary">0</span><br>
       إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
-      <span id="twelvePercentLine">اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (17.7‎‎%‎) : <span id="twelvePercent">0</span><br></span>
-      <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (7%): <span id="deduction">0</span><br></span>
+      <span id="twelvePercentLine">اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (12.5‎‎%‎) : <span id="twelvePercent">0</span><br></span>
+      <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
       <span id="totalSocialLine">إجمالي الاشتراكات في حالة خروج الموظف لإجازة بدون راتب: <span id="totalSocial">0</span><br></span>
       <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
     </div>
@@ -632,7 +772,6 @@
 
       const totalAllowances = document.getElementById("totalAllowances");
       const totalPeriod = document.getElementById("totalPeriod");
-      const subscriptionSalaryElement = document.getElementById("subscriptionSalary");
       const twelvePercent = document.getElementById("twelvePercent");
       const deduction = document.getElementById("deduction");
       const net = document.getElementById("net");
@@ -698,7 +837,6 @@
 
         let totalBase = 0;
         let totalCalc = 0;
-        let subscriptionSalaryTotal = 0;
 
         const selectedYear = parseInt(document.getElementById("nextYearSelect").value);
         const basicNextYearValue = parseFloat(document.getElementById("basicNextYear").value) || 0;
@@ -737,7 +875,6 @@
             
             resultBox.value = sum.toFixed(3);
             totalCalc += sum;
-            subscriptionSalaryTotal += sum;
           } else {
             totalBase += monthly;
             
@@ -754,30 +891,24 @@
             
             resultBox.value = sum.toFixed(3);
             totalCalc += sum;
-            
-            // حساب راتب الاشتراك (75% من بدلات السكن والكهرباء والماء)
-            if (item.id === "housing" || item.id === "electricity" || item.id === "water") {
-              subscriptionSalaryTotal += sum * 0.75;
-            }
           }
         });
 
         totalAllowances.textContent = totalBase.toFixed(3);
         totalPeriod.textContent = totalCalc.toFixed(3);
-        subscriptionSalaryElement.textContent = subscriptionSalaryTotal.toFixed(3);
         
         // حساب اشتراكات الصندوق الاجتماعي فقط للعقود الدائمة
         if (contractType.value === "permanent") {
-          let governmentShare = subscriptionSalaryTotal * 0.177;
-          twelvePercent.textContent = governmentShare.toFixed(3);
+          let twelvePercentValue = totalCalc * 0.125;
+          twelvePercent.textContent = twelvePercentValue.toFixed(3);
 
-          let employeeShare = subscriptionSalaryTotal * 0.07;
-          deduction.textContent = employeeShare.toFixed(3);
+          let ded = totalCalc * 0.08;
+          deduction.textContent = ded.toFixed(3);
 
-          let totalSocialValue = governmentShare + employeeShare;
+          let totalSocialValue = twelvePercentValue + ded;
           totalSocial.textContent = totalSocialValue.toFixed(3);
 
-          let netValue = totalCalc - employeeShare;
+          let netValue = totalCalc - ded;
           net.textContent = netValue.toFixed(3);
         } else {
           twelvePercent.textContent = "0";
@@ -811,7 +942,6 @@
         
         totalAllowances.textContent = "0";
         totalPeriod.textContent = "0";
-        subscriptionSalaryElement.textContent = "0";
         twelvePercent.textContent = "0";
         deduction.textContent = "0";
         totalSocial.textContent = "0";
