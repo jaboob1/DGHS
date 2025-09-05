@@ -2,16 +2,10 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <!-- إضافة viewport meta tag للتحكم بعرض الصفحة على الهواتف -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>حاسبة رواتب</title>
   <style>
-    @font-face {
-      font-family: 'Diwani';
-      src: url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
-      font-weight: normal;
-      font-style: normal;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
     
     * {
       box-sizing: border-box;
@@ -20,29 +14,29 @@
     }
     
     body {
-      font-family: Arial, sans-serif;
+      font-family: Arial, 'Lateef', sans-serif;
       direction: rtl;
       margin: 0;
       padding: 10px;
       background: #f5f5f5;
       position: relative;
       min-height: 100vh;
-      padding-bottom: 25px;
-      font-size: 13px;
+      padding-bottom: 40px;
+      font-size: 14px;
       display: flex;
       justify-content: center;
       align-items: center;
     }
     
     .container {
-      padding: 15px;
+      padding: 20px;
       border: 2px solid #8B0000;
-      border-radius: 8px;
+      border-radius: 10px;
       width: 95%;
-      max-width: 700px;
-      margin: 10px auto;
+      max-width: 750px;
+      margin: 15px auto;
       background: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
       position: relative;
     }
 
@@ -51,8 +45,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
-      padding-bottom: 8px;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
       border-bottom: 2px solid #8B0000;
       flex-wrap: wrap;
     }
@@ -62,7 +56,7 @@
     }
     
     .inner-logo img {
-      height: 50px;
+      height: 55px;
       width: auto;
       max-width: 100%;
     }
@@ -75,28 +69,28 @@
     }
     
     .directorate-title {
-      font-family: 'Diwani', 'Lateef', serif;
-      font-size: 16px;
+      font-family: 'Lateef', serif;
+      font-size: 18px;
       color: #8B0000;
       margin: 0;
       font-weight: bold;
     }
     
     .department-title {
-      font-family: 'Diwani', 'Lateef', serif;
-      font-size: 13px;
+      font-family: 'Lateef', serif;
+      font-size: 15px;
       color: #8B0000;
-      margin: 2px 0 0 0;
+      margin: 3px 0 0 0;
     }
 
     h3 {
       text-align: center;
       color: #8B0000;
-      margin: 0 0 12px 0;
-      font-size: 18px;
-      padding: 8px;
+      margin: 0 0 15px 0;
+      font-size: 20px;
+      padding: 10px;
       background-color: #f8f8f8;
-      border-radius: 4px;
+      border-radius: 5px;
       border: 1px solid #8B0000;
     }
 
@@ -105,75 +99,75 @@
       flex-direction: column;
       align-items: flex-start;
       width: 100%;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .input-row {
       display: flex;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       width: 100%;
       flex-wrap: wrap;
     }
 
     label {
       display: inline-block;
-      width: 160px;
-      margin-left: 8px;
+      width: 170px;
+      margin-left: 10px;
       font-weight: bold;
       text-align: right;
-      padding-right: 25px;
-      font-size: 13px;
+      padding-right: 30px;
+      font-size: 14px;
     }
     
     input {
-      padding: 5px;
-      margin: 3px;
+      padding: 8px;
+      margin: 4px;
       border: 1px solid #ccc;
-      border-radius: 3px;
-      font-size: 12px;
-      height: 30px;
+      border-radius: 4px;
+      font-size: 14px;
+      height: 35px;
     }
     
     input.employee-input {
-      width: 210px;
+      width: 220px;
     }
     
     input.amount-input {
-      width: 110px;
+      width: 120px;
     }
     
     select.year-select, select.contract-type {
-      padding: 5px;
-      width: 120px;
-      margin: 3px;
+      padding: 8px;
+      width: 130px;
+      margin: 4px;
       border: 1px solid #ccc;
-      border-radius: 3px;
-      font-size: 12px;
-      height: 30px;
+      border-radius: 4px;
+      font-size: 14px;
+      height: 35px;
     }
     
     input[readonly] {
       background-color: #f5f5f5;
       color: #333;
-      width: 110px;
+      width: 120px;
     }
     
     .result {
-      margin-top: 10px;
+      margin-top: 15px;
       font-weight: bold;
       color: green;
-      line-height: 1.5;
-      padding: 8px;              
-      font-size: 14px;           
+      line-height: 1.6;
+      padding: 12px;              
+      font-size: 15px;           
       background-color: #f0f9f0;
-      border-radius: 4px;
+      border-radius: 5px;
       border: 1px solid #c3e6c3; 
     }
     
     .separator {
       border-top: 2px solid #8B0000;
-      margin: 12px 0;
+      margin: 15px 0;
       width: 100%;
     }
     
@@ -181,37 +175,37 @@
     .approval-section {
       display: flex;
       justify-content: space-between;
-      margin-top: 15px;
-      padding: 10px 0 2px 0;
+      margin-top: 20px;
+      padding: 12px 0 5px 0;
       border-top: 2px solid #8B0000;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: bold;
-      min-height: 45px;
+      min-height: 50px;
       flex-wrap: wrap;
     }
     
     .approval-right {
       text-align: right;
       flex: 1;
-      min-width: 150px;
+      min-width: 160px;
       margin: 5px 0;
     }
     
     .button-container {
       display: flex;
       justify-content: center;
-      gap: 10px;
-      margin-top: 15px;
+      gap: 15px;
+      margin-top: 20px;
       flex-wrap: wrap;
     }
     
     .print-btn, .reset-btn {
-      padding: 8px 16px;
-      font-size: 13px;
+      padding: 10px 20px;
+      font-size: 15px;
       color: white;
       border: none;
       cursor: pointer;
-      border-radius: 4px;
+      border-radius: 5px;
       transition: background 0.3s;
     }
     
@@ -231,7 +225,7 @@
       background: #267349;
     }
     
-    /* تذييل الصفحة المتحرك */
+    /* تذييل الصفحة المتحرك - تم التصحيح */
     .footer-animation {
       position: fixed;
       bottom: 0;
@@ -239,16 +233,15 @@
       width: 100%;
       background-color: #8B0000; 
       color: white;
-      padding: 6px 0;
+      padding: 8px 0;
       text-align: center;
       overflow: hidden;
-      box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
       z-index: 1000;
     }
     
     .marquee {
       display: block;
-      width: 100%;
       white-space: nowrap;
       overflow: hidden;
       box-sizing: border-box;
@@ -256,39 +249,39 @@
     
     .marquee span {
       display: inline-block;
-      padding-right: 100%;
-      animation: marquee 20s linear infinite;
+      padding-left: 100%;
+      animation: marquee 25s linear infinite;
       font-weight: bold;
       font-size: 16px;
     }
     
     @keyframes marquee {
       0%   { transform: translate(0, 0); }
-      100% { transform: translate(100%, 0); }
+      100% { transform: translate(-100%, 0); }
     }
 
     .disclaimer {
       text-align: center;
-      margin-top: 15px;
-      padding: 6px;
+      margin-top: 20px;
+      padding: 8px;
       background-color: #fff3cd;
       border: 1px solid #ffeaa7;
-      border-radius: 4px;
+      border-radius: 5px;
       color: #856404;
-      font-size: 11px;
+      font-size: 12px;
       direction: rtl;
     }
 
     /* ملاحظة على نفس السطر */
     .inline-note {
       color: #666;
-      font-size: 11px;
+      font-size: 12px;
       margin-right: 10px;
-      padding: 4px 7px;
+      padding: 5px 8px;
       background-color: #f9f9f9;
       border-right: 2px solid #ddd;
-      border-radius: 3px;
-      line-height: 1.3;
+      border-radius: 4px;
+      line-height: 1.4;
       white-space: nowrap;
     }
 
@@ -298,7 +291,7 @@
         margin: 0;
         padding: 0;
         background: white;
-        font-size: 10px;
+        font-size: 11px;
         width: 100%;
         height: auto;
         display: block;
@@ -308,7 +301,7 @@
         border: 2px solid #8B0000 !important;
         box-shadow: none;
         margin: 0;
-        padding: 5px;
+        padding: 8px;
         width: 100%;
         max-width: 100%;
         page-break-inside: avoid;
@@ -316,74 +309,74 @@
       }
       
       .inner-header {
-        margin-bottom: 8px;
-        padding-bottom: 6px;
+        margin-bottom: 10px;
+        padding-bottom: 8px;
       }
       
       .inner-logo img {
-        height: 40px;
+        height: 45px;
       }
       
       .directorate-title {
-        font-size: 14px;
+        font-size: 16px;
       }
       
       .department-title {
-        font-size: 11px;
+        font-size: 13px;
       }
       
       h3 {
-        font-size: 16px;
-        margin: 3px 0 8px 0;
-        padding: 6px;
+        font-size: 18px;
+        margin: 5px 0 10px 0;
+        padding: 8px;
       }
       
       label {
-        width: 140px;
-        margin-left: 8px;
-        padding-right: 20px;
-        font-size: 11px;
+        width: 150px;
+        margin-left: 10px;
+        padding-right: 25px;
+        font-size: 12px;
       }
       
       input, select {
-        padding: 3px;
-        margin: 2px;
-        font-size: 10px;
-        height: 26px;
+        padding: 5px;
+        margin: 3px;
+        font-size: 11px;
+        height: 30px;
       }
       
       input.employee-input {
-        width: 180px;
+        width: 190px;
       }
       
       input.amount-input {
-        width: 90px;
-      }
-      
-      select.year-select, select.contract-type {
         width: 100px;
       }
       
+      select.year-select, select.contract-type {
+        width: 110px;
+      }
+      
       input[readonly] {
-        width: 90px;
+        width: 100px;
       }
       
       .result {
-        font-size: 11px;
-        padding: 6px;
-        line-height: 1.3;
-        margin: 8px 0;
+        font-size: 12px;
+        padding: 8px;
+        line-height: 1.4;
+        margin: 10px 0;
       }
       
       .separator {
-        margin: 8px 0;
+        margin: 10px 0;
       }
       
       .approval-section {
-        margin-top: 12px;
-        padding-top: 8px;
-        font-size: 11px;
-        min-height: 40px;
+        margin-top: 15px;
+        padding-top: 10px;
+        font-size: 12px;
+        min-height: 45px;
       }
       
       .button-container, .footer-animation, .disclaimer {
@@ -391,9 +384,9 @@
       }
       
       .inline-note {
-        font-size: 10px;
-        margin-right: 8px;
-        padding: 3px 6px;
+        font-size: 11px;
+        margin-right: 10px;
+        padding: 4px 7px;
         background-color: transparent !important;
       }
       
@@ -411,53 +404,63 @@
     }
     
     .contract-spacer {
-      height: 10px;
+      height: 12px;
       display: block;
     }
 
     /* استعلامات وسائط للشاشات الصغيرة */
     @media (max-width: 768px) {
       body {
-        padding: 5px;
-        font-size: 12px;
+        padding: 8px;
+        font-size: 14px;
+        align-items: flex-start;
+        padding-top: 15px;
       }
       
       .container {
-        padding: 10px;
+        padding: 15px;
         width: 100%;
-        margin: 5px auto;
+        margin: 0 auto 60px auto;
       }
       
       .inner-header {
         flex-direction: column;
         text-align: center;
+        gap: 10px;
       }
       
       .inner-logo {
-        margin: 5px 0;
+        order: 1;
+      }
+      
+      .inner-title {
+        order: 2;
+        width: 100%;
       }
       
       .inner-logo img {
-        height: 40px;
+        height: 45px;
       }
       
       .directorate-title {
-        font-size: 14px;
+        font-size: 16px;
       }
       
       .department-title {
-        font-size: 12px;
+        font-size: 14px;
       }
       
       h3 {
-        font-size: 16px;
-        padding: 6px;
+        font-size: 18px;
+        padding: 10px;
+        margin-bottom: 15px;
       }
       
       .input-row {
         flex-direction: column;
         align-items: flex-start;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
+        gap: 5px;
       }
       
       label {
@@ -466,13 +469,15 @@
         padding-right: 0;
         margin-bottom: 5px;
         margin-left: 0;
+        font-size: 14px;
       }
       
       input, select {
         width: 100% !important;
         margin: 2px 0;
-        font-size: 14px; /* زيادة حجم الخط ليكون أسهل في الاستخدام على الهواتف */
-        height: 35px;
+        font-size: 15px;
+        height: 40px;
+        max-width: 100%;
       }
       
       input.employee-input,
@@ -482,48 +487,53 @@
         width: 100% !important;
       }
       
+      input[readonly] {
+        width: 100% !important;
+      }
+      
       .inline-note {
         width: 100%;
-        margin: 5px 0;
+        margin: 8px 0;
         white-space: normal;
         text-align: center;
+        font-size: 13px;
       }
       
       .approval-section {
         flex-direction: column;
+        gap: 15px;
       }
       
       .approval-right {
-        margin: 10px 0;
         text-align: center;
+        width: 100%;
       }
       
       .result {
-        font-size: 13px;
-        padding: 10px;
+        font-size: 14px;
+        padding: 15px;
       }
       
       .button-container {
         flex-direction: column;
-        gap: 8px;
+        gap: 10px;
       }
       
       .print-btn, .reset-btn {
         width: 100%;
-        padding: 10px;
-        font-size: 14px;
+        padding: 12px;
+        font-size: 16px;
       }
       
       .footer-animation {
-        position: relative;
-        margin-top: 20px;
+        position: fixed;
+        bottom: 0;
+        padding: 10px 0;
       }
       
       .marquee span {
         font-size: 14px;
-        white-space: normal;
-        animation: none;
-        padding-right: 0;
+        white-space: nowrap;
       }
     }
 
@@ -534,38 +544,69 @@
       }
       
       input.employee-input {
-        width: 180px;
+        width: 200px;
       }
       
       input.amount-input {
-        width: 100px;
+        width: 110px;
       }
       
       .inner-logo img {
-        height: 45px;
+        height: 50px;
+      }
+      
+      label {
+        width: 160px;
       }
     }
 
     /* استعلامات وسائط للشاشات الصغيرة جدًا */
     @media (max-width: 480px) {
       .directorate-title {
-        font-size: 13px;
+        font-size: 15px;
       }
       
       .department-title {
-        font-size: 11px;
+        font-size: 13px;
       }
       
       h3 {
-        font-size: 14px;
+        font-size: 16px;
       }
       
       label {
-        font-size: 12px;
+        font-size: 13px;
       }
       
       .result {
-        font-size: 12px;
+        font-size: 13px;
+      }
+      
+      .marquee span {
+        font-size: 13px;
+      }
+      
+      .footer-animation {
+        padding: 8px 0;
+      }
+    }
+
+    /* تحسينات للشاشات الكبيرة */
+    @media (min-width: 1200px) {
+      .container {
+        max-width: 800px;
+      }
+      
+      body {
+        font-size: 15px;
+      }
+      
+      label {
+        font-size: 15px;
+      }
+      
+      input, select {
+        font-size: 15px;
       }
     }
   </style>
