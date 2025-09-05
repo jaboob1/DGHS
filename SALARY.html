@@ -1,569 +1,281 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>حاسبة رواتب</title>
-  <style>
-    @font-face {
-      font-family: 'Diwani';
-      src: url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
-      font-weight: normal;
-      font-style: normal;
-    }
-    
-    body {
-      font-family: Arial, sans-serif;
-      direction: rtl;
-      margin: 0;
-      padding: 20px;
-      background: #f9f9f9;
-      position: relative;
-      min-height: 100vh;
-      padding-bottom: 30px;
-      font-size: 14px;
-    }
-    
-    .container {
-      padding: 20px;
-      border: 2px solid #8B0000;
-      border-radius: 10px;
-      max-width: 800px;
-      margin: 0 auto 50px auto;
-      background: white;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      position: relative;
-    }
-
-    /* رأس الصفحة داخل الإطار */
-    .inner-header {
-      text-align: center;
-      margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 2px solid #8B0000;
-    }
-    
-    .directorate-title {
-      font-family: 'Diwani', 'Lateef', serif;
-      font-size: 18px;
-      color: #8B0000;
-      margin: 0;
-      font-weight: bold;
-    }
-    
-    .department-title {
-      font-family: 'Diwani', 'Lateef', serif;
-      font-size: 14px;
-      color: #8B0000;
-      margin: 5px 0 0 0;
-    }
-
-    h3 {
-      text-align: center;
-      color: #8B0000;
-      margin: 0 0 15px 0;
-      font-size: 20px;
-      padding: 10px;
-      background-color: #f8f8f8;
-      border-radius: 5px;
-      border: 1px solid #8B0000;
-    }
-
-    label {
-      display: inline-block;
-      width: 150px;
-      margin: 5px 0;
-      font-weight: bold;
-    }
-    input {
-      padding: 6px;
-      margin: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    input.employee-input {
-      width: 250px;
-    }
-    input.amount-input {
-      width: 120px;
-    }
-    select.year-select, select.contract-type {
-      padding: 6px;
-      width: 130px;
-      margin: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    input[readonly] {
-      background-color: #f5f5f5;
-      color: #333;
-      width: 120px;
-    }
-    .result {
-      margin-top: 5px;
-      font-weight: bold;
-      color: green;
-      line-height: 1.6;
-      padding: 5px;              
-      font-size: 16px;           
-      background-color: #f0f9f0;
-      border-radius: 3px;
-      border: 1px solid #c3e6c3; 
-    }
-    .separator {
-      border-top: 2px solid #8B0000;
-      margin: 20px 0;
-      width: 100%;
-    }
-    .approval-section {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-      padding: 15px 0 5px 0;
-      border-top: 2px dashed #8B0000;
-      font-size: 14px;
-      font-weight: bold;
-    }
-    .approval-right {
-      text-align: right;
-      flex: 1;
-    }
-    .button-container {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-    .print-btn, .reset-btn {
-      padding: 10px 25px;
-      font-size: 16px;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: background 0.3s;
-    }
-    .print-btn {
-      background: #8B0000;
-    }
-    .print-btn:hover {
-      background: #700000;
-    }
-    .reset-btn {
-      background: #2E8B57;
-    }
-    .reset-btn:hover {
-      background: #267349;
-    }
-    
-    /* تذييل الصفحة المتحرك */
-    .footer-animation {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: #8B0000; 
-      color: white;
-      padding: 10px 0;
-      text-align: center;
-      overflow: hidden;
-      box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
-      z-index: 1000;
-    }
-    .marquee {
-      display: block;
-      width: 100%;
-      white-space: nowrap;
-      overflow: hidden;
-      box-sizing: border-box;
-    }
-    .marquee span {
-      display: inline-block;
-      padding-left: 100%;
-      animation: marquee 15s linear infinite;
-      font-weight: bold;
-      font-size: 14px;
-    }
-    @keyframes marquee {
-      0%   { transform: translate(0, 0); }
-      100% { transform: translate(-100%, 0); }
-    }
-
-    .disclaimer {
-      text-align: center;
-      margin-top: 25px;
-      padding: 10px;
-      background-color: #fff3cd;
-      border: 1px solid #ffeaa7;
-      border-radius: 5px;
-      color: #856404;
-      font-size: 13px;
-      direction: rtl;
-    }
-
-    /* إعدادات الطباعة */
-    @media print {
-      body {
-        margin: 0;
-        background: white;
-        padding: 0;
-        font-size: 13px;
-        height: auto;
-      }
-      .inner-header {
-        border: none;
-        box-shadow: none;
-        margin: 0 auto 10px auto;
-        padding: 5px;
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-        page-break-inside: avoid;
-      }
-      .directorate-title {
-        font-size: 16px;
-      }
-      .department-title {
-        font-size: 12px;
-      }
-      .container {
-        border: none;
-        box-shadow: none;
-        margin: 0 auto;
-        padding: 10px;
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-        page-break-inside: avoid;
-      }
-      .result {
-        font-size: 14px; 
-        padding: 3px;   
-        line-height: 1.4;
-        margin-bottom: 10px;
-      }
-      .print-btn, .reset-btn {
-        display: none;
-      }
-      .approval-section {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 15px;
-        padding-top: 10px;
-        border-top: 2px dashed #8B0000;
-        font-size: 14px;
-        font-weight: bold;
-        page-break-inside: avoid;
-      }
-      .footer-animation {
-        display: none;
-      }
-      /* منع تقسيم المحتوى بين صفحات الطباعة */
-      .button-container, .separator {
-        page-break-before: avoid;
-        page-break-after: avoid;
-      }
-      .disclaimer {
-        display: none !important;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة الموظفين</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        
+        .search-section {
+            display: flex;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+        
+        #employeeId {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button {
+            padding: 12px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .employee-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .full-width {
+            grid-column: span 2;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .message {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+    </style>
 </head>
 <body>
-
-  <div class="container">
-    <!-- رأس الصفحة داخل الإطار بدون شعارات -->
-    <div class="inner-header">
-      <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
-      <div class="department-title">دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
-    </div>
-
-    <h3>حاسبة رواتب</h3>
-
-    <label>اسم الموظف:</label>
-    <input type="text" id="employeeName" class="employee-input" placeholder="أسم الموظف"><br>
-
-    <label>رقم الموظف:</label>
-    <input type="text" id="employeeNumber" class="employee-input" placeholder="رقم الموظف"><br>
-
-    <label>نوع العقد:</label>
-    <select id="contractType" class="contract-type">
-      <option value="permanent">عقود دائمة</option>
-      <option value="temporary">عقود موقتة</option>
-    </select><br><br>
-
-    <label>تاريخ البداية:</label>
-    <input type="date" id="startDate"><br>
-
-    <label>تاريخ النهاية:</label>
-    <input type="date" id="endDate"><br><br>
-
-    <div>
-      <label>البدل الأساسي:</label>
-      <input type="number" id="basic" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="basicResult" readonly><br>
-
-      <label>بدل الأساسي للسنة التالية:</label>
-      <input type="number" id="basicNextYear" class="amount-input" placeholder="أدخل المبلغ">
-      <select id="nextYearSelect" class="year-select">
-        <option value="2026">2026</option>
-        <option value="2027">2027</option>
-        <option value="2028">2028</option>
-        <option value="2029">2029</option>
-        <option value="2030">2030</option>
-      </select><br>
-
-      <label>بدل السكن:</label>
-      <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="housingResult" readonly><br>
-
-      <label>بدل الكهرباء:</label>
-      <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="electricityResult" readonly><br>
-
-      <label>بدل الماء:</label>
-      <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="waterResult" readonly><br>
-
-      <label>بدل الهاتف:</label>
-      <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="phoneResult" readonly><br>
-
-      <label>بدل النقل:</label>
-      <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="transportResult" readonly><br>
-
-      <label>بدل مهني:</label>
-      <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="professionalResult" readonly><br>
-
-      <label>بدل غلاء معيشة:</label>
-      <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
-      <input type="text" id="costLivingResult" readonly><br>
-    </div>
-
-    <div class="separator"></div>
-
-    <div class="result">
-      عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
-      إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
-      إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
-      <span id="twelvePercentLine">  اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (12.5‎‎%‎) : <span id="twelvePercent">0</span><br></span>
-      <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
-      <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
-    </div>
-
-    <div class="approval-section">
-      <div class="approval-right">
-        إعداد ومراجعة: _______________      
-      </div>
-      <div class="approval-right">
-        اعتماد مدير الدائرة: _______________      
-      </div>
-    </div>
-
-    <div class="button-container">
-      <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
-      <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ جميع الحقول</button>
-    </div>
-    
-    <!-- التنويه -->
-    <div class="disclaimer">
-      تنويه: هذه الصفحة غير رسمية بالوزارة تم اعدادها وتطويرها من دائرة الشؤون المالية بظفار
-    </div>
-  </div>
-
-  <div class="footer-animation">
-    <div class="marquee">
-      <span>جميع الحقوق محفوظة لـ محمد جعبوب - قسم الرواتب - دائرة الشؤون المالية</span>
-    </div>
-  </div>
-
-  <script>
-    const startDate = document.getElementById("startDate");
-    const endDate = document.getElementById("endDate");
-    const contractType = document.getElementById("contractType");
-
-    const today = new Date();
-    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-    
-    function formatDate(date) {
-      const year = date.getFullYear();
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const day = date.getDate().toString().padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
-    
-    startDate.value = formatDate(firstDayOfMonth);
-    endDate.value = formatDate(lastDayOfMonth);
-
-    const allowances = [
-      {id:"basic", result:"basicResult"},
-      {id:"housing", result:"housingResult"},
-      {id:"electricity", result:"electricityResult"},
-      {id:"water", result:"waterResult"},         
-      {id:"phone", result:"phoneResult"},
-      {id:"transport", result:"transportResult"},
-      {id:"professional", result:"professionalResult"},
-      {id:"costLiving", result:"costLivingResult"}
-    ];
-
-    const totalAllowances = document.getElementById("totalAllowances");
-    const totalPeriod = document.getElementById("totalPeriod");
-    const twelvePercent = document.getElementById("twelvePercent");
-    const deduction = document.getElementById("deduction");
-    const net = document.getElementById("net");
-    const daysCount = document.getElementById("daysCount");
-
-    const twelvePercentLine = document.getElementById("twelvePercentLine");
-    const deductionLine = document.getElementById("deductionLine");
-    const netLine = document.getElementById("netLine");
-
-    function daysInMonth(year, month) {
-      return new Date(year, month + 1, 0).getDate();
-    }
-
-    function updateContractDisplay() {
-      if (contractType.value === "temporary") {
-        twelvePercentLine.style.display = "none";
-        deductionLine.style.display = "none";
-        netLine.style.display = "none";
-      } else {
-        twelvePercentLine.style.display = "block";
-        deductionLine.style.display = "block";
-        netLine.style.display = "block";
-      }
-    }
-
-    function calculate() {
-      if (!(startDate.value && endDate.value)) return;
-
-      let start = new Date(startDate.value);
-      let end = new Date(endDate.value);
-
-      if (end < start) {
-        totalPeriod.textContent = "❌ تاريخ النهاية قبل البداية";
-        daysCount.textContent = "0";
-        return;
-      }
-
-      let diffTime = end - start;
-      let days = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-      daysCount.textContent = days;
-
-      let totalBase = 0;
-      let totalCalc = 0;
-
-      const selectedYear = parseInt(document.getElementById("nextYearSelect").value);
-      const basicNextYearValue = parseFloat(document.getElementById("basicNextYear").value) || 0;
-
-      allowances.forEach(item => {
-        let input = document.getElementById(item.id);
-        let resultBox = document.getElementById(item.result);
-        let monthly = parseFloat(input.value) || 0;
+    <div class="container">
+        <h1>نظام إدارة الموظفين</h1>
         
-        if (item.id === "basic") {
-          totalBase += monthly; 
-          
-          let current = new Date(start);
-          let sum = 0;
-          while (current <= end) {
-            let year = current.getFullYear();
-            let month = current.getMonth();
-            let daysInThisMonth = daysInMonth(year, month);
+        <div class="search-section">
+            <input type="text" id="employeeId" placeholder="أدخل رقم الموظف...">
+            <button id="searchBtn">بحث</button>
+            <button id="clearBtn">مسح النموذج</button>
+        </div>
+        
+        <div id="message" class="message hidden"></div>
+        
+        <form id="employeeForm" class="employee-form hidden">
+            <div class="form-group">
+                <label for="id">رقم الموظف:</label>
+                <input type="text" id="id" readonly>
+            </div>
             
-            let dailyValue = 0;
-            if (year < selectedYear) {
-              dailyValue = monthly / daysInThisMonth;
-            } else {
-              dailyValue = basicNextYearValue / daysInThisMonth;
+            <div class="form-group">
+                <label for="name">اسم الموظف:</label>
+                <input type="text" id="name" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="department">القسم:</label>
+                <input type="text" id="department" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="position">المنصب:</label>
+                <input type="text" id="position" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="salary">الراتب:</label>
+                <input type="text" id="salary" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">البريد الإلكتروني:</label>
+                <input type="email" id="email" readonly>
+            </div>
+            
+            <div class="form-group full-width">
+                <label for="address">العنوان:</label>
+                <input type="text" id="address" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">رقم الهاتف:</label>
+                <input type="tel" id="phone" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="hireDate">تاريخ التعيين:</label>
+                <input type="text" id="hireDate" readonly>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // بيانات وهمية للموظفين (في تطبيق حقيقي، سيتم جلب البيانات من قاعدة بيانات)
+        const employees = [
+            {
+                id: "1001",
+                name: "أحمد محمد",
+                department: "تكنولوجيا المعلومات",
+                position: "مطور ويب",
+                salary: "5000 ريال",
+                email: "ahmed@company.com",
+                address: "الرياض، حي العليا",
+                phone: "0551234567",
+                hireDate: "2022-03-15"
+            },
+            {
+                id: "1002",
+                name: "فاطمة علي",
+                department: "المبيعات",
+                position: "مديرة مبيعات",
+                salary: "6000 ريال",
+                email: "fatima@company.com",
+                address: "جدة، حي الصفا",
+                phone: "0557654321",
+                hireDate: "2021-07-22"
+            },
+            {
+                id: "1003",
+                name: "خالد سالم",
+                department: "المحاسبة",
+                position: "محاسب",
+                salary: "4500 ريال",
+                email: "khaled@company.com",
+                address: "الدمام، حي الاتصالات",
+                phone: "0559876543",
+                hireDate: "2023-01-10"
+            }
+        ];
+
+        // عناصر DOM
+        const employeeIdInput = document.getElementById('employeeId');
+        const searchBtn = document.getElementById('searchBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const employeeForm = document.getElementById('employeeForm');
+        const messageDiv = document.getElementById('message');
+
+        // إضافة مستمعي الأحداث
+        searchBtn.addEventListener('click', searchEmployee);
+        clearBtn.addEventListener('click', clearForm);
+        employeeIdInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchEmployee();
+            }
+        });
+
+        // دالة البحث عن الموظف
+        function searchEmployee() {
+            const employeeId = employeeIdInput.value.trim();
+            
+            if (!employeeId) {
+                showMessage('يرجى إدخال رقم الموظف', 'error');
+                return;
             }
             
-            sum += dailyValue;
-            current.setDate(current.getDate() + 1);
-          }
-          
-          resultBox.value = sum.toFixed(3);
-          totalCalc += sum;
-        } else {
-          totalBase += monthly;
-          
-          let current = new Date(start);
-          let sum = 0;
-          while (current <= end) {
-            let year = current.getFullYear();
-            let month = current.getMonth();
-            let daysInThisMonth = daysInMonth(year, month);
-            let daily = monthly / daysInThisMonth;
-            sum += daily;
-            current.setDate(current.getDate() + 1);
-          }
-          
-          resultBox.value = sum.toFixed(3);
-          totalCalc += sum;
+            // البحث في بيانات الموظفين
+            const employee = employees.find(emp => emp.id === employeeId);
+            
+            if (employee) {
+                // تعبئة النموذج ببيانات الموظف
+                document.getElementById('id').value = employee.id;
+                document.getElementById('name').value = employee.name;
+                document.getElementById('department').value = employee.department;
+                document.getElementById('position').value = employee.position;
+                document.getElementById('salary').value = employee.salary;
+                document.getElementById('email').value = employee.email;
+                document.getElementById('address').value = employee.address;
+                document.getElementById('phone').value = employee.phone;
+                document.getElementById('hireDate').value = employee.hireDate;
+                
+                employeeForm.classList.remove('hidden');
+                showMessage('تم العثور على بيانات الموظف', 'success');
+            } else {
+                employeeForm.classList.add('hidden');
+                showMessage('لم يتم العثور على موظف بهذا الرقم', 'error');
+            }
         }
-      });
 
-      totalAllowances.textContent = totalBase.toFixed(3);
-      totalPeriod.textContent = totalCalc.toFixed(3);
-      
-      let twelvePercentValue = totalCalc * 0.125;
-      twelvePercent.textContent = twelvePercentValue.toFixed(3);
+        // دالة مسح النموذج
+        function clearForm() {
+            employeeIdInput.value = '';
+            employeeForm.classList.add('hidden');
+            messageDiv.classList.add('hidden');
+        }
 
-      let ded = totalCalc * 0.08;
-      deduction.textContent = ded.toFixed(3);
-
-      let netValue = totalCalc - ded;
-      net.textContent = netValue.toFixed(3);
-
-      updateContractDisplay();
-    }
-
-    function resetForm() {
-      document.getElementById("employeeName").value = "";
-      document.getElementById("employeeNumber").value = "";
-      document.getElementById("startDate").value = "";
-      document.getElementById("endDate").value = "";
-      document.getElementById("basic").value = "";
-      document.getElementById("basicNextYear").value = "";
-      document.getElementById("housing").value = "";
-      document.getElementById("electricity").value = "";
-      document.getElementById("water").value = "";
-      document.getElementById("phone").value = "";
-      document.getElementById("transport").value = "";
-      document.getElementById("professional").value = "";
-      document.getElementById("costLiving").value = "";
-      contractType.value = "permanent";
-      
-      allowances.forEach(item => {
-        document.getElementById(item.result).value = "";
-      });
-      
-      totalAllowances.textContent = "0";
-      totalPeriod.textContent = "0";
-      twelvePercent.textContent = "0";
-      deduction.textContent = "0";
-      net.textContent = "0";
-      daysCount.textContent = "0";
-      updateContractDisplay();
-    }
-
-    startDate.addEventListener("change", calculate);
-    endDate.addEventListener("change", calculate);
-    contractType.addEventListener("change", updateContractDisplay);
-    document.getElementById("nextYearSelect").addEventListener("change", calculate);
-    document.getElementById("basicNextYear").addEventListener("input", calculate);
-    
-    allowances.forEach(item => {
-      document.getElementById(item.id).addEventListener("input", calculate);
-    });
-
-    window.onload = function() {
-      calculate();
-      updateContractDisplay();
-    };
-  </script>
-
+        // دالة عرض الرسائل
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.classList.remove('hidden');
+            
+            // إخفاء الرسالة تلقائياً بعد 5 ثواني
+            setTimeout(() => {
+                messageDiv.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
 </body>
 </html>
