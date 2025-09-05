@@ -4,6 +4,39 @@
   <meta charset="UTF-8">
   <title>حاسبة رواتب</title>
   <style>
+    /* أنماط شريط التنقل الجديد */
+    .navbar {
+      background-color: #8B0000;
+      overflow: hidden;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 10000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      display: flex;
+      justify-content: center;
+    }
+    
+    .navbar button {
+      background-color: transparent;
+      border: none;
+      color: white;
+      padding: 14px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+      font-family: Tahoma, sans-serif;
+    }
+    
+    .navbar button:hover {
+      background-color: #A52A2A;
+    }
+    
+    /* تعديل المسافة لشريط التنقل */
+    body {
+      padding-top: 50px; /* إضافة مساحة لشريط التنقل */
+    }
+
     @font-face {
       font-family: 'Diwani';
       src: url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
@@ -284,6 +317,10 @@
 
     /* إعدادات الطباعة المحسنة لصفحة واحدة */
     @media print {
+      .navbar {
+        display: none;
+      }
+      
       body {
         margin: 0;
         padding: 0;
@@ -292,6 +329,7 @@
         width: 100%;
         height: auto;
         display: block;
+        padding-top: 0;
       }
       
       .container {
@@ -407,6 +445,13 @@
   </style>
 </head>
 <body>
+
+  <!-- شريط التنقل الجديد -->
+  <div class="navbar">
+    <button onclick="window.location.href='index.html'">الرئيسية</button>
+    <button onclick="window.location.href='https://www.jaboob.com/old.html'">الاحتساب القديم</button>
+    <button onclick="window.location.href='salary-calculator.html'">الاحتساب الجديد</button>
+  </div>
 
   <div class="container">
     <!-- رأس الصفحة داخل الإطار مع الشعارات -->
