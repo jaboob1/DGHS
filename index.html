@@ -4,39 +4,6 @@
   <meta charset="UTF-8">
   <title>حاسبة رواتب</title>
   <style>
-    /* أنماط شريط التنقل الجديد */
-    .navbar {
-      background-color: #8B0000;
-      overflow: hidden;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 10000;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-      display: flex;
-      justify-content: center;
-    }
-    
-    .navbar button {
-      background-color: transparent;
-      border: none;
-      color: white;
-      padding: 14px 20px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s;
-      font-family: Tahoma, sans-serif;
-    }
-    
-    .navbar button:hover {
-      background-color: #A52A2A;
-    }
-    
-    /* تعديل المسافة لشريط التنقل */
-    body {
-      padding-top: 50px; /* إضافة مساحة لشريط التنقل */
-    }
-
     @font-face {
       font-family: 'Diwani';
       src: url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
@@ -77,7 +44,7 @@
       position: relative;
     }
 
-    /* رأس الصفحة داخل الإطار مع الشعارات */
+‎    /* رأس الصفحة داخل الإطار مع الشعارات */
     .inner-header {
       display: flex;
       justify-content: space-between;
@@ -203,7 +170,7 @@
       width: 100%;
     }
     
-    /* تقليص قسم التوقيع ليتناسب مع الطباعة */
+‎    /* تقليص قسم التوقيع ليتناسب مع الطباعة */
     .approval-section {
       display: flex;
       justify-content: space-between;
@@ -254,7 +221,7 @@
       background: #267349;
     }
     
-    /* تذييل الصفحة المتحرك */
+‎    /* تذييل الصفحة المتحرك */
     .footer-animation {
       position: fixed;
       bottom: 0;
@@ -302,7 +269,7 @@
       direction: rtl;
     }
 
-    /* ملاحظة على نفس السطر */
+‎    /* ملاحظة على نفس السطر */
     .inline-note {
       color: #666;
       font-size: 11px;
@@ -315,12 +282,8 @@
       white-space: nowrap;
     }
 
-    /* إعدادات الطباعة المحسنة لصفحة واحدة */
+‎    /* إعدادات الطباعة المحسنة لصفحة واحدة */
     @media print {
-      .navbar {
-        display: none;
-      }
-      
       body {
         margin: 0;
         padding: 0;
@@ -329,7 +292,6 @@
         width: 100%;
         height: auto;
         display: block;
-        padding-top: 0;
       }
       
       .container {
@@ -425,7 +387,7 @@
         background-color: transparent !important;
       }
       
-      /* ضمان عدم تقسيم المحتوى */
+‎      /* ضمان عدم تقسيم المحتوى */
       .container, .inner-header, .result, .approval-section, .input-row {
         page-break-before: avoid;
         page-break-after: avoid;
@@ -433,7 +395,7 @@
       }
     }
 
-    /* أنماط جديدة للإخفاء والإظهار */
+‎    /* أنماط جديدة للإخفاء والإظهار */
     .temporary-hide {
       display: block;
     }
@@ -446,15 +408,8 @@
 </head>
 <body>
 
-  <!-- شريط التنقل الجديد -->
-  <div class="navbar">
-    <button onclick="window.location.href='index.html'">الرئيسية</button>
-    <button onclick="window.location.href='https://www.jaboob.com/old.html'">الاحتساب القديم</button>
-    <button onclick="window.location.href='index.html'">الاحتساب الجديد</button>
-  </div>
-
   <div class="container">
-    <!-- رأس الصفحة داخل الإطار مع الشعارات -->
+‎    <!-- رأس الصفحة داخل الإطار مع الشعارات -->
     <div class="inner-header">
       <div class="inner-logo">
         <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="شعار وزارة الصحة">
@@ -507,20 +462,20 @@
         <input type="text" id="basicResult" readonly>
       </div>
 
-      <!-- بدل الأساسي للسنة التالية مع الملاحظة على نفس السطر -->
+‎      <!-- بدل الأساسي للسنة التالية مع الملاحظة على نفس السطر -->
       <div class="input-row">
         <label for="basicNextYear">بدل الأساسي للسنة التالية:</label>
         <input type="number" id="basicNextYear" class="amount-input" placeholder="أدخل المبلغ">
         <select id="nextYearSelect" class="year-select">
-          <!-- سيتم ملء السنوات من 2015 إلى 2030 عبر الجافاسكريبت -->
+‎          <!-- سيتم ملء السنوات من 2015 إلى 2030 عبر الجافاسكريبت -->
         </select>
         <span class="inline-note">تدرج العلاوة الدورية لسنتين متداخلة</span>
       </div>
 
-      <!-- إضافة مسافة بين أنواع العقود -->
+‎      <!-- إضافة مسافة بين أنواع العقود -->
       <div id="contractSpacer" class="contract-spacer"></div>
 
-      <!-- الحقول التي سيتم إخفاؤها عند اختيار عقود موقتة -->
+‎      <!-- الحقول التي سيتم إخفاؤها عند اختيار عقود موقتة -->
       <div class="temporary-hide">
         <div class="input-row">
           <label for="housing">بدل السكن:</label>
@@ -569,22 +524,22 @@
     <div class="separator"></div>
 
     <div class="result">
-      عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
-      إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
-      إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
+‎      عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
+‎      إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
+‎      إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
       <span id="twelvePercentLine">اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (12.5‎‎%‎) : <span id="twelvePercent">0</span><br></span>
       <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
       <span id="totalSocialLine">إجمالي الاشتراكات في حالة خروج الموظف لإجازة بدون راتب: <span id="totalSocial">0</span><br></span>
       <span id="netLine"> صافي المستحق: <span id="net">0</span></span>
     </div>
 
-    <!-- قسم الإعداد والمراجعة المعدل -->
+‎    <!-- قسم الإعداد والمراجعة المعدل -->
     <div class="approval-section">
       <div class="approval-right">
-        إعداد ومراجعة: _______________      
+‎        إعداد ومراجعة: _______________      
       </div>
       <div class="approval-right">
-        اعتماد مدير الدائرة: _______________      
+‎        اعتماد مدير الدائرة: _______________      
       </div>
     </div>
 
@@ -593,9 +548,9 @@
       <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ الحقول</button>
     </div>
     
-    <!-- التنويه -->
+‎    <!-- التنويه -->
     <div class="disclaimer">
-      للتنويه: محتوى الصفحة لا يتبع وزارة الصحة ،تم أنشاء هذي الاداة وتطويرها بمبادرة فردية 
+‎      للتنويه: محتوى الصفحة لا يتبع وزارة الصحة ،تم أنشاء هذي الاداة وتطويرها بمبادرة فردية 
     </div>
   </div>
 
@@ -614,12 +569,12 @@
       const temporaryHideElements = document.querySelectorAll('.temporary-hide');
       const nextYearSelect = document.getElementById("nextYearSelect");
 
-      // تعيين التواريخ الافتراضية
+‎      // تعيين التواريخ الافتراضية
       const today = new Date();
       const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
       const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
       
-      // تعبئة السنوات من 2015 إلى 2030
+‎      // تعبئة السنوات من 2015 إلى 2030
       for (let year = 2015; year <= 2030; year++) {
         const option = document.createElement("option");
         option.value = year;
@@ -627,7 +582,7 @@
         nextYearSelect.appendChild(option);
       }
       
-      // تحديد السنة الحالية كقيمة افتراضية
+‎      // تحديد السنة الحالية كقيمة افتراضية
       nextYearSelect.value = today.getFullYear() + 1;
       
       function formatDate(date) {
@@ -670,32 +625,32 @@
 
       function updateContractDisplay() {
         if (contractType.value === "temporary") {
-          // إخفاء الحقول غير المرغوبة في عقود موقتة
+‎          // إخفاء الحقول غير المرغوبة في عقود موقتة
           temporaryHideElements.forEach(el => {
             el.style.display = "none";
           });
           
-          // إخفاء حسابات الصندوق الاجتماعي
+‎          // إخفاء حسابات الصندوق الاجتماعي
           twelvePercentLine.style.display = "none";
           deductionLine.style.display = "none";
           totalSocialLine.style.display = "none";
           netLine.style.display = "none";
           
-          // إخفاء المسافة الإضافية
+‎          // إخفاء المسافة الإضافية
           contractSpacer.style.display = "none";
         } else {
-          // إظهار جميع الحقول في عقود دائمة
+‎          // إظهار جميع الحقول في عقود دائمة
           temporaryHideElements.forEach(el => {
             el.style.display = "block";
           });
           
-          // إظهار حسابات الصندوق الاجتماعي
+‎          // إظهار حسابات الصندوق الاجتماعي
           twelvePercentLine.style.display = "block";
           deductionLine.style.display = "block";
           totalSocialLine.style.display = "block";
           netLine.style.display = "block";
           
-          // إظهار المسافة الإضافية
+‎          // إظهار المسافة الإضافية
           contractSpacer.style.display = "block";
         }
       }
@@ -727,7 +682,7 @@
           let resultBox = document.getElementById(item.result);
           let monthly = parseFloat(input.value) || 0;
           
-          // إذا كان نوع العقد موقتاً، نتجاهل الحقول المخفية في الحساب
+‎          // إذا كان نوع العقد موقتاً، نتجاهل الحقول المخفية في الحساب
           if (contractType.value === "temporary" && 
               (item.id !== "basic" && item.id !== "basicNextYear")) {
             return; // تخطي هذا الحقل
@@ -778,7 +733,7 @@
         totalAllowances.textContent = totalBase.toFixed(3);
         totalPeriod.textContent = totalCalc.toFixed(3);
         
-        // حساب اشتراكات الصندوق الاجتماعي فقط للعقود الدائمة
+‎        // حساب اشتراكات الصندوق الاجتماعي فقط للعقود الدائمة
         if (contractType.value === "permanent") {
           let twelvePercentValue = totalCalc * 0.125;
           twelvePercent.textContent = twelvePercentValue.toFixed(3);
@@ -831,10 +786,10 @@
         updateContractDisplay();
       }
 
-      // جعل الدالة متاحة عالمياً
+‎      // جعل الدالة متاحة عالمياً
       window.resetForm = resetForm;
 
-      // إضافة مستمعي الأحداث
+‎      // إضافة مستمعي الأحداث
       startDate.addEventListener("change", calculate);
       endDate.addEventListener("change", calculate);
       contractType.addEventListener("change", updateContractDisplay);
@@ -845,7 +800,7 @@
         document.getElementById(item.id).addEventListener("input", calculate);
       });
 
-      // التهيئة الأولية
+‎      // التهيئة الأولية
       calculate();
       updateContractDisplay();
     });
