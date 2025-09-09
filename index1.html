@@ -37,7 +37,7 @@
       border: 2px solid #8B0000;
       border-radius: 8px;
       width: 95%;
-      max-width: 800px; /* زيادة العرض لاستيعاب التغييرات */
+      max-width: 900px;
       margin: 10px auto;
       background: white;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -133,7 +133,8 @@
     }
     
     input.amount-input {
-      width: 100px;
+      width: 120px; /* زيادة العرض */
+      border: 1px solid #ddd;
     }
     
     select.contract-type {
@@ -149,24 +150,29 @@
     input[readonly] {
       background-color: #f5f5f5;
       color: #333;
-      width: 100px;
+      width: 120px; /* زيادة العرض */
+      border: 1px solid #ddd;
     }
     
     /* إضافة نمط للحقل الجديد بعد الخصم */
     input.after-deduction {
       background-color: #f0f9f0;
       color: #2E8B57;
-      width: 100px;
+      width: 120px; /* زيادة العرض */
       font-weight: bold;
+      border: 1px solid #ddd;
     }
     
     .column-title {
-      font-size: 11px;
+      font-size: 12px;
       color: #8B0000;
       margin: 0 5px;
       text-align: center;
-      width: 100px;
+      width: 120px; /* زيادة العرض */
       font-weight: bold;
+      padding: 5px;
+      border: 1px solid #ddd;
+      background-color: #f8f8f8;
     }
     
     .result {
@@ -286,19 +292,6 @@
       direction: rtl;
     }
 
-    /* ملاحظة على نفس السطر */
-    .inline-note {
-      color: #666;
-      font-size: 11px;
-      margin-right: 10px;
-      padding: 4px 7px;
-      background-color: #f9f9f9;
-      border-right: 2px solid #ddd;
-      border-radius: 3px;
-      line-height: 1.3;
-      white-space: nowrap;
-    }
-
     /* صف التواريخ في سطر واحد */
     .date-row {
       display: flex;
@@ -319,6 +312,7 @@
     .date-input {
       width: 150px;
       margin-left: 10px;
+      border: 1px solid #ddd;
     }
     
     /* أنماط جديدة للإخفاء والإظهار */
@@ -336,6 +330,7 @@
       font-weight: bold;
       background-color: #f0f0f0;
       color: #8B0000;
+      border: 1px solid #ddd;
     }
 
     @media print {
@@ -402,7 +397,7 @@
       }
       
       input.amount-input, input[readonly], input.after-deduction {
-        width: 80px;
+        width: 100px;
       }
       
       select.contract-type {
@@ -410,8 +405,8 @@
       }
       
       .column-title {
-        font-size: 9px;
-        width: 80px;
+        font-size: 10px;
+        width: 100px;
       }
       
       .result {
@@ -436,14 +431,7 @@
         display: none;
       }
       
-      .inline-note {
-        font-size: 10px;
-        margin-right: 8px;
-        padding: 3px 6px;
-        background-color: transparent !important;
-      }
-      
-      /* ضمان عدم تقسيم المحتوى */
+      /* ضمان عدم تقسيم المحتوة */
       .container, .inner-header, .result, .approval-section, .input-row {
         page-break-before: avoid;
         page-break-after: avoid;
@@ -477,9 +465,9 @@
       <!-- إضافة عناوين الأعمدة -->
       <div class="input-row">
         <label></label>
-        <span class="column-title">إجمالي راتب الدرجة</span>
-        <span class="column-title">إجمالي الاحتساب قبل الخصم</span>
-        <span class="column-title"> إجمالي الاحتساب بعد الخصم</span>
+        <span class="column-title">المبلغ الشهري</span>
+        <span class="column-title">الإجمالي للفترة</span>
+        <span class="column-title">بعد خصم 8%</span>
       </div>
 
       <div class="input-row">
@@ -562,26 +550,12 @@
           <input type="text" id="professionalAfterDeduction" class="after-deduction" readonly>
         </div>
 
-        <!-- البدلات الجديدة المضافة -->
+        <!-- بدلات أخرى بدلاً من بدل إضافي 1 -->
         <div class="input-row">
-          <label for="allowance1">بدل إضافي 1:</label>
-          <input type="number" id="allowance1" class="amount-input" placeholder="أدخل المبلغ">
-          <input type="text" id="allowance1Result" readonly>
-          <input type="text" id="allowance1AfterDeduction" class="after-deduction" readonly>
-        </div>
-
-        <div class="input-row">
-          <label for="allowance2">بدل إضافي 2:</label>
-          <input type="number" id="allowance2" class="amount-input" placeholder="أدخل المبلغ">
-          <input type="text" id="allowance2Result" readonly>
-          <input type="text" id="allowance2AfterDeduction" class="after-deduction" readonly>
-        </div>
-
-        <div class="input-row">
-          <label for="allowance3">بدل إضافي 3:</label>
-          <input type="number" id="allowance3" class="amount-input" placeholder="أدخل المبلغ">
-          <input type="text" id="allowance3Result" readonly>
-          <input type="text" id="allowance3AfterDeduction" class="after-deduction" readonly>
+          <label for="otherAllowances">بدلات أخرى:</label>
+          <input type="number" id="otherAllowances" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="otherAllowancesResult" readonly>
+          <input type="text" id="otherAllowancesAfterDeduction" class="after-deduction" readonly>
         </div>
 
         <div class="input-row">
@@ -605,11 +579,9 @@
 
     <div class="result">
       عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
-      إجمالي راتب الدرجة: <span id="totalAllowances">0</span><br>
+      إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
       إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
-      <span id="twelvePercentLine">اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (12.5‎‎%‎) : <span id="twelvePercent">0</span><br></span>
       <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
-      <span id="totalSocialLine">إجمالي الاشتراكات في حالة خروج الموظف لإجازة بدون راتب: <span id="totalSocial">0</span><br></span>
       <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
     </div>
 
@@ -671,29 +643,23 @@
         {id:"phone", result:"phoneResult", afterDeduction:"phoneAfterDeduction"},
         {id:"transport", result:"transportResult", afterDeduction:"transportAfterDeduction"},
         {id:"professional", result:"professionalResult", afterDeduction:"professionalAfterDeduction"},
-        {id:"allowance1", result:"allowance1Result", afterDeduction:"allowance1AfterDeduction"},
-        {id:"allowance2", result:"allowance2Result", afterDeduction:"allowance2AfterDeduction"},
-        {id:"allowance3", result:"allowance3Result", afterDeduction:"allowance3AfterDeduction"},
+        {id:"otherAllowances", result:"otherAllowancesResult", afterDeduction:"otherAllowancesAfterDeduction"},
         {id:"costLiving", result:"costLivingResult", afterDeduction:"costLivingAfterDeduction"}
       ];
 
       const totalAllowances = document.getElementById("totalAllowances");
       const totalPeriod = document.getElementById("totalPeriod");
-      const twelvePercent = document.getElementById("twelvePercent");
       const deduction = document.getElementById("deduction");
       const net = document.getElementById("net");
       const daysCount = document.getElementById("daysCount");
-      const totalSocial = document.getElementById("totalSocial");
       
       // حقول الإجمالي
       const monthlyTotal = document.getElementById("monthlyTotal");
       const periodTotal = document.getElementById("periodTotal");
       const afterDeductionTotal = document.getElementById("afterDeductionTotal");
 
-      const twelvePercentLine = document.getElementById("twelvePercentLine");
       const deductionLine = document.getElementById("deductionLine");
       const netLine = document.getElementById("netLine");
-      const totalSocialLine = document.getElementById("totalSocialLine");
 
       function daysInMonth(year, month) {
         return new Date(year, month + 1, 0).getDate();
@@ -707,9 +673,7 @@
           });
           
           // إخفاء حسابات الصندوق الاجتماعي
-          twelvePercentLine.style.display = "none";
           deductionLine.style.display = "none";
-          totalSocialLine.style.display = "none";
           netLine.style.display = "none";
           
           // إخفاء المسافة الإضافية
@@ -721,9 +685,7 @@
           });
           
           // إظهار حسابات الصندوق الاجتماعي
-          twelvePercentLine.style.display = "block";
           deductionLine.style.display = "block";
-          totalSocialLine.style.display = "block";
           netLine.style.display = "block";
           
           // إظهار المسافة الإضافية
@@ -794,21 +756,13 @@
         
         // حساب اشتراكات الصندوق الاجتماعي فقط للعقود الدائمة
         if (contractType.value === "permanent") {
-          let twelvePercentValue = totalCalc * 0.125;
-          twelvePercent.textContent = twelvePercentValue.toFixed(3);
-
           let ded = totalCalc * 0.08;
           deduction.textContent = ded.toFixed(3);
-
-          let totalSocialValue = twelvePercentValue + ded;
-          totalSocial.textContent = totalSocialValue.toFixed(3);
 
           let netValue = totalCalc - ded;
           net.textContent = netValue.toFixed(3);
         } else {
-          twelvePercent.textContent = "0";
           deduction.textContent = "0";
-          totalSocial.textContent = "0";
           net.textContent = totalCalc.toFixed(3);
         }
 
@@ -827,9 +781,7 @@
         document.getElementById("phone").value = "";
         document.getElementById("transport").value = "";
         document.getElementById("professional").value = "";
-        document.getElementById("allowance1").value = "";
-        document.getElementById("allowance2").value = "";
-        document.getElementById("allowance3").value = "";
+        document.getElementById("otherAllowances").value = "";
         document.getElementById("costLiving").value = "";
         contractType.value = "permanent";
         
@@ -845,9 +797,7 @@
         
         totalAllowances.textContent = "0";
         totalPeriod.textContent = "0";
-        twelvePercent.textContent = "0";
         deduction.textContent = "0";
-        totalSocial.textContent = "0";
         net.textContent = "0";
         daysCount.textContent = "0";
         updateContractDisplay();
