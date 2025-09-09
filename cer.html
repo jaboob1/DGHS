@@ -14,7 +14,7 @@
             color: #333;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background-color: #fff;
             padding: 20px;
@@ -98,6 +98,11 @@
             border: 1px solid #ddd;
             min-height: 18px;
         }
+        .deduction-note {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+        }
         @media (max-width: 768px) {
             .calculator {
                 flex-direction: column;
@@ -156,6 +161,11 @@
                 </div>
                 
                 <div class="allowance-item">
+                    <label for="phone-allowance">بدل الهاتف:</label>
+                    <input type="number" id="phone-allowance" min="0" value="0">
+                </div>
+                
+                <div class="allowance-item">
                     <label for="other-allowance">بدلات أخرى:</label>
                     <input type="number" id="other-allowance" min="0" value="0">
                 </div>
@@ -206,6 +216,11 @@
                 </div>
                 
                 <div class="allowance-item">
+                    <label>بدل الهاتف:</label>
+                    <div class="result-field" id="calculated-phone">0</div>
+                </div>
+                
+                <div class="allowance-item">
                     <label>بدلات أخرى:</label>
                     <div class="result-field" id="calculated-other">0</div>
                 </div>
@@ -224,15 +239,66 @@
             <!-- صافي الراتب بعد الاستقطاع -->
             <div class="column">
                 <div class="column-header">صافي الراتب بعد الاستقطاع</div>
+                <div class="deduction-note">(يتم خصم 8% من كل بدل)</div>
                 
                 <div class="allowance-item">
-                    <label for="deductions">الاستقطاعات:</label>
-                    <input type="number" id="deductions" min="0" value="0">
+                    <label>بدل الأساسي بعد الخصم:</label>
+                    <div class="result-field" id="net-basic">0</div>
                 </div>
                 
                 <div class="allowance-item">
-                    <label>صافي الراتب:</label>
-                    <div class="result-field" id="net-salary">0</div>
+                    <label>بدل السكن بعد الخصم:</label>
+                    <div class="result-field" id="net-housing">0</div>
+                </div>
+                
+                <div class="allowance-item">
+                    <label>بدل الكهرباء بعد الخصم:</label>
+                    <div class="result-field" id="net-electricity">0</div>
+                </div>
+                
+                <div class="allowance-item">
+                    <label>بدل الماء بعد الخصم:</label>
+                    <div class="result-field" id="net-water">0</div>
+                </div>
+                
+                <div class="allowance-item">
+                    <label>بدل النقل بعد الخصم:</label>
+                    <div class="result-field" id="net-transportation">0</div>
+                </div>
+                
+                <div class="allowance-item">
+                    <label>بدل المهني بعد الخصم:</label>
+                    <div class="result-field" id="net-professional">0</div>
+                </div>
+                
+                <div class="allowance-item">
+                    <label>بدل الهاتف بعد الخصم:</label>
+                    <div class="result-field" id="net-phone">0</div>
+                </div>
+                
+                <div class="allowance-item">
+                    <label>بدلات أخرى بعد الخصم:</label>
+                    <div class="result-field" id="net-other">0</div>
+                </div>
+                
+                <div class="allowance-item">
+                    <label>بدل غلاء المعيشة بعد الخصم:</label>
+                    <div class="result-field" id="net-living">0</div>
+                </div>
+                
+                <div class="allowance-item">
+                    <label for="deductions">استقطاعات إضافية:</label>
+                    <input type="number" id="deductions" min="0" value="0">
+                </div>
+                
+                <div class="total">
+                    <label>إجمالي الراتب بعد الخصم:</label>
+                    <div class="result-field" id="total-after-deduction">0</div>
+                </div>
+                
+                <div class="total">
+                    <label>الصافي النهائي:</label>
+                    <div class="result-field" id="final-net">0</div>
                 </div>
                 
                 <div class="allowance-item">
@@ -243,11 +309,6 @@
                 <div class="allowance-item">
                     <label>عدد الأشهر المكتملة:</label>
                     <div class="result-field" id="months-count">0</div>
-                </div>
-                
-                <div class="total">
-                    <label>الصافي النهائي:</label>
-                    <div class="result-field" id="final-net">0</div>
                 </div>
             </div>
         </div>
@@ -287,11 +348,12 @@
             const water = parseFloat(document.getElementById('water-allowance').value) || 0;
             const transportation = parseFloat(document.getElementById('transportation-allowance').value) || 0;
             const professional = parseFloat(document.getElementById('professional-allowance').value) || 0;
+            const phone = parseFloat(document.getElementById('phone-allowance').value) || 0;
             const other = parseFloat(document.getElementById('other-allowance').value) || 0;
             const living = parseFloat(document.getElementById('living-allowance').value) || 0;
             
             // حساب إجمالي راتب التعيين
-            const appointmentTotal = basic + housing + electricity + water + transportation + professional + other + living;
+            const appointmentTotal = basic + housing + electricity + water + transportation + professional + phone + other + living;
             document.getElementById('appointment-total').textContent = appointmentTotal.toFixed(2);
             
             // حساب قيمة كل بدل للفترة
@@ -301,30 +363,59 @@
             const calculatedWater = calculateAllowanceForPeriod(water, monthDetails);
             const calculatedTransportation = calculateAllowanceForPeriod(transportation, monthDetails);
             const calculatedProfessional = calculateAllowanceForPeriod(professional, monthDetails);
+            const calculatedPhone = calculateAllowanceForPeriod(phone, monthDetails);
             const calculatedOther = calculateAllowanceForPeriod(other, monthDetails);
             const calculatedLiving = calculateAllowanceForPeriod(living, monthDetails);
             
-            // عرض القيم المحسوبة
+            // عرض القيم المحسوبة في العمود الثاني
             document.getElementById('calculated-basic').textContent = calculatedBasic.toFixed(2);
             document.getElementById('calculated-housing').textContent = calculatedHousing.toFixed(2);
             document.getElementById('calculated-electricity').textContent = calculatedElectricity.toFixed(2);
             document.getElementById('calculated-water').textContent = calculatedWater.toFixed(2);
             document.getElementById('calculated-transportation').textContent = calculatedTransportation.toFixed(2);
             document.getElementById('calculated-professional').textContent = calculatedProfessional.toFixed(2);
+            document.getElementById('calculated-phone').textContent = calculatedPhone.toFixed(2);
             document.getElementById('calculated-other').textContent = calculatedOther.toFixed(2);
             document.getElementById('calculated-living').textContent = calculatedLiving.toFixed(2);
             
             // حساب إجمالي راتب الفترة
             const periodTotal = calculatedBasic + calculatedHousing + calculatedElectricity + 
                                calculatedWater + calculatedTransportation + calculatedProfessional + 
-                               calculatedOther + calculatedLiving;
+                               calculatedPhone + calculatedOther + calculatedLiving;
             document.getElementById('period-total').textContent = periodTotal.toFixed(2);
             
-            // حساب صافي الراتب بعد الاستقطاعات
+            // حساب صافي كل بدل بعد خصم 8% للعمود الثالث
+            const netBasic = calculatedBasic * 0.92;
+            const netHousing = calculatedHousing * 0.92;
+            const netElectricity = calculatedElectricity * 0.92;
+            const netWater = calculatedWater * 0.92;
+            const netTransportation = calculatedTransportation * 0.92;
+            const netProfessional = calculatedProfessional * 0.92;
+            const netPhone = calculatedPhone * 0.92;
+            const netOther = calculatedOther * 0.92;
+            const netLiving = calculatedLiving * 0.92;
+            
+            // عرض القيم بعد الخصم في العمود الثالث
+            document.getElementById('net-basic').textContent = netBasic.toFixed(2);
+            document.getElementById('net-housing').textContent = netHousing.toFixed(2);
+            document.getElementById('net-electricity').textContent = netElectricity.toFixed(2);
+            document.getElementById('net-water').textContent = netWater.toFixed(2);
+            document.getElementById('net-transportation').textContent = netTransportation.toFixed(2);
+            document.getElementById('net-professional').textContent = netProfessional.toFixed(2);
+            document.getElementById('net-phone').textContent = netPhone.toFixed(2);
+            document.getElementById('net-other').textContent = netOther.toFixed(2);
+            document.getElementById('net-living').textContent = netLiving.toFixed(2);
+            
+            // حساب إجمالي الراتب بعد خصم 8%
+            const totalAfterDeduction = netBasic + netHousing + netElectricity + 
+                                      netWater + netTransportation + netProfessional + 
+                                      netPhone + netOther + netLiving;
+            document.getElementById('total-after-deduction').textContent = totalAfterDeduction.toFixed(2);
+            
+            // حساب صافي الراتب بعد الاستقطاعات الإضافية
             const deductions = parseFloat(document.getElementById('deductions').value) || 0;
-            const netSalary = periodTotal - deductions;
-            document.getElementById('net-salary').textContent = netSalary.toFixed(2);
-            document.getElementById('final-net').textContent = netSalary.toFixed(2);
+            const finalNet = totalAfterDeduction - deductions;
+            document.getElementById('final-net').textContent = finalNet.toFixed(2);
         }
         
         function calculateDays(startDate, endDate) {
