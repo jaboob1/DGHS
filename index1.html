@@ -133,7 +133,7 @@
     }
     
     input.amount-input {
-      width: 120px; /* زيادة العرض */
+      width: 120px;
       border: 1px solid #ddd;
     }
     
@@ -150,7 +150,7 @@
     input[readonly] {
       background-color: #f5f5f5;
       color: #333;
-      width: 120px; /* زيادة العرض */
+      width: 120px;
       border: 1px solid #ddd;
     }
     
@@ -158,7 +158,7 @@
     input.after-deduction {
       background-color: #f0f9f0;
       color: #2E8B57;
-      width: 120px; /* زيادة العرض */
+      width: 120px;
       font-weight: bold;
       border: 1px solid #ddd;
     }
@@ -168,7 +168,7 @@
       color: #8B0000;
       margin: 0 5px;
       text-align: center;
-      width: 120px; /* زيادة العرض */
+      width: 120px;
       font-weight: bold;
       padding: 5px;
       border: 1px solid #ddd;
@@ -333,6 +333,11 @@
       border: 1px solid #ddd;
     }
 
+    /* البدلات الخاصة بالعقود المؤقتة */
+    .temporary-allowances {
+      display: none;
+    }
+
     @media print {
       body {
         margin: 0;
@@ -431,7 +436,7 @@
         display: none;
       }
       
-      /* ضمان عدم تقسيم المحتوة */
+      /* ضمان عدم تقسيم المحتوى */
       .container, .inner-header, .result, .approval-section, .input-row {
         page-break-before: avoid;
         page-break-after: avoid;
@@ -462,14 +467,6 @@
     <h3>حاسبة رواتب</h3>
 
     <div class="input-section">
-      <!-- إضافة عناوين الأعمدة -->
-      <div class="input-row">
-        <label></label>
-        <span class="column-title">المبلغ الشهري</span>
-        <span class="column-title">الإجمالي للفترة</span>
-        <span class="column-title">بعد خصم 8%</span>
-      </div>
-
       <div class="input-row">
         <label for="employeeName">اسم الموظف:</label>
         <input type="text" id="employeeName" class="employee-input" placeholder="أسم الموظف">
@@ -490,10 +487,18 @@
 
       <!-- صف التواريخ في سطر واحد -->
       <div class="date-row">
-        <span class="date-label">التواريخ:</span>
+        <span class="date-label">تاريخ الاحتساب من:</span>
         <input type="date" id="startDate" class="date-input">
         <span style="margin: 0 5px;">إلى</span>
         <input type="date" id="endDate" class="date-input">
+      </div>
+
+      <!-- إضافة عناوين الأعمدة بعد التاريخ -->
+      <div class="input-row">
+        <label></label>
+        <span class="column-title">المبلغ الشهري</span>
+        <span class="column-title">الإجمالي للفترة</span>
+        <span class="column-title">بعد خصم 8%</span>
       </div>
 
       <div class="input-row">
@@ -503,11 +508,18 @@
         <input type="text" id="basicAfterDeduction" class="after-deduction" readonly>
       </div>
 
-      <!-- إضافة مسافة بين أنواع العقود -->
-      <div id="contractSpacer" class="contract-spacer"></div>
+      <!-- البدلات الخاصة بالعقود المؤقتة -->
+      <div id="temporaryAllowances" class="temporary-allowances">
+        <div class="input-row">
+          <label for="otherAllowances">بدلات أخرى:</label>
+          <input type="number" id="otherAllowances" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="otherAllowancesResult" readonly>
+          <input type="text" id="otherAllowancesAfterDeduction" class="after-deduction" readonly>
+        </div>
+      </div>
 
       <!-- الحقول التي سيتم إخفاؤها عند اختيار عقود موقتة -->
-      <div class="temporary-hide">
+      <div id="permanentAllowances" class="temporary-hide">
         <div class="input-row">
           <label for="housing">بدل السكن:</label>
           <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
@@ -548,14 +560,6 @@
           <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
           <input type="text" id="professionalResult" readonly>
           <input type="text" id="professionalAfterDeduction" class="after-deduction" readonly>
-        </div>
-
-        <!-- بدلات أخرى بدلاً من بدل إضافي 1 -->
-        <div class="input-row">
-          <label for="otherAllowances">بدلات أخرى:</label>
-          <input type="number" id="otherAllowances" class="amount-input" placeholder="أدخل المبلغ">
-          <input type="text" id="otherAllowancesResult" readonly>
-          <input type="text" id="otherAllowancesAfterDeduction" class="after-deduction" readonly>
         </div>
 
         <div class="input-row">
@@ -618,7 +622,8 @@
       const endDate = document.getElementById("endDate");
       const contractType = document.getElementById("contractType");
       const contractSpacer = document.getElementById("contractSpacer");
-      const temporaryHideElements = document.querySelectorAll('.temporary-hide');
+      const permanentAllowances = document.getElementById("permanentAllowances");
+      const temporaryAllowances = document.getElementById("temporaryAllowances");
 
       // تعيين التواريخ الافتراضية
       const today = new Date();
@@ -667,10 +672,11 @@
 
       function updateContractDisplay() {
         if (contractType.value === "temporary") {
-          // إخفاء الحقول غير المرغوبة في عقود موقتة
-          temporaryHideElements.forEach(el => {
-            el.style.display = "none";
-          });
+          // إخفاء الحقول الخاصة بالعقود الدائمة
+          permanentAllowances.style.display = "none";
+          
+          // إظهار الحقول الخاصة بالعقود المؤقتة
+          temporaryAllowances.style.display = "block";
           
           // إخفاء حسابات الصندوق الاجتماعي
           deductionLine.style.display = "none";
@@ -679,10 +685,11 @@
           // إخفاء المسافة الإضافية
           contractSpacer.style.display = "none";
         } else {
-          // إظهار جميع الحقول في عقود دائمة
-          temporaryHideElements.forEach(el => {
-            el.style.display = "block";
-          });
+          // إظهار الحقول الخاصة بالعقود الدائمة
+          permanentAllowances.style.display = "block";
+          
+          // إخفاء الحقول الخاصة بالعقود المؤقتة
+          temporaryAllowances.style.display = "none";
           
           // إظهار حسابات الصندوق الاجتماعي
           deductionLine.style.display = "block";
@@ -720,7 +727,13 @@
           let monthly = parseFloat(input.value) || 0;
           
           // إذا كان نوع العقد موقتاً، نتجاهل الحقول المخفية في الحساب
-          if (contractType.value === "temporary" && item.id !== "basic") {
+          if (contractType.value === "temporary" && 
+              item.id !== "basic" && item.id !== "otherAllowances") {
+            return; // تخطي هذا الحقل
+          }
+          
+          // إذا كان نوع العقد دائماً، نتجاهل الحقول المؤقتة
+          if (contractType.value === "permanent" && item.id === "otherAllowances") {
             return; // تخطي هذا الحقل
           }
           
@@ -747,9 +760,11 @@
         });
 
         // تحديث الإجماليات
-        monthlyTotal.value = totalBase.toFixed(3);
-        periodTotal.value = totalCalc.toFixed(3);
-        afterDeductionTotal.value = totalAfterDeduction.toFixed(3);
+        if (contractType.value === "permanent") {
+          monthlyTotal.value = totalBase.toFixed(3);
+          periodTotal.value = totalCalc.toFixed(3);
+          afterDeductionTotal.value = totalAfterDeduction.toFixed(3);
+        }
 
         totalAllowances.textContent = totalBase.toFixed(3);
         totalPeriod.textContent = totalCalc.toFixed(3);
