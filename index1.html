@@ -37,7 +37,7 @@
       border: 2px solid #8B0000;
       border-radius: 8px;
       width: 95%;
-      max-width: 850px; /* زيادة العرض لاستيعاب العمود الجديد */
+      max-width: 800px; /* زيادة العرض لاستيعاب التغييرات */
       margin: 10px auto;
       background: white;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -133,10 +133,10 @@
     }
     
     input.amount-input {
-      width: 100px; /* تقليل العرض قليلاً */
+      width: 100px;
     }
     
-    select.year-select, select.contract-type {
+    select.contract-type {
       padding: 5px;
       width: 120px;
       margin: 3px;
@@ -149,14 +149,14 @@
     input[readonly] {
       background-color: #f5f5f5;
       color: #333;
-      width: 100px; /* تقليل العرض قليلاً */
+      width: 100px;
     }
     
     /* إضافة نمط للحقل الجديد بعد الخصم */
     input.after-deduction {
       background-color: #f0f9f0;
       color: #2E8B57;
-      width: 100px; /* تقليل العرض قليلاً */
+      width: 100px;
       font-weight: bold;
     }
     
@@ -299,7 +299,45 @@
       white-space: nowrap;
     }
 
-    /* إعدادات الطباعة المحسنة لصفحة واحدة */
+    /* صف التواريخ في سطر واحد */
+    .date-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+      width: 100%;
+    }
+    
+    .date-label {
+      width: 160px;
+      margin-left: 8px;
+      font-weight: bold;
+      text-align: right;
+      padding-right: 25px;
+      font-size: 13px;
+    }
+    
+    .date-input {
+      width: 150px;
+      margin-left: 10px;
+    }
+    
+    /* أنماط جديدة للإخفاء والإظهار */
+    .temporary-hide {
+      display: block;
+    }
+    
+    .contract-spacer {
+      height: 10px;
+      display: block;
+    }
+    
+    /* إجماليات الأعمدة */
+    .column-total {
+      font-weight: bold;
+      background-color: #f0f0f0;
+      color: #8B0000;
+    }
+
     @media print {
       body {
         margin: 0;
@@ -367,7 +405,7 @@
         width: 80px;
       }
       
-      select.year-select, select.contract-type {
+      select.contract-type {
         width: 100px;
       }
       
@@ -412,16 +450,6 @@
         page-break-inside: avoid;
       }
     }
-
-    /* أنماط جديدة للإخفاء والإظهار */
-    .temporary-hide {
-      display: block;
-    }
-    
-    .contract-spacer {
-      height: 10px;
-      display: block;
-    }
   </style>
 </head>
 <body>
@@ -449,10 +477,9 @@
       <!-- إضافة عناوين الأعمدة -->
       <div class="input-row">
         <label></label>
-        <span class="column-title">المبلغ الشهري</span>
-        <span class="column-title">بعد خصم 8%</span>
-        <span class="column-title">الإجمالي للفترة</span>
-        <span></span> <!-- مساحة للعنوان الإضافي إن وجد -->
+        <span class="column-title">إجمالي راتب الدرجة</span>
+        <span class="column-title">إجمالي الاحتساب قبل الخصم</span>
+        <span class="column-title"> إجمالي الاحتساب بعد الخصم</span>
       </div>
 
       <div class="input-row">
@@ -473,31 +500,19 @@
         </select>
       </div>
 
-      <div class="input-row">
-        <label for="startDate">تاريخ البداية:</label>
-        <input type="date" id="startDate">
-      </div>
-
-      <div class="input-row">
-        <label for="endDate">تاريخ النهاية:</label>
-        <input type="date" id="endDate">
+      <!-- صف التواريخ في سطر واحد -->
+      <div class="date-row">
+        <span class="date-label">التواريخ:</span>
+        <input type="date" id="startDate" class="date-input">
+        <span style="margin: 0 5px;">إلى</span>
+        <input type="date" id="endDate" class="date-input">
       </div>
 
       <div class="input-row">
         <label for="basic">البدل الأساسي:</label>
         <input type="number" id="basic" class="amount-input" placeholder="أدخل المبلغ">
-        <input type="text" id="basicAfterDeduction" class="after-deduction" readonly>
         <input type="text" id="basicResult" readonly>
-      </div>
-
-      <!-- بدل الأساسي للسنة التالية مع الملاحظة على نفس السطر -->
-      <div class="input-row">
-        <label for="basicNextYear">بدل الأساسي للسنة التالية:</label>
-        <input type="number" id="basicNextYear" class="amount-input" placeholder="أدخل المبلغ">
-        <select id="nextYearSelect" class="year-select">
-          <!-- سيتم ملء السنوات من 2015 إلى 2030 عبر الجافاسكريبت -->
-        </select>
-        <span class="inline-note">تدرج العلاوة الدورية لسنتين متداخلة</span>
+        <input type="text" id="basicAfterDeduction" class="after-deduction" readonly>
       </div>
 
       <!-- إضافة مسافة بين أنواع العقود -->
@@ -508,50 +523,80 @@
         <div class="input-row">
           <label for="housing">بدل السكن:</label>
           <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
-          <input type="text" id="housingAfterDeduction" class="after-deduction" readonly>
           <input type="text" id="housingResult" readonly>
+          <input type="text" id="housingAfterDeduction" class="after-deduction" readonly>
         </div>
 
         <div class="input-row">
           <label for="electricity">بدل الكهرباء:</label>
           <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
-          <input type="text" id="electricityAfterDeduction" class="after-deduction" readonly>
           <input type="text" id="electricityResult" readonly>
+          <input type="text" id="electricityAfterDeduction" class="after-deduction" readonly>
         </div>
 
         <div class="input-row">
           <label for="water">بدل الماء:</label>
           <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
-          <input type="text" id="waterAfterDeduction" class="after-deduction" readonly>
           <input type="text" id="waterResult" readonly>
+          <input type="text" id="waterAfterDeduction" class="after-deduction" readonly>
         </div>
 
         <div class="input-row">
           <label for="phone">بدل الهاتف:</label>
           <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
-          <input type="text" id="phoneAfterDeduction" class="after-deduction" readonly>
           <input type="text" id="phoneResult" readonly>
+          <input type="text" id="phoneAfterDeduction" class="after-deduction" readonly>
         </div>
 
         <div class="input-row">
           <label for="transport">بدل النقل:</label>
           <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
-          <input type="text" id="transportAfterDeduction" class="after-deduction" readonly>
           <input type="text" id="transportResult" readonly>
+          <input type="text" id="transportAfterDeduction" class="after-deduction" readonly>
         </div>
 
         <div class="input-row">
           <label for="professional">بدل مهني:</label>
           <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
-          <input type="text" id="professionalAfterDeduction" class="after-deduction" readonly>
           <input type="text" id="professionalResult" readonly>
+          <input type="text" id="professionalAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <!-- البدلات الجديدة المضافة -->
+        <div class="input-row">
+          <label for="allowance1">بدل إضافي 1:</label>
+          <input type="number" id="allowance1" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="allowance1Result" readonly>
+          <input type="text" id="allowance1AfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="allowance2">بدل إضافي 2:</label>
+          <input type="number" id="allowance2" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="allowance2Result" readonly>
+          <input type="text" id="allowance2AfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="allowance3">بدل إضافي 3:</label>
+          <input type="number" id="allowance3" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="allowance3Result" readonly>
+          <input type="text" id="allowance3AfterDeduction" class="after-deduction" readonly>
         </div>
 
         <div class="input-row">
           <label for="costLiving">بدل غلاء معيشة:</label>
           <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
-          <input type="text" id="costLivingAfterDeduction" class="after-deduction" readonly>
           <input type="text" id="costLivingResult" readonly>
+          <input type="text" id="costLivingAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <!-- إجماليات الأعمدة -->
+        <div class="input-row">
+          <label>الإجمالي:</label>
+          <input type="text" id="monthlyTotal" class="amount-input column-total" readonly>
+          <input type="text" id="periodTotal" class="column-total" readonly>
+          <input type="text" id="afterDeductionTotal" class="after-deduction column-total" readonly>
         </div>
       </div>
     </div>
@@ -560,7 +605,7 @@
 
     <div class="result">
       عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
-      إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
+      إجمالي راتب الدرجة: <span id="totalAllowances">0</span><br>
       إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
       <span id="twelvePercentLine">اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (12.5‎‎%‎) : <span id="twelvePercent">0</span><br></span>
       <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
@@ -602,23 +647,11 @@
       const contractType = document.getElementById("contractType");
       const contractSpacer = document.getElementById("contractSpacer");
       const temporaryHideElements = document.querySelectorAll('.temporary-hide');
-      const nextYearSelect = document.getElementById("nextYearSelect");
 
       // تعيين التواريخ الافتراضية
       const today = new Date();
       const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
       const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-      
-      // تعبئة السنوات من 2015 إلى 2030
-      for (let year = 2015; year <= 2030; year++) {
-        const option = document.createElement("option");
-        option.value = year;
-        option.textContent = year;
-        nextYearSelect.appendChild(option);
-      }
-      
-      // تحديد السنة الحالية كقيمة افتراضية
-      nextYearSelect.value = today.getFullYear() + 1;
       
       function formatDate(date) {
         const year = date.getFullYear();
@@ -638,6 +671,9 @@
         {id:"phone", result:"phoneResult", afterDeduction:"phoneAfterDeduction"},
         {id:"transport", result:"transportResult", afterDeduction:"transportAfterDeduction"},
         {id:"professional", result:"professionalResult", afterDeduction:"professionalAfterDeduction"},
+        {id:"allowance1", result:"allowance1Result", afterDeduction:"allowance1AfterDeduction"},
+        {id:"allowance2", result:"allowance2Result", afterDeduction:"allowance2AfterDeduction"},
+        {id:"allowance3", result:"allowance3Result", afterDeduction:"allowance3AfterDeduction"},
         {id:"costLiving", result:"costLivingResult", afterDeduction:"costLivingAfterDeduction"}
       ];
 
@@ -648,6 +684,11 @@
       const net = document.getElementById("net");
       const daysCount = document.getElementById("daysCount");
       const totalSocial = document.getElementById("totalSocial");
+      
+      // حقول الإجمالي
+      const monthlyTotal = document.getElementById("monthlyTotal");
+      const periodTotal = document.getElementById("periodTotal");
+      const afterDeductionTotal = document.getElementById("afterDeductionTotal");
 
       const twelvePercentLine = document.getElementById("twelvePercentLine");
       const deductionLine = document.getElementById("deductionLine");
@@ -708,9 +749,7 @@
 
         let totalBase = 0;
         let totalCalc = 0;
-
-        const selectedYear = parseInt(document.getElementById("nextYearSelect").value);
-        const basicNextYearValue = parseFloat(document.getElementById("basicNextYear").value) || 0;
+        let totalAfterDeduction = 0;
 
         allowances.forEach(item => {
           let input = document.getElementById(item.id);
@@ -719,56 +758,36 @@
           let monthly = parseFloat(input.value) || 0;
           
           // إذا كان نوع العقد موقتاً، نتجاهل الحقول المخفية في الحساب
-          if (contractType.value === "temporary" && 
-              (item.id !== "basic" && item.id !== "basicNextYear")) {
+          if (contractType.value === "temporary" && item.id !== "basic") {
             return; // تخطي هذا الحقل
           }
           
-          if (item.id === "basic") {
-            totalBase += monthly; 
-            
-            let current = new Date(start);
-            let sum = 0;
-            while (current <= end) {
-              let year = current.getFullYear();
-              let month = current.getMonth();
-              let daysInThisMonth = daysInMonth(year, month);
-              
-              let dailyValue = 0;
-              if (year < selectedYear) {
-                dailyValue = monthly / daysInThisMonth;
-              } else {
-                dailyValue = basicNextYearValue / daysInThisMonth;
-              }
-              
-              sum += dailyValue;
-              current.setDate(current.getDate() + 1);
-            }
-            
-            resultBox.value = sum.toFixed(3);
-            // حساب القيمة بعد خصم 8%
-            afterDeductionBox.value = (sum * 0.92).toFixed(3);
-            totalCalc += sum;
-          } else {
-            totalBase += monthly;
-            
-            let current = new Date(start);
-            let sum = 0;
-            while (current <= end) {
-              let year = current.getFullYear();
-              let month = current.getMonth();
-              let daysInThisMonth = daysInMonth(year, month);
-              let daily = monthly / daysInThisMonth;
-              sum += daily;
-              current.setDate(current.getDate() + 1);
-            }
-            
-            resultBox.value = sum.toFixed(3);
-            // حساب القيمة بعد خصم 8%
-            afterDeductionBox.value = (sum * 0.92).toFixed(3);
-            totalCalc += sum;
+          totalBase += monthly;
+          
+          let current = new Date(start);
+          let sum = 0;
+          while (current <= end) {
+            let year = current.getFullYear();
+            let month = current.getMonth();
+            let daysInThisMonth = daysInMonth(year, month);
+            let daily = monthly / daysInThisMonth;
+            sum += daily;
+            current.setDate(current.getDate() + 1);
           }
+          
+          resultBox.value = sum.toFixed(3);
+          // حساب القيمة بعد خصم 8%
+          let afterDeductionValue = sum * 0.92;
+          afterDeductionBox.value = afterDeductionValue.toFixed(3);
+          
+          totalCalc += sum;
+          totalAfterDeduction += afterDeductionValue;
         });
+
+        // تحديث الإجماليات
+        monthlyTotal.value = totalBase.toFixed(3);
+        periodTotal.value = totalCalc.toFixed(3);
+        afterDeductionTotal.value = totalAfterDeduction.toFixed(3);
 
         totalAllowances.textContent = totalBase.toFixed(3);
         totalPeriod.textContent = totalCalc.toFixed(3);
@@ -802,13 +821,15 @@
         document.getElementById("startDate").value = formatDate(firstDayOfMonth);
         document.getElementById("endDate").value = formatDate(lastDayOfMonth);
         document.getElementById("basic").value = "";
-        document.getElementById("basicNextYear").value = "";
         document.getElementById("housing").value = "";
         document.getElementById("electricity").value = "";
         document.getElementById("water").value = "";
         document.getElementById("phone").value = "";
         document.getElementById("transport").value = "";
         document.getElementById("professional").value = "";
+        document.getElementById("allowance1").value = "";
+        document.getElementById("allowance2").value = "";
+        document.getElementById("allowance3").value = "";
         document.getElementById("costLiving").value = "";
         contractType.value = "permanent";
         
@@ -816,6 +837,11 @@
           document.getElementById(item.result).value = "";
           document.getElementById(item.afterDeduction).value = "";
         });
+        
+        // إعادة تعيين الإجماليات
+        monthlyTotal.value = "";
+        periodTotal.value = "";
+        afterDeductionTotal.value = "";
         
         totalAllowances.textContent = "0";
         totalPeriod.textContent = "0";
@@ -834,8 +860,6 @@
       startDate.addEventListener("change", calculate);
       endDate.addEventListener("change", calculate);
       contractType.addEventListener("change", updateContractDisplay);
-      document.getElementById("nextYearSelect").addEventListener("change", calculate);
-      document.getElementById("basicNextYear").addEventListener("input", calculate);
       
       allowances.forEach(item => {
         document.getElementById(item.id).addEventListener("input", calculate);
