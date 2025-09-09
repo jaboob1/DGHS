@@ -1,804 +1,851 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة رواتب الموظفين</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 14px;
-            color: #333;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            padding: 20px;
-        }
-        
-        header {
-            background: linear-gradient(90deg, #2c3e50 0%, #4a6491 100%);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            margin: -20px -20px 20px -20px;
-            border-radius: 12px 12px 0 0;
-            position: relative;
-        }
-        
-        h1 {
-            font-size: 24px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        h1 i {
-            font-size: 28px;
-        }
-        
-        .contract-type {
-            margin: 15px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 10px;
-            border-radius: 8px;
-            width: fit-content;
-            margin: 15px auto;
-        }
-        
-        .contract-type label {
-            font-weight: bold;
-            color: white;
-            font-size: 16px;
-        }
-        
-        .contract-type select {
-            padding: 8px 15px;
-            border-radius: 6px;
-            border: none;
-            font-size: 15px;
-            background-color: white;
-            color: #2c3e50;
-            cursor: pointer;
-        }
-        
-        .header-dates {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-top: 15px;
-        }
-        
-        .header-dates div {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 10px;
-            border-radius: 8px;
-        }
-        
-        .header-dates label {
-            font-size: 14px;
-            margin-bottom: 5px;
-            color: white;
-            font-weight: bold;
-        }
-        
-        .header-dates input {
-            padding: 8px;
-            border: none;
-            border-radius: 5px;
-            text-align: center;
-            width: 150px;
-            font-size: 14px;
-            background-color: white;
-        }
-        
-        .calculator-content {
-            display: flex;
-            padding: 15px 0;
-            gap: 20px;
-        }
-        
-        .column {
-            flex: 1;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-            border: 1px solid #eaeaea;
-        }
-        
-        .column-header {
-            background: linear-gradient(90deg, #4a6491 0%, #2c3e50 100%);
-            color: white;
-            padding: 12px;
-            text-align: center;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 18px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .allowance-item {
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px;
-            border-radius: 6px;
-            transition: background-color 0.3s;
-        }
-        
-        .allowance-item:hover {
-            background-color: #f0f5ff;
-        }
-        
-        .allowance-item label {
-            font-weight: bold;
-            color: #2c3e50;
-            width: 130px;
-            text-align: left;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .allowance-item label i {
-            color: #4a6491;
-            font-size: 16px;
-        }
-        
-        input[type="number"] {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-            transition: all 0.3s;
-            width: 100px;
-            text-align: center;
-            background-color: white;
-        }
-        
-        input[type="number"]:focus {
-            border-color: #4a6491;
-            outline: none;
-            box-shadow: 0 0 8px rgba(74, 100, 145, 0.4);
-            transform: scale(1.02);
-        }
-        
-        .result-field {
-            background: linear-gradient(to bottom, #edf2f7, #e2e8f0);
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            font-size: 14px;
-            min-height: 20px;
-            width: 100px;
-            text-align: center;
-            font-weight: 500;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        
-        .total {
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 2px solid #4a6491;
-            font-weight: bold;
-            font-size: 16px;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .total .result-field {
-            width: 110px;
-            font-weight: bold;
-            background: linear-gradient(to bottom, #e6f7ff, #d1f0ff);
-            font-size: 15px;
-        }
-        
-        .summary-section {
-            background: linear-gradient(to right, #e8f4ff, #d9ecff);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-            border: 1px solid #cce5ff;
-        }
-        
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-        
-        .summary-item {
-            background-color: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 4px solid #4a6491;
-        }
-        
-        .summary-item label {
-            font-weight: bold;
-            color: #2c3e50;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .summary-item label i {
-            color: #4a6491;
-        }
-        
-        .summary-value {
-            font-size: 16px;
-            color: #4a6491;
-            font-weight: bold;
-            width: 110px;
-            text-align: center;
-            padding: 8px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            border: 1px solid #e9ecef;
-        }
-        
-        #net-salary {
-            color: #27ae60;
-            font-size: 18px;
-            background-color: #e8f5e8;
-            border-color: #c3e6c3;
-        }
-        
-        .buttons-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 25px 0 10px 0;
-        }
-        
-        button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: bold;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        button:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        #clear-btn {
-            background: linear-gradient(to right, #e74c3c, #c0392b);
-            color: white;
-        }
-        
-        #print-btn {
-            background: linear-gradient(to right, #27ae60, #219653);
-            color: white;
-        }
-        
-        .temporary-hidden {
-            display: none;
-        }
-        
-        .results-hidden {
-            display: none;
-        }
-        
-        @media (max-width: 900px) {
-            .calculator-content {
-                flex-direction: column;
-            }
-            
-            .summary-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .header-dates {
-                flex-direction: column;
-                gap: 15px;
-            }
-        }
-        
-        @media print {
-            button, .header-dates {
-                display: none;
-            }
-            
-            body {
-                padding: 0;
-                background-color: white;
-            }
-            
-            .container {
-                box-shadow: none;
-            }
-        }
-        
-        .info-tooltip {
-            position: relative;
-            display: inline-block;
-            cursor: help;
-        }
-        
-        .info-tooltip .tooltip-text {
-            visibility: hidden;
-            width: 200px;
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-            border-radius: 6px;
-            padding: 10px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 12px;
-            font-weight: normal;
-        }
-        
-        .info-tooltip:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>حاسبة رواتب</title>
+  <style>
+    @font-face {
+      font-family: 'Diwani';
+      src: url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      margin: 0;
+      padding: 10px;
+      background: #f5f5f5;
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 25px;
+      font-size: 13px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .container {
+      padding: 15px;
+      border: 2px solid #8B0000;
+      border-radius: 8px;
+      width: 95%;
+      max-width: 900px;
+      margin: 10px auto;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    /* رأس الصفحة داخل الإطار مع الشعارات */
+    .inner-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #8B0000;
+    }
+    
+    .inner-logo {
+      flex: 0 0 auto;
+    }
+    
+    .inner-logo img {
+      height: 50px;
+      width: auto;
+    }
+    
+    .inner-title {
+      text-align: center;
+      flex: 1;
+    }
+    
+    .directorate-title {
+      font-family: 'Diwani', 'Lateef', serif;
+      font-size: 16px;
+      color: #8B0000;
+      margin: 0;
+      font-weight: bold;
+    }
+    
+    .department-title {
+      font-family: 'Diwani', 'Lateef', serif;
+      font-size: 13px;
+      color: #8B0000;
+      margin: 2px 0 0 0;
+    }
+
+    h3 {
+      text-align: center;
+      color: #8B0000;
+      margin: 0 0 12px 0;
+      font-size: 18px;
+      padding: 8px;
+      background-color: #f8f8f8;
+      border-radius: 4px;
+      border: 1px solid #8B0000;
+    }
+
+    .input-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+      margin-bottom: 8px;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+      width: 100%;
+    }
+
+    label {
+      display: inline-block;
+      width: 160px;
+      margin-left: 8px;
+      font-weight: bold;
+      text-align: right;
+      padding-right: 25px;
+      font-size: 13px;
+    }
+    
+    input {
+      padding: 5px;
+      margin: 3px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+      height: 30px;
+    }
+    
+    input.employee-input {
+      width: 210px;
+    }
+    
+    input.amount-input {
+      width: 120px;
+      border: 1px solid #ddd;
+    }
+    
+    select.contract-type {
+      padding: 5px;
+      width: 120px;
+      margin: 3px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+      height: 30px;
+    }
+    
+    input[readonly] {
+      background-color: #f5f5f5;
+      color: #333;
+      width: 120px;
+      border: 1px solid #ddd;
+    }
+    
+    /* إضافة نمط للحقل الجديد بعد الخصم */
+    input.after-deduction {
+      background-color: #f0f9f0;
+      color: #2E8B57;
+      width: 120px;
+      font-weight: bold;
+      border: 1px solid #ddd;
+    }
+    
+    .column-title {
+      font-size: 12px;
+      color: #8B0000;
+      margin: 0 5px;
+      text-align: center;
+      width: 120px;
+      font-weight: bold;
+      padding: 5px;
+      border: 1px solid #ddd;
+      background-color: #f8f8f8;
+    }
+    
+    .result {
+      margin-top: 10px;
+      font-weight: bold;
+      color: green;
+      line-height: 1.5;
+      padding: 8px;              
+      font-size: 12px;           
+      background-color: #f0f9f0;
+      border-radius: 4px;
+      border: 1px solid #c3e6c3; 
+    }
+    
+    .separator {
+      border-top: 2px solid #8B0000;
+      margin: 12px 0;
+      width: 100%;
+    }
+    
+    /* تقليص قسم التوقيع ليتناسب مع الطباعة */
+    .approval-section {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      padding: 10px 0 2px 0;
+      border-top: 2px solid #8B0000;
+      font-size: 13px;
+      font-weight: bold;
+      min-height: 45px;
+    }
+    
+    .approval-right {
+      text-align: right;
+      flex: 1;
+    }
+    
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .print-btn, .reset-btn, .site-btn {
+      padding: 8px 16px;
+      font-size: 13px;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    
+    .print-btn {
+      background: #8B0000;
+    }
+    
+    .print-btn:hover {
+      background: #700000;
+    }
+    
+    .reset-btn {
+      background: #2E8B57;
+    }
+    
+    .reset-btn:hover {
+      background: #267349;
+    }
+    
+    /* زر الموقع الجديد */
+    .site-btn {
+      background: #1E90FF;
+    }
+    
+    .site-btn:hover {
+      background: #0077CC;
+    }
+    
+    /* تذييل الصفحة المتحرك */
+    .footer-animation {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #8B0000; 
+      color: white;
+      padding: 6px 0;
+      text-align: center;
+      overflow: hidden;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+    
+    .marquee {
+      display: block;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    
+    .marquee span {
+      display: inline-block;
+      padding-right: 100%;
+      animation: marquee 20s linear infinite;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    @keyframes marquee {
+      0%   { transform: translate(0, 0); }
+      100% { transform: translate(100%, 0); }
+    }
+
+    .disclaimer {
+      text-align: center;
+      margin-top: 15px;
+      padding: 6px;
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 4px;
+      color: #856404;
+      font-size: 11px;
+      direction: rtl;
+    }
+
+    /* صف التواريخ في سطر واحد */
+    .date-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+      width: 100%;
+    }
+    
+    .date-label {
+      width: 160px;
+      margin-left: 8px;
+      font-weight: bold;
+      text-align: right;
+      padding-right: 25px;
+      font-size: 13px;
+    }
+    
+    .date-input {
+      width: 150px;
+      margin-left: 10px;
+      border: 1px solid #ddd;
+    }
+    
+    /* أنماط جديدة للإخفاء والإظهار */
+    .temporary-hide {
+      display: block;
+    }
+    
+    .contract-spacer {
+      height: 10px;
+      display: block;
+    }
+    
+    /* إجماليات الأعمدة */
+    .column-total {
+      font-weight: bold;
+      background-color: #f0f0f0;
+      color: #8B0000;
+      border: 1px solid #ddd;
+    }
+
+    /* البدلات الخاصة بالعقود المؤقتة */
+    .temporary-allowances {
+      display: none;
+    }
+
+    @media print {
+      body {
+        margin: 0;
+        padding: 0;
+        background: white;
+        font-size: 10px;
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      
+      .container {
+        border: 2px solid #8B0000 !important;
+        box-shadow: none;
+        margin: 0;
+        padding: 5px;
+        width: 100%;
+        max-width: 100%;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      
+      .inner-header {
+        margin-bottom: 8px;
+        padding-bottom: 6px;
+      }
+      
+      .inner-logo img {
+        height: 40px;
+      }
+      
+      .directorate-title {
+        font-size: 14px;
+      }
+      
+      .department-title {
+        font-size: 11px;
+      }
+      
+      h3 {
+        font-size: 16px;
+        margin: 3px 0 8px 0;
+        padding: 6px;
+      }
+      
+      label {
+        width: 140px;
+        margin-left: 8px;
+        padding-right: 20px;
+        font-size: 11px;
+      }
+      
+      input, select {
+        padding: 3px;
+        margin: 2px;
+        font-size: 10px;
+        height: 26px;
+      }
+      
+      input.employee-input {
+        width: 180px;
+      }
+      
+      input.amount-input, input[readonly], input.after-deduction {
+        width: 100px;
+      }
+      
+      select.contract-type {
+        width: 100px;
+      }
+      
+      .column-title {
+        font-size: 10px;
+        width: 100px;
+      }
+      
+      .result {
+        font-size: 11px;
+        padding: 6px;
+        line-height: 1.3;
+        margin: 8px 0;
+      }
+      
+      .separator {
+        margin: 8px 0;
+      }
+      
+      .approval-section {
+        margin-top: 12px;
+        padding-top: 8px;
+        font-size: 11px;
+        min-height: 40px;
+      }
+      
+      .button-container, .footer-animation, .disclaimer {
+        display: none;
+      }
+      
+      /* ضمان عدم تقسيم المحتوى */
+      .container, .inner-header, .result, .approval-section, .input-row {
+        page-break-before: avoid;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-calculator"></i> حاسبة رواتب الموظفين</h1>
-            <div class="contract-type">
-                <label for="contract-type">نوع العقد:</label>
-                <select id="contract-type">
-                    <option value="permanent">عقود دائمة</option>
-                    <option value="temporary">عقود موقتة</option>
-                </select>
-            </div>
-            <div class="header-dates">
-                <div>
-                    <label for="start-date"><i class="fas fa-calendar-alt"></i> تاريخ البداية:</label>
-                    <input type="date" id="start-date">
-                </div>
-                <div>
-                    <label for="end-date"><i class="fas fa-calendar-check"></i> تاريخ النهاية:</label>
-                    <input type="date" id="end-date">
-                </div>
-            </div>
-        </header>
-        
-        <div class="calculator-content">
-            <!-- راتب التعيين -->
-            <div class="column">
-                <div class="column-header">
-                    <i class="fas fa-money-bill-wave"></i> راتب التعيين
-                </div>
-                
-                <div class="allowance-item">
-                    <label for="basic-allowance"><i class="fas fa-home"></i> بدل الأساسي:</label>
-                    <input type="number" id="basic-allowance" min="0" step="0.001" placeholder="0.000">
-                </div>
-                
-                <div class="allowance-item temporary-hidden">
-                    <label for="housing-allowance"><i class="fas fa-building"></i> بدل السكن:</label>
-                    <input type="number" id="housing-allowance" min="0" step="0.001" placeholder="0.000">
-                </div>
-                
-                <div class="allowance-item temporary-hidden">
-                    <label for="electricity-allowance"><i class="fas fa-bolt"></i> بدل الكهرباء:</label>
-                    <input type="number" id="electricity-allowance" min="0" step="0.001" placeholder="0.000">
-                </div>
-                
-                <div class="allowance-item temporary-hidden">
-                    <label for="water-allowance"><i class="fas fa-tint"></i> بدل الماء:</label>
-                    <input type="number" id="water-allowance" min="0" step="0.001" placeholder="0.000">
-                </div>
-                
-                <div class="allowance-item temporary-hidden">
-                    <label for="transportation-allowance"><i class="fas fa-bus"></i> بدل النقل:</label>
-                    <input type="number" id="transportation-allowance" min="0" step="0.001" placeholder="0.000">
-                </div>
-                
-                <div class="allowance-item temporary-hidden">
-                    <label for="professional-allowance"><i class="fas fa-user-tie"></i> بدل المهني:</label>
-                    <input type="number" id="professional-allowance" min="0" step="0.001" placeholder="0.000">
-                </div>
-                
-                <div class="allowance-item temporary-hidden">
-                    <label for="phone-allowance"><i class="fas fa-phone"></i> بدل الهاتف:</label>
-                    <input type="number" id="phone-allowance" min="0" step="0.001" placeholder="0.000">
-                </div>
-                
-                <div class="allowance-item">
-                    <label for="other-allowance"><i class="fas fa-plus-circle"></i> بدلات أخرى:</label>
-                    <input type="number" id="other-allowance" min="0" step="0.001" placeholder="0.000">
-                </div>
-                
-                <div class="allowance-item temporary-hidden">
-                    <label for="living-allowance"><i class="fas fa-shopping-cart"></i> بدل غلاء المعيشة:</label>
-                    <input type="number" id="living-allowance" min="0" step="0.001" placeholder="0.000">
-                </div>
-                
-                <div class="total">
-                    <label><i class="fas fa-calculator"></i> إجمالي راتب التعيين:</label>
-                    <div class="result-field" id="appointment-total">0.000</div>
-                </div>
-            </div>
-            
-            <!-- راتب فترة الاحتساب -->
-            <div class="column">
-                <div class="column-header">
-                    <i class="fas fa-calculator"></i> راتب فترة الاحتساب
-                </div>
-                
-                <div class="allowance-item">
-                    <label><i class="fas fa-home"></i> بدل الأساسي:</label>
-                    <div class="result-field" id="calculated-basic">0.000</div>
-                </div>
-                
-                <div class="allowance-item temporary-hidden">
-                    <label><i class="fas fa-building"></i> بدل السكن:</label>
-                    <div class="result-field" id="calculated-housing">0.000</div>
-                </div>
-                
-                <div class="allowance-item temporary-hidden">
-                    <label><i class="fas fa-bolt"></i> بدل الكهرباء:</label>
-                    <div class="result-field" id="calculated-electricity">0.000</div>
-                </div>
-                
-                <div class="allowance-item temporary-hidden">
-                    <label><i class="fas fa-tint"></i> بدل الماء:</label>
-                    <div class="result-field" id="calculated-water">0.000</div>
-                </div>
-                
-                <div class="allowance-item temporary-hidden">
-                    <label><i class="fas fa-bus"></i> بدل النقل:</label>
-                    <div class="result-field" id="calculated-transportation">0.000</div>
-                </div>
-                
-                <div class="allowance-item temporary-hidden">
-                    <label><i class="fas fa-user-tie"></i> بدل المهني:</label>
-                    <div class="result-field" id="calculated-professional">0.000</div>
-                </div>
-                
-                <div class="allowance-item temporary-hidden">
-                    <label><i class="fas fa-phone"></i> بدل الهاتف:</label>
-                    <div class="result-field" id="calculated-phone">0.000</div>
-                </div>
-                
-                <div class="allowance-item">
-                    <label><i class="fas fa-plus-circle"></i> بدلات أخرى:</label>
-                    <div class="result-field" id="calculated-other">0.000</div>
-                </div>
-                
-                <div class="allowance-item temporary-hidden">
-                    <label><i class="fas fa-shopping-cart"></i> بدل غلاء المعيشة:</label>
-                    <div class="result-field" id="calculated-living">0.000</div>
-                </div>
-                
-                <div class="total">
-                    <label><i class="fas fa-calculator"></i> إجمالي راتب الفترة:</label>
-                    <div class="result-field" id="period-total">0.000</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- قسم الملخص والاستقطاعات -->
-        <div class="summary-section" id="results-section">
-            <div class="summary-grid">
-                <div class="summary-item">
-                    <label><i class="fas fa-file-invoice-dollar"></i> إجمالي راتب الفترة:</label>
-                    <div class="summary-value" id="summary-period-total">0.000</div>
-                </div>
-                
-                <div class="summary-item">
-                    <label><i class="fas fa-percentage"></i> الاستقطاعات (8%):</label>
-                    <div class="summary-value" id="deductions">0.000</div>
-                </div>
-                
-                <div class="summary-item">
-                    <label><i class="fas fa-calendar-day"></i> عدد أيام الفترة:</label>
-                    <div class="summary-value" id="days-count">0</div>
-                </div>
-                
-                <div class="summary-item">
-                    <label><i class="fas fa-calculator"></i> عدد الأيام المحتسبة:</label>
-                    <div class="summary-value" id="calculated-days">0</div>
-                </div>
-                
-                <div class="summary-item" style="grid-column: span 2; text-align: center;">
-                    <label><i class="fas fa-money-bill"></i> صافي الراتب:</label>
-                    <div class="summary-value" id="net-salary">0.000</div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="buttons-container">
-            <button id="clear-btn"><i class="fas fa-trash-alt"></i> تفريغ الحقول</button>
-            <button id="print-btn"><i class="fas fa-print"></i> طباعة</button>
-        </div>
+
+  <div class="container">
+    <!-- رأس الصفحة داخل الإطار مع الشعارات -->
+    <div class="inner-header">
+      <div class="inner-logo">
+        <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="شعار وزارة الصحة">
+      </div>
+      
+      <div class="inner-title">
+        <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
+        <div class="department-title">دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
+      </div>
+      
+      <div class="inner-logo">
+        <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="شعار عمان فيجن">
+      </div>
     </div>
 
-    <script>
-        // تعيين التواريخ تلقائياً لشهر الحالي
-        document.addEventListener('DOMContentLoaded', function() {
-            const today = new Date();
-            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-            
-            // تنسيق التاريخ إلى yyyy-mm-dd
-            function formatDate(date) {
-                const yyyy = date.getFullYear();
-                const mm = String(date.getMonth() + 1).padStart(2, '0');
-                const dd = String(date.getDate()).padStart(2, '0');
-                return `${yyyy}-${mm}-${dd}`;
-            }
-            
-            document.getElementById('start-date').value = formatDate(firstDay);
-            document.getElementById('end-date').value = formatDate(lastDay);
-            
-            // إضافة event listeners لجميع الحقول
-            const inputFields = document.querySelectorAll('input[type="number"], input[type="date"]');
-            
-            inputFields.forEach(function(input) {
-                input.addEventListener('input', calculateAll);
-            });
-            
-            // إضافة event listener لنوع العقد
-            document.getElementById('contract-type').addEventListener('change', toggleContractType);
-            
-            // إضافة event listeners لأزرار التفريغ والطباعة
-            document.getElementById('clear-btn').addEventListener('click', clearFields);
-            document.getElementById('print-btn').addEventListener('click', function() {
-                window.print();
-            });
-            
-            // حساب القيم الأولية
-            calculateAll();
+    <h3>حاسبة رواتب</h3>
+
+    <div class="input-section">
+      <div class="input-row">
+        <label for="employeeName">اسم الموظف:</label>
+        <input type="text" id="employeeName" class="employee-input" placeholder="أسم الموظف">
+      </div>
+
+      <div class="input-row">
+        <label for="employeeNumber">رقم الموظف:</label>
+        <input type="text" id="employeeNumber" class="employee-input" placeholder="رقم الموظف">
+      </div>
+
+      <div class="input-row">
+        <label for="contractType">نوع العقد:</label>
+        <select id="contractType" class="contract-type">
+          <option value="permanent">عقود دائمة</option>
+          <option value="temporary">عقود موقتة</option>
+        </select>
+      </div>
+
+      <!-- صف التواريخ في سطر واحد -->
+      <div class="date-row">
+        <span class="date-label">تاريخ الاحتساب من:</span>
+        <input type="date" id="startDate" class="date-input">
+        <span style="margin: 0 5px;">إلى</span>
+        <input type="date" id="endDate" class="date-input">
+      </div>
+
+      <!-- إضافة عناوين الأعمدة بعد التاريخ -->
+      <div class="input-row">
+        <label></label>
+        <span class="column-title">بدلات التعيين</span>
+        <span class="column-title">اجمالي قبل الخصم</span>
+        <span class="column-title">اجمالي بعد الخصم</span>
+      </div>
+
+      <div class="input-row">
+        <label for="basic">البدل الأساسي:</label>
+        <input type="number" id="basic" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="basicResult" readonly>
+        <input type="text" id="basicAfterDeduction" class="after-deduction" readonly>
+      </div>
+
+      <!-- البدلات الخاصة بالعقود المؤقتة -->
+      <div id="temporaryAllowances" class="temporary-allowances">
+        <div class="input-row">
+          <label for="otherAllowances">بدلات أخرى:</label>
+          <input type="number" id="otherAllowances" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="otherAllowancesResult" readonly>
+          <input type="text" id="otherAllowancesAfterDeduction" class="after-deduction" readonly>
+        </div>
+      </div>
+
+      <!-- الحقول التي سيتم إخفاؤها عند اختيار عقود موقتة -->
+      <div id="permanentAllowances" class="temporary-hide">
+        <div class="input-row">
+          <label for="housing">بدل السكن:</label>
+          <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="housingResult" readonly>
+          <input type="text" id="housingAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="electricity">بدل الكهرباء:</label>
+          <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="electricityResult" readonly>
+          <input type="text" id="electricityAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="water">بدل الماء:</label>
+          <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="waterResult" readonly>
+          <input type="text" id="waterAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="phone">بدل الهاتف:</label>
+          <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="phoneResult" readonly>
+          <input type="text" id="phoneAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="transport">بدل النقل:</label>
+          <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="transportResult" readonly>
+          <input type="text" id="transportAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="professional">بدل مهني:</label>
+          <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="professionalResult" readonly>
+          <input type="text" id="professionalAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="costLiving">بدل غلاء معيشة:</label>
+          <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="costLivingResult" readonly>
+          <input type="text" id="costLivingAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <!-- إجماليات الأعمدة -->
+        <div class="input-row">
+          <label>الإجمالي:</label>
+          <input type="text" id="monthlyTotal" class="amount-input column-total" readonly>
+          <input type="text" id="periodTotal" class="column-total" readonly>
+          <input type="text" id="afterDeductionTotal" class="after-deduction column-total" readonly>
+        </div>
+      </div>
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="result">
+      عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
+      إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
+      إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
+      <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
+      <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
+    </div>
+
+    <!-- قسم الإعداد والمراجعة المعدل -->
+    <div class="approval-section">
+      <div class="approval-right">
+        إعداد ومراجعة: _______________      
+      </div>
+      <div class="approval-right">
+        اعتمده: _______________      
+      </div>
+    </div>
+
+    <div class="button-container">
+      <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
+      <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ الحقول</button>
+      <!-- الزر الجديد لفتح موقع جعبوب -->
+      <button class="site-btn" onclick="window.open('https://jaboob.com', '_blank')">حاسبة قياسية</button>
+    </div>
+    
+    <!-- التنويه -->
+    <div class="disclaimer">
+      للتنويه: محتوى الصفحة لا يتبع وزارة الصحة ،تم أنشاء هذي الاداة وتطويرها بمبادرة فردية 
+    </div>
+  </div>
+
+  <div class="footer-animation">
+    <div class="marquee">
+      <span> جميع الحقوق محفوظة © 2025 محمد جعبوب - قسم الرواتب - دائرة الشؤون المالية</span>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const startDate = document.getElementById("startDate");
+      const endDate = document.getElementById("endDate");
+      const contractType = document.getElementById("contractType");
+      const contractSpacer = document.getElementById("contractSpacer");
+      const permanentAllowances = document.getElementById("permanentAllowances");
+      const temporaryAllowances = document.getElementById("temporaryAllowances");
+
+      // تعيين التواريخ الافتراضية
+      const today = new Date();
+      const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      
+      function formatDate(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+      
+      startDate.value = formatDate(firstDayOfMonth);
+      endDate.value = formatDate(lastDayOfMonth);
+
+      const allowances = [
+        {id:"basic", result:"basicResult", afterDeduction:"basicAfterDeduction"},
+        {id:"housing", result:"housingResult", afterDeduction:"housingAfterDeduction"},
+        {id:"electricity", result:"electricityResult", afterDeduction:"electricityAfterDeduction"},
+        {id:"water", result:"waterResult", afterDeduction:"waterAfterDeduction"},         
+        {id:"phone", result:"phoneResult", afterDeduction:"phoneAfterDeduction"},
+        {id:"transport", result:"transportResult", afterDeduction:"transportAfterDeduction"},
+        {id:"professional", result:"professionalResult", afterDeduction:"professionalAfterDeduction"},
+        {id:"otherAllowances", result:"otherAllowancesResult", afterDeduction:"otherAllowancesAfterDeduction"},
+        {id:"costLiving", result:"costLivingResult", afterDeduction:"costLivingAfterDeduction"}
+      ];
+
+      const totalAllowances = document.getElementById("totalAllowances");
+      const totalPeriod = document.getElementById("totalPeriod");
+      const deduction = document.getElementById("deduction");
+      const net = document.getElementById("net");
+      const daysCount = document.getElementById("daysCount");
+      
+      // حقول الإجمالي
+      const monthlyTotal = document.getElementById("monthlyTotal");
+      const periodTotal = document.getElementById("periodTotal");
+      const afterDeductionTotal = document.getElementById("afterDeductionTotal");
+
+      const deductionLine = document.getElementById("deductionLine");
+      const netLine = document.getElementById("netLine");
+
+      function daysInMonth(year, month) {
+        return new Date(year, month + 1, 0).getDate();
+      }
+
+      function updateContractDisplay() {
+        if (contractType.value === "temporary") {
+          // إخفاء الحقول الخاصة بالعقود الدائمة
+          permanentAllowances.style.display = "none";
+          
+          // إظهار الحقول الخاصة بالعقود المؤقتة
+          temporaryAllowances.style.display = "block";
+          
+          // إخفاء حسابات الصندوق الاجتماعي
+          deductionLine.style.display = "none";
+          netLine.style.display = "none";
+          
+          // إخفاء المسافة الإضافية
+          contractSpacer.style.display = "none";
+        } else {
+          // إظهار الحقول الخاصة بالعقود الدائمة
+          permanentAllowances.style.display = "block";
+          
+          // إخفاء الحقول الخاصة بالعقود المؤقتة
+          temporaryAllowances.style.display = "none";
+          
+          // إظهار حسابات الصندوق الاجتماعي
+          deductionLine.style.display = "block";
+          netLine.style.display = "block";
+          
+          // إظهار المسافة الإضافية
+          contractSpacer.style.display = "block";
+        }
+      }
+
+      function calculate() {
+        if (!(startDate.value && endDate.value)) return;
+
+        let start = new Date(startDate.value);
+        let end = new Date(endDate.value);
+
+        if (end < start) {
+          totalPeriod.textContent = "❌ تاريخ النهاية قبل البداية";
+          daysCount.textContent = "0";
+          return;
+        }
+
+        let diffTime = end - start;
+        let days = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        daysCount.textContent = days;
+
+        let totalBase = 0;
+        let totalCalc = 0;
+        let totalAfterDeduction = 0;
+
+        allowances.forEach(item => {
+          let input = document.getElementById(item.id);
+          let resultBox = document.getElementById(item.result);
+          let afterDeductionBox = document.getElementById(item.afterDeduction);
+          let monthly = parseFloat(input.value) || 0;
+          
+          // إذا كان نوع العقد موقتاً، نتجاهل الحقول المخفية في الحساب
+          if (contractType.value === "temporary" && 
+              item.id !== "basic" && item.id !== "otherAllowances") {
+            return; // تخطي هذا الحقل
+          }
+          
+          // إذا كان نوع العقد دائماً، نتجاهل الحقول المؤقتة
+          if (contractType.value === "permanent" && item.id === "otherAllowances") {
+            return; // تخطي هذا الحقل
+          }
+          
+          totalBase += monthly;
+          
+          let current = new Date(start);
+          let sum = 0;
+          while (current <= end) {
+            let year = current.getFullYear();
+            let month = current.getMonth();
+            let daysInThisMonth = daysInMonth(year, month);
+            let daily = monthly / daysInThisMonth;
+            sum += daily;
+            current.setDate(current.getDate() + 1);
+          }
+          
+          resultBox.value = sum.toFixed(3);
+          // حساب القيمة بعد خصم 8%
+          let afterDeductionValue = sum * 0.92;
+          afterDeductionBox.value = afterDeductionValue.toFixed(3);
+          
+          totalCalc += sum;
+          totalAfterDeduction += afterDeductionValue;
+        });
+
+        // تحديث الإجماليات
+        if (contractType.value === "permanent") {
+          monthlyTotal.value = totalBase.toFixed(3);
+          periodTotal.value = totalCalc.toFixed(3);
+          afterDeductionTotal.value = totalAfterDeduction.toFixed(3);
+        }
+
+        totalAllowances.textContent = totalBase.toFixed(3);
+        totalPeriod.textContent = totalCalc.toFixed(3);
+        
+        // حساب اشتراكات الصندوق الاجتماعي فقط للعقود الدائمة
+        if (contractType.value === "permanent") {
+          let ded = totalCalc * 0.08;
+          deduction.textContent = ded.toFixed(3);
+
+          let netValue = totalCalc - ded;
+          net.textContent = netValue.toFixed(3);
+        } else {
+          deduction.textContent = "0";
+          net.textContent = totalCalc.toFixed(3);
+        }
+
+        updateContractDisplay();
+      }
+
+      function resetForm() {
+        document.getElementById("employeeName").value = "";
+        document.getElementById("employeeNumber").value = "";
+        document.getElementById("startDate").value = formatDate(firstDayOfMonth);
+        document.getElementById("endDate").value = formatDate(lastDayOfMonth);
+        document.getElementById("basic").value = "";
+        document.getElementById("housing").value = "";
+        document.getElementById("electricity").value = "";
+        document.getElementById("water").value = "";
+        document.getElementById("phone").value = "";
+        document.getElementById("transport").value = "";
+        document.getElementById("professional").value = "";
+        document.getElementById("otherAllowances").value = "";
+        document.getElementById("costLiving").value = "";
+        contractType.value = "permanent";
+        
+        allowances.forEach(item => {
+          document.getElementById(item.result).value = "";
+          document.getElementById(item.afterDeduction).value = "";
         });
         
-        function toggleContractType() {
-            const contractType = document.getElementById('contract-type').value;
-            const hiddenItems = document.querySelectorAll('.temporary-hidden');
-            const resultsSection = document.getElementById('results-section');
-            
-            if (contractType === 'temporary') {
-                // إخفاء الحقول الخاصة بالعقود الدائمة
-                hiddenItems.forEach(function(item) {
-                    item.style.display = 'none';
-                });
-                // إخفاء قسم النتائج
-                resultsSection.classList.add('results-hidden');
-            } else {
-                // إظهار جميع الحقول
-                hiddenItems.forEach(function(item) {
-                    item.style.display = 'flex';
-                });
-                // إظهار قسم النتائج
-                resultsSection.classList.remove('results-hidden');
-            }
-            
-            // إعادة الحساب بعد تغيير نوع العقد
-            calculateAll();
-        }
+        // إعادة تعيين الإجماليات
+        monthlyTotal.value = "";
+        periodTotal.value = "";
+        afterDeductionTotal.value = "";
         
-        function calculateAll() {
-            calculateTotals();
-            calculateSalary();
-        }
-        
-        function calculateTotals() {
-            // الحصول على قيمة البدلات
-            const basic = parseFloat(document.getElementById('basic-allowance').value) || 0;
-            const housing = parseFloat(document.getElementById('housing-allowance').value) || 0;
-            const electricity = parseFloat(document.getElementById('electricity-allowance').value) || 0;
-            const water = parseFloat(document.getElementById('water-allowance').value) || 0;
-            const transportation = parseFloat(document.getElementById('transportation-allowance').value) || 0;
-            const professional = parseFloat(document.getElementById('professional-allowance').value) || 0;
-            const phone = parseFloat(document.getElementById('phone-allowance').value) || 0;
-            const other = parseFloat(document.getElementById('other-allowance').value) || 0;
-            const living = parseFloat(document.getElementById('living-allowance').value) || 0;
-            
-            // حساب إجمالي راتب التعيين
-            const appointmentTotal = basic + housing + electricity + water + transportation + professional + phone + other + living;
-            document.getElementById('appointment-total').textContent = appointmentTotal.toFixed(3);
-        }
-        
-        function calculateSalary() {
-            // الحصول على التواريخ
-            const startDate = new Date(document.getElementById('start-date').value);
-            const endDate = new Date(document.getElementById('end-date').value);
-            
-            // التحقق من صحة التواريخ
-            if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-                return;
-            }
-            
-            if (startDate > endDate) {
-                alert('تاريخ البداية يجب أن يكون قبل تاريخ النهاية');
-                return;
-            }
-            
-            // حساب عدد الأيام والفترة
-            const daysCount = calculateDays(startDate, endDate);
-            document.getElementById('days-count').textContent = daysCount;
-            
-            // حساب عدد الأيام المحتسبة (نفس عدد الأيام في هذه الحالة)
-            document.getElementById('calculated-days').textContent = daysCount;
-            
-            // حساب عدد الأشهر الكاملة والأيام الجزئية
-            const monthDetails = calculateMonthsAndDays(startDate, endDate);
-            
-            // الحصول على قيمة البدلات
-            const basic = parseFloat(document.getElementById('basic-allowance').value) || 0;
-            const housing = parseFloat(document.getElementById('housing-allowance').value) || 0;
-            const electricity = parseFloat(document.getElementById('electricity-allowance').value) || 0;
-            const water = parseFloat(document.getElementById('water-allowance').value) || 0;
-            const transportation = parseFloat(document.getElementById('transportation-allowance').value) || 0;
-            const professional = parseFloat(document.getElementById('professional-allowance').value) || 0;
-            const phone = parseFloat(document.getElementById('phone-allowance').value) || 0;
-            const other = parseFloat(document.getElementById('other-allowance').value) || 0;
-            const living = parseFloat(document.getElementById('living-allowance').value) || 0;
-            
-            // حساب قيمة كل بدل للفترة
-            const calculatedBasic = calculateAllowanceForPeriod(basic, monthDetails);
-            const calculatedHousing = calculateAllowanceForPeriod(housing, monthDetails);
-            const calculatedElectricity = calculateAllowanceForPeriod(electricity, monthDetails);
-            const calculatedWater = calculateAllowanceForPeriod(water, monthDetails);
-            const calculatedTransportation = calculateAllowanceForPeriod(transportation, monthDetails);
-            const calculatedProfessional = calculateAllowanceForPeriod(professional, monthDetails);
-            const calculatedPhone = calculateAllowanceForPeriod(phone, monthDetails);
-            const calculatedOther = calculateAllowanceForPeriod(other, monthDetails);
-            const calculatedLiving = calculateAllowanceForPeriod(living, monthDetails);
-            
-            // عرض القيم المحسوبة في العمود الثاني
-            document.getElementById('calculated-basic').textContent = calculatedBasic.toFixed(3);
-            document.getElementById('calculated-housing').textContent = calculatedHousing.toFixed(3);
-            document.getElementById('calculated-electricity').textContent = calculatedElectricity.toFixed(3);
-            document.getElementById('calculated-water').textContent = calculatedWater.toFixed(3);
-            document.getElementById('calculated-transportation').textContent = calculatedTransportation.toFixed(3);
-            document.getElementById('calculated-professional').textContent = calculatedProfessional.toFixed(3);
-            document.getElementById('calculated-phone').textContent = calculatedPhone.toFixed(3);
-            document.getElementById('calculated-other').textContent = calculatedOther.toFixed(3);
-            document.getElementById('calculated-living').textContent = calculatedLiving.toFixed(3);
-            
-            // حساب إجمالي راتب الفترة
-            const periodTotal = calculatedBasic + calculatedHousing + calculatedElectricity + 
-                               calculatedWater + calculatedTransportation + calculatedProfessional + 
-                               calculatedPhone + calculatedOther + calculatedLiving;
-            document.getElementById('period-total').textContent = periodTotal.toFixed(3);
-            document.getElementById('summary-period-total').textContent = periodTotal.toFixed(3);
-            
-            // حساب الاستقطاعات (8%)
-            const deductions = periodTotal * 0.08;
-            document.getElementById('deductions').textContent = deductions.toFixed(3);
-            
-            // حساب صافي الراتب
-            const netSalary = periodTotal - deductions;
-            document.getElementById('net-salary').textContent = netSalary.toFixed(3);
-        }
-        
-        function calculateDays(startDate, endDate) {
-            // حساب الفرق بالأيام (بما في ذلك يوم البداية)
-            const diffTime = endDate - startDate;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-            return diffDays;
-        }
-        
-        function calculateMonthsAndDays(startDate, endDate) {
-            let currentDate = new Date(startDate);
-            let totalMonths = 0;
-            
-            // حساب عدد الأيام في كل شهر على حدة
-            while (currentDate <= endDate) {
-                const year = currentDate.getFullYear();
-                const month = currentDate.getMonth();
-                
-                // حساب عدد أيام الشهر الحالي
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
-                
-                // تحديد تاريخ نهاية الفترة في هذا الشهر
-                const endOfMonth = new Date(year, month + 1, 0);
-                const periodEnd = endDate < endOfMonth ? endDate : endOfMonth;
-                
-                // حساب عدد الأيام في هذا الشهر
-                const daysInPeriod = Math.ceil((periodEnd - currentDate) / (1000 * 60 * 60 * 24)) + 1;
-                
-                // إضافة نسبة الشهر (الأيام في الفترة / أيام الشهر الكاملة)
-                totalMonths += daysInPeriod / daysInMonth;
-                
-                // الانتقال إلى الشهر التالي
-                currentDate = new Date(year, month + 1, 1);
-            }
-            
-            return {
-                totalMonths: totalMonths
-            };
-        }
-        
-        function calculateAllowanceForPeriod(monthlyAllowance, monthDetails) {
-            // حساب قيمة البدل للفترة بناء على عدد الأشهر (كاملة وجزئية)
-            return monthlyAllowance * monthDetails.totalMonths;
-        }
-        
-        function clearFields() {
-            // مسح جميع حقول الإدخال
-            const inputFields = document.querySelectorAll('input[type="number"]');
-            inputFields.forEach(function(input) {
-                input.value = '';
-            });
-            
-            // إعادة تعيين التواريخ لشهر الحالي
-            const today = new Date();
-            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-            
-            function formatDate(date) {
-                const yyyy = date.getFullYear();
-                const mm = String(date.getMonth() + 1).padStart(2, '0');
-                const dd = String(date.getDate()).padStart(2, '0');
-                return `${yyyy}-${mm}-${dd}`;
-            }
-            
-            document.getElementById('start-date').value = formatDate(firstDay);
-            document.getElementById('end-date').value = formatDate(lastDay);
-            
-            // إعادة الحساب
-            calculateAll();
-        }
-    </script>
+        totalAllowances.textContent = "0";
+        totalPeriod.textContent = "0";
+        deduction.textContent = "0";
+        net.textContent = "0";
+        daysCount.textContent = "0";
+        updateContractDisplay();
+      }
+
+      // جعل الدالة متاحة عالمياً
+      window.resetForm = resetForm;
+
+      // إضافة مستمعي الأحداث
+      startDate.addEventListener("change", calculate);
+      endDate.addEventListener("change", calculate);
+      contractType.addEventListener("change", updateContractDisplay);
+      
+      allowances.forEach(item => {
+        document.getElementById(item.id).addEventListener("input", calculate);
+      });
+
+      // التهيئة الأولية
+      calculate();
+      updateContractDisplay();
+    });
+  </script>
+
 </body>
 </html>
