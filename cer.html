@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>حاسبة رواتب المتقدمة</title>
+  <title>حاسبة dghs</title>
   <style>
     @font-face {
       font-family: 'Diwani';
@@ -347,6 +347,14 @@
       display: none;
     }
 
+    /* إخفاء عمود "بعد الخصم" للعقود المؤقتة بتغيير اللون إلى الأبيض */
+    .temporary-contract .after-deduction-column,
+    .temporary-contract .after-deduction {
+      color: white !important;
+      background-color: white !important;
+      border-color: white !important;
+    }
+
     @media print {
       body {
         margin: 0;
@@ -451,6 +459,14 @@
         page-break-after: avoid;
         page-break-inside: avoid;
       }
+
+      /* إخفاء عمود "بعد الخصم" للعقود المؤقتة أثناء الطباعة */
+      .temporary-contract .after-deduction-column,
+      .temporary-contract .after-deduction {
+        color: white !important;
+        background-color: white !important;
+        border-color: white !important;
+      }
     }
   </style>
 </head>
@@ -507,7 +523,7 @@
         <label></label>
         <span class="column-title">بدلات التعيين</span>
         <span class="column-title">اجمالي قبل الخصم</span>
-        <span class="column-title">اجمالي بعد الخصم</span>
+        <span class="column-title after-deduction-column">اجمالي بعد الخصم</span>
       </div>
 
       <div class="input-row">
@@ -632,6 +648,7 @@
       const startDate = document.getElementById("startDate");
       const endDate = document.getElementById("endDate");
       const contractType = document.getElementById("contractType");
+      const container = document.querySelector('.container');
       const contractSpacer = document.getElementById("contractSpacer");
       const permanentAllowances = document.getElementById("permanentAllowances");
       const temporaryAllowances = document.getElementById("temporaryAllowances");
@@ -695,6 +712,9 @@
           
           // إخفاء المسافة الإضافية
           contractSpacer.style.display = "none";
+          
+          // إضافة كلاس للتحكم في إخفاء عمود "بعد الخصم" بتغيير اللون
+          container.classList.add('temporary-contract');
         } else {
           // إظهار الحقول الخاصة بالعقود الدائمة
           permanentAllowances.style.display = "block";
@@ -708,6 +728,9 @@
           
           // إظهار المسافة الإضافية
           contractSpacer.style.display = "block";
+          
+          // إزالة كلاس إخفاء عمود "بعد الخصم"
+          container.classList.remove('temporary-contract');
         }
       }
 
@@ -762,12 +785,17 @@
           }
           
           resultBox.value = sum.toFixed(3);
-          // حساب القيمة بعد خصم 8%
-          let afterDeductionValue = sum * 0.92;
-          afterDeductionBox.value = afterDeductionValue.toFixed(3);
+          
+          // حساب القيمة بعد خصم 8% فقط للعقود الدائمة
+          if (contractType.value === "permanent") {
+            let afterDeductionValue = sum * 0.92;
+            afterDeductionBox.value = afterDeductionValue.toFixed(3);
+            totalAfterDeduction += afterDeductionValue;
+          } else {
+            afterDeductionBox.value = sum.toFixed(3);
+          }
           
           totalCalc += sum;
-          totalAfterDeduction += afterDeductionValue;
         });
 
         // تحديث الإجماليات
@@ -826,6 +854,10 @@
         deduction.textContent = "0";
         net.textContent = "0";
         daysCount.textContent = "0";
+        
+        // إزالة كلاس العقود المؤقتة
+        container.classList.remove('temporary-contract');
+        
         updateContractDisplay();
       }
 
