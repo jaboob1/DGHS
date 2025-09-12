@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>حاسبة رواتب المتقدمة</title>
+  <title>حاسبة dghs</title>
   <style>
     @font-face {
       font-family: 'Diwani';
@@ -166,7 +166,7 @@
     .column-title {
       font-size: 12px;
       color: #8B0000;
-      margin: 0 5px;
+      margin: 0 3px;
       text-align: center;
       width: 120px;
       font-weight: bold;
@@ -180,10 +180,10 @@
       font-weight: bold;
       color: green;
       line-height: 1.5;
-      padding: 8px;              
-      font-size: 12px;           
+      padding: 20px;              
+      font-size: 11px;           
       background-color: #f0f9f0;
-      border-radius: 4px;
+      border-radius: 8px;
       border: 1px solid #c3e6c3; 
     }
     
@@ -197,8 +197,8 @@
     .approval-section {
       display: flex;
       justify-content: space-between;
-      margin-top: 15px;
-      padding: 10px 0 2px 0;
+      margin-top: 10px;
+      padding: 15px 0 15px 0;
       border-top: 2px solid #8B0000;
       font-size: 13px;
       font-weight: bold;
@@ -207,7 +207,7 @@
     
     .approval-right {
       text-align: right;
-      flex: 1;
+      flex: 2;
     }
     
     .button-container {
@@ -301,39 +301,46 @@
       direction: rtl;
     }
 
-    /* صف التواريخ في سطر واحد */
+    /* تحسين تنسيق صف التواريخ */
     .date-row {
       display: flex;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       width: 100%;
+      flex-wrap: wrap;
     }
     
     .date-label {
       width: 160px;
-      margin-left: 8px;
+      margin-left: 5px;
       font-weight: bold;
       text-align: right;
       padding-right: 25px;
       font-size: 13px;
+      flex-shrink: 0;
+    }
+    
+    .date-input-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
     .date-input {
-      width: 150px;
-      margin-left: 10px;
-      border: 1px solid #ddd;
+      width: 140px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+      height: 30px;
+      text-align: center;
     }
     
-    /* أنماط جديدة للإخفاء والإظهار */
-    .temporary-hide {
-      display: block;
+    .date-separator {
+      font-weight: bold;
+      color: #8B0000;
     }
-    
-    .contract-spacer {
-      height: 10px;
-      display: block;
-    }
-    
+
     /* إجماليات الأعمدة */
     .column-total {
       font-weight: bold;
@@ -444,9 +451,16 @@
       
       .approval-section {
         margin-top: 12px;
-        padding-top: 8px;
+        padding-top: 15px;
         font-size: 11px;
-        min-height: 40px;
+        min-height: 60px;
+      }
+      
+      /* تحسين طباعة التواريخ */
+      .date-input {
+        width: 110px;
+        font-size: 10px;
+        height: 26px;
       }
       
       .button-container, .footer-animation, .disclaimer {
@@ -510,12 +524,14 @@
         </select>
       </div>
 
-      <!-- صف التواريخ في سطر واحد -->
+      <!-- صف التواريخ في سطر واحد - محسّن -->
       <div class="date-row">
         <span class="date-label">تاريخ الاحتساب من:</span>
-        <input type="date" id="startDate" class="date-input">
-        <span style="margin: 0 5px;">إلى</span>
-        <input type="date" id="endDate" class="date-input">
+        <div class="date-input-container">
+          <input type="date" id="startDate" class="date-input">
+          <span class="date-separator">إلى</span>
+          <input type="date" id="endDate" class="date-input">
+        </div>
       </div>
 
       <!-- إضافة عناوين الأعمدة بعد التاريخ -->
@@ -611,13 +627,13 @@
       إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
       إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
       <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
-      <span id="netLine">✅ صافي المستحق: <span id="net">0</span></span>
+      <span id="netLine"> صافي المستحق: <span id="net">0</span></span>
     </div>
 
     <!-- قسم الإعداد والمراجعة المعدل -->
     <div class="approval-section">
-      <div class="approval-right">
-        إعداد ومراجعة: _______________      
+       <div class="approval-right">
+إعداد ومراجعة: _______________      
       </div>
       <div class="approval-right">
         اعتمده: _______________      
@@ -649,7 +665,6 @@
       const endDate = document.getElementById("endDate");
       const contractType = document.getElementById("contractType");
       const container = document.querySelector('.container');
-      const contractSpacer = document.getElementById("contractSpacer");
       const permanentAllowances = document.getElementById("permanentAllowances");
       const temporaryAllowances = document.getElementById("temporaryAllowances");
 
@@ -710,9 +725,6 @@
           deductionLine.style.display = "none";
           netLine.style.display = "none";
           
-          // إخفاء المسافة الإضافية
-          contractSpacer.style.display = "none";
-          
           // إضافة كلاس للتحكم في إخفاء عمود "بعد الخصم" بتغيير اللون
           container.classList.add('temporary-contract');
         } else {
@@ -725,9 +737,6 @@
           // إظهار حسابات الصندوق الاجتماعي
           deductionLine.style.display = "block";
           netLine.style.display = "block";
-          
-          // إظهار المسافة الإضافية
-          contractSpacer.style.display = "block";
           
           // إزالة كلاس إخفاء عمود "بعد الخصم"
           container.classList.remove('temporary-contract');
