@@ -301,12 +301,13 @@
       direction: rtl;
     }
 
-    /* صف التواريخ في سطر واحد */
+    /* تحسين تنسيق صف التواريخ */
     .date-row {
       display: flex;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       width: 100%;
+      flex-wrap: wrap;
     }
     
     .date-label {
@@ -316,24 +317,30 @@
       text-align: right;
       padding-right: 25px;
       font-size: 13px;
+      flex-shrink: 0;
+    }
+    
+    .date-input-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
     .date-input {
-      width: 150px;
-      margin-left: 25px;
-      border: 1px solid #ddd;
+      width: 140px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+      height: 30px;
+      text-align: center;
     }
     
-    /* أنماط جديدة للإخفاء والإظهار */
-    .temporary-hide {
-      display: block;
+    .date-separator {
+      font-weight: bold;
+      color: #000000;
     }
-    
-    .contract-spacer {
-      height: 10px;
-      display: block;
-    }
-    
+
     /* إجماليات الأعمدة */
     .column-total {
       font-weight: bold;
@@ -409,7 +416,7 @@
       
       input, select {
         padding: 3px;
-        margin: 2px;
+        margin: 3px;
         font-size: 10px;
         height: 26px;
       }
@@ -449,6 +456,13 @@
         min-height: 60px;
       }
       
+      /* تحسين طباعة التواريخ */
+      .date-input {
+        width: 110px;
+        font-size: 10px;
+        height: 26px;
+      }
+      
       .button-container, .footer-animation, .disclaimer {
         display: none;
       }
@@ -466,6 +480,11 @@
         color: white !important;
         background-color: white !important;
         border-color: white !important;
+      }
+
+      /* التعديل الجديد: إزاحة "إعداد ومراجعة" إلى اليسار */
+      .approval-right:first-child {
+        padding-right: 30px; /* زيادة المسافة من اليمين لتحريك المحتوى إلى اليسار */
       }
     }
   </style>
@@ -510,12 +529,14 @@
         </select>
       </div>
 
-      <!-- صف التواريخ في سطر واحد -->
+      <!-- صف التواريخ في سطر واحد - محسّن -->
       <div class="date-row">
         <span class="date-label">تاريخ الاحتساب من:</span>
-        <input type="date" id="startDate" class="date-input">
-        <span style="margin: 0 15px;">إلى</span>
-        <input type="date" id="endDate" class="date-input">
+        <div class="date-input-container">
+          <input type="date" id="startDate" class="date-input">
+          <span class="date-separator">إلى</span>
+          <input type="date" id="endDate" class="date-input">
+        </div>
       </div>
 
       <!-- إضافة عناوين الأعمدة بعد التاريخ -->
@@ -649,7 +670,6 @@
       const endDate = document.getElementById("endDate");
       const contractType = document.getElementById("contractType");
       const container = document.querySelector('.container');
-      const contractSpacer = document.getElementById("contractSpacer");
       const permanentAllowances = document.getElementById("permanentAllowances");
       const temporaryAllowances = document.getElementById("temporaryAllowances");
 
@@ -710,9 +730,6 @@
           deductionLine.style.display = "none";
           netLine.style.display = "none";
           
-          // إخفاء المسافة الإضافية
-          contractSpacer.style.display = "none";
-          
           // إضافة كلاس للتحكم في إخفاء عمود "بعد الخصم" بتغيير اللون
           container.classList.add('temporary-contract');
         } else {
@@ -725,9 +742,6 @@
           // إظهار حسابات الصندوق الاجتماعي
           deductionLine.style.display = "block";
           netLine.style.display = "block";
-          
-          // إظهار المسافة الإضافية
-          contractSpacer.style.display = "block";
           
           // إزالة كلاس إخفاء عمود "بعد الخصم"
           container.classList.remove('temporary-contract');
