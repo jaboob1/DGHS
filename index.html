@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>حاسبة رواتب</title>
+  <title>حاسبة الرواتب القياسية</title>
   <style>
     @font-face {
       font-family: 'Diwani';
@@ -195,7 +195,7 @@
       flex-wrap: wrap;
     }
     
-    .print-btn, .reset-btn {
+    .print-btn, .reset-btn, .advanced-btn {
       padding: 8px 16px;
       font-size: 13px;
       color: white;
@@ -219,6 +219,14 @@
     
     .reset-btn:hover {
       background: #267349;
+    }
+    
+    .advanced-btn {
+      background: #1E90FF;
+    }
+    
+    .advanced-btn:hover {
+      background: #0078D7;
     }
     
     /* تذييل الصفحة المتحرك */
@@ -546,6 +554,7 @@
     <div class="button-container">
       <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
       <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ الحقول</button>
+      <button class="advanced-btn" onclick="window.open('https://www.jaboob.com/cer.html', '_blank')">الحاسبة المتقدمة</button>
     </div>
     
     <!-- التنويه -->
