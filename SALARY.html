@@ -347,10 +347,12 @@
       display: none;
     }
 
-    /* إخفاء عمود "بعد الخصم" للعقود المؤقتة */
+    /* إخفاء عمود "بعد الخصم" للعقود المؤقتة بتغيير اللون إلى الأبيض */
     .temporary-contract .after-deduction-column,
     .temporary-contract .after-deduction {
-      display: none;
+      color: white !important;
+      background-color: white !important;
+      border-color: white !important;
     }
 
     @media print {
@@ -461,7 +463,9 @@
       /* إخفاء عمود "بعد الخصم" للعقود المؤقتة أثناء الطباعة */
       .temporary-contract .after-deduction-column,
       .temporary-contract .after-deduction {
-        display: none;
+        color: white !important;
+        background-color: white !important;
+        border-color: white !important;
       }
     }
   </style>
@@ -709,7 +713,7 @@
           // إخفاء المسافة الإضافية
           contractSpacer.style.display = "none";
           
-          // إضافة كلاس للتحكم في إخفاء عمود "بعد الخصم"
+          // إضافة كلاس للتحكم في إخفاء عمود "بعد الخصم" بتغيير اللون
           container.classList.add('temporary-contract');
         } else {
           // إظهار الحقول الخاصة بالعقود الدائمة
