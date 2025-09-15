@@ -32,14 +32,14 @@
             color: white;
             font-weight: bold;
         }
-        input[type="text"], input[type="number"] {
-            width: 120%;
-            padding: 10px;
+        select, input[type="text"], input[type="number"] {
+            width: 90%;
+            padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
             text-align: center;
         }
-        input[type="text"]:focus, input[type="number"]:focus {
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
             outline: none;
             border-color: #4CAF50;
         }
@@ -50,11 +50,11 @@
         .material-input {
             text-align: right;
         }
-        @media (max-width: 700px) {
+        @media (max-width: 768px) {
             table {
                 font-size: 12px;
             }
-            input[type="text"], input[type="number"] {
+            select, input[type="text"], input[type="number"] {
                 padding: 4px;
             }
         }
@@ -66,11 +66,11 @@
     <table>
         <thead>
             <tr>
-                <th width="90%">المواد</th>
-                <th width="90%">الكمية</th>
-                <th width="90%">سعر الكمية</th>
-                <th width="90%">الإجمالي</th>
-                <th width="90%">إجراء</th>
+                <th width="60%">المواد</th>
+                <th width="15%">عدد الأمتار</th>
+                <th width="15%">سعر المتر الواحد</th>
+                <th width="20%">الإجمالي</th>
+                <th width="10%">إجراء</th>
             </tr>
         </thead>
         <tbody id="materials-table">
@@ -79,13 +79,16 @@
         <tfoot>
             <tr>
                 <td colspan="3" style="text-align: left; font-weight: bold;">المجموع الكلي</td>
-                <td id="grand-total" style="font-weight: bold;">0.000</td>
+                <td id="grand-total" style="font-weight: bold;">0.00</td>
                 <td></td>
             </tr>
         </tfoot>
     </table>
 
     <script>
+        // المواد الافتراضية
+        const materials = ["أسمنت", "حديد", "طابوق", "صبيات", "كبس", "يد عاملة", "نوافذ", "رمل", "حصى", "أخرى"];
+
         // إنشاء 10 صفوف في الجدول
         const tableBody = document.getElementById('materials-table');
         let rowCount = 10;
@@ -93,15 +96,31 @@
         for (let i = 0; i < rowCount; i++) {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><input type="text" class="material-input" placeholder="اسم المادة"></td>
+                <td>
+                    <select class="material-select" onchange="handleMaterialChange(this)">
+                        ${materials.map(m => `<option value="${m}">${m}</option>`).join('')}
+                    </select>
+                    <input type="text" class="material-input" placeholder="ادخل اسم المادة" style="display:none;">
+                </td>
                 <td><input type="number" min="0" class="meters-input" placeholder="0" oninput="calculateTotal(this)"></td>
-                <td><input type="number" min="0" class="price-input" placeholder="0.000" oninput="calculateTotal(this)"></td>
-                <td><input type="text" class="total-column total-input" value="0.000" readonly></td>
+                <td><input type="number" min="0" class="price-input" placeholder="0.00" oninput="calculateTotal(this)"></td>
+                <td><input type="text" class="total-column total-input" value="0.00" readonly></td>
                 <td><button onclick="clearRow(this)">مسح</button></td>
             `;
             tableBody.appendChild(row);
         }
         
+        // إظهار خانة إدخال يدوي عند اختيار "أخرى"
+        function handleMaterialChange(select) {
+            const input = select.parentElement.querySelector('.material-input');
+            if (select.value === "أخرى") {
+                input.style.display = "inline-block";
+            } else {
+                input.style.display = "none";
+                input.value = "";
+            }
+        }
+
         // دالة حساب الإجمالي
         function calculateTotal(input) {
             const row = input.parentElement.parentElement;
@@ -134,13 +153,18 @@
         // دالة مسح الصف
         function clearRow(button) {
             const row = button.parentElement.parentElement;
-            const inputs = row.querySelectorAll('input');
+            const inputs = row.querySelectorAll('input, select');
             
             inputs.forEach(input => {
-                input.value = '';
+                if (input.tagName === "SELECT") {
+                    input.selectedIndex = 0;
+                } else {
+                    input.value = '';
+                }
             });
-            
-            row.querySelector('.total-input').value = '0.000';
+
+            row.querySelector('.material-input').style.display = "none";
+            row.querySelector('.total-input').value = '0.00';
             
             // تحديث المجموع الكلي
             updateGrandTotal();
