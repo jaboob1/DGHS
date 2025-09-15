@@ -5,259 +5,75 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>حاسبة معاش التقاعد - صندوق الحماية الاجتماعية (عُمان)</title>
   <style>
-    :root{
-      --bg:#f7f9fc;
-      --card:#ffffff;
-      --accent:#0b72d9;
-      --muted:#6b7280;
-      --success:#064e3b;
-    }
-    body{
-      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-      background: linear-gradient(180deg, var(--bg), #eef4fb);
-      margin:0;
-      padding:20px;
-      color:#0f172a;
-    }
-    .container{
-      max-width:800px;
-      margin:20px auto;
-    }
-    .card{
-      background:var(--card);
-      border-radius:12px;
-      box-shadow:0 6px 18px rgba(15,23,42,0.08);
-      padding:20px;
-    }
-    h1{margin:0 0 8px 0;font-size:20px}
-    p.lead{margin:0 0 16px 0;color:var(--muted)}
-    .grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
-    label{display:block;font-size:13px;margin-bottom:6px;color:#0f172a}
-    input[type="number"], input[type="text"], select{
-      width:100%;
-      padding:10px 12px;
-      border-radius:8px;
-      border:1px solid #d1d5db;
-      font-size:14px;
-      box-sizing:border-box;
-    }
-    .full{grid-column:1 / -1}
-    .btn{
-      background:var(--accent);
-      color:white;
-      padding:10px 14px;
-      border-radius:8px;
-      border:none;
-      cursor:pointer;
-      font-weight:600;
-    }
-    .btn:active{transform:translateY(1px)}
-    .result{
-      margin-top:14px;
-      padding:12px;
-      border-radius:8px;
-      background:linear-gradient(180deg,#f8fafc,#ffffff);
-      border:1px solid #e6eefc;
-    }
-    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .small{font-size:13px;color:var(--muted)}
-    .breakdown{margin-top:10px;padding:10px;border-radius:8px;background:#fbfdff;border:1px solid #edf6ff}
-    .highlight{font-size:18px;font-weight:700;color:var(--success)}
-    footer.small{margin-top:12px;color:var(--muted);font-size:12px}
-    @media (max-width:640px){
-      .grid{grid-template-columns:1fr}
-    }
+    body{font-family:Arial, sans-serif;background:#f7f9fc;margin:0;padding:20px;direction:rtl}
+    .container{max-width:800px;margin:20px auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
+    h1{margin:0 0 10px;font-size:20px}
+    label{display:block;margin-top:12px;font-weight:bold}
+    input,select{width:100%;padding:8px;margin-top:4px;border:1px solid #ccc;border-radius:6px}
+    .btn{margin-top:16px;background:#0b72d9;color:#fff;border:none;padding:10px 15px;border-radius:6px;cursor:pointer}
+    .result{margin-top:20px;padding:12px;background:#eef6ff;border-radius:6px}
+    .highlight{font-weight:bold;font-size:18px;color:#064e3b}
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="card">
-      <h1>حاسبة معاش التقاعد — صندوق الحماية الاجتماعية (مبسطة)</h1>
-      <p class="lead">أدخل بياناتك للحصول على تقدير تقريبي لمبلغ المعاش الشهري. الحاسبة تطبّق قاعدة 2% لكل سنة كما في النظام المبسّط: (2% × سنوات الخدمة السابقة × الراتب الأخير) + (2% × سنوات الخدمة اللاحقة × متوسط القيمة المستقبلية للأجور) ثم تطبّق خصم التقاعد المبكر إن وُجد، وتراعي الحد الأدنى للضمان إن تم إدخاله.</p>
+    <h1>حاسبة مبسطة لمعاش التقاعد</h1>
+    <p>النظام يحسب على أساس 2% × سنوات الخدمة × الراتب (مع إعادة تقييم الأجور بنسبة نمو 3% للخدمة اللاحقة).</p>
 
-      <div class="grid">
-        <div>
-          <label>سنوات الخدمة السابقة (قبل بدء النظام الجديد)</label>
-          <input id="years_prev" type="number" min="0" step="0.1" value="0">
-        </div>
+    <label>سنوات الخدمة السابقة</label>
+    <input id="years_prev" type="number" value="13">
 
-        <div>
-          <label>سنوات الخدمة اللاحقة (بعد بدء النظام الجديد)</label>
-          <input id="years_after" type="number" min="0" step="0.1" value="0">
-        </div>
+    <label>سنوات الخدمة اللاحقة</label>
+    <input id="years_after" type="number" value="15">
 
-        <div>
-          <label>الراتب الأخير المعاد تقييمه (ريال عماني)</label>
-          <input id="last_salary" type="number" min="0" step="0.01" value="1000">
-        </div>
+    <label>الراتب الحالي (ريال عماني)</label>
+    <input id="salary_now" type="number" value="890">
 
-        <div>
-          <label>متوسط القيمة المستقبلية للأجور (للخدمة اللاحقة) (ريال عماني)</label>
-          <input id="avg_future_salary" type="number" min="0" step="0.01" value="1000">
-        </div>
+    <button class="btn" onclick="calc()">احسب المعاش</button>
 
-        <div>
-          <label>هل التقاعد مبكّر؟</label>
-          <select id="early_select">
-            <option value="no" selected>لا — لا خصم</option>
-            <option value="yes">نعم — تطبيق خصم سنوي على المعاش</option>
-          </select>
-        </div>
-
-        <div>
-          <label>عدد سنوات التقاعد المبكّر (إذا وُجد)</label>
-          <input id="early_years" type="number" min="0" step="0.1" value="0">
-        </div>
-
-        <div class="full">
-          <label>نسبة الخصم عن كل سنة تقاعد مبكّر (٪) — (افتراضي: 3%)</label>
-          <input id="early_pct_per_year" type="number" min="0" step="0.01" value="3">
-          <div class="small">يمكنك تعديل هذه النسبة لتتناسب مع سياسة خاصة أو قرار تعسفي — الحاسبة لا تفترض صيغة خصم رسمية محددة بل تترك قابلية الضبط.</div>
-        </div>
-
-        <div class="full">
-          <label>الحد الأدنى للضمان النقدي (إن وُجد) — يترك فارغاً لو لم تطبق</label>
-          <input id="min_guarantee" type="number" min="0" step="0.01" placeholder="مثلاً: 300">
-          <div class="small">إذا أدخلت قيمة، سيُعرض الحد الأدنى ويُؤخذ الأكبر بينه وبين المعاش المحسوب.</div>
-        </div>
-
-        <div class="full row" style="justify-content:space-between;align-items:center">
-          <div>
-            <button id="calcBtn" class="btn">احسب المعاش</button>
-            <button id="resetBtn" class="btn" style="background:#6b7280;margin-left:8px">إعادة ضبط</button>
-          </div>
-          <div class="small">القواعد المستخدمة: النسبة الأساسية = 2% لكل سنة خدمة.</div>
-        </div>
-      </div>
-
-      <div id="result" class="result" style="display:none">
-        <div><strong>النتيجة النهائية:</strong></div>
-        <div style="margin-top:8px">
-          <span>المعاش الشهري المقدر: </span>
-          <span id="finalAmount" class="highlight">0.00 ر.ع</span>
-        </div>
-
-        <div class="breakdown">
-          <div><strong>تفصيل الحساب:</strong></div>
-          <div id="detail_prev" style="margin-top:8px"></div>
-          <div id="detail_after" style="margin-top:6px"></div>
-          <div id="detail_early" style="margin-top:6px"></div>
-          <div id="detail_guarantee" style="margin-top:6px"></div>
-        </div>
-
-        <footer class="small">
-          ملاحظة: هذه الحاسبة تبسيطية وتعتمد على المعطيات التي أدخلتها. إذا أردت تطبيق قواعد رسميّة أدق (مثل إعادة تقييم الأجور سنوياً وفق عوامل محددة، أو جداول خصم فعلية عند التقاعد المبكّر حسب التشريع)، أرسل لي البيانات أو القانون الرسمي وسأحسّن الحاسبة لتطابقها بدقة.
-        </footer>
-      </div>
-
+    <div id="result" class="result" style="display:none">
+      <p><strong>المعاش التقاعدي المقدر:</strong> <span id="finalAmount" class="highlight"></span> ر.ع</p>
+      <p id="detail_prev"></p>
+      <p id="detail_after"></p>
+      <p id="detail_avg"></p>
     </div>
   </div>
 
 <script>
-  // عناصر الصفحة
-  const yearsPrev = document.getElementById('years_prev');
-  const yearsAfter = document.getElementById('years_after');
-  const lastSalary = document.getElementById('last_salary');
-  const avgFuture = document.getElementById('avg_future_salary');
-  const earlySelect = document.getElementById('early_select');
-  const earlyYears = document.getElementById('early_years');
-  const earlyPct = document.getElementById('early_pct_per_year');
-  const minGuarantee = document.getElementById('min_guarantee');
+function calc(){
+  const yearsPrev = parseFloat(document.getElementById('years_prev').value)||0;
+  const yearsAfter = parseFloat(document.getElementById('years_after').value)||0;
+  const salaryNow = parseFloat(document.getElementById('salary_now').value)||0;
 
-  const calcBtn = document.getElementById('calcBtn');
-  const resetBtn = document.getElementById('resetBtn');
+  const growth = 0.03; // نسبة النمو 3%
 
-  const resultDiv = document.getElementById('result');
-  const finalAmountEl = document.getElementById('finalAmount');
-  const detailPrev = document.getElementById('detail_prev');
-  const detailAfter = document.getElementById('detail_after');
-  const detailEarly = document.getElementById('detail_early');
-  const detailGuarantee = document.getElementById('detail_guarantee');
+  // الراتب عند التقاعد بعد كل الخدمة (نهاية الفترة اللاحقة)
+  const salaryAtRetire = salaryNow * Math.pow(1+growth, yearsAfter);
 
-  // ثابت النسبة الأساسية (2%)
-  const basePct = 2; // percent per year
+  // متوسط القيمة المستقبلية للأجور للخدمة اللاحقة:
+  // = salaryNow * (( (1+g)^yearsAfter - 1) / (yearsAfter * g))
+  const avgFuture = salaryNow * ( (Math.pow(1+growth, yearsAfter) - 1) / (yearsAfter * growth) ) * (1+growth);
 
-  function formatOMR(x){
-    // ثابت دقيق لعرض النتيجة مع فصل الآلاف
-    return Number(x).toLocaleString('ar-EG', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' ر.ع';
-  }
+  // مكوّن الخدمة السابقة (باستخدام الراتب عند التقاعد)
+  const prevPart = 0.02 * yearsPrev * salaryAtRetire;
 
-  calcBtn.addEventListener('click', function(){
-    // قراءة القيم
-    const yPrev = parseFloat(yearsPrev.value) || 0;
-    const yAfter = parseFloat(yearsAfter.value) || 0;
-    const salaryLast = parseFloat(lastSalary.value) || 0;
-    const avgF = parseFloat(avgFuture.value) || 0;
-    const early = (earlySelect.value === 'yes');
-    const eYears = parseFloat(earlyYears.value) || 0;
-    const ePctPerYear = parseFloat(earlyPct.value) || 0;
-    const minG = (minGuarantee.value === '') ? null : (parseFloat(minGuarantee.value) || 0);
+  // مكوّن الخدمة اللاحقة (باستخدام المتوسط المحسوب)
+  const afterPart = 0.02 * yearsAfter * avgFuture;
 
-    // حساب جزئي للخدمة السابقة
-    const prevComponent = (basePct/100) * yPrev * salaryLast;
+  const total = prevPart + afterPart;
 
-    // حساب جزئي للخدمة اللاحقة
-    const afterComponent = (basePct/100) * yAfter * avgF;
+  document.getElementById('result').style.display='block';
+  document.getElementById('finalAmount').textContent = total.toFixed(2);
 
-    // مجموع مبدئي قبل خصم المبكر
-    let grossPension = prevComponent + afterComponent;
+  document.getElementById('detail_prev').textContent =
+    `الخدمة السابقة: 2% × ${yearsPrev} × ${salaryAtRetire.toFixed(2)} = ${prevPart.toFixed(2)} ر.ع`;
 
-    // تطبيق خصم التقاعد المبكر (إن وجد)
-    let earlyDeduction = 0;
-    let pensionAfterEarly = grossPension;
-    if (early && eYears > 0 && ePctPerYear > 0){
-      // نحسب نسبة الخصم الإجمالية = eYears * ePctPerYear
-      // ثم نخصمها من المعاش
-      const totalPct = (eYears * ePctPerYear);
-      earlyDeduction = grossPension * (totalPct/100);
-      pensionAfterEarly = grossPension - earlyDeduction;
-      if (pensionAfterEarly < 0) pensionAfterEarly = 0;
-    }
+  document.getElementById('detail_after').textContent =
+    `الخدمة اللاحقة: 2% × ${yearsAfter} × متوسط الأجور المستقبلية (${avgFuture.toFixed(2)}) = ${afterPart.toFixed(2)} ر.ع`;
 
-    // تطبيق الضمان الأدنى إذا وُجد
-    let finalPension = pensionAfterEarly;
-    let guaranteeApplied = false;
-    if (minG !== null && !isNaN(minG)){
-      if (minG > finalPension){
-        finalPension = minG;
-        guaranteeApplied = true;
-      }
-    }
-
-    // عرض النتائج
-    resultDiv.style.display = 'block';
-    finalAmountEl.textContent = formatOMR(finalPension);
-
-    detailPrev.innerHTML = `<strong>خدمة سابقة:</strong> ${yPrev} سنة × ${basePct}% × ${formatOMR(salaryLast)} = <strong>${formatOMR(prevComponent)}</strong>`;
-    detailAfter.innerHTML = `<strong>خدمة لاحقة:</strong> ${yAfter} سنة × ${basePct}% × ${formatOMR(avgF)} = <strong>${formatOMR(afterComponent)}</strong>`;
-    detailEarly.innerHTML = `<strong>المجموع قبل خصم المبكر:</strong> ${formatOMR(grossPension)}${ early && eYears>0 ? `<br><strong>خصم التقاعد المبكّر:</strong> ${eYears} سنة × ${ePctPerYear}% = نسبة إجمالية ${(eYears*ePctPerYear).toFixed(2)}% → مقدار الخصم ${formatOMR(earlyDeduction)} → بعد الخصم ${formatOMR(pensionAfterEarly)}` : '' }`;
-    detailGuarantee.innerHTML = minG !== null ? `<strong>الحد الأدنى للضمان:</strong> ${formatOMR(minG)} ${guaranteeApplied ? '⇒ تم تطبيق الضمان (الحد أكبر من المحسوب).' : '⇒ لم يطبق لأن المحسوب أعلى.'}` : '<em>لم يتم إدخال حد ضمان نقدي.</em>';
-  });
-
-  resetBtn.addEventListener('click', function(){
-    yearsPrev.value = 0;
-    yearsAfter.value = 0;
-    lastSalary.value = 1000;
-    avgFuture.value = 1000;
-    earlySelect.value = 'no';
-    earlyYears.value = 0;
-    earlyPct.value = 3;
-    minGuarantee.value = '';
-    resultDiv.style.display = 'none';
-  });
-
-  // تشغيل سريع عند الفتح لإظهار مثال
-  window.addEventListener('load', () => {
-    // مثال افتراضي (يمكن للمستخدم تغييره)
-    yearsPrev.value = 10;
-    yearsAfter.value = 15;
-    lastSalary.value = 1000;
-    avgFuture.value = 1200;
-  });
+  document.getElementById('detail_avg').textContent =
+    `متوسط القيمة المستقبلية للأجور محسوب تلقائيًا بنسبة نمو 3% = ${avgFuture.toFixed(2)} ر.ع`;
+}
 </script>
 </body>
 </html>
