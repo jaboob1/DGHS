@@ -25,16 +25,16 @@
     <h1>حاسبة الراتب التقاعدي (احتساب قديم + جديد)</h1>
 
     <form id="inputs">
-      <label>الراتب الأخير (ريال):</label>
+      <label>الراتب الأخير (ديسمبر 2023م )(ريال):</label>
       <input type="number" id="salaryStart" value="875" step="0.01">
 
-      <label>عدد السنوات السابقة:</label>
+      <label>عدد السنوات السابقة قبل سنة 2024م:</label>
       <input type="number" id="prevYears" value="13">
 
-      <label>عدد السنوات المستقبلية:</label>
+      <label>عدد السنوات المستقبلية بعد يناير 2024م:</label>
       <input type="number" id="futureYears" value="20">
 
-      <label>نسبة النمو السنوي للأجور (%):</label>
+      <label>نسبة النمو السنوي للأجور (%3):</label>
       <input type="number" id="growthRate" value="3" step="0.01">
 
       <br>
@@ -53,13 +53,13 @@
 
     <div class="summary">
       <div class="box">
-        <div><strong>الخدمة السابقة</strong></div>
-        <div>المعادلة: 2% × الراتب الأخير × السنوات السابقة</div>
+        <div><strong>الخدمة السابقة قبل 2024م</strong></div>
+        <div>المعادلة: 2% × الراتب الأخير ديسمبر 2023 × السنوات السابقة قبل يناير 2024م</div>
         <div>النتيجة: <strong id="prevPart">--</strong> ريال</div>
       </div>
 
       <div class="box">
-        <div><strong>الخدمة المستقبلية</strong></div>
+        <div><strong>الخدمة المستقبلية ما بعد يناير 2024م </strong></div>
         <div>المعادلة: 2% × متوسط الأجر × السنوات المستقبلية</div>
         <div>متوسط الأجر: <strong id="avgSalary">--</strong> ريال</div>
         <div>النتيجة: <strong id="futurePart">--</strong> ريال</div>
