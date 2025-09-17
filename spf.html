@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
   <meta charset="utf-8">
-  <title>حاسبة الراتب التقاعدي (معامل 2%)</title>
+  <title>حاسبة الراتب التقاعدي (احتساب قديم + جديد)</title>
   <style>
     body{direction:rtl; font-family:Tahoma,Arial,sans-serif; background:#f7f9fb; padding:20px; color:#111}
     .card{background:#fff; border-radius:8px; padding:18px; box-shadow:0 2px 8px rgba(0,0,0,0.06); max-width:950px; margin:0 auto}
@@ -22,7 +22,7 @@
 </head>
 <body>
   <div class="card">
-    <h1>حاسبة الراتب التقاعدي (معامل 2%)</h1>
+    <h1>حاسبة الراتب التقاعدي (احتساب قديم + جديد)</h1>
 
     <form id="inputs">
       <label>الراتب الأخير (ريال):</label>
@@ -54,8 +54,7 @@
     <div class="summary">
       <div class="box">
         <div><strong>الخدمة السابقة</strong></div>
-        <div>المعادلة: 2% × الراتب الأخير المقيّم × السنوات السابقة</div>
-        <div>الراتب الأخير المقيّم: <strong id="revaluatedSalary">--</strong> ريال</div>
+        <div>المعادلة: 2% × الراتب الأخير × السنوات السابقة</div>
         <div>النتيجة: <strong id="prevPart">--</strong> ريال</div>
       </div>
 
@@ -72,9 +71,7 @@
       </div>
     </div>
 
-    <div class="formula" id="formulaText">
-      <!-- يظهر التوضيح الكتابي للمعادلة هنا -->
-    </div>
+    <div class="formula" id="formulaText"></div>
   </div>
 
 <script>
@@ -104,16 +101,12 @@ function calculate(){
   // متوسط الأجر للخدمة المستقبلية
   let avgSalary = salaries.reduce((a,b)=>a+b,0)/salaries.length;
 
-  // الراتب الأخير المقيّم (بعد 20 سنة نمو)
-  let revaluatedSalary = salaryStart * Math.pow(1+g, futureYears);
-
   // حساب أجزاء المعاش (معامل 2%)
-  let prevPart = revaluatedSalary * (prevYears * 0.02);
+  let prevPart = salaryStart * (prevYears * 0.02);   // ← باستخدام الراتب الأخير فقط
   let futurePart = avgSalary * (futureYears * 0.02);
   let total = prevPart + futurePart;
 
   // عرض النتائج
-  document.getElementById('revaluatedSalary').textContent = format(revaluatedSalary);
   document.getElementById('prevPart').textContent = format(prevPart);
   document.getElementById('avgSalary').textContent = format(avgSalary);
   document.getElementById('futurePart').textContent = format(futurePart);
@@ -122,7 +115,7 @@ function calculate(){
   // توضيح كتابي للمعادلة
   document.getElementById('formulaText').innerHTML = `
     <strong>توضيح الحساب:</strong><br>
-    • <u>الخدمة السابقة (${prevYears} سنة)</u> = 2% × ${format(revaluatedSalary)} × ${prevYears} = <strong>${format(prevPart)} ريال</strong><br>
+    • <u>الخدمة السابقة (${prevYears} سنة)</u> = 2% × ${format(salaryStart)} × ${prevYears} = <strong>${format(prevPart)} ريال</strong><br>
     • <u>الخدمة المستقبلية (${futureYears} سنة)</u> = 2% × ${format(avgSalary)} × ${futureYears} = <strong>${format(futurePart)} ريال</strong><br>
     • <u>المعاش الكلي</u> = ${format(prevPart)} + ${format(futurePart)} = <strong>${format(total)} ريال</strong>
   `;
