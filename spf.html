@@ -2,13 +2,13 @@
 <html lang="ar">
 <head>
   <meta charset="utf-8">
-  <title>حاسبة الراتب التقاعدي</title>
+  <title>حاسبة الراتب التقاعدي (حسب معادلة 2%)</title>
   <style>
     body{direction:rtl; font-family:Tahoma,Arial,sans-serif; background:#f7f9fb; padding:20px; color:#111}
     .card{background:#fff; border-radius:8px; padding:18px; box-shadow:0 2px 8px rgba(0,0,0,0.06); max-width:950px; margin:0 auto}
     h1{font-size:20px; margin-bottom:10px}
     label{display:block; margin:8px 0 4px}
-    input{padding:6px 8px; border:1px solid #ccc; border-radius:4px; width:200px}
+    input{padding:6px 8px; border:1px solid #ccc; border-radius:4px; width:220px}
     button{margin-top:12px; padding:8px 14px; background:#2b6cb0; color:#fff; border:none; border-radius:6px; cursor:pointer}
     button:hover{background:#1a4f80}
     table{width:100%; border-collapse:collapse; margin-top:14px}
@@ -21,7 +21,7 @@
 </head>
 <body>
   <div class="card">
-    <h1>حاسبة الراتب التقاعدي</h1>
+    <h1>حاسبة الراتب التقاعدي (معامل 2%)</h1>
 
     <form id="inputs">
       <label>الراتب الأخير (ريال):</label>
@@ -53,13 +53,14 @@
     <div class="summary">
       <div class="box">
         <div><strong>الخدمة السابقة</strong></div>
-        <div>المعادلة: الراتب الأخير × (السنوات × 2%)</div>
+        <div>المعادلة: 2% × الراتب الأخير المقيّم × السنوات السابقة</div>
+        <div>الراتب الأخير المقيّم: <strong id="revaluatedSalary">--</strong> ريال</div>
         <div>النتيجة: <strong id="prevPart">--</strong> ريال</div>
       </div>
 
       <div class="box">
         <div><strong>الخدمة المستقبلية</strong></div>
-        <div>المعادلة: متوسط الأجر × (السنوات × 2.5%)</div>
+        <div>المعادلة: 2% × متوسط الأجر × السنوات المستقبلية</div>
         <div>متوسط الأجر: <strong id="avgSalary">--</strong> ريال</div>
         <div>النتيجة: <strong id="futurePart">--</strong> ريال</div>
       </div>
@@ -94,11 +95,19 @@ function calculate(){
     tbody.appendChild(tr);
   }
 
+  // متوسط الأجر للخدمة المستقبلية
   let avgSalary = salaries.reduce((a,b)=>a+b,0)/salaries.length;
-  let prevPart = salaryStart * (prevYears*0.02);
-  let futurePart = avgSalary * (futureYears*0.020);
+
+  // الراتب الأخير المعاد تقييمه (بعد 20 سنة نمو)
+  let revaluatedSalary = salaryStart * Math.pow(1+g, futureYears);
+
+  // حساب أجزاء المعاش (معامل 2%)
+  let prevPart = revaluatedSalary * (prevYears * 0.02);
+  let futurePart = avgSalary * (futureYears * 0.02);
   let total = prevPart + futurePart;
 
+  // عرض النتائج
+  document.getElementById('revaluatedSalary').textContent = format(revaluatedSalary);
   document.getElementById('prevPart').textContent = format(prevPart);
   document.getElementById('avgSalary').textContent = format(avgSalary);
   document.getElementById('futurePart').textContent = format(futurePart);
