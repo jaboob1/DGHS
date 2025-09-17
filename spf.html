@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
   <meta charset="utf-8">
-  <title>حاسبة الراتب التقاعدي (حسب معادلة 2%)</title>
+  <title>حاسبة الراتب التقاعدي (معامل 2%)</title>
   <style>
     body{direction:rtl; font-family:Tahoma,Arial,sans-serif; background:#f7f9fb; padding:20px; color:#111}
     .card{background:#fff; border-radius:8px; padding:18px; box-shadow:0 2px 8px rgba(0,0,0,0.06); max-width:950px; margin:0 auto}
@@ -17,6 +17,7 @@
     .summary{margin-top:16px; display:flex; gap:12px; flex-wrap:wrap}
     .box{background:#f1f6fb; padding:12px; border-radius:6px; min-width:220px}
     strong{color:#2b6cb0}
+    .formula{margin-top:18px; padding:12px; background:#fffbea; border:1px solid #f0e6a6; border-radius:6px; line-height:1.6}
   </style>
 </head>
 <body>
@@ -70,6 +71,10 @@
         <div style="font-size:18px">المجموع: <strong id="totalPension">--</strong> ريال</div>
       </div>
     </div>
+
+    <div class="formula" id="formulaText">
+      <!-- يظهر التوضيح الكتابي للمعادلة هنا -->
+    </div>
   </div>
 
 <script>
@@ -86,8 +91,9 @@ function calculate(){
   tbody.innerHTML = '';
   let salaries = [];
 
-  for(let i=0; i<futureYears; i++){
-    let year = 2024 + i;
+  // نمو الأجور يبدأ من الراتب الأخير مباشرة
+  for(let i=1; i<=futureYears; i++){
+    let year = 2023 + i;
     let salary = salaryStart * Math.pow(1+g, i);
     salaries.push(salary);
     let tr = document.createElement('tr');
@@ -98,7 +104,7 @@ function calculate(){
   // متوسط الأجر للخدمة المستقبلية
   let avgSalary = salaries.reduce((a,b)=>a+b,0)/salaries.length;
 
-  // الراتب الأخير المعاد تقييمه (بعد 20 سنة نمو)
+  // الراتب الأخير المقيّم (بعد 20 سنة نمو)
   let revaluatedSalary = salaryStart * Math.pow(1+g, futureYears);
 
   // حساب أجزاء المعاش (معامل 2%)
@@ -112,6 +118,14 @@ function calculate(){
   document.getElementById('avgSalary').textContent = format(avgSalary);
   document.getElementById('futurePart').textContent = format(futurePart);
   document.getElementById('totalPension').textContent = format(total);
+
+  // توضيح كتابي للمعادلة
+  document.getElementById('formulaText').innerHTML = `
+    <strong>توضيح الحساب:</strong><br>
+    • <u>الخدمة السابقة (${prevYears} سنة)</u> = 2% × ${format(revaluatedSalary)} × ${prevYears} = <strong>${format(prevPart)} ريال</strong><br>
+    • <u>الخدمة المستقبلية (${futureYears} سنة)</u> = 2% × ${format(avgSalary)} × ${futureYears} = <strong>${format(futurePart)} ريال</strong><br>
+    • <u>المعاش الكلي</u> = ${format(prevPart)} + ${format(futurePart)} = <strong>${format(total)} ريال</strong>
+  `;
 }
 </script>
 </body>
