@@ -90,7 +90,7 @@ function calculate(){
 
   // نمو الأجور يبدأ من الراتب الأخير مباشرة
   for(let i=1; i<=futureYears; i++){
-    let year = 2024 + i;
+    let year = 2023 + i;
     let salary = salaryStart * Math.pow(1+g, i);
     salaries.push(salary);
     let tr = document.createElement('tr');
