@@ -25,7 +25,7 @@
     <h1>حاسبة الراتب التقاعدي (احتساب قديم + جديد)</h1>
 
     <form id="inputs">
-      <label>الراتب الأخير (ديسمبر 2023م )(ريال):</label>
+      <label>الراتب الأخير في ديسمبر 2023م:</label>
       <input type="number" id="salaryStart" value="875" step="0.01">
 
       <label>عدد السنوات السابقة قبل سنة 2024م:</label>
@@ -60,7 +60,7 @@
 
       <div class="box">
         <div><strong>الخدمة المستقبلية ما بعد يناير 2024م </strong></div>
-        <div>المعادلة: 2% × متوسط الأجر × السنوات المستقبلية</div>
+        <div>المعادلة: 2% × متوسط الأجر × السنوات المستقبلية ما بعد يناير 2024م</div>
         <div>متوسط الأجر: <strong id="avgSalary">--</strong> ريال</div>
         <div>النتيجة: <strong id="futurePart">--</strong> ريال</div>
       </div>
@@ -90,7 +90,7 @@ function calculate(){
 
   // نمو الأجور يبدأ من الراتب الأخير مباشرة
   for(let i=1; i<=futureYears; i++){
-    let year = 2023 + i;
+    let year = 2024 + i;
     let salary = salaryStart * Math.pow(1+g, i);
     salaries.push(salary);
     let tr = document.createElement('tr');
