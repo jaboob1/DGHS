@@ -2,37 +2,48 @@
 <html lang="ar">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>حساب الراتب التقاعدي</title>
+  <title>حاسبة الراتب التقاعدي</title>
   <style>
-    :root{font-family: "Segoe UI", Tahoma, Arial, sans-serif}
-    body{direction: rtl; text-align: right; padding:20px; background:#f7f9fb; color:#111}
-    .card{background:#fff; border-radius:8px; padding:18px; box-shadow:0 2px 8px rgba(0,0,0,0.06); max-width:900px; margin:0 auto}
-    h1{margin:0 0 10px 0; font-size:20px}
-    table{width:100%; border-collapse:collapse; margin-top:12px}
+    body{direction:rtl; font-family:Tahoma,Arial,sans-serif; background:#f7f9fb; padding:20px; color:#111}
+    .card{background:#fff; border-radius:8px; padding:18px; box-shadow:0 2px 8px rgba(0,0,0,0.06); max-width:950px; margin:0 auto}
+    h1{font-size:20px; margin-bottom:10px}
+    label{display:block; margin:8px 0 4px}
+    input{padding:6px 8px; border:1px solid #ccc; border-radius:4px; width:200px}
+    button{margin-top:12px; padding:8px 14px; background:#2b6cb0; color:#fff; border:none; border-radius:6px; cursor:pointer}
+    button:hover{background:#1a4f80}
+    table{width:100%; border-collapse:collapse; margin-top:14px}
     th,td{padding:8px 10px; border-bottom:1px solid #eee; font-size:14px}
-    th{background:#fafafa; font-weight:600}
-    .summary{margin-top:14px; display:flex; gap:12px; flex-wrap:wrap}
-    .box{background:#f1f6fb; padding:12px; border-radius:6px; min-width:200px}
-    .btns{margin-top:14px}
-    button{padding:8px 12px; border-radius:6px; border:1px solid #2b6cb0; background:#2b6cb0; color:#fff; cursor:pointer}
-    small{color:#555}
+    th{background:#fafafa}
+    .summary{margin-top:16px; display:flex; gap:12px; flex-wrap:wrap}
+    .box{background:#f1f6fb; padding:12px; border-radius:6px; min-width:220px}
+    strong{color:#2b6cb0}
   </style>
 </head>
 <body>
   <div class="card">
-    <h1>حاسبة الراتب التقاعدي — تبسيط حسب معطياتك</h1>
-    <p><small>المعطيات المستخدمة: آخر راتب أساسي (31-12-2023) = <strong id="salaryStartText">875</strong> ريال، سنوات سابقة = <strong id="prevYearsText">13</strong> سنة (تحسب بمعامل 2% لكل سنة)، سنوات مستقبلية = <strong id="futureYearsText">20</strong> سنة، نمو الأجور السنوي = <strong id="growthText">3%</strong>.</small></p>
+    <h1>حاسبة الراتب التقاعدي</h1>
 
-    <div class="btns">
-      <button id="recalcBtn">أعد الحساب (تغيير القيم أعلاه)</button>
-    </div>
+    <form id="inputs">
+      <label>الراتب الأخير (ريال):</label>
+      <input type="number" id="salaryStart" value="875" step="0.01">
 
-    <table id="salaryTable" aria-label="جدول الرواتب">
+      <label>عدد السنوات السابقة:</label>
+      <input type="number" id="prevYears" value="13">
+
+      <label>عدد السنوات المستقبلية:</label>
+      <input type="number" id="futureYears" value="20">
+
+      <label>نسبة النمو السنوي للأجور (%):</label>
+      <input type="number" id="growthRate" value="3" step="0.01">
+
+      <br>
+      <button type="button" onclick="calculate()">احسب</button>
+    </form>
+
+    <table id="salaryTable">
       <thead>
         <tr>
           <th>السنة</th>
-          <th>الرقم (سنة من 0)</th>
           <th>الراتب المتوقع (ريال)</th>
         </tr>
       </thead>
@@ -41,115 +52,58 @@
 
     <div class="summary">
       <div class="box">
-        <div><strong>حساب الخدمة السابقة</strong></div>
-        <div>المعادلة: <em>الراتب الأخير × (عدد السنوات السابقة × 2%)</em></div>
-        <div style="margin-top:6px">نتيجة: <strong id="prevPart">--</strong> ريال</div>
+        <div><strong>الخدمة السابقة</strong></div>
+        <div>المعادلة: الراتب الأخير × (السنوات × 2%)</div>
+        <div>النتيجة: <strong id="prevPart">--</strong> ريال</div>
       </div>
 
       <div class="box">
-        <div><strong>حساب السنوات المستقبلية</strong></div>
-        <div>المعادلة: <em>متوسط الأجر على سنوات المستقبل × (عدد السنوات المستقبلية × 2.5%)</em></div>
-        <div style="margin-top:6px">متوسط الأجر (20 سنة): <strong id="avgSalary">--</strong> ريال</div>
-        <div>نتيجة جزء المستقبل: <strong id="futurePart">--</strong> ريال</div>
+        <div><strong>الخدمة المستقبلية</strong></div>
+        <div>المعادلة: متوسط الأجر × (السنوات × 2.5%)</div>
+        <div>متوسط الأجر: <strong id="avgSalary">--</strong> ريال</div>
+        <div>النتيجة: <strong id="futurePart">--</strong> ريال</div>
       </div>
 
       <div class="box">
-        <div><strong>النتيجة النهائية</strong></div>
-        <div style="margin-top:6px">مجموع المعاش المتوقع الشهري: <span style="font-size:18px"><strong id="totalPension">--</strong> ريال</span></div>
+        <div><strong>المعاش التقاعدي المتوقع</strong></div>
+        <div style="font-size:18px">المجموع: <strong id="totalPension">--</strong> ريال</div>
       </div>
     </div>
-
-    <p style="margin-top:12px"><small>ملاحظة: هذه حسابات تقريبية مبسطة بناءً على افتراض ثبات طريقة الحساب ونمو سنوي ثابت 3%. المتوسط حسبناَه بدقة رياضية (متوسط القيم السنوية)، وليس المتوسط التقريبي (بداية+نهاية)/2.</small></p>
   </div>
 
 <script>
-(function(){
-  // الافتراضات الافتراضية (يمكن تغييرها)
-  let salaryStart = 875;     // الراتب في 2023 (يعتبر بداية 2024)
-  let prevYears = 13;        // سنوات سابقة قبل 2024
-  let futureYears = 20;      // سنوات بعد 2024 حتى التقاعد
-  let annualGrowth = 0.03;   // نمو سنوي 3%
+function format(x){return Number(x).toLocaleString('ar-EG',{minimumFractionDigits:2, maximumFractionDigits:2});}
 
-  // عناصر لعرض القيم
-  const tbody = document.querySelector('#salaryTable tbody');
-  const prevPartEl = document.getElementById('prevPart');
-  const avgSalaryEl = document.getElementById('avgSalary');
-  const futurePartEl = document.getElementById('futurePart');
-  const totalPensionEl = document.getElementById('totalPension');
+function calculate(){
+  let salaryStart = parseFloat(document.getElementById('salaryStart').value) || 0;
+  let prevYears = parseInt(document.getElementById('prevYears').value) || 0;
+  let futureYears = parseInt(document.getElementById('futureYears').value) || 0;
+  let growthRate = parseFloat(document.getElementById('growthRate').value) || 0;
 
-  const salaryStartText = document.getElementById('salaryStartText');
-  const prevYearsText = document.getElementById('prevYearsText');
-  const futureYearsText = document.getElementById('futureYearsText');
-  const growthText = document.getElementById('growthText');
+  let g = growthRate/100;
+  let tbody = document.querySelector('#salaryTable tbody');
+  tbody.innerHTML = '';
+  let salaries = [];
 
-  function format(x){ return Number(x).toLocaleString('ar-EG',{minimumFractionDigits:2, maximumFractionDigits:2}); }
-
-  function calculateAndRender(){
-    // إظهار المعطيات أعلى الصفحة
-    salaryStartText.textContent = format(salaryStart);
-    prevYearsText.textContent = prevYears;
-    futureYearsText.textContent = futureYears;
-    growthText.textContent = (annualGrowth*100).toFixed(2) + '%';
-
-    // بناء جدول الرواتب من 2024 إلى (2024 + futureYears - 1)
-    tbody.innerHTML = '';
-    let salaries = [];
-    for(let i=0; i<futureYears; i++){
-      let year = 2024 + i;
-      let salary = salaryStart * Math.pow(1 + annualGrowth, i); // نمو تراكمي
-      salaries.push(salary);
-      let tr = document.createElement('tr');
-      tr.innerHTML = `<td>${year}</td><td style="text-align:center">${i}</td><td style="text-align:left">${format(salary)}</td>`;
-      tbody.appendChild(tr);
-    }
-
-    // متوسط الأجر على السنوات المستقبلية (حساب دقيق)
-    const sum = salaries.reduce((a,b)=>a+b,0);
-    const avgSalary = sum / salaries.length;
-
-    // حساب جزء السنوات السابقة (بحسب ما طلبت: 2% × عدد السنوات السابقة × الراتب الأخير)
-    const prevPart = salaryStart * (prevYears * 0.02);
-
-    // حساب جزء السنوات المستقبلية (2.5% × عدد السنوات المستقبلية × متوسط الأجر)
-    const futurePart = avgSalary * (futureYears * 0.025);
-
-    // الجمع النهائي
-    const total = prevPart + futurePart;
-
-    // عرض النتائج
-    prevPartEl.textContent = format(prevPart);
-    avgSalaryEl.textContent = format(avgSalary);
-    futurePartEl.textContent = format(futurePart);
-    totalPensionEl.textContent = format(total);
+  for(let i=0; i<futureYears; i++){
+    let year = 2024 + i;
+    let salary = salaryStart * Math.pow(1+g, i);
+    salaries.push(salary);
+    let tr = document.createElement('tr');
+    tr.innerHTML = `<td>${year}</td><td>${format(salary)}</td>`;
+    tbody.appendChild(tr);
   }
 
-  // زر لإعادة الحساب مع إدخال قيم من المستخدم (بسيط)
-  document.getElementById('recalcBtn').addEventListener('click', function(){
-    let s = prompt('أدخل آخر الراتب الأساسي (ريال):', salaryStart);
-    if(s === null) return;
-    let p = prompt('أدخل عدد السنوات السابقة (مثلاً 13):', prevYears);
-    if(p === null) return;
-    let f = prompt('أدخل عدد السنوات المستقبلية (مثلاً 20):', futureYears);
-    if(f === null) return;
-    let g = prompt('أدخل معدل النمو السنوي بالأعداد العشرية أو النسبة (مثلاً 3 أو 0.03):', annualGrowth*100);
+  let avgSalary = salaries.reduce((a,b)=>a+b,0)/salaries.length;
+  let prevPart = salaryStart * (prevYears*0.02);
+  let futurePart = avgSalary * (futureYears*0.020);
+  let total = prevPart + futurePart;
 
-    // تحويل القيم وإعادة الحساب
-    salaryStart = Math.max(0, parseFloat(s) || salaryStart);
-    prevYears = Math.max(0, parseInt(p,10) || prevYears);
-    futureYears = Math.max(1, parseInt(f,10) || futureYears);
-
-    // مرونة في قراءة المدخل (3 أو 0.03)
-    let gnum = parseFloat(g);
-    if(!isNaN(gnum)){
-      annualGrowth = (gnum > 1) ? (gnum/100) : gnum;
-    }
-
-    calculateAndRender();
-  });
-
-  // الحساب الأولي
-  calculateAndRender();
-})();
+  document.getElementById('prevPart').textContent = format(prevPart);
+  document.getElementById('avgSalary').textContent = format(avgSalary);
+  document.getElementById('futurePart').textContent = format(futurePart);
+  document.getElementById('totalPension').textContent = format(total);
+}
 </script>
 </body>
 </html>
