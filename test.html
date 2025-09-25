@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة رواتب الموظفين</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        input[type="date"], input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        input[type="date"]:focus, input[type="number"]:focus, input[type="text"]:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        .date-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .date-row .form-group {
+            flex: 1;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .result-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-right: 4px solid #3498db;
+        }
+        
+        .result-section h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .result-value {
+            font-weight: 600;
+            color: #27ae60;
+        }
+        
+        .total-salary {
+            font-size: 1.2em;
+            color: #e74c3c;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid #ddd;
+        }
+        
+        @media (max-width: 600px) {
+            .date-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>حاسبة رواتب الموظفين</h1>
+        
+        <div class="form-group">
+            <label for="startDate">تاريخ البدء:</label>
+            <input type="date" id="startDate">
+        </div>
+        
+        <div class="form-group">
+            <label for="endDate">تاريخ الانتهاء:</label>
+            <input type="date" id="endDate">
+        </div>
+        
+        <div class="form-group">
+            <label for="salary">راتب التعاقد (شهري):</label>
+            <input type="number" id="salary" placeholder="أدخل الراتب الشهري">
+        </div>
+        
+        <button id="calculateBtn">احسب الراتب</button>
+        
+        <div class="result-section" id="resultSection" style="display: none;">
+            <h2>نتيجة الحساب</h2>
+            <div class="result-item">
+                <span class="result-label">فترة العمل:</span>
+                <span class="result-value" id="periodResult"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">إجمالي الأيام:</span>
+                <span class="result-value" id="totalDays"></span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">الراتب اليومي:</span>
+                <span class="result-value" id="dailySalary"></span>
+            </div>
+            <div class="result-item total-salary">
+                <span class="result-label">الراتب المستحق:</span>
+                <span class="result-value" id="finalSalary"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            // الحصول على القيم من المدخلات
+            const startDate = new Date(document.getElementById('startDate').value);
+            const endDate = new Date(document.getElementById('endDate').value);
+            const salary = parseFloat(document.getElementById('salary').value);
+            
+            // التحقق من صحة المدخلات
+            if (!startDate || !endDate || isNaN(salary) || salary <= 0) {
+                alert('يرجى التأكد من إدخال جميع البيانات بشكل صحيح');
+                return;
+            }
+            
+            if (startDate > endDate) {
+                alert('تاريخ البدء يجب أن يكون قبل تاريخ الانتهاء');
+                return;
+            }
+            
+            // حساب الفترة بالكامل مع مراعاة الأشهر المختلفة
+            const result = calculateSalaryForPeriod(startDate, endDate, salary);
+            
+            // عرض النتائج
+            document.getElementById('periodResult').textContent = 
+                `${formatDate(startDate)} - ${formatDate(endDate)}`;
+            document.getElementById('totalDays').textContent = result.totalDays + ' يوم';
+            document.getElementById('dailySalary').textContent = result.dailySalary.toFixed(2) + ' ريال/يوم';
+            document.getElementById('finalSalary').textContent = result.finalSalary.toFixed(2) + ' ريال';
+            
+            // إظهار قسم النتائج
+            document.getElementById('resultSection').style.display = 'block';
+        });
+        
+        function calculateSalaryForPeriod(startDate, endDate, monthlySalary) {
+            let currentDate = new Date(startDate);
+            let totalSalary = 0;
+            let totalDays = 0;
+            
+            // حساب الراتب اليومي (بافتراض أن الشهر 30 يوم)
+            const dailySalary = monthlySalary / 30;
+            
+            // التكرار خلال كل يوم في الفترة
+            while (currentDate <= endDate) {
+                totalDays++;
+                totalSalary += dailySalary;
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            
+            return {
+                totalDays: totalDays,
+                dailySalary: dailySalary,
+                finalSalary: totalSalary
+            };
+        }
+        
+        function formatDate(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+        
+        // تعيين التواريخ الافتراضية لتسهيل الاختبار
+        window.onload = function() {
+            const today = new Date();
+            const nextMonth = new Date(today);
+            nextMonth.setMonth(nextMonth.getMonth() + 1);
+            
+            document.getElementById('startDate').valueAsDate = today;
+            document.getElementById('endDate').valueAsDate = nextMonth;
+        };
+    </script>
+</body>
+</html>
