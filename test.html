@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة رواتب الموظفين</title>
+    <title>حاسبة رواتب الموظفين - حساب دقيق</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,19 +13,32 @@
         }
         
         body {
-            background-color: #f5f7fa;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: #333;
             line-height: 1.6;
             padding: 20px;
+            min-height: 100vh;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to left, #3498db, #2ecc71);
         }
         
         h1 {
@@ -34,10 +47,21 @@
             margin-bottom: 30px;
             padding-bottom: 15px;
             border-bottom: 2px solid #eee;
+            position: relative;
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 100px;
+            height: 2px;
+            background: #3498db;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         
         label {
@@ -47,23 +71,24 @@
             color: #2c3e50;
         }
         
-        input[type="date"], input[type="number"], input[type="text"] {
+        input[type="date"], input[type="number"] {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
-            transition: border 0.3s;
+            transition: all 0.3s;
         }
         
-        input[type="date"]:focus, input[type="number"]:focus, input[type="text"]:focus {
+        input[type="date"]:focus, input[type="number"]:focus {
             border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
             outline: none;
         }
         
         .date-row {
             display: flex;
-            gap: 15px;
+            gap: 20px;
         }
         
         .date-row .form-group {
@@ -71,41 +96,56 @@
         }
         
         button {
-            background-color: #3498db;
+            background: linear-gradient(to left, #3498db, #2ecc71);
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 14px 25px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
             font-weight: 600;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
             width: 100%;
             margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
         }
         
         button:hover {
-            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
         }
         
         .result-section {
-            margin-top: 30px;
-            padding: 20px;
+            margin-top: 40px;
+            padding: 25px;
             background-color: #f8f9fa;
-            border-radius: 5px;
+            border-radius: 10px;
             border-right: 4px solid #3498db;
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .result-section h2 {
             color: #2c3e50;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
         }
         
         .result-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
             border-bottom: 1px solid #eee;
         }
         
@@ -120,14 +160,59 @@
         }
         
         .total-salary {
-            font-size: 1.2em;
+            font-size: 1.3em;
             color: #e74c3c;
-            margin-top: 10px;
-            padding-top: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
             border-top: 2px solid #ddd;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         
-        @media (max-width: 600px) {
+        .calculation-steps {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f0f7ff;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .calculation-steps h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .step {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #e1e8ed;
+        }
+        
+        .month-breakdown {
+            margin-top: 20px;
+        }
+        
+        .month-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed #e1e8ed;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            background-color: #ffeaea;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
             .date-row {
                 flex-direction: column;
                 gap: 0;
@@ -137,11 +222,32 @@
                 padding: 20px;
             }
         }
+        
+        .info-note {
+            background-color: #e8f4fc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-right: 4px solid #3498db;
+        }
+        
+        .info-note h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .info-note ul {
+            padding-right: 20px;
+        }
+        
+        .info-note li {
+            margin-bottom: 8px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>حاسبة رواتب الموظفين</h1>
+        <h1>حاسبة رواتب الموظفين - حساب دقيق</h1>
         
         <div class="form-group">
             <label for="startDate">تاريخ البدء:</label>
@@ -155,12 +261,14 @@
         
         <div class="form-group">
             <label for="salary">راتب التعاقد (شهري):</label>
-            <input type="number" id="salary" placeholder="أدخل الراتب الشهري">
+            <input type="number" id="salary" placeholder="أدخل الراتب الشهري بالريال">
         </div>
         
         <button id="calculateBtn">احسب الراتب</button>
         
-        <div class="result-section" id="resultSection" style="display: none;">
+        <div class="error-message" id="errorMessage"></div>
+        
+        <div class="result-section" id="resultSection">
             <h2>نتيجة الحساب</h2>
             <div class="result-item">
                 <span class="result-label">فترة العمل:</span>
@@ -171,68 +279,193 @@
                 <span class="result-value" id="totalDays"></span>
             </div>
             <div class="result-item">
-                <span class="result-label">الراتب اليومي:</span>
+                <span class="result-label">الراتب اليومي (متوسط):</span>
                 <span class="result-value" id="dailySalary"></span>
             </div>
+            
+            <div class="month-breakdown" id="monthBreakdown">
+                <!-- سيتم إضافة التفاصيل هنا عبر JavaScript -->
+            </div>
+            
             <div class="result-item total-salary">
                 <span class="result-label">الراتب المستحق:</span>
                 <span class="result-value" id="finalSalary"></span>
             </div>
+            
+            <div class="calculation-steps" id="calculationSteps">
+                <h3>خطوات الحساب</h3>
+                <!-- سيتم إضافة خطوات الحساب هنا -->
+            </div>
+        </div>
+        
+        <div class="info-note">
+            <h3>معلومة عن طريقة الحساب:</h3>
+            <ul>
+                <li>يتم حساب الراتب بدقة مع مراعاة عدد أيام كل شهر (28، 30، أو 31 يومًا)</li>
+                <li>يتم تقسيم الراتب الشهري على عدد أيام الشهر الفعلي للحصول على الراتب اليومي</li>
+                <li>يتم حساب الأيام الفعلية في كل شهر ضمن الفترة المحددة</li>
+                <li>يتم ضرب الراتب اليومي لكل شهر في عدد الأيام المستحقة فيه</li>
+            </ul>
         </div>
     </div>
 
     <script>
         document.getElementById('calculateBtn').addEventListener('click', function() {
+            // إخفاء رسالة الخطأ إذا كانت ظاهرة
+            document.getElementById('errorMessage').style.display = 'none';
+            
             // الحصول على القيم من المدخلات
-            const startDate = new Date(document.getElementById('startDate').value);
-            const endDate = new Date(document.getElementById('endDate').value);
-            const salary = parseFloat(document.getElementById('salary').value);
+            const startDateInput = document.getElementById('startDate').value;
+            const endDateInput = document.getElementById('endDate').value;
+            const salaryInput = document.getElementById('salary').value;
             
             // التحقق من صحة المدخلات
-            if (!startDate || !endDate || isNaN(salary) || salary <= 0) {
-                alert('يرجى التأكد من إدخال جميع البيانات بشكل صحيح');
+            if (!startDateInput || !endDateInput || !salaryInput) {
+                showError('يرجى ملء جميع الحقول المطلوبة');
+                return;
+            }
+            
+            const startDate = new Date(startDateInput);
+            const endDate = new Date(endDateInput);
+            const salary = parseFloat(salaryInput);
+            
+            if (isNaN(salary) || salary <= 0) {
+                showError('يرجى إدخال قيمة راتب صحيحة');
                 return;
             }
             
             if (startDate > endDate) {
-                alert('تاريخ البدء يجب أن يكون قبل تاريخ الانتهاء');
+                showError('تاريخ البدء يجب أن يكون قبل تاريخ الانتهاء');
                 return;
             }
             
-            // حساب الفترة بالكامل مع مراعاة الأشهر المختلفة
-            const result = calculateSalaryForPeriod(startDate, endDate, salary);
+            // حساب الراتب مع مراعاة الأشهر المختلفة
+            const result = calculateSalaryWithMonthDays(startDate, endDate, salary);
             
             // عرض النتائج
             document.getElementById('periodResult').textContent = 
                 `${formatDate(startDate)} - ${formatDate(endDate)}`;
             document.getElementById('totalDays').textContent = result.totalDays + ' يوم';
-            document.getElementById('dailySalary').textContent = result.dailySalary.toFixed(2) + ' ريال/يوم';
+            document.getElementById('dailySalary').textContent = result.averageDailySalary.toFixed(2) + ' ريال/يوم';
             document.getElementById('finalSalary').textContent = result.finalSalary.toFixed(2) + ' ريال';
+            
+            // عرض تفصيلي للأشهر
+            displayMonthBreakdown(result.months);
+            
+            // عرض خطوات الحساب
+            displayCalculationSteps(result);
             
             // إظهار قسم النتائج
             document.getElementById('resultSection').style.display = 'block';
         });
         
-        function calculateSalaryForPeriod(startDate, endDate, monthlySalary) {
-            let currentDate = new Date(startDate);
-            let totalSalary = 0;
+        function calculateSalaryWithMonthDays(startDate, endDate, monthlySalary) {
+            let current = new Date(startDate);
             let totalDays = 0;
+            let totalSalary = 0;
+            const months = [];
             
-            // حساب الراتب اليومي (بافتراض أن الشهر 30 يوم)
-            const dailySalary = monthlySalary / 30;
-            
-            // التكرار خلال كل يوم في الفترة
-            while (currentDate <= endDate) {
-                totalDays++;
-                totalSalary += dailySalary;
-                currentDate.setDate(currentDate.getDate() + 1);
+            // التكرار خلال كل شهر في الفترة
+            while (current <= endDate) {
+                const year = current.getFullYear();
+                const month = current.getMonth();
+                
+                // تحديد بداية ونهاية الشهر الحالي
+                const monthStart = new Date(year, month, 1);
+                const monthEnd = new Date(year, month + 1, 0);
+                
+                // تحديد بداية ونهاية الفترة لهذا الشهر
+                const periodStart = current > monthStart ? current : monthStart;
+                const periodEnd = endDate < monthEnd ? endDate : monthEnd;
+                
+                // حساب عدد الأيام في هذا الشهر ضمن الفترة
+                const daysInThisMonth = Math.floor((periodEnd - periodStart) / (1000 * 60 * 60 * 24)) + 1;
+                
+                if (daysInThisMonth > 0) {
+                    // عدد أيام الشهر الحقيقي
+                    const daysInMonth = monthEnd.getDate();
+                    
+                    // الراتب اليومي لهذا الشهر
+                    const dailySalary = monthlySalary / daysInMonth;
+                    
+                    // الراتب المستحق لهذا الشهر
+                    const salaryForMonth = dailySalary * daysInThisMonth;
+                    
+                    months.push({
+                        name: getMonthName(month),
+                        year: year,
+                        daysInMonth: daysInMonth,
+                        daysWorked: daysInThisMonth,
+                        dailySalary: dailySalary,
+                        salaryForMonth: salaryForMonth
+                    });
+                    
+                    totalDays += daysInThisMonth;
+                    totalSalary += salaryForMonth;
+                }
+                
+                // الانتقال إلى الشهر التالي
+                current = new Date(year, month + 1, 1);
             }
+            
+            // متوسط الراتب اليومي
+            const averageDailySalary = totalSalary / totalDays;
             
             return {
                 totalDays: totalDays,
-                dailySalary: dailySalary,
-                finalSalary: totalSalary
+                averageDailySalary: averageDailySalary,
+                finalSalary: totalSalary,
+                months: months
             };
+        }
+        
+        function getMonthName(monthIndex) {
+            const months = [
+                "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
+                "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+            ];
+            return months[monthIndex];
+        }
+        
+        function displayMonthBreakdown(months) {
+            const breakdownContainer = document.getElementById('monthBreakdown');
+            breakdownContainer.innerHTML = '<h3>تفصيل الراتب حسب الأشهر:</h3>';
+            
+            months.forEach(month => {
+                const monthElement = document.createElement('div');
+                monthElement.className = 'month-item';
+                monthElement.innerHTML = `
+                    <span>${month.name} ${month.year} (${month.daysInMonth} يوم)</span>
+                    <span>${month.daysWorked} يوم × ${month.dailySalary.toFixed(2)} = ${month.salaryForMonth.toFixed(2)} ريال</span>
+                `;
+                breakdownContainer.appendChild(monthElement);
+            });
+        }
+        
+        function displayCalculationSteps(result) {
+            const stepsContainer = document.getElementById('calculationSteps');
+            stepsContainer.innerHTML = '<h3>خطوات الحساب:</h3>';
+            
+            result.months.forEach((month, index) => {
+                const stepElement = document.createElement('div');
+                stepElement.className = 'step';
+                stepElement.innerHTML = `
+                    <strong>الخطوة ${index + 1}:</strong> حساب راتب ${month.name}<br>
+                    - عدد أيام الشهر: ${month.daysInMonth} يوم<br>
+                    - الراتب اليومي: ${(month.dailySalary).toFixed(2)} ريال (${result.finalSalary.toFixed(2)} ÷ ${month.daysInMonth})<br>
+                    - الأيام المستحقة: ${month.daysWorked} يوم<br>
+                    - الراتب المستحق: ${month.daysWorked} × ${month.dailySalary.toFixed(2)} = <strong>${month.salaryForMonth.toFixed(2)} ريال</strong>
+                `;
+                stepsContainer.appendChild(stepElement);
+            });
+            
+            const totalStep = document.createElement('div');
+            totalStep.className = 'step';
+            totalStep.innerHTML = `
+                <strong>الخطوة النهائية:</strong> جمع رواتب الأشهر<br>
+                - إجمالي الراتب: ${result.months.map(m => m.salaryForMonth.toFixed(2)).join(' + ')} = <strong>${result.finalSalary.toFixed(2)} ريال</strong>
+            `;
+            stepsContainer.appendChild(totalStep);
         }
         
         function formatDate(date) {
@@ -240,6 +473,15 @@
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const year = date.getFullYear();
             return `${day}/${month}/${year}`;
+        }
+        
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            
+            // إخفاء قسم النتائج إذا كان ظاهرًا
+            document.getElementById('resultSection').style.display = 'none';
         }
         
         // تعيين التواريخ الافتراضية لتسهيل الاختبار
