@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة رواتب الموظفين - حساب دقيق</title>
+    <title>حاسبة رواتب الموظفين - حساب الأيام الفعلية</title>
     <style>
         * {
             box-sizing: border-box;
@@ -247,7 +247,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>حاسبة رواتب الموظفين - حساب دقيق</h1>
+        <h1>حاسبة رواتب الموظفين - حساب الأيام الفعلية</h1>
         
         <div class="form-group">
             <label for="startDate">تاريخ البدء:</label>
@@ -278,10 +278,6 @@
                 <span class="result-label">إجمالي الأيام:</span>
                 <span class="result-value" id="totalDays"></span>
             </div>
-            <div class="result-item">
-                <span class="result-label">الراتب اليومي (متوسط):</span>
-                <span class="result-value" id="dailySalary"></span>
-            </div>
             
             <div class="month-breakdown" id="monthBreakdown">
                 <!-- سيتم إضافة التفاصيل هنا عبر JavaScript -->
@@ -305,6 +301,7 @@
                 <li>يتم تقسيم الراتب الشهري على عدد أيام الشهر الفعلي للحصول على الراتب اليومي</li>
                 <li>يتم حساب الأيام الفعلية في كل شهر ضمن الفترة المحددة</li>
                 <li>يتم ضرب الراتب اليومي لكل شهر في عدد الأيام المستحقة فيه</li>
+                <li>يتم جمع الرواتب المحسوبة لكل شهر للحصول على الراتب الإجمالي</li>
             </ul>
         </div>
     </div>
@@ -340,13 +337,12 @@
             }
             
             // حساب الراتب مع مراعاة الأشهر المختلفة
-            const result = calculateSalaryWithMonthDays(startDate, endDate, salary);
+            const result = calculateSalaryWithActualDays(startDate, endDate, salary);
             
             // عرض النتائج
             document.getElementById('periodResult').textContent = 
                 `${formatDate(startDate)} - ${formatDate(endDate)}`;
             document.getElementById('totalDays').textContent = result.totalDays + ' يوم';
-            document.getElementById('dailySalary').textContent = result.averageDailySalary.toFixed(2) + ' ريال/يوم';
             document.getElementById('finalSalary').textContent = result.finalSalary.toFixed(2) + ' ريال';
             
             // عرض تفصيلي للأشهر
@@ -359,7 +355,7 @@
             document.getElementById('resultSection').style.display = 'block';
         });
         
-        function calculateSalaryWithMonthDays(startDate, endDate, monthlySalary) {
+        function calculateSalaryWithActualDays(startDate, endDate, monthlySalary) {
             let current = new Date(startDate);
             let totalDays = 0;
             let totalSalary = 0;
@@ -385,7 +381,7 @@
                     // عدد أيام الشهر الحقيقي
                     const daysInMonth = monthEnd.getDate();
                     
-                    // الراتب اليومي لهذا الشهر
+                    // الراتب اليومي لهذا الشهر (الراتب الشهري ÷ أيام الشهر الفعلية)
                     const dailySalary = monthlySalary / daysInMonth;
                     
                     // الراتب المستحق لهذا الشهر
@@ -408,12 +404,8 @@
                 current = new Date(year, month + 1, 1);
             }
             
-            // متوسط الراتب اليومي
-            const averageDailySalary = totalSalary / totalDays;
-            
             return {
                 totalDays: totalDays,
-                averageDailySalary: averageDailySalary,
                 finalSalary: totalSalary,
                 months: months
             };
@@ -452,7 +444,7 @@
                 stepElement.innerHTML = `
                     <strong>الخطوة ${index + 1}:</strong> حساب راتب ${month.name}<br>
                     - عدد أيام الشهر: ${month.daysInMonth} يوم<br>
-                    - الراتب اليومي: ${(month.dailySalary).toFixed(2)} ريال (${result.finalSalary.toFixed(2)} ÷ ${month.daysInMonth})<br>
+                    - الراتب اليومي: ${month.dailySalary.toFixed(2)} ريال (${result.finalSalary.toFixed(2)} ÷ ${month.daysInMonth})<br>
                     - الأيام المستحقة: ${month.daysWorked} يوم<br>
                     - الراتب المستحق: ${month.daysWorked} × ${month.dailySalary.toFixed(2)} = <strong>${month.salaryForMonth.toFixed(2)} ريال</strong>
                 `;
