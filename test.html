@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة رواتب الموظفين - حساب الأيام الفعلية</title>
+    <title>حاسبة رواتب الموظفين - حساب كامل الأيام</title>
     <style>
         * {
             box-sizing: border-box;
@@ -247,7 +247,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>حاسبة رواتب الموظفين - حساب الأيام الفعلية</h1>
+        <h1>حاسبة رواتب الموظفين - حساب كامل الأيام</h1>
         
         <div class="form-group">
             <label for="startDate">تاريخ البدء:</label>
@@ -299,7 +299,7 @@
             <ul>
                 <li>يتم حساب الراتب بدقة مع مراعاة عدد أيام كل شهر (28، 30، أو 31 يومًا)</li>
                 <li>يتم تقسيم الراتب الشهري على عدد أيام الشهر الفعلي للحصول على الراتب اليومي</li>
-                <li>يتم حساب الأيام الفعلية في كل شهر ضمن الفترة المحددة</li>
+                <li>يتم حساب جميع الأيام في كل شهر ضمن الفترة المحددة، بما في ذلك اليوم الأخير</li>
                 <li>يتم ضرب الراتب اليومي لكل شهر في عدد الأيام المستحقة فيه</li>
                 <li>يتم جمع الرواتب المحسوبة لكل شهر للحصول على الراتب الإجمالي</li>
             </ul>
@@ -337,7 +337,7 @@
             }
             
             // حساب الراتب مع مراعاة الأشهر المختلفة
-            const result = calculateSalaryWithActualDays(startDate, endDate, salary);
+            const result = calculateSalaryWithAllDays(startDate, endDate, salary);
             
             // عرض النتائج
             document.getElementById('periodResult').textContent = 
@@ -355,7 +355,7 @@
             document.getElementById('resultSection').style.display = 'block';
         });
         
-        function calculateSalaryWithActualDays(startDate, endDate, monthlySalary) {
+        function calculateSalaryWithAllDays(startDate, endDate, monthlySalary) {
             let current = new Date(startDate);
             let totalDays = 0;
             let totalSalary = 0;
@@ -368,14 +368,17 @@
                 
                 // تحديد بداية ونهاية الشهر الحالي
                 const monthStart = new Date(year, month, 1);
-                const monthEnd = new Date(year, month + 1, 0);
+                const monthEnd = new Date(year, month + 1, 0); // اليوم الأخير من الشهر
                 
                 // تحديد بداية ونهاية الفترة لهذا الشهر
                 const periodStart = current > monthStart ? current : monthStart;
-                const periodEnd = endDate < monthEnd ? endDate : monthEnd;
+                let periodEnd = endDate < monthEnd ? endDate : monthEnd;
                 
-                // حساب عدد الأيام في هذا الشهر ضمن الفترة
-                const daysInThisMonth = Math.floor((periodEnd - periodStart) / (1000 * 60 * 60 * 24)) + 1;
+                // التأكد من تضمين اليوم الأخير بالكامل
+                periodEnd.setHours(23, 59, 59, 999);
+                
+                // حساب عدد الأيام في هذا الشهر ضمن الفترة (بما في ذلك اليوم الأخير)
+                const daysInThisMonth = Math.ceil((periodEnd - periodStart) / (1000 * 60 * 60 * 24)) + 1;
                 
                 if (daysInThisMonth > 0) {
                     // عدد أيام الشهر الحقيقي
@@ -445,7 +448,7 @@
                     <strong>الخطوة ${index + 1}:</strong> حساب راتب ${month.name}<br>
                     - عدد أيام الشهر: ${month.daysInMonth} يوم<br>
                     - الراتب اليومي: ${month.dailySalary.toFixed(2)} ريال (${result.finalSalary.toFixed(2)} ÷ ${month.daysInMonth})<br>
-                    - الأيام المستحقة: ${month.daysWorked} يوم<br>
+                    - الأيام المستحقة: ${month.daysWorked} يوم (بما في ذلك اليوم الأخير)<br>
                     - الراتب المستحق: ${month.daysWorked} × ${month.dailySalary.toFixed(2)} = <strong>${month.salaryForMonth.toFixed(2)} ريال</strong>
                 `;
                 stepsContainer.appendChild(stepElement);
