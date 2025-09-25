@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة رواتب الموظفين - حساب كامل الأيام</title>
+    <title>حاسبة رواتب الموظفين - حساب دقيق</title>
     <style>
         * {
             box-sizing: border-box;
@@ -243,11 +243,24 @@
         .info-note li {
             margin-bottom: 8px;
         }
+        
+        .example {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .example h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>حاسبة رواتب الموظفين - حساب كامل الأيام</h1>
+        <h1>حاسبة رواتب الموظفين - حساب دقيق</h1>
         
         <div class="form-group">
             <label for="startDate">تاريخ البدء:</label>
@@ -294,12 +307,20 @@
             </div>
         </div>
         
+        <div class="example">
+            <h3>مثال توضيحي:</h3>
+            <p>إذا كان الراتب الشهري 1200 ريال، وفترة العمل من 15 أكتوبر إلى 31 أكتوبر (شهر أكتوبر به 31 يومًا):</p>
+            <p>الراتب اليومي = 1200 ÷ 31 = 38.71 ريال/يوم</p>
+            <p>عدد أيام العمل = 17 يوم (من 15 إلى 31 أكتوبر)</p>
+            <p>الراتب المستحق = 17 × 38.71 = 658.06 ريال</p>
+        </div>
+        
         <div class="info-note">
             <h3>معلومة عن طريقة الحساب:</h3>
             <ul>
                 <li>يتم حساب الراتب بدقة مع مراعاة عدد أيام كل شهر (28، 30، أو 31 يومًا)</li>
                 <li>يتم تقسيم الراتب الشهري على عدد أيام الشهر الفعلي للحصول على الراتب اليومي</li>
-                <li>يتم حساب جميع الأيام في كل شهر ضمن الفترة المحددة، بما في ذلك اليوم الأخير</li>
+                <li>يتم حساب جميع الأيام في الفترة المحددة، من أول يوم إلى آخر يوم</li>
                 <li>يتم ضرب الراتب اليومي لكل شهر في عدد الأيام المستحقة فيه</li>
                 <li>يتم جمع الرواتب المحسوبة لكل شهر للحصول على الراتب الإجمالي</li>
             </ul>
@@ -374,10 +395,7 @@
                 const periodStart = current > monthStart ? current : monthStart;
                 let periodEnd = endDate < monthEnd ? endDate : monthEnd;
                 
-                // التأكد من تضمين اليوم الأخير بالكامل
-                periodEnd.setHours(23, 59, 59, 999);
-                
-                // حساب عدد الأيام في هذا الشهر ضمن الفترة (بما في ذلك اليوم الأخير)
+                // حساب عدد الأيام في هذا الشهر ضمن الفترة (بما في ذلك اليوم الأول والأخير)
                 const daysInThisMonth = Math.ceil((periodEnd - periodStart) / (1000 * 60 * 60 * 24)) + 1;
                 
                 if (daysInThisMonth > 0) {
@@ -426,6 +444,11 @@
             const breakdownContainer = document.getElementById('monthBreakdown');
             breakdownContainer.innerHTML = '<h3>تفصيل الراتب حسب الأشهر:</h3>';
             
+            if (months.length === 0) {
+                breakdownContainer.innerHTML += '<p>لا توجد فترة عمل محسوبة</p>';
+                return;
+            }
+            
             months.forEach(month => {
                 const monthElement = document.createElement('div');
                 monthElement.className = 'month-item';
@@ -441,6 +464,11 @@
             const stepsContainer = document.getElementById('calculationSteps');
             stepsContainer.innerHTML = '<h3>خطوات الحساب:</h3>';
             
+            if (result.months.length === 0) {
+                stepsContainer.innerHTML += '<p>لا توجد خطوات حساب متاحة</p>';
+                return;
+            }
+            
             result.months.forEach((month, index) => {
                 const stepElement = document.createElement('div');
                 stepElement.className = 'step';
@@ -448,7 +476,7 @@
                     <strong>الخطوة ${index + 1}:</strong> حساب راتب ${month.name}<br>
                     - عدد أيام الشهر: ${month.daysInMonth} يوم<br>
                     - الراتب اليومي: ${month.dailySalary.toFixed(2)} ريال (${result.finalSalary.toFixed(2)} ÷ ${month.daysInMonth})<br>
-                    - الأيام المستحقة: ${month.daysWorked} يوم (بما في ذلك اليوم الأخير)<br>
+                    - الأيام المستحقة: ${month.daysWorked} يوم<br>
                     - الراتب المستحق: ${month.daysWorked} × ${month.dailySalary.toFixed(2)} = <strong>${month.salaryForMonth.toFixed(2)} ريال</strong>
                 `;
                 stepsContainer.appendChild(stepElement);
@@ -487,6 +515,7 @@
             
             document.getElementById('startDate').valueAsDate = today;
             document.getElementById('endDate').valueAsDate = nextMonth;
+            document.getElementById('salary').value = 3000;
         };
     </script>
 </body>
