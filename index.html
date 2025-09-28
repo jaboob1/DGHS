@@ -535,7 +535,7 @@
       عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
       إجمالي راتب التعيين: <span id="totalAllowances">0</span><br>
       إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
-      <span id="twelvePercentLine">اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (12.5‎‎%‎) : <span id="twelvePercent">0</span><br></span>
+      <span id="twelvePercentLine">اشتراكات صندوق الحماية الاجتماعية حصة الحكومة (13.5‎‎%‎) : <span id="twelvePercent">0</span><br></span>
       <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
       <span id="totalSocialLine">إجمالي الاشتراكات في حالة خروج الموظف لإجازة بدون راتب: <span id="totalSocial">0</span><br></span>
       <span id="netLine"> صافي المستحق: <span id="net">0</span></span>
@@ -744,7 +744,7 @@
         
         // حساب اشتراكات الصندوق الاجتماعي فقط للعقود الدائمة
         if (contractType.value === "permanent") {
-          let twelvePercentValue = totalCalc * 0.125;
+          let twelvePercentValue = totalCalc * 0.135;
           twelvePercent.textContent = twelvePercentValue.toFixed(3);
 
           let ded = totalCalc * 0.08;
