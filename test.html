@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>حاسبة  dghs</title>
+  <title>حاسبة  إجازة غير مدفوعة الراتب</title>
   <style>
     @font-face {
       font-family: 'Diwani';
@@ -423,7 +423,7 @@
       </div>
     </div>
 
-    <h3>حاسبة الرواتب القياسية</h3>
+    <h3>حاسبة إجازة غير مدفوعة الراتب</h3>
 
     <div class="input-section">
       <div class="input-row">
@@ -449,19 +449,19 @@
       </div>
 
       <div class="input-row">
-        <label for="basic">البدل الأساسي:</label>
+        <label for="basic">راتب الإشتراك :</label>
         <input type="number" id="basic" class="amount-input" placeholder="أدخل المبلغ">
         <input type="text" id="basicResult" readonly>
       </div>
 
       <!-- بدل الأساسي للسنة التالية مع الملاحظة على نفس السطر -->
       <div class="input-row">
-        <label for="basicNextYear">بدل الأساسي للسنة التالية:</label>
+        <label for="basicNextYear">راتب الإشتراك للسنة التالية:</label>
         <input type="number" id="basicNextYear" class="amount-input" placeholder="أدخل المبلغ">
         <select id="nextYearSelect" class="year-select">
           <!-- سيتم ملء السنوات من 2015 إلى 2030 عبر الجافاسكريبت -->
         </select>
-        <span class="inline-note">تدرج العلاوة الدورية لسنتين متداخلة</span>
+        <span class="inline-note"> العلاوة الدورية لسنتين متداخلة</span>
       </div>
     </div>
 
@@ -472,7 +472,7 @@
       راتب الاشتراك: <span id="totalAllowances">0</span><br>
       <!-- تم حذف سطر إجمالي الاستحقاق -->
       <!-- تم حذف سطور حصة الحكومة وحصة الموظف -->
-      إجمالي الاشتراكات في حالة خروج الموظف لإجازة بدون راتب: <span id="totalSocial">0</span><br>
+      إجمالي الاشتراكات لإجازة غير مدفوعة الراتب: <span id="totalSocial">0</span><br>
       <!-- تم حذف سطر صافي المستحق -->
     </div>
 
