@@ -341,7 +341,7 @@
         <div class="form-grid">
           <div class="input-group">
             <label for="birthDate">تاريخ الميلاد:</label>
-            <input type="date" id="birthDate" required>
+            <input type="date" id="birthDate" required onchange="calculateFutureYears()">
           </div>
           
           <div class="input-group">
@@ -475,6 +475,30 @@
   <script>
     function format(x) {
       return Number(x).toLocaleString('ar-EG', {minimumFractionDigits:2, maximumFractionDigits:2});
+    }
+
+    // دالة حساب السنوات المستقبلية بناءً على تاريخ الميلاد
+    function calculateFutureYears() {
+      const birthDate = document.getElementById('birthDate').value;
+      
+      if (birthDate) {
+        const birthYear = new Date(birthDate).getFullYear();
+        const currentYear = new Date().getFullYear();
+        
+        // حساب سنة الميلاد + 60 سنة
+        const retirementYear = birthYear + 60;
+        
+        // حساب السنوات المستقبلية (العام الحالي - سنة التقاعد)
+        let futureYears = retirementYear - currentYear;
+        
+        // التأكد من أن القيمة غير سالبة
+        if (futureYears < 0) {
+          futureYears = 0;
+        }
+        
+        // وضع النتيجة في حقل السنوات المستقبلية
+        document.getElementById('futureYears').value = futureYears;
+      }
     }
 
     // دالة حساب العمر من تاريخ الميلاد
@@ -618,6 +642,9 @@
 
     // تعيين تاريخ افتراضي لتاريخ الميلاد (لأغراض التجربة)
     document.getElementById('birthDate').value = '1980-01-01';
+    
+    // حساب السنوات المستقبلية عند التحميل
+    calculateFutureYears();
   </script>
 </body>
 </html>
