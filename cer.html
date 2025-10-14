@@ -48,14 +48,14 @@
         
         .buttons-container {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
+            flex-direction: column;
+            align-items: flex-end; /* محاذاة لليمين */
+            gap: 15px;
             margin-top: 20px;
         }
         
         .btn {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
             padding: 15px 30px;
@@ -67,9 +67,10 @@
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            min-width: 220px;
+            width: 300px; /* عرض متساوي لجميع الأزرار */
             border: none;
             cursor: pointer;
+            text-align: center;
         }
         
         .btn:hover {
@@ -103,7 +104,11 @@
             }
             
             .btn {
-                min-width: 100%;
+                width: 100%; /* على الشاشات الصغيرة، اجعل الأزرار تأخذ العرض الكامل */
+            }
+            
+            .buttons-container {
+                align-items: stretch; /* على الشاشات الصغيرة، اجعل الأزرار تتمدد */
             }
         }
     </style>
@@ -114,12 +119,16 @@
         <p>اختر الخدمة التي تريد الوصول إليها</p>
         
         <div class="buttons-container">
-            <a href="https://www.jaboob.com" class="btn">
-                <i>📊</i> حاسبة رواتب العقود الخاصة
+            <a href="https://www.jaboob.com/spf.html" class="btn">
+                <i>🏦</i> حاسبة التقاعد
             </a>
-            
-            <a href="https://www.jaboob.com/SALARY.html" class="btn">
-                <i>💰</i> حاسبة الرواتب
+
+            <a href="https://www.jaboob.com/index1.html" class="btn">
+                <i>📝</i> حاسبة رواتب عقود دائمة وخاصة
+            </a>
+
+            <a href="https://www.jaboob.com/dghs.html" class="btn">
+                <i>📅</i> حاسبة اجازة غير مدفوعة الراتب
             </a>
         </div>
     </div>
