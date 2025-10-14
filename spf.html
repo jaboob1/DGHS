@@ -17,6 +17,7 @@
       --border: #e2e8f0;
       --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
       --hover-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+      --retirement: #9c27b0;
     }
     
     * {
@@ -27,7 +28,7 @@
     
     body {
       direction: rtl;
-      font-family: 'Times New Roman', Tahoma, Arial, sans-serif;
+      font-family: 'Cairo', 'Times New Roman', Tahoma, Arial, sans-serif;
       background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
       padding: 20px;
       color: var(--dark);
@@ -36,7 +37,7 @@
     }
     
     .container {
-      max-width: 850px;
+      max-width: 900px;
       margin: 0 auto;
     }
     
@@ -47,6 +48,7 @@
       box-shadow: var(--card-shadow);
       transition: all 0.3s ease;
       overflow: hidden;
+      margin-bottom: 20px;
     }
     
     .card:hover {
@@ -65,6 +67,14 @@
       color: var(--primary);
       margin-bottom: 10px;
       font-weight: 700;
+    }
+    
+    h2 {
+      font-size: 22px;
+      color: var(--retirement);
+      margin: 25px 0 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--retirement);
     }
     
     .description {
@@ -88,11 +98,11 @@
     label {
       display: block;
       margin-bottom: 8px;
-      font-weight: 550;
+      font-weight: 55;
       color: var(--dark);
     }
     
-    input {
+    input, select {
       width: 100%;
       padding: 14px 16px;
       border: 2px solid var(--border);
@@ -102,7 +112,7 @@
       font-family: 'Cairo', sans-serif;
     }
     
-    input:focus {
+    input:focus, select:focus {
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.2);
@@ -186,6 +196,11 @@
       transition: all 0.3s;
     }
     
+    .retirement-box {
+      background: linear-gradient(135deg, #f9f1ff 0%, #f0e6ff 100%);
+      border-left: 4px solid var(--retirement);
+    }
+    
     .box:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -198,6 +213,10 @@
       font-weight: 700;
       display: flex;
       align-items: center;
+    }
+    
+    .retirement-title {
+      color: var(--retirement);
     }
     
     .box-title i {
@@ -220,6 +239,10 @@
       border-top: 1px dashed #cbd5e0;
     }
     
+    .retirement-result {
+      color: var(--retirement);
+    }
+    
     .formula {
       margin-top: 30px;
       padding: 20px;
@@ -238,6 +261,40 @@
     .highlight {
       color: var(--accent);
       font-weight: 700;
+    }
+    
+    .retirement-highlight {
+      color: var(--retirement);
+    }
+    
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .info-item {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .info-label {
+      font-size: 14px;
+      color: #718096;
+      margin-bottom: 5px;
+    }
+    
+    .info-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .retirement-info .info-value {
+      color: var(--retirement);
     }
     
     @media (max-width: 768px) {
@@ -283,6 +340,20 @@
       <form id="inputs">
         <div class="form-grid">
           <div class="input-group">
+            <label for="birthDate">تاريخ الميلاد:</label>
+            <input type="date" id="birthDate" required onchange="calculateFutureYears()">
+          </div>
+          
+          <div class="input-group">
+            <label for="gender">نوع الجنس:</label>
+            <select id="gender" required>
+              <option value="">اختر نوع الجنس</option>
+              <option value="male">ذكر</option>
+              <option value="female">أنثى</option>
+            </select>
+          </div>
+          
+          <div class="input-group">
             <label for="salaryStart">الراتب الأخير في ديسمبر 2023م (ريال):</label>
             <input type="number" id="salaryStart" value="" step="0.01" placeholder="أدخل الراتب">
           </div>
@@ -293,7 +364,7 @@
           </div>
           
           <div class="input-group">
-            <label for="futureYears">عدد السنوات المستقبلية بعد يناير 2024م:</label>
+            <label for="futureYears">عدد السنوات المستقبلية المتبقية الى سن 60 ابتداء من يناير 2024م:</label>
             <input type="number" id="futureYears" value="" placeholder="عدد السنوات">
           </div>
           
@@ -342,9 +413,61 @@
       </div>
 
       <div class="formula" id="formulaText"></div>
+    </div>
+
+    <!-- قسم التقاعد المبكر الجديد -->
+    <div class="card">
+      <div class="header">
+        <h1>حاسبة التقاعد المبكر</h1>
+        <p class="description">احتساب نسبة الخصم والراتب بعد الخصم بناءً على العمر ونوع الجنس</p>
+      </div>
+
+      <div class="info-grid retirement-info">
+        <div class="info-item">
+          <div class="info-label">العمر الحالي</div>
+          <div class="info-value" id="currentAge">--</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">سن التقاعد</div>
+          <div class="info-value" id="retirementAge">--</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">السنوات المتبقية</div>
+          <div class="info-value" id="yearsLeft">--</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">نسبة الخصم</div>
+          <div class="info-value" id="discountRate">--</div>
+        </div>
+      </div>
+
+      <div class="summary">
+        <div class="box retirement-box">
+          <div class="box-title retirement-title"><i></i> الراتب التقاعدي قبل الخصم</div>
+          <div class="box-content">الراتب الأساسي المحسوب بناءً على سنوات الخدمة</div>
+          <div class="result retirement-result" id="pensionBeforeDiscount">-- ريال</div>
+        </div>
+
+        <div class="box retirement-box">
+          <div class="box-title retirement-title"><i></i> إجمالي نسبة الخصم</div>
+          <div class="box-content">5% عن كل سنة من أول 5 سنوات + 1% عن كل سنة إضافية</div>
+          <div class="result retirement-result" id="totalDiscount">-- ريال</div>
+        </div>
+
+        <div class="box retirement-box">
+          <div class="box-title retirement-title"><i></i> الراتب بعد الخصم</div>
+          <div class="box-content">الراتب النهائي بعد تطبيق خصم التقاعد المبكر</div>
+          <div class="result retirement-result" id="pensionAfterDiscount">-- ريال</div>
+        </div>
+      </div>
+
+      <div class="formula" id="retirementFormulaText"></div>
       
       <div class="note">
         ملاحظة: هذه الحاسبة لأغراض تقديرية فقط، ويجب الرجوع إلى صندوق الحماية الاجتماعية للحصول على الأرقام الدقيقة.
+        <br>• سن التقاعد للذكور: 55 سنة
+        <br>• سن التقاعد للإناث: 50 سنة
+        <br>• نسبة الخصم: 5% لكل سنة من أول 5 سنوات متبقية، ثم 1% لكل سنة إضافية
       </div>
     </div>
   </div>
@@ -354,12 +477,84 @@
       return Number(x).toLocaleString('ar-EG', {minimumFractionDigits:2, maximumFractionDigits:2});
     }
 
+    // دالة حساب السنوات المستقبلية بناءً على تاريخ الميلاد
+    function calculateFutureYears() {
+      const birthDate = document.getElementById('birthDate').value;
+      
+      if (birthDate) {
+        const birthYear = new Date(birthDate).getFullYear();
+        const currentYear = new Date().getFullYear();
+        
+        // حساب سنة الميلاد + 60 سنة
+        const retirementYear = birthYear + 60;
+        
+        // حساب السنوات المستقبلية (العام الحالي - سنة التقاعد)
+        let futureYears = retirementYear - currentYear;
+        
+        // التأكد من أن القيمة غير سالبة
+        if (futureYears < 0) {
+          futureYears = 0;
+        }
+        
+        // وضع النتيجة في حقل السنوات المستقبلية
+        document.getElementById('futureYears').value = futureYears;
+      }
+    }
+
+    // دالة حساب العمر من تاريخ الميلاد
+    function calculateAge(birthDate) {
+      const today = new Date();
+      const birth = new Date(birthDate);
+      let age = today.getFullYear() - birth.getFullYear();
+      const monthDiff = today.getMonth() - birth.getMonth();
+      
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+        age--;
+      }
+      
+      return age;
+    }
+
+    // دالة حساب سنوات التقاعد المتبقية
+    function calculateYearsToRetirement(birthDate, gender) {
+      const age = calculateAge(birthDate);
+      let retirementAge = 55; // Default for male
+      
+      if (gender === 'female') {
+        retirementAge = 50;
+      }
+      
+      const yearsLeft = retirementAge - age;
+      return Math.max(0, yearsLeft);
+    }
+
+    // دالة حساب نسبة الخصم
+    function calculateDiscountRate(yearsToRetirement) {
+      if (yearsToRetirement <= 0) return 0;
+      
+      let discountRate = 0;
+      
+      // 5% لكل سنة من أول 5 سنوات
+      const firstFiveYears = Math.min(yearsToRetirement, 5);
+      discountRate += firstFiveYears * 5;
+      
+      // 1% لكل سنة إضافية بعد الخمس سنوات الأولى
+      const additionalYears = Math.max(yearsToRetirement - 5, 0);
+      discountRate += additionalYears * 1;
+      
+      return discountRate;
+    }
+
     function calculate() {
+      // الحصول على القيم من النموذج
+      const birthDate = document.getElementById('birthDate').value;
+      const gender = document.getElementById('gender').value;
       let salaryStart = parseFloat(document.getElementById('salaryStart').value) || 0;
       let prevYears = parseInt(document.getElementById('prevYears').value) || 0;
       let futureYears = parseInt(document.getElementById('futureYears').value) || 0;
       let growthRate = parseFloat(document.getElementById('growthRate').value) || 0;
 
+      // الحسابات الأساسية للراتب التقاعدي
       let g = growthRate/100;
       let tbody = document.querySelector('#salaryTable tbody');
       tbody.innerHTML = '';
@@ -379,24 +574,77 @@
       let avgSalary = salaries.reduce((a,b)=>a+b,0)/salaries.length;
 
       // حساب أجزاء المعاش (معامل 2%)
-      let prevPart = salaryStart * (prevYears * 0.02);   // ← باستخدام الراتب الأخير فقط
+      let prevPart = salaryStart * (prevYears * 0.02);
       let futurePart = avgSalary * (futureYears * 0.02);
-      let total = prevPart + futurePart;
+      let totalPension = prevPart + futurePart;
 
-      // عرض النتائج
+      // عرض النتائج الأساسية
       document.getElementById('prevPart').textContent = format(prevPart) + " ريال";
       document.getElementById('avgSalary').textContent = format(avgSalary);
       document.getElementById('futurePart').textContent = format(futurePart) + " ريال";
-      document.getElementById('totalPension').textContent = format(total) + " ريال";
+      document.getElementById('totalPension').textContent = format(totalPension) + " ريال";
 
       // توضيح كتابي للمعادلة
       document.getElementById('formulaText').innerHTML = `
         <strong>توضيح الحساب:</strong><br>
         • <u>الخدمة السابقة (${prevYears} سنة)</u> = 2% × ${format(salaryStart)} × ${prevYears} = <span class="highlight">${format(prevPart)} ريال</span><br>
         • <u>الخدمة المستقبلية (${futureYears} سنة)</u> = 2% × ${format(avgSalary)} × ${futureYears} = <span class="highlight">${format(futurePart)} ريال</span><br>
-        • <u>المعاش الكلي</u> = ${format(prevPart)} + ${format(futurePart)} = <span class="highlight">${format(total)} ريال</span>
+        • <u>المعاش الكلي</u> = ${format(prevPart)} + ${format(futurePart)} = <span class="highlight">${format(totalPension)} ريال</span>
       `;
+
+      // حساب التقاعد المبكر
+      if (birthDate && gender) {
+        const currentAge = calculateAge(birthDate);
+        const yearsToRetirement = calculateYearsToRetirement(birthDate, gender);
+        const discountRate = calculateDiscountRate(yearsToRetirement);
+        const retirementAge = gender === 'female' ? 50 : 55;
+        
+        const discountAmount = totalPension * (discountRate / 100);
+        const pensionAfterDiscount = totalPension - discountAmount;
+        
+        // عرض نتائج التقاعد المبكر
+        document.getElementById('currentAge').textContent = currentAge + ' سنة';
+        document.getElementById('retirementAge').textContent = retirementAge + ' سنة';
+        document.getElementById('yearsLeft').textContent = yearsToRetirement + ' سنة';
+        document.getElementById('discountRate').textContent = discountRate + '%';
+        
+        document.getElementById('pensionBeforeDiscount').textContent = format(totalPension) + ' ريال';
+        document.getElementById('totalDiscount').textContent = format(discountAmount) + ' ريال (' + discountRate + '%)';
+        document.getElementById('pensionAfterDiscount').textContent = format(pensionAfterDiscount) + ' ريال';
+        
+        // توضيح معادلة التقاعد المبكر
+        const firstFive = Math.min(yearsToRetirement, 5);
+        const additional = Math.max(yearsToRetirement - 5, 0);
+        
+        document.getElementById('retirementFormulaText').innerHTML = `
+          <strong>توضيح حساب التقاعد المبكر:</strong><br>
+          • <u>العمر الحالي</u>: ${currentAge} سنة<br>
+          • <u>سن التقاعد</u>: ${retirementAge} سنة (${gender === 'female' ? 'أنثى' : 'ذكر'})<br>
+          • <u>السنوات المتبقية</u>: ${yearsToRetirement} سنة<br>
+          • <u>حساب نسبة الخصم</u>: (${firstFive} سنة × 5%) + (${additional} سنة × 1%) = <span class="retirement-highlight">${discountRate}%</span><br>
+          • <u>قيمة الخصم</u>: ${format(totalPension)} × ${discountRate}% = <span class="retirement-highlight">${format(discountAmount)} ريال</span><br>
+          • <u>الراتب بعد الخصم</u>: ${format(totalPension)} - ${format(discountAmount)} = <span class="retirement-highlight">${format(pensionAfterDiscount)} ريال</span>
+        `;
+      } else {
+        // إخفاء قسم التقاعد المبكر إذا لم يتم إدخال البيانات المطلوبة
+        document.getElementById('currentAge').textContent = '--';
+        document.getElementById('retirementAge').textContent = '--';
+        document.getElementById('yearsLeft').textContent = '--';
+        document.getElementById('discountRate').textContent = '--';
+        
+        document.getElementById('pensionBeforeDiscount').textContent = '-- ريال';
+        document.getElementById('totalDiscount').textContent = '-- ريال';
+        document.getElementById('pensionAfterDiscount').textContent = '-- ريال';
+        
+        document.getElementById('retirementFormulaText').innerHTML = 'الرجاء إدخال تاريخ الميلاد ونوع الجنس لحساب التقاعد المبكر';
+      }
     }
+
+    // تعيين تاريخ افتراضي لتاريخ الميلاد (لأغراض التجربة)
+    document.getElementById('birthDate').value = '1980-01-01';
+    
+    // حساب السنوات المستقبلية عند التحميل
+    calculateFutureYears();
   </script>
 </body>
 </html>
