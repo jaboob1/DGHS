@@ -345,6 +345,11 @@
           </div>
           
           <div class="input-group">
+            <label for="appointmentDate">تاريخ التعيين:</label>
+            <input type="date" id="appointmentDate" required onchange="calculatePreviousYears()">
+          </div>
+          
+          <div class="input-group">
             <label for="gender">نوع الجنس:</label>
             <select id="gender" required>
               <option value="">اختر نوع الجنس</option>
@@ -360,7 +365,12 @@
           
           <div class="input-group">
             <label for="prevYears">عدد السنوات السابقة قبل سنة 2024م:</label>
-            <input type="number" id="prevYears" value="" placeholder="عدد السنوات">
+            <input type="number" id="prevYears" value="" placeholder="عدد السنوات" readonly>
+          </div>
+          
+          <div class="input-group">
+            <label for="previousService">ضم خدمة سابقة (سنوات):</label>
+            <input type="number" id="previousService" value="0" step="0.01" placeholder="عدد السنوات الإضافية">
           </div>
           
           <div class="input-group">
@@ -394,7 +404,7 @@
       <div class="summary">
         <div class="box">
           <div class="box-title"><i></i> الخدمة السابقة قبل 2024م</div>
-          <div class="box-content">المعادلة: 2% × الراتب الأخير ديسمبر 2023 × السنوات السابقة قبل يناير 2024م</div>
+          <div class="box-content">المعادلة: 2% × الراتب الأخير ديسمبر 2023 × (السنوات السابقة قبل يناير 2024م + ضم الخدمة)</div>
           <div class="result" id="prevPart">-- ريال</div>
         </div>
 
@@ -477,6 +487,31 @@
       return Number(x).toLocaleString('ar-EG', {minimumFractionDigits:2, maximumFractionDigits:2});
     }
 
+    // دالة حساب السنوات السابقة من تاريخ التعيين إلى نهاية 2023
+    function calculatePreviousYears() {
+      const appointmentDate = document.getElementById('appointmentDate').value;
+      
+      if (appointmentDate) {
+        const appointment = new Date(appointmentDate);
+        const endOf2023 = new Date('2023-12-31');
+        
+        // حساب الفرق بالسنوات بين تاريخ التعيين ونهاية 2023
+        let yearsDiff = endOf2023.getFullYear() - appointment.getFullYear();
+        const monthDiff = endOf2023.getMonth() - appointment.getMonth();
+        
+        // إذا كان تاريخ التعيين بعد شهر ديسمبر من نفس السنة
+        if (monthDiff < 0 || (monthDiff === 0 && endOf2023.getDate() < appointment.getDate())) {
+          yearsDiff--;
+        }
+        
+        // التأكد من أن القيمة غير سالبة
+        const previousYears = Math.max(0, yearsDiff);
+        
+        // وضع النتيجة في حقل السنوات السابقة
+        document.getElementById('prevYears').value = previousYears;
+      }
+    }
+
     // دالة حساب السنوات المستقبلية بناءً على تاريخ الميلاد
     function calculateFutureYears() {
       const birthDate = document.getElementById('birthDate').value;
@@ -548,11 +583,16 @@
     function calculate() {
       // الحصول على القيم من النموذج
       const birthDate = document.getElementById('birthDate').value;
+      const appointmentDate = document.getElementById('appointmentDate').value;
       const gender = document.getElementById('gender').value;
       let salaryStart = parseFloat(document.getElementById('salaryStart').value) || 0;
       let prevYears = parseInt(document.getElementById('prevYears').value) || 0;
+      let previousService = parseFloat(document.getElementById('previousService').value) || 0;
       let futureYears = parseInt(document.getElementById('futureYears').value) || 0;
       let growthRate = parseFloat(document.getElementById('growthRate').value) || 0;
+
+      // حساب إجمالي سنوات الخدمة السابقة (بما في ذلك ضم الخدمة)
+      const totalPreviousYears = prevYears + previousService;
 
       // الحسابات الأساسية للراتب التقاعدي
       let g = growthRate/100;
@@ -574,7 +614,7 @@
       let avgSalary = salaries.reduce((a,b)=>a+b,0)/salaries.length;
 
       // حساب أجزاء المعاش (معامل 2%)
-      let prevPart = salaryStart * (prevYears * 0.02);
+      let prevPart = salaryStart * (totalPreviousYears * 0.02);
       let futurePart = avgSalary * (futureYears * 0.02);
       let totalPension = prevPart + futurePart;
 
@@ -587,7 +627,7 @@
       // توضيح كتابي للمعادلة
       document.getElementById('formulaText').innerHTML = `
         <strong>توضيح الحساب:</strong><br>
-        • <u>الخدمة السابقة (${prevYears} سنة)</u> = 2% × ${format(salaryStart)} × ${prevYears} = <span class="highlight">${format(prevPart)} ريال</span><br>
+        • <u>الخدمة السابقة (${prevYears} سنة من التعيين + ${previousService} سنة ضم خدمة = ${totalPreviousYears} سنة)</u> = 2% × ${format(salaryStart)} × ${totalPreviousYears} = <span class="highlight">${format(prevPart)} ريال</span><br>
         • <u>الخدمة المستقبلية (${futureYears} سنة)</u> = 2% × ${format(avgSalary)} × ${futureYears} = <span class="highlight">${format(futurePart)} ريال</span><br>
         • <u>المعاش الكلي</u> = ${format(prevPart)} + ${format(futurePart)} = <span class="highlight">${format(totalPension)} ريال</span>
       `;
@@ -640,10 +680,12 @@
       }
     }
 
-    // تعيين تاريخ افتراضي لتاريخ الميلاد (لأغراض التجربة)
+    // تعيين تاريخ افتراضي لتاريخ الميلاد وتاريخ التعيين (لأغراض التجربة)
     document.getElementById('birthDate').value = '1980-01-01';
+    document.getElementById('appointmentDate').value = '2005-01-01';
     
-    // حساب السنوات المستقبلية عند التحميل
+    // حساب السنوات السابقة والمستقبلية عند التحميل
+    calculatePreviousYears();
     calculateFutureYears();
   </script>
 </body>
