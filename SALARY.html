@@ -28,7 +28,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 30px;
-            margin-bottom: 30px;
+            margin-bottom: 10px; /* تم تقليل المسافة لرفع الأزرار */
         }
         
         .logo {
@@ -41,7 +41,6 @@
             color: #000;
             font-weight: bold;
             text-align: right;
-            flex-grow: 1;
         }
         
         .container {
@@ -51,6 +50,7 @@
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-top: 20px; /* تم إضافة مسافة علوية لرفع الأزرار */
             margin-bottom: 30px;
         }
         
@@ -161,15 +161,12 @@
 </head>
 <body>
     <div class="header">
-        <!-- استبدل رابط الصورة برابط شعار رؤية عمان 2040 الفعلي -->
-       </div>
-      
-      <div class="inner-logo">
-        <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="شعار عمان فيجن">
-      </div>
+        <!-- الشعار في أقصى اليسار -->
+        <div class="inner-logo">
+            <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="شعار عمان فيجن" class="logo">
+        </div>
+        <!-- عبارة الحاسبة الإلكترونية في أقصى اليمين -->
         <div class="page-title">الحاسبة الإلكترونية</div>
-        <!-- عنصر فارغ للحفاظ على التوازن في التخطيط -->
-        <div style="width: 180px;"></div>
     </div>
     
     <div class="container">
