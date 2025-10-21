@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الصفحة الرئيسية</title>
+    <title>بوابة الخدمات الإلكترونية</title>
     <style>
         * {
             margin: 0;
@@ -19,8 +19,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            text-align: center;
             padding: 20px;
         }
         
@@ -30,36 +28,37 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 30px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            margin-bottom: 30px;
         }
         
         .logo {
-            height: 60px;
+            height: 70px;
+            width: auto;
         }
         
         .page-title {
-            font-size: 20px;
+            font-size: 30px;
             color: #000;
             font-weight: bold;
+            text-align: center;
+            flex-grow: 1;
         }
         
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             width: 100%;
             background-color: #f8f9fa;
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            margin-top: 80px;
+            margin-bottom: 30px;
         }
         
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
             color: #1e5799;
+            text-align: center;
         }
         
         p {
@@ -67,6 +66,7 @@
             margin-bottom: 40px;
             opacity: 0.9;
             color: #555;
+            text-align: center;
         }
         
         .buttons-container {
@@ -81,18 +81,21 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 15px 30px;
+            padding: 15px 20px;
             background: linear-gradient(45deg, #1e5799, #2989d8);
             color: white;
             text-decoration: none;
             border-radius: 50px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            min-width: 220px;
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
             border: none;
             cursor: pointer;
+            text-align: center;
         }
         
         .btn:hover {
@@ -111,10 +114,24 @@
         }
         
         .footer {
-            margin-top: 40px;
+            margin-top: 20px;
             font-size: 0.9rem;
             opacity: 0.7;
             color: #666;
+            text-align: center;
+            width: 100%;
+        }
+        
+        @media (max-width: 900px) {
+            .buttons-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 400px;
+            }
         }
         
         @media (max-width: 600px) {
@@ -126,18 +143,18 @@
                 font-size: 2rem;
             }
             
-            .btn {
-                min-width: 100%;
-            }
-            
             .header {
                 flex-direction: column;
-                gap: 10px;
+                gap: 15px;
                 padding: 10px;
             }
             
             .page-title {
-                font-size: 18px;
+                font-size: 24px;
+            }
+            
+            .logo {
+                height: 60px;
             }
         }
     </style>
@@ -145,8 +162,10 @@
 <body>
     <div class="header">
         <!-- استبدل رابط الصورة برابط شعار رؤية عمان 2040 الفعلي -->
-        <img src="https://via.placeholder.com/200x60/1e5799/ffffff?text=رؤية+عمان+2040" alt="رؤية عمان 2040" class="logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Oman_Vision_2040_Logo.png/800px-Oman_Vision_2040_Logo.png" alt="رؤية عمان 2040" class="logo">
         <div class="page-title">الحاسبة الإلكترونية</div>
+        <!-- عنصر فارغ للحفاظ على التوازن في التخطيط -->
+        <div style="width: 150px;"></div>
     </div>
     
     <div class="container">
