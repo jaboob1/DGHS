@@ -1,23 +1,14 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>حاسبة الراتب التقاعدي (احتساب التقاعد لصندوق الحماية الاجتماعية)</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>حاسبة dghs</title>
   <style>
-    :root {
-      --primary: #2b6cb0;
-      --primary-dark: #1a4f80;
-      --secondary: #4c8cbd;
-      --accent: #f39c12;
-      --light: #f7f9fb;
-      --dark: #2d3748;
-      --success: #38a169;
-      --border: #e2e8f0;
-      --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-      --hover-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
-      --retirement: #9c27b0;
+    @font-face {
+      font-family: 'Diwani';
+      src: url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
+      font-weight: normal;
+      font-style: normal;
     }
     
     * {
@@ -27,666 +18,887 @@
     }
     
     body {
+      font-family: Arial, sans-serif;
       direction: rtl;
-      font-family: 'Cairo', 'Times New Roman', Tahoma, Arial, sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
-      padding: 20px;
-      color: var(--dark);
-      line-height: 1.6;
+      margin: 0;
+      padding: 10px;
+      background: #f5f5f5;
+      position: relative;
       min-height: 100vh;
-    }
-    
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 30px;
-      box-shadow: var(--card-shadow);
-      transition: all 0.3s ease;
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-    
-    .card:hover {
-      box-shadow: var(--hover-shadow);
-    }
-    
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    h1 {
-      font-size: 28px;
-      color: var(--primary);
-      margin-bottom: 10px;
-      font-weight: 700;
-    }
-    
-    h2 {
-      font-size: 22px;
-      color: var(--retirement);
-      margin: 25px 0 15px;
-      padding-bottom: 10px;
-      border-bottom: 2px solid var(--retirement);
-    }
-    
-    .description {
-      color: #718096;
-      font-size: 16px;
-      max-width: 550px;
-      margin: 0 auto;
-    }
-    
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      margin-bottom: 25px;
-    }
-    
-    .input-group {
-      margin-bottom: 15px;
-    }
-    
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 55;
-      color: var(--dark);
-    }
-    
-    input, select {
-      width: 100%;
-      padding: 14px 16px;
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      font-size: 16px;
-      transition: all 0.3s;
-      font-family: 'Cairo', sans-serif;
-    }
-    
-    input:focus, select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.2);
-    }
-    
-    .btn-container {
-      text-align: center;
-      margin: 25px 0;
-    }
-    
-    button {
-      padding: 16px 45px;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 18px;
-      font-weight: 600;
-      transition: all 0.3s;
-      box-shadow: 0 4px 6px rgba(43, 108, 176, 0.3);
-    }
-    
-    button:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 7px 14px rgba(43, 108, 176, 0.4);
-    }
-    
-    button:active {
-      transform: translateY(0);
-    }
-    
-    .table-container {
-      overflow-x: auto;
-      margin: 30px 0;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    }
-    
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 300px;
-    }
-    
-    th, td {
-      padding: 14px 16px;
-      text-align: center;
-      border-bottom: 1px solid var(--border);
-      font-size: 16px;
-    }
-    
-    th {
-      background: var(--primary);
-      color: white;
-      font-weight: 600;
-    }
-    
-    tr:nth-child(even) {
-      background-color: #f8fafc;
-    }
-    
-    tr:hover {
-      background-color: #f1f7ff;
-    }
-    
-    .summary {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      margin-top: 30px;
-    }
-    
-    .box {
-      background: linear-gradient(135deg, #f1f6fb 0%, #e6eef8 100%);
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-      border-left: 4px solid var(--primary);
-      transition: all 0.3s;
-    }
-    
-    .retirement-box {
-      background: linear-gradient(135deg, #f9f1ff 0%, #f0e6ff 100%);
-      border-left: 4px solid var(--retirement);
-    }
-    
-    .box:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    }
-    
-    .box-title {
-      font-size: 18px;
-      color: var(--primary);
-      margin-bottom: 12px;
-      font-weight: 700;
+      padding-bottom: 25px;
+      font-size: 13px;
       display: flex;
+      justify-content: center;
       align-items: center;
     }
     
-    .retirement-title {
-      color: var(--retirement);
+    .container {
+      padding: 15px;
+      border: 2px solid #8B0000;
+      border-radius: 8px;
+      width: 95%;
+      max-width: 750px;
+      margin: 10px auto;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    /* رأس الصفحة داخل الإطار مع الشعارات */
+    .inner-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #8B0000;
     }
     
-    .box-title i {
-      margin-left: 8px;
+    .inner-logo {
+      flex: 0 0 auto;
     }
     
-    .box-content {
-      font-size: 15px;
-      color: #4a5568;
+    .inner-logo img {
+      height: 50px;
+      width: auto;
+    }
+    
+    .inner-title {
+      text-align: center;
+      flex: 1;
+    }
+    
+    .directorate-title {
+      font-family: 'Diwani', 'Lateef', serif;
+      font-size: 16px;
+      color: #8B0000;
+      margin: 0;
+      font-weight: bold;
+    }
+    
+    .department-title {
+      font-family: 'Diwani', 'Lateef', serif;
+      font-size: 13px;
+      color: #8B0000;
+      margin: 2px 0 0 0;
+    }
+
+    h3 {
+      text-align: center;
+      color: #8B0000;
+      margin: 0 0 12px 0;
+      font-size: 18px;
+      padding: 8px;
+      background-color: #f8f8f8;
+      border-radius: 4px;
+      border: 1px solid #8B0000;
+    }
+
+    .input-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
       margin-bottom: 8px;
-      line-height: 1.5;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+      width: 100%;
+    }
+
+    label {
+      display: inline-block;
+      width: 160px;
+      margin-left: 8px;
+      font-weight: bold;
+      text-align: right;
+      padding-right: 25px;
+      font-size: 13px;
+    }
+    
+    input {
+      padding: 5px;
+      margin: 3px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+      height: 30px;
+    }
+    
+    input.employee-input {
+      width: 210px;
+    }
+    
+    input.amount-input {
+      width: 120px;
+      border: 1px solid #ddd;
+    }
+    
+    select.contract-type {
+      padding: 5px;
+      width: 120px;
+      margin: 3px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+      height: 30px;
+    }
+    
+    input[readonly] {
+      background-color: #f5f5f5;
+      color: #333;
+      width: 120px;
+      border: 1px solid #ddd;
+    }
+    
+    /* إضافة نمط للحقل الجديد بعد الخصم */
+    input.after-deduction {
+      background-color: #f0f9f0;
+      color: #2E8B57;
+      width: 120px;
+      font-weight: bold;
+      border: 1px solid #ddd;
+    }
+    
+    .column-title {
+      font-size: 12px;
+      color: #8B0000;
+      margin: 0 3px;
+      text-align: center;
+      width: 120px;
+      font-weight: bold;
+      padding: 5px;
+      border: 1px solid #ddd;
+      background-color: #f8f8f8;
     }
     
     .result {
-      font-size: 20px;
-      color: var(--success);
-      font-weight: 700;
       margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px dashed #cbd5e0;
+      font-weight: bold;
+      color: green;
+      line-height: 1.5;
+      padding: 20px;              
+      font-size: 11px;           
+      background-color: #f0f9f0;
+      border-radius: 8px;
+      border: 1px solid #c3e6c3; 
     }
     
-    .retirement-result {
-      color: var(--retirement);
+    .separator {
+      border-top: 2px solid #8B0000;
+      margin: 12px 0;
+      width: 100%;
     }
     
-    .formula {
-      margin-top: 30px;
-      padding: 20px;
-      background: linear-gradient(135deg, #fffbea 0%, #fef6e1 100%);
-      border: 1px solid #f0e6a6;
-      border-radius: 12px;
-      line-height: 1.8;
-      font-size: 15px;
+    /* تقليص قسم التوقيع ليتناسب مع الطباعة */
+    .approval-section {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      padding: 15px 0 15px 0;
+      border-top: 2px solid #8B0000;
+      font-size: 13px;
+      font-weight: bold;
+      min-height: 45px;
     }
     
-    .formula strong {
-      color: var(--primary);
+    .approval-right {
+      text-align: right;
+      flex: 2;
+    }
+    
+    /* إضافة محاذاة خاصة لعنصر "إعداد ومراجعة" */
+    .preparation {
+      text-align: right;
+      margin-right: 5ch; /* إزاحة بمقدار 5 أحرف */
+    }
+    
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .print-btn, .reset-btn, .site-btn {
+      padding: 8px 16px;
+      font-size: 13px;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    
+    .print-btn {
+      background: #8B0000;
+    }
+    
+    .print-btn:hover {
+      background: #700000;
+    }
+    
+    .reset-btn {
+      background: #2E8B57;
+    }
+    
+    .reset-btn:hover {
+      background: #267349;
+    }
+    
+    /* زر الموقع الجديد */
+    .site-btn {
+      background: #1E90FF;
+    }
+    
+    .site-btn:hover {
+      background: #0077CC;
+    }
+    
+    /* تذييل الصفحة المتحرك */
+    .footer-animation {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #8B0000; 
+      color: white;
+      padding: 6px 0;
+      text-align: center;
+      overflow: hidden;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+    
+    .marquee {
+      display: block;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    
+    .marquee span {
+      display: inline-block;
+      padding-right: 100%;
+      animation: marquee 20s linear infinite;
+      font-weight: bold;
       font-size: 16px;
     }
     
-    .highlight {
-      color: var(--accent);
-      font-weight: 700;
+    @keyframes marquee {
+      0%   { transform: translate(0, 0); }
+      100% { transform: translate(100%, 0); }
+    }
+
+    .disclaimer {
+      text-align: center;
+      margin-top: 15px;
+      padding: 6px;
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 4px;
+      color: #856404;
+      font-size: 11px;
+      direction: rtl;
+    }
+
+    /* تحسين تنسيق صف التواريخ */
+    .date-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      width: 100%;
+      flex-wrap: wrap;
     }
     
-    .retirement-highlight {
-      color: var(--retirement);
+    .date-label {
+      width: 160px;
+      margin-left: 5px;
+      font-weight: bold;
+      text-align: right;
+      padding-right: 25px;
+      font-size: 13px;
+      flex-shrink: 0;
     }
     
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin: 20px 0;
+    .date-input-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
-    .info-item {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 8px;
+    .date-input {
+      width: 140px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+      height: 30px;
       text-align: center;
     }
     
-    .info-label {
-      font-size: 14px;
-      color: #718096;
-      margin-bottom: 5px;
+    .date-separator {
+      font-weight: bold;
+      color: #000000;
     }
-    
-    .info-value {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--primary);
+
+    /* إجماليات الأعمدة */
+    .column-total {
+      font-weight: bold;
+      background-color: #f0f0f0;
+      color: #8B0000;
+      border: 1px solid #ddd;
     }
-    
-    .retirement-info .info-value {
-      color: var(--retirement);
+
+    /* البدلات الخاصة بالعقود المؤقتة */
+    .temporary-allowances {
+      display: none;
     }
-    
-    @media (max-width: 768px) {
-      .card {
-        padding: 20px;
-      }
-      
-      h1 {
-        font-size: 24px;
-      }
-      
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .summary {
-        grid-template-columns: 1fr;
-      }
-      
-      button {
+
+    /* إخفاء عمود "بعد الخصم" للعقود المؤقتة بتغيير اللون إلى الأبيض */
+    .temporary-contract .after-deduction-column,
+    .temporary-contract .after-deduction {
+      color: white !important;
+      background-color: white !important;
+      border-color: white !important;
+    }
+
+    @media print {
+      body {
+        margin: 0;
+        padding: 0;
+        background: white;
+        font-size: 10px;
         width: 100%;
+        height: auto;
+        display: block;
       }
-    }
-    
-    .note {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 20px;
-      border-right: 4px solid var(--accent);
-      font-size: 14px;
+      
+      .container {
+        border: 2px solid #8B0000 !important;
+        box-shadow: none;
+        margin: 0;
+        padding: 5px;
+        width: 100%;
+        max-width: 100%;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      
+      .inner-header {
+        margin-bottom: 8px;
+        padding-bottom: 6px;
+      }
+      
+      .inner-logo img {
+        height: 40px;
+      }
+      
+      .directorate-title {
+        font-size: 14px;
+      }
+      
+      .department-title {
+        font-size: 11px;
+      }
+      
+      h3 {
+        font-size: 16px;
+        margin: 3px 0 8px 0;
+        padding: 6px;
+      }
+      
+      label {
+        width: 140px;
+        margin-left: 8px;
+        padding-right: 20px;
+        font-size: 11px;
+      }
+      
+      input, select {
+        padding: 3px;
+        margin: 3px;
+        font-size: 10px;
+        height: 26px;
+      }
+      
+      input.employee-input {
+        width: 180px;
+      }
+      
+      input.amount-input, input[readonly], input.after-deduction {
+        width: 100px;
+      }
+      
+      select.contract-type {
+        width: 100px;
+      }
+      
+      .column-title {
+        font-size: 10px;
+        width: 100px;
+      }
+      
+      .result {
+        font-size: 11px;
+        padding: 6px;
+        line-height: 1.3;
+        margin: 8px 0;
+      }
+      
+      .separator {
+        margin: 8px 0;
+      }
+      
+      .approval-section {
+        margin-top: 12px;
+        padding-top: 15px;
+        font-size: 11px;
+        min-height: 60px;
+      }
+      
+      /* تحسين طباعة التواريخ */
+      .date-input {
+        width: 110px;
+        font-size: 10px;
+        height: 26px;
+      }
+      
+      .button-container, .footer-animation, .disclaimer {
+        display: none;
+      }
+      
+      /* ضمان عدم تقسيم المحتوى */
+      .container, .inner-header, .result, .approval-section, .input-row {
+        page-break-before: avoid;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+      }
+
+      /* إخفاء عمود "بعد الخصم" للعقود المؤقتة أثناء الطباعة */
+      .temporary-contract .after-deduction-column,
+      .temporary-contract .after-deduction {
+        color: white !important;
+        background-color: white !important;
+        border-color: white !important;
+      }
+
+      /* التعديل الجديد: إزاحة "إعداد ومراجعة" إلى اليسار بمقدار 5 أحرف */
+      .preparation {
+        margin-right: 5ch !important;
+        text-align: right;
+      }
     }
   </style>
 </head>
 <body>
+
   <div class="container">
-    <div class="card">
-      <div class="header">
-        <h1>حاسبة الراتب التقاعدي لصندوق الحماية الاجتماعية</h1>
-        <p class="description">أداة لاحتساب الراتب التقاعدي المتوقع بناءً على سنوات الخدمة والراتب الأخير</p>
+    <!-- رأس الصفحة داخل الإطار مع الشعارات -->
+    <div class="inner-header">
+      <div class="inner-logo">
+        <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="شعار وزارة الصحة">
       </div>
-
-      <form id="inputs">
-        <div class="form-grid">
-          <div class="input-group">
-            <label for="birthDate">تاريخ الميلاد:</label>
-            <input type="date" id="birthDate" required onchange="calculateFutureYears()">
-          </div>
-          
-          <div class="input-group">
-            <label for="appointmentDate">تاريخ التعيين:</label>
-            <input type="date" id="appointmentDate" required onchange="calculatePreviousYears()">
-          </div>
-          
-          <div class="input-group">
-            <label for="gender">نوع الجنس:</label>
-            <select id="gender" required>
-              <option value="">اختر نوع الجنس</option>
-              <option value="male">ذكر</option>
-              <option value="female">أنثى</option>
-            </select>
-          </div>
-          
-          <div class="input-group">
-            <label for="salaryStart">الراتب الأخير في ديسمبر 2023م (ريال):</label>
-            <input type="number" id="salaryStart" value="" step="0.01" placeholder="أدخل الراتب">
-          </div>
-          
-          <div class="input-group">
-            <label for="prevYears">عدد السنوات السابقة قبل سنة 2024م:</label>
-            <input type="number" id="prevYears" value="" placeholder="عدد السنوات" readonly>
-          </div>
-          
-          <div class="input-group">
-            <label for="previousService">ضم خدمة سابقة (سنوات):</label>
-            <input type="number" id="previousService" value="0" step="0.01" placeholder="عدد السنوات الإضافية">
-          </div>
-          
-          <div class="input-group">
-            <label for="futureYears">عدد السنوات المستقبلية المتبقية الى سن 60 ابتداء من يناير 2024م:</label>
-            <input type="number" id="futureYears" value="" placeholder="عدد السنوات">
-          </div>
-          
-          <div class="input-group">
-            <label for="growthRate">نسبة النمو السنوي للأجور (%):</label>
-            <input type="number" id="growthRate" value="3" step="0.01" placeholder="النسبة المئوية">
-          </div>
-        </div>
-        
-        <div class="btn-container">
-          <button type="button" onclick="calculate()">احسب الراتب التقاعدي</button>
-        </div>
-      </form>
-
-      <div class="table-container">
-        <table id="salaryTable">
-          <thead>
-            <tr>
-              <th>السنة</th>
-              <th>نمو الأجور المستقبلي بنسبة ‎%‎3‎</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      
+      <div class="inner-title">
+        <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
+        <div class="department-title">دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
       </div>
-
-      <div class="summary">
-        <div class="box">
-          <div class="box-title"><i></i> الخدمة السابقة قبل 2024م</div>
-          <div class="box-content">المعادلة: 2% × الراتب الأخير ديسمبر 2023 × (السنوات السابقة قبل يناير 2024م + ضم الخدمة)</div>
-          <div class="result" id="prevPart">-- ريال</div>
-        </div>
-
-        <div class="box">
-          <div class="box-title"><i></i> الخدمة المستقبلية ما بعد يناير 2024م</div>
-          <div class="box-content">المعادلة: 2% × متوسط الأجر(م ق م) × السنوات المستقبلية ما بعد يناير 2024م</div>
-          <div class="box-content">متوسط القيمة المستقبلية للأجور (م ق م) : <span id="avgSalary">--</span> ريال</div>
-          <div class="result" id="futurePart">-- ريال</div>
-        </div>
-
-        <div class="box">
-          <div class="box-title"><i></i> المعاش التقاعدي المتوقع</div>
-          <div class="box-content">المجموع الكلي للراتب التقاعدي الشهري</div>
-          <div class="result" id="totalPension">-- ريال</div>
-        </div>
+      
+      <div class="inner-logo">
+        <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="شعار عمان فيجن">
       </div>
-
-      <div class="formula" id="formulaText"></div>
     </div>
 
-    <!-- قسم التقاعد المبكر الجديد -->
-    <div class="card">
-      <div class="header">
-        <h1>حاسبة التقاعد المبكر</h1>
-        <p class="description">احتساب نسبة الخصم والراتب بعد الخصم بناءً على العمر ونوع الجنس</p>
+    <h3>حاسبة الرواتب المتقدمة</h3>
+
+    <div class="input-section">
+      <div class="input-row">
+        <label for="employeeName">اسم الموظف:</label>
+        <input type="text" id="employeeName" class="employee-input" placeholder="أسم الموظف">
       </div>
 
-      <div class="info-grid retirement-info">
-        <div class="info-item">
-          <div class="info-label">العمر الحالي</div>
-          <div class="info-value" id="currentAge">--</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">سن التقاعد</div>
-          <div class="info-value" id="retirementAge">--</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">السنوات المتبقية</div>
-          <div class="info-value" id="yearsLeft">--</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">نسبة الخصم</div>
-          <div class="info-value" id="discountRate">--</div>
-        </div>
+      <div class="input-row">
+        <label for="employeeNumber">رقم الموظف:</label>
+        <input type="text" id="employeeNumber" class="employee-input" placeholder="رقم الموظف">
       </div>
 
-      <div class="summary">
-        <div class="box retirement-box">
-          <div class="box-title retirement-title"><i></i> الراتب التقاعدي قبل الخصم</div>
-          <div class="box-content">الراتب الأساسي المحسوب بناءً على سنوات الخدمة</div>
-          <div class="result retirement-result" id="pensionBeforeDiscount">-- ريال</div>
-        </div>
+      <div class="input-row">
+        <label for="contractType">نوع العقد:</label>
+        <select id="contractType" class="contract-type">
+          <option value="permanent">عقود دائمة</option>
+          <option value="temporary">عقود موقتة</option>
+        </select>
+      </div>
 
-        <div class="box retirement-box">
-          <div class="box-title retirement-title"><i></i> إجمالي نسبة الخصم</div>
-          <div class="box-content">5% عن كل سنة من أول 5 سنوات + 1% عن كل سنة إضافية</div>
-          <div class="result retirement-result" id="totalDiscount">-- ريال</div>
-        </div>
-
-        <div class="box retirement-box">
-          <div class="box-title retirement-title"><i></i> الراتب بعد الخصم</div>
-          <div class="box-content">الراتب النهائي بعد تطبيق خصم التقاعد المبكر</div>
-          <div class="result retirement-result" id="pensionAfterDiscount">-- ريال</div>
+      <!-- صف التواريخ في سطر واحد - محسّن -->
+      <div class="date-row">
+        <span class="date-label">تاريخ الاحتساب من:</span>
+        <div class="date-input-container">
+          <input type="date" id="startDate" class="date-input">
+          <span class="date-separator">إلى</span>
+          <input type="date" id="endDate" class="date-input">
         </div>
       </div>
 
-      <div class="formula" id="retirementFormulaText"></div>
-      
-      <div class="note">
-        ملاحظة: هذه الحاسبة لأغراض تقديرية فقط، ويجب الرجوع إلى صندوق الحماية الاجتماعية للحصول على الأرقام الدقيقة.
-        <br>• سن التقاعد للذكور: 55 سنة
-        <br>• سن التقاعد للإناث: 50 سنة
-        <br>• نسبة الخصم: 5% لكل سنة من أول 5 سنوات متبقية، ثم 1% لكل سنة إضافية
+      <!-- إضافة عناوين الأعمدة بعد التاريخ -->
+      <div class="input-row">
+        <label></label>
+        <span class="column-title">بدلات التعيين</span>
+        <span class="column-title">اجمالي قبل الخصم</span>
+        <span class="column-title after-deduction-column">اجمالي بعد الخصم</span>
       </div>
+
+      <div class="input-row">
+        <label for="basic">البدل الأساسي:</label>
+        <input type="number" id="basic" class="amount-input" placeholder="أدخل المبلغ">
+        <input type="text" id="basicResult" readonly>
+        <input type="text" id="basicAfterDeduction" class="after-deduction" readonly>
+      </div>
+
+      <!-- البدلات الخاصة بالعقود المؤقتة -->
+      <div id="temporaryAllowances" class="temporary-allowances">
+        <div class="input-row">
+          <label for="otherAllowances">بدلات أخرى:</label>
+          <input type="number" id="otherAllowances" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="otherAllowancesResult" readonly>
+          <input type="text" id="otherAllowancesAfterDeduction" class="after-deduction" readonly>
+        </div>
+      </div>
+
+      <!-- الحقول التي سيتم إخفاؤها عند اختيار عقود موقتة -->
+      <div id="permanentAllowances" class="temporary-hide">
+        <div class="input-row">
+          <label for="housing">بدل السكن:</label>
+          <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="housingResult" readonly>
+          <input type="text" id="housingAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="electricity">بدل الكهرباء:</label>
+          <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="electricityResult" readonly>
+          <input type="text" id="electricityAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="water">بدل الماء:</label>
+          <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="waterResult" readonly>
+          <input type="text" id="waterAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="phone">بدل الهاتف:</label>
+          <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="phoneResult" readonly>
+          <input type="text" id="phoneAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="transport">بدل النقل:</label>
+          <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="transportResult" readonly>
+          <input type="text" id="transportAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="professional">بدل مهني:</label>
+          <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="professionalResult" readonly>
+          <input type="text" id="professionalAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <div class="input-row">
+          <label for="costLiving">بدل غلاء معيشة:</label>
+          <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
+          <input type="text" id="costLivingResult" readonly>
+          <input type="text" id="costLivingAfterDeduction" class="after-deduction" readonly>
+        </div>
+
+        <!-- إجماليات الأعمدة -->
+        <div class="input-row">
+          <label>الإجمالي:</label>
+          <input type="text" id="monthlyTotal" class="amount-input column-total" readonly>
+          <input type="text" id="periodTotal" class="column-total" readonly>
+          <input type="text" id="afterDeductionTotal" class="after-deduction column-total" readonly>
+        </div>
+      </div>
+    </div>
+
+    <div class="separator"></div>
+
+    <div class="result">
+      عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
+      إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
+      إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
+      <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
+      <span id="netLine"> صافي المستحق: <span id="net">0</span></span>
+    </div>
+
+    <!-- قسم الإعداد والمراجعة المعدل -->
+    <div class="approval-section">
+      <div class="approval-right preparation">
+        إعداد ومراجعة: _______________
+      </div>
+      <div class="approval-right">
+        اعتمده: _______________
+      </div>
+    </div>
+
+    <div class="button-container">
+      <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
+      <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ الحقول</button>
+      <!-- الزر الجديد لفتح موقع جعبوب -->
+      <button class="site-btn" onclick="window.open('https://jaboob.com', '_blank')">حاسبة قياسية</button>
+    </div>
+    
+    <!-- التنويه -->
+    <div class="disclaimer">
+      للتنويه: محتوى الصفحة لا يتبع وزارة الصحة ،تم أنشاء هذي الاداة وتطويرها بمبادرة فردية 
+    </div>
+  </div>
+
+  <div class="footer-animation">
+    <div class="marquee">
+      <span> جميع الحقوق محفوظة © 2025 محمد جعبوب - قسم الرواتب - دائرة الشؤون المالية</span>
     </div>
   </div>
 
   <script>
-    function format(x) {
-      return Number(x).toLocaleString('ar-EG', {minimumFractionDigits:2, maximumFractionDigits:2});
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+      const startDate = document.getElementById("startDate");
+      const endDate = document.getElementById("endDate");
+      const contractType = document.getElementById("contractType");
+      const container = document.querySelector('.container');
+      const permanentAllowances = document.getElementById("permanentAllowances");
+      const temporaryAllowances = document.getElementById("temporaryAllowances");
 
-    // دالة حساب السنوات السابقة من تاريخ التعيين إلى نهاية 2023
-    function calculatePreviousYears() {
-      const appointmentDate = document.getElementById('appointmentDate').value;
-      
-      if (appointmentDate) {
-        const appointment = new Date(appointmentDate);
-        const endOf2023 = new Date('2023-12-31');
-        
-        // حساب الفرق بالسنوات بين تاريخ التعيين ونهاية 2023
-        let yearsDiff = endOf2023.getFullYear() - appointment.getFullYear();
-        const monthDiff = endOf2023.getMonth() - appointment.getMonth();
-        
-        // إذا كان تاريخ التعيين بعد شهر ديسمبر من نفس السنة
-        if (monthDiff < 0 || (monthDiff === 0 && endOf2023.getDate() < appointment.getDate())) {
-          yearsDiff--;
-        }
-        
-        // التأكد من أن القيمة غير سالبة
-        const previousYears = Math.max(0, yearsDiff);
-        
-        // وضع النتيجة في حقل السنوات السابقة
-        document.getElementById('prevYears').value = previousYears;
-      }
-    }
-
-    // دالة حساب السنوات المستقبلية بناءً على تاريخ الميلاد
-    function calculateFutureYears() {
-      const birthDate = document.getElementById('birthDate').value;
-      
-      if (birthDate) {
-        const birthYear = new Date(birthDate).getFullYear();
-        const currentYear = new Date().getFullYear();
-        
-        // حساب سنة الميلاد + 60 سنة
-        const retirementYear = birthYear + 60;
-        
-        // حساب السنوات المستقبلية (العام الحالي - سنة التقاعد)
-        let futureYears = retirementYear - currentYear;
-        
-        // التأكد من أن القيمة غير سالبة
-        if (futureYears < 0) {
-          futureYears = 0;
-        }
-        
-        // وضع النتيجة في حقل السنوات المستقبلية
-        document.getElementById('futureYears').value = futureYears;
-      }
-    }
-
-    // دالة حساب العمر من تاريخ الميلاد
-    function calculateAge(birthDate) {
+      // تعيين التواريخ الافتراضية
       const today = new Date();
-      const birth = new Date(birthDate);
-      let age = today.getFullYear() - birth.getFullYear();
-      const monthDiff = today.getMonth() - birth.getMonth();
+      const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
       
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-        age--;
+      function formatDate(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
       }
       
-      return age;
-    }
+      startDate.value = formatDate(firstDayOfMonth);
+      endDate.value = formatDate(lastDayOfMonth);
 
-    // دالة حساب سنوات التقاعد المتبقية
-    function calculateYearsToRetirement(birthDate, gender) {
-      const age = calculateAge(birthDate);
-      let retirementAge = 55; // Default for male
-      
-      if (gender === 'female') {
-        retirementAge = 50;
-      }
-      
-      const yearsLeft = retirementAge - age;
-      return Math.max(0, yearsLeft);
-    }
+      const allowances = [
+        {id:"basic", result:"basicResult", afterDeduction:"basicAfterDeduction"},
+        {id:"housing", result:"housingResult", afterDeduction:"housingAfterDeduction"},
+        {id:"electricity", result:"electricityResult", afterDeduction:"electricityAfterDeduction"},
+        {id:"water", result:"waterResult", afterDeduction:"waterAfterDeduction"},         
+        {id:"phone", result:"phoneResult", afterDeduction:"phoneAfterDeduction"},
+        {id:"transport", result:"transportResult", afterDeduction:"transportAfterDeduction"},
+        {id:"professional", result:"professionalResult", afterDeduction:"professionalAfterDeduction"},
+        {id:"otherAllowances", result:"otherAllowancesResult", afterDeduction:"otherAllowancesAfterDeduction"},
+        {id:"costLiving", result:"costLivingResult", afterDeduction:"costLivingAfterDeduction"}
+      ];
 
-    // دالة حساب نسبة الخصم
-    function calculateDiscountRate(yearsToRetirement) {
-      if (yearsToRetirement <= 0) return 0;
+      const totalAllowances = document.getElementById("totalAllowances");
+      const totalPeriod = document.getElementById("totalPeriod");
+      const deduction = document.getElementById("deduction");
+      const net = document.getElementById("net");
+      const daysCount = document.getElementById("daysCount");
       
-      let discountRate = 0;
-      
-      // 5% لكل سنة من أول 5 سنوات
-      const firstFiveYears = Math.min(yearsToRetirement, 5);
-      discountRate += firstFiveYears * 5;
-      
-      // 1% لكل سنة إضافية بعد الخمس سنوات الأولى
-      const additionalYears = Math.max(yearsToRetirement - 5, 0);
-      discountRate += additionalYears * 1;
-      
-      return discountRate;
-    }
+      // حقول الإجمالي
+      const monthlyTotal = document.getElementById("monthlyTotal");
+      const periodTotal = document.getElementById("periodTotal");
+      const afterDeductionTotal = document.getElementById("afterDeductionTotal");
 
-    function calculate() {
-      // الحصول على القيم من النموذج
-      const birthDate = document.getElementById('birthDate').value;
-      const appointmentDate = document.getElementById('appointmentDate').value;
-      const gender = document.getElementById('gender').value;
-      let salaryStart = parseFloat(document.getElementById('salaryStart').value) || 0;
-      let prevYears = parseInt(document.getElementById('prevYears').value) || 0;
-      let previousService = parseFloat(document.getElementById('previousService').value) || 0;
-      let futureYears = parseInt(document.getElementById('futureYears').value) || 0;
-      let growthRate = parseFloat(document.getElementById('growthRate').value) || 0;
+      const deductionLine = document.getElementById("deductionLine");
+      const netLine = document.getElementById("netLine");
 
-      // حساب إجمالي سنوات الخدمة السابقة (بما في ذلك ضم الخدمة)
-      const totalPreviousYears = prevYears + previousService;
-
-      // الحسابات الأساسية للراتب التقاعدي
-      let g = growthRate/100;
-      let tbody = document.querySelector('#salaryTable tbody');
-      tbody.innerHTML = '';
-      let salaries = [];
-
-      // نمو الأجور يبدأ من الراتب الأخير مباشرة
-      for(let i=1; i<=futureYears; i++){
-        let year = 2023 + i;
-        let salary = salaryStart * Math.pow(1+g, i);
-        salaries.push(salary);
-        let tr = document.createElement('tr');
-        tr.innerHTML = `<td>${year}</td><td>${format(salary)}</td>`;
-        tbody.appendChild(tr);
+      function daysInMonth(year, month) {
+        return new Date(year, month + 1, 0).getDate();
       }
 
-      // متوسط الأجر للخدمة المستقبلية
-      let avgSalary = salaries.reduce((a,b)=>a+b,0)/salaries.length;
-
-      // حساب أجزاء المعاش (معامل 2%)
-      let prevPart = salaryStart * (totalPreviousYears * 0.02);
-      let futurePart = avgSalary * (futureYears * 0.02);
-      let totalPension = prevPart + futurePart;
-
-      // عرض النتائج الأساسية
-      document.getElementById('prevPart').textContent = format(prevPart) + " ريال";
-      document.getElementById('avgSalary').textContent = format(avgSalary);
-      document.getElementById('futurePart').textContent = format(futurePart) + " ريال";
-      document.getElementById('totalPension').textContent = format(totalPension) + " ريال";
-
-      // توضيح كتابي للمعادلة
-      document.getElementById('formulaText').innerHTML = `
-        <strong>توضيح الحساب:</strong><br>
-        • <u>الخدمة السابقة (${prevYears} سنة من التعيين + ${previousService} سنة ضم خدمة = ${totalPreviousYears} سنة)</u> = 2% × ${format(salaryStart)} × ${totalPreviousYears} = <span class="highlight">${format(prevPart)} ريال</span><br>
-        • <u>الخدمة المستقبلية (${futureYears} سنة)</u> = 2% × ${format(avgSalary)} × ${futureYears} = <span class="highlight">${format(futurePart)} ريال</span><br>
-        • <u>المعاش الكلي</u> = ${format(prevPart)} + ${format(futurePart)} = <span class="highlight">${format(totalPension)} ريال</span>
-      `;
-
-      // حساب التقاعد المبكر
-      if (birthDate && gender) {
-        const currentAge = calculateAge(birthDate);
-        const yearsToRetirement = calculateYearsToRetirement(birthDate, gender);
-        const discountRate = calculateDiscountRate(yearsToRetirement);
-        const retirementAge = gender === 'female' ? 50 : 55;
-        
-        const discountAmount = totalPension * (discountRate / 100);
-        const pensionAfterDiscount = totalPension - discountAmount;
-        
-        // عرض نتائج التقاعد المبكر
-        document.getElementById('currentAge').textContent = currentAge + ' سنة';
-        document.getElementById('retirementAge').textContent = retirementAge + ' سنة';
-        document.getElementById('yearsLeft').textContent = yearsToRetirement + ' سنة';
-        document.getElementById('discountRate').textContent = discountRate + '%';
-        
-        document.getElementById('pensionBeforeDiscount').textContent = format(totalPension) + ' ريال';
-        document.getElementById('totalDiscount').textContent = format(discountAmount) + ' ريال (' + discountRate + '%)';
-        document.getElementById('pensionAfterDiscount').textContent = format(pensionAfterDiscount) + ' ريال';
-        
-        // توضيح معادلة التقاعد المبكر
-        const firstFive = Math.min(yearsToRetirement, 5);
-        const additional = Math.max(yearsToRetirement - 5, 0);
-        
-        document.getElementById('retirementFormulaText').innerHTML = `
-          <strong>توضيح حساب التقاعد المبكر:</strong><br>
-          • <u>العمر الحالي</u>: ${currentAge} سنة<br>
-          • <u>سن التقاعد</u>: ${retirementAge} سنة (${gender === 'female' ? 'أنثى' : 'ذكر'})<br>
-          • <u>السنوات المتبقية</u>: ${yearsToRetirement} سنة<br>
-          • <u>حساب نسبة الخصم</u>: (${firstFive} سنة × 5%) + (${additional} سنة × 1%) = <span class="retirement-highlight">${discountRate}%</span><br>
-          • <u>قيمة الخصم</u>: ${format(totalPension)} × ${discountRate}% = <span class="retirement-highlight">${format(discountAmount)} ريال</span><br>
-          • <u>الراتب بعد الخصم</u>: ${format(totalPension)} - ${format(discountAmount)} = <span class="retirement-highlight">${format(pensionAfterDiscount)} ريال</span>
-        `;
-      } else {
-        // إخفاء قسم التقاعد المبكر إذا لم يتم إدخال البيانات المطلوبة
-        document.getElementById('currentAge').textContent = '--';
-        document.getElementById('retirementAge').textContent = '--';
-        document.getElementById('yearsLeft').textContent = '--';
-        document.getElementById('discountRate').textContent = '--';
-        
-        document.getElementById('pensionBeforeDiscount').textContent = '-- ريال';
-        document.getElementById('totalDiscount').textContent = '-- ريال';
-        document.getElementById('pensionAfterDiscount').textContent = '-- ريال';
-        
-        document.getElementById('retirementFormulaText').innerHTML = 'الرجاء إدخال تاريخ الميلاد ونوع الجنس لحساب التقاعد المبكر';
+      function updateContractDisplay() {
+        if (contractType.value === "temporary") {
+          // إخفاء الحقول الخاصة بالعقود الدائمة
+          permanentAllowances.style.display = "none";
+          
+          // إظهار الحقول الخاصة بالعقود المؤقتة
+          temporaryAllowances.style.display = "block";
+          
+          // إخفاء حسابات الصندوق الاجتماعي
+          deductionLine.style.display = "none";
+          netLine.style.display = "none";
+          
+          // إضافة كلاس للتحكم في إخفاء عمود "بعد الخصم" بتغيير اللون
+          container.classList.add('temporary-contract');
+        } else {
+          // إظهار الحقول الخاصة بالعقود الدائمة
+          permanentAllowances.style.display = "block";
+          
+          // إخفاء الحقول الخاصة بالعقود المؤقتة
+          temporaryAllowances.style.display = "none";
+          
+          // إظهار حسابات الصندوق الاجتماعي
+          deductionLine.style.display = "block";
+          netLine.style.display = "block";
+          
+          // إزالة كلاس إخفاء عمود "بعد الخصم"
+          container.classList.remove('temporary-contract');
+        }
       }
-    }
 
-    // تعيين تاريخ افتراضي لتاريخ الميلاد وتاريخ التعيين (لأغراض التجربة)
-    document.getElementById('birthDate').value = '1980-01-01';
-    document.getElementById('appointmentDate').value = '2005-01-01';
-    
-    // حساب السنوات السابقة والمستقبلية عند التحميل
-    calculatePreviousYears();
-    calculateFutureYears();
+      function calculate() {
+        if (!(startDate.value && endDate.value)) return;
+
+        let start = new Date(startDate.value);
+        let end = new Date(endDate.value);
+
+        if (end < start) {
+          totalPeriod.textContent = "❌ تاريخ النهاية قبل البداية";
+          daysCount.textContent = "0";
+          return;
+        }
+
+        let diffTime = end - start;
+        let days = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        daysCount.textContent = days;
+
+        let totalBase = 0;
+        let totalCalc = 0;
+        let totalAfterDeduction = 0;
+
+        allowances.forEach(item => {
+          let input = document.getElementById(item.id);
+          let resultBox = document.getElementById(item.result);
+          let afterDeductionBox = document.getElementById(item.afterDeduction);
+          let monthly = parseFloat(input.value) || 0;
+          
+          // إذا كان نوع العقد موقتاً، نتجاهل الحقول المخفية في الحساب
+          if (contractType.value === "temporary" && 
+              item.id !== "basic" && item.id !== "otherAllowances") {
+            return; // تخطي هذا الحقل
+          }
+          
+          // إذا كان نوع العقد دائماً، نتجاهل الحقول المؤقتة
+          if (contractType.value === "permanent" && item.id === "otherAllowances") {
+            return; // تخطي هذا الحقل
+          }
+          
+          totalBase += monthly;
+          
+          let current = new Date(start);
+          let sum = 0;
+          while (current <= end) {
+            let year = current.getFullYear();
+            let month = current.getMonth();
+            let daysInThisMonth = daysInMonth(year, month);
+            let daily = monthly / daysInThisMonth;
+            sum += daily;
+            current.setDate(current.getDate() + 1);
+          }
+          
+          resultBox.value = sum.toFixed(3);
+          
+          // حساب القيمة بعد خصم 8% فقط للعقود الدائمة
+          if (contractType.value === "permanent") {
+            let afterDeductionValue = sum * 0.92;
+            afterDeductionBox.value = afterDeductionValue.toFixed(3);
+            totalAfterDeduction += afterDeductionValue;
+          } else {
+            afterDeductionBox.value = sum.toFixed(3);
+          }
+          
+          totalCalc += sum;
+        });
+
+        // تحديث الإجماليات
+        if (contractType.value === "permanent") {
+          monthlyTotal.value = totalBase.toFixed(3);
+          periodTotal.value = totalCalc.toFixed(3);
+          afterDeductionTotal.value = totalAfterDeduction.toFixed(3);
+        }
+
+        totalAllowances.textContent = totalBase.toFixed(3);
+        totalPeriod.textContent = totalCalc.toFixed(3);
+        
+        // حساب اشتراكات الصندوق الاجتماعي فقط للعقود الدائمة
+        if (contractType.value === "permanent") {
+          let ded = totalCalc * 0.08;
+          deduction.textContent = ded.toFixed(3);
+
+          let netValue = totalCalc - ded;
+          net.textContent = netValue.toFixed(3);
+        } else {
+          deduction.textContent = "0";
+          net.textContent = totalCalc.toFixed(3);
+        }
+
+        updateContractDisplay();
+      }
+
+      function resetForm() {
+        document.getElementById("employeeName").value = "";
+        document.getElementById("employeeNumber").value = "";
+        document.getElementById("startDate").value = formatDate(firstDayOfMonth);
+        document.getElementById("endDate").value = formatDate(lastDayOfMonth);
+        document.getElementById("basic").value = "";
+        document.getElementById("housing").value = "";
+        document.getElementById("electricity").value = "";
+        document.getElementById("water").value = "";
+        document.getElementById("phone").value = "";
+        document.getElementById("transport").value = "";
+        document.getElementById("professional").value = "";
+        document.getElementById("otherAllowances").value = "";
+        document.getElementById("costLiving").value = "";
+        contractType.value = "permanent";
+        
+        allowances.forEach(item => {
+          document.getElementById(item.result).value = "";
+          document.getElementById(item.afterDeduction).value = "";
+        });
+        
+        // إعادة تعيين الإجماليات
+        monthlyTotal.value = "";
+        periodTotal.value = "";
+        afterDeductionTotal.value = "";
+        
+        totalAllowances.textContent = "0";
+        totalPeriod.textContent = "0";
+        deduction.textContent = "0";
+        net.textContent = "0";
+        daysCount.textContent = "0";
+        
+        // إزالة كلاس العقود المؤقتة
+        container.classList.remove('temporary-contract');
+        
+        updateContractDisplay();
+      }
+
+      // جعل الدالة متاحة عالمياً
+      window.resetForm = resetForm;
+
+      // إضافة مستمعي الأحداث
+      startDate.addEventListener("change", calculate);
+      endDate.addEventListener("change", calculate);
+      contractType.addEventListener("change", updateContractDisplay);
+      
+      allowances.forEach(item => {
+        document.getElementById(item.id).addEventListener("input", calculate);
+      });
+
+      // التهيئة الأولية
+      calculate();
+      updateContractDisplay();
+    });
   </script>
+
 </body>
 </html>
