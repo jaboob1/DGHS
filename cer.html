@@ -3,135 +3,324 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة الخدمات الإلكترونية</title>
+    <title>حاسبة رصيد الإجازة</title>
     <style>
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
         body {
-            background: linear-gradient(135deg, #1e5799 0%, #207cca 51%, #2989d8 100%);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+            background-color: #f5f5f5;
+            margin: 0;
             padding: 20px;
+            color: #333;
         }
-        
         .container {
             max-width: 800px;
-            width: 100%;
-            background-color: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
-        
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
         }
-        
-        p {
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-            opacity: 0.9;
+        .form-group {
+            margin-bottom: 20px;
         }
-        
-        .buttons-container {
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .date-range {
             display: flex;
-            flex-direction: column;
-            align-items: center; /* محاذاة لوسط الشاشة */
             gap: 15px;
+        }
+        .date-range > div {
+            flex: 1;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            display: none;
+        }
+        .results h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+        }
+        .result-item.total {
+            border-top: 1px solid #ddd;
+            margin-top: 10px;
+            padding-top: 15px;
+            font-weight: bold;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+        .vacation-list {
             margin-top: 20px;
         }
-        
-        .btn {
+        .vacation-item {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 15px 30px;
-            background: linear-gradient(45deg, #ff8a00, #e52e71);
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #e8f4fc;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .remove-btn {
+            background-color: #e74c3c;
             color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            width: 300px; /* عرض متساوي لجميع الأزرار */
             border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
             cursor: pointer;
-            text-align: center;
+            font-size: 12px;
+            width: auto;
         }
-        
-        .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(45deg, #e52e71, #ff8a00);
+        .remove-btn:hover {
+            background-color: #c0392b;
         }
-        
-        .btn:active {
-            transform: translateY(0);
-        }
-        
-        .btn i {
-            margin-left: 10px;
-            font-size: 1.4rem;
-        }
-        
-        .footer {
-            margin-top: 40px;
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-        
-        @media (max-width: 600px) {
-            .container {
-                padding: 25px;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .btn {
-                width: 100%; /* على الشاشات الصغيرة، اجعل الأزرار تأخذ العرض الكامل */
-                font-size: 1rem;
-            }
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>بوابة الخدمات الإلكترونية</h1>
-        <p>اختر الخدمة التي تريد الوصول إليها</p>
+        <h1>حاسبة رصيد إجازة الموظف</h1>
         
-        <div class="buttons-container">
-            <a href="https://www.jaboob.com/spf.html" class="btn">
-                <i>🏦</i> حاسبة التقاعد
-            </a>
-
-            <a href="https://www.jaboob.com/index1.html" class="btn">
-                <i>📝</i> حاسبة رواتب عقود دائمة وخاصة
-            </a>
-
-            <a href="https://www.jaboob.com/dghs.html" class="btn">
-                <i>📅</i> حاسبة اجازة غير مدفوعة الراتب
-            </a>
+        <div class="form-group">
+            <label for="hiringDate">تاريخ التعيين:</label>
+            <input type="date" id="hiringDate">
+        </div>
+        
+        <div class="form-group">
+            <label>فترة الإجازة:</label>
+            <div class="date-range">
+                <div>
+                    <label for="vacationStart">من:</label>
+                    <input type="date" id="vacationStart">
+                </div>
+                <div>
+                    <label for="vacationEnd">إلى:</label>
+                    <input type="date" id="vacationEnd">
+                </div>
+            </div>
+            <div id="dateError" class="error">يجب أن يكون تاريخ البداية قبل تاريخ النهاية</div>
+        </div>
+        
+        <button id="calculateBtn">حساب الرصيد</button>
+        <button id="addVacationBtn" style="background-color: #2ecc71; margin-top: 10px;">إضافة إجازة</button>
+        
+        <div class="results" id="results">
+            <h2>نتائج الحساب</h2>
+            <div class="result-item">
+                <span>تاريخ التعيين:</span>
+                <span id="hiringDateResult"></span>
+            </div>
+            <div class="result-item">
+                <span>عدد أشهر العمل:</span>
+                <span id="monthsWorked"></span>
+            </div>
+            <div class="result-item">
+                <span>رصيد الإجازة المستحق:</span>
+                <span id="vacationBalance"></span>
+            </div>
+            
+            <div class="vacation-list" id="vacationList">
+                <!-- سيتم إضافة فترات الإجازة هنا -->
+            </div>
+            
+            <div class="result-item total">
+                <span>الرصيد المتبقي:</span>
+                <span id="remainingBalance"></span>
+            </div>
         </div>
     </div>
-    
-    <div class="footer">
-        جميع الحقوق محفوظة &copy www.jaboob.com 2025
-    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hiringDateInput = document.getElementById('hiringDate');
+            const vacationStartInput = document.getElementById('vacationStart');
+            const vacationEndInput = document.getElementById('vacationEnd');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const addVacationBtn = document.getElementById('addVacationBtn');
+            const resultsDiv = document.getElementById('results');
+            const dateError = document.getElementById('dateError');
+            
+            let vacations = [];
+            
+            // تعيين التواريخ الافتراضية
+            const today = new Date();
+            hiringDateInput.valueAsDate = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
+            vacationStartInput.valueAsDate = new Date();
+            vacationEndInput.valueAsDate = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000); // بعد أسبوع
+            
+            calculateBtn.addEventListener('click', calculateVacationBalance);
+            addVacationBtn.addEventListener('click', addVacation);
+            
+            function calculateVacationBalance() {
+                const hiringDate = new Date(hiringDateInput.value);
+                const today = new Date();
+                
+                if (!hiringDateInput.value) {
+                    alert('يرجى إدخال تاريخ التعيين');
+                    return;
+                }
+                
+                if (hiringDate > today) {
+                    alert('تاريخ التعيين لا يمكن أن يكون في المستقبل');
+                    return;
+                }
+                
+                // حساب عدد أشهر العمل
+                let monthsWorked = (today.getFullYear() - hiringDate.getFullYear()) * 12;
+                monthsWorked -= hiringDate.getMonth();
+                monthsWorked += today.getMonth();
+                
+                // إذا كان يوم الشهر الحالي أقل من يوم التعيين، نخصم شهر
+                if (today.getDate() < hiringDate.getDate()) {
+                    monthsWorked--;
+                }
+                
+                // حساب رصيد الإجازة (4 أيام لكل شهر)
+                const vacationBalance = monthsWorked * 4;
+                
+                // حساب إجمالي أيام الإجازة المأخوذة
+                const totalVacationDays = vacations.reduce((total, vacation) => {
+                    return total + vacation.days;
+                }, 0);
+                
+                // حساب الرصيد المتبقي
+                const remainingBalance = vacationBalance - totalVacationDays;
+                
+                // عرض النتائج
+                document.getElementById('hiringDateResult').textContent = formatDate(hiringDate);
+                document.getElementById('monthsWorked').textContent = monthsWorked;
+                document.getElementById('vacationBalance').textContent = vacationBalance + ' يوم';
+                document.getElementById('remainingBalance').textContent = remainingBalance + ' يوم';
+                
+                // تحديث قائمة الإجازات
+                updateVacationList();
+                
+                // إظهار النتائج
+                resultsDiv.style.display = 'block';
+            }
+            
+            function addVacation() {
+                const startDate = new Date(vacationStartInput.value);
+                const endDate = new Date(vacationEndInput.value);
+                
+                if (!vacationStartInput.value || !vacationEndInput.value) {
+                    alert('يرجى إدخال تاريخي بداية ونهاية الإجازة');
+                    return;
+                }
+                
+                if (startDate > endDate) {
+                    dateError.style.display = 'block';
+                    return;
+                } else {
+                    dateError.style.display = 'none';
+                }
+                
+                // حساب عدد أيام الإجازة
+                const timeDiff = endDate.getTime() - startDate.getTime();
+                const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // +1 لتضمين اليوم الأول
+                
+                // إضافة الإجازة إلى القائمة
+                vacations.push({
+                    start: startDate,
+                    end: endDate,
+                    days: daysDiff
+                });
+                
+                // إعادة حساب الرصيد
+                calculateVacationBalance();
+                
+                // مسح حقول الإدخال
+                vacationStartInput.value = '';
+                vacationEndInput.value = '';
+            }
+            
+            function removeVacation(index) {
+                vacations.splice(index, 1);
+                calculateVacationBalance();
+            }
+            
+            function updateVacationList() {
+                const vacationList = document.getElementById('vacationList');
+                vacationList.innerHTML = '';
+                
+                if (vacations.length === 0) {
+                    vacationList.innerHTML = '<p>لا توجد إجازات مضافة</p>';
+                    return;
+                }
+                
+                vacations.forEach((vacation, index) => {
+                    const vacationItem = document.createElement('div');
+                    vacationItem.className = 'vacation-item';
+                    vacationItem.innerHTML = `
+                        <div>
+                            <span>${formatDate(vacation.start)} - ${formatDate(vacation.end)}</span>
+                        </div>
+                        <div>
+                            <span>${vacation.days} يوم</span>
+                            <button class="remove-btn" onclick="removeVacation(${index})">حذف</button>
+                        </div>
+                    `;
+                    vacationList.appendChild(vacationItem);
+                });
+            }
+            
+            function formatDate(date) {
+                return date.toLocaleDateString('ar-EG');
+            }
+            
+            // جعل الدالة removeVacation متاحة بشكل عام
+            window.removeVacation = removeVacation;
+            
+            // حساب الرصيد عند تحميل الصفحة
+            calculateVacationBalance();
+        });
+    </script>
 </body>
 </html>
