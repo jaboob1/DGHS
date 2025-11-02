@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة رصيد الإجازة</title>
+    <title>حاسبة رصيد الإجازة المتقدمة</title>
     <style>
         * {
             box-sizing: border-box;
@@ -16,7 +16,7 @@
             color: #333;
         }
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background-color: white;
             padding: 30px;
@@ -37,7 +37,7 @@
             font-weight: bold;
             color: #2c3e50;
         }
-        input[type="date"] {
+        input[type="date"], input[type="text"] {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
@@ -122,17 +122,75 @@
             margin-top: 5px;
             display: none;
         }
+        .official-holidays {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f7ff;
+            border-radius: 5px;
+            border: 1px solid #d1e7ff;
+        }
+        .holiday-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: flex-end;
+        }
+        .holiday-item > div {
+            flex: 1;
+        }
+        .section-title {
+            color: #2c3e50;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .add-holiday-btn {
+            background-color: #2ecc71;
+            margin-top: 10px;
+        }
+        .add-holiday-btn:hover {
+            background-color: #27ae60;
+        }
+        .holiday-list {
+            margin-top: 20px;
+        }
+        .holiday-list-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #e8f6ef;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .calculation-details {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff9e6;
+            border-radius: 5px;
+            border: 1px solid #ffeaa7;
+        }
+        .month-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+        .month-item:last-child {
+            border-bottom: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>حاسبة رصيد إجازة الموظف</h1>
+        <h1>حاسبة رصيد إجازة الموظف المتقدمة</h1>
         
         <div class="form-group">
             <label for="hiringDate">تاريخ التعيين:</label>
             <input type="date" id="hiringDate">
         </div>
         
+        <h3 class="section-title">الإجازات العادية</h3>
         <div class="form-group">
             <label>فترة الإجازة:</label>
             <div class="date-range">
@@ -148,8 +206,28 @@
             <div id="dateError" class="error">يجب أن يكون تاريخ البداية قبل تاريخ النهاية</div>
         </div>
         
-        <button id="calculateBtn">حساب الرصيد</button>
-        <button id="addVacationBtn" style="background-color: #2ecc71; margin-top: 10px;">إضافة إجازة</button>
+        <button id="addVacationBtn" style="background-color: #2ecc71;">إضافة إجازة عادية</button>
+        
+        <h3 class="section-title">الإجازات الرسمية</h3>
+        <div class="official-holidays">
+            <div class="holiday-item">
+                <div>
+                    <label for="holidayName">اسم الإجازة الرسمية:</label>
+                    <input type="text" id="holidayName" placeholder="مثال: عيد الفطر">
+                </div>
+                <div>
+                    <label for="holidayStart">من:</label>
+                    <input type="date" id="holidayStart">
+                </div>
+                <div>
+                    <label for="holidayEnd">إلى:</label>
+                    <input type="date" id="holidayEnd">
+                </div>
+            </div>
+            <button id="addHolidayBtn" class="add-holiday-btn">إضافة إجازة رسمية</button>
+        </div>
+        
+        <button id="calculateBtn">حساب الرصيد الكلي</button>
         
         <div class="results" id="results">
             <h2>نتائج الحساب</h2>
@@ -162,12 +240,31 @@
                 <span id="monthsWorked"></span>
             </div>
             <div class="result-item">
+                <span>عدد أيام العمل:</span>
+                <span id="daysWorked"></span>
+            </div>
+            <div class="result-item">
                 <span>رصيد الإجازة المستحق:</span>
                 <span id="vacationBalance"></span>
             </div>
+            <div class="result-item">
+                <span>الإجازات الرسمية المضافة:</span>
+                <span id="officialHolidaysTotal"></span>
+            </div>
+            
+            <div class="calculation-details" id="calculationDetails">
+                <h3>تفاصيل حساب الاستحقاق الشهري</h3>
+                <!-- سيتم إضافة تفاصيل الحساب الشهري هنا -->
+            </div>
             
             <div class="vacation-list" id="vacationList">
-                <!-- سيتم إضافة فترات الإجازة هنا -->
+                <h3>الإجازات العادية المضافة</h3>
+                <!-- سيتم إضافة فترات الإجازة العادية هنا -->
+            </div>
+            
+            <div class="holiday-list" id="holidayList">
+                <h3>الإجازات الرسمية المضافة</h3>
+                <!-- سيتم إضافة فترات الإجازة الرسمية هنا -->
             </div>
             
             <div class="result-item total">
@@ -182,12 +279,18 @@
             const hiringDateInput = document.getElementById('hiringDate');
             const vacationStartInput = document.getElementById('vacationStart');
             const vacationEndInput = document.getElementById('vacationEnd');
+            const holidayNameInput = document.getElementById('holidayName');
+            const holidayStartInput = document.getElementById('holidayStart');
+            const holidayEndInput = document.getElementById('holidayEnd');
             const calculateBtn = document.getElementById('calculateBtn');
             const addVacationBtn = document.getElementById('addVacationBtn');
+            const addHolidayBtn = document.getElementById('addHolidayBtn');
             const resultsDiv = document.getElementById('results');
             const dateError = document.getElementById('dateError');
+            const calculationDetails = document.getElementById('calculationDetails');
             
             let vacations = [];
+            let officialHolidays = [];
             
             // تعيين التواريخ الافتراضية
             const today = new Date();
@@ -195,8 +298,32 @@
             vacationStartInput.valueAsDate = new Date();
             vacationEndInput.valueAsDate = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000); // بعد أسبوع
             
+            // تعيين تاريخ الإجازة الرسمية الافتراضي
+            holidayStartInput.valueAsDate = new Date();
+            holidayEndInput.valueAsDate = new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000); // 3 أيام
+            
             calculateBtn.addEventListener('click', calculateVacationBalance);
             addVacationBtn.addEventListener('click', addVacation);
+            addHolidayBtn.addEventListener('click', addOfficialHoliday);
+            
+            // دالة للحصول على عدد أيام الشهر
+            function getDaysInMonth(year, month) {
+                return new Date(year, month + 1, 0).getDate();
+            }
+            
+            // دالة لتنسيق التاريخ
+            function formatDate(date) {
+                return date.toLocaleDateString('ar-EG');
+            }
+            
+            // دالة لتنسيق اسم الشهر
+            function getMonthName(monthIndex) {
+                const months = [
+                    "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
+                    "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+                ];
+                return months[monthIndex];
+            }
             
             function calculateVacationBalance() {
                 const hiringDate = new Date(hiringDateInput.value);
@@ -222,25 +349,82 @@
                     monthsWorked--;
                 }
                 
-                // حساب رصيد الإجازة (4 أيام لكل شهر)
-                const vacationBalance = monthsWorked * 4;
+                // حساب عدد أيام العمل
+                const timeDiff = today.getTime() - hiringDate.getTime();
+                const daysWorked = Math.ceil(timeDiff / (1000 * 3600 * 24));
                 
-                // حساب إجمالي أيام الإجازة المأخوذة
+                // حساب رصيد الإجازة بناءً على الاستحقاق اليومي الدقيق لكل شهر
+                let totalVacationBalance = 0;
+                let currentDate = new Date(hiringDate);
+                let calculationDetailsHTML = '<h3>تفاصيل حساب الاستحقاق الشهري</h3>';
+                
+                // إضافة تفاصيل الحساب لكل شهر
+                while (currentDate <= today) {
+                    const year = currentDate.getFullYear();
+                    const month = currentDate.getMonth();
+                    const daysInMonth = getDaysInMonth(year, month);
+                    
+                    // حساب عدد أيام العمل في هذا الشهر
+                    let daysWorkedInMonth;
+                    
+                    if (currentDate.getFullYear() === hiringDate.getFullYear() && 
+                        currentDate.getMonth() === hiringDate.getMonth()) {
+                        // الشهر الأول (من تاريخ التعيين إلى نهاية الشهر)
+                        daysWorkedInMonth = daysInMonth - currentDate.getDate() + 1;
+                    } else if (currentDate.getFullYear() === today.getFullYear() && 
+                              currentDate.getMonth() === today.getMonth()) {
+                        // الشهر الحالي (من بداية الشهر إلى تاريخ اليوم)
+                        daysWorkedInMonth = today.getDate();
+                    } else {
+                        // شهر كامل
+                        daysWorkedInMonth = daysInMonth;
+                    }
+                    
+                    // حساب الاستحقاق لهذا الشهر (4 أيام مقسمة على أيام الشهر)
+                    const monthlyRate = 4 / daysInMonth;
+                    const monthVacation = daysWorkedInMonth * monthlyRate;
+                    totalVacationBalance += monthVacation;
+                    
+                    // إضافة تفاصيل الشهر للعرض
+                    calculationDetailsHTML += `
+                        <div class="month-item">
+                            <span>${getMonthName(month)} ${year}</span>
+                            <span>${daysWorkedInMonth} يوم عمل × (${(monthlyRate).toFixed(4)} يوم/يوم) = ${monthVacation.toFixed(2)} يوم</span>
+                        </div>
+                    `;
+                    
+                    // الانتقال إلى الشهر التالي
+                    currentDate.setMonth(currentDate.getMonth() + 1);
+                    currentDate.setDate(1);
+                }
+                
+                // تحديث تفاصيل الحساب
+                calculationDetails.innerHTML = calculationDetailsHTML;
+                
+                // حساب إجمالي أيام الإجازة العادية المأخوذة
                 const totalVacationDays = vacations.reduce((total, vacation) => {
                     return total + vacation.days;
                 }, 0);
                 
+                // حساب إجمالي أيام الإجازات الرسمية المضافة
+                const totalHolidayDays = officialHolidays.reduce((total, holiday) => {
+                    return total + holiday.days;
+                }, 0);
+                
                 // حساب الرصيد المتبقي
-                const remainingBalance = vacationBalance - totalVacationDays;
+                const remainingBalance = (totalVacationBalance + totalHolidayDays) - totalVacationDays;
                 
                 // عرض النتائج
                 document.getElementById('hiringDateResult').textContent = formatDate(hiringDate);
                 document.getElementById('monthsWorked').textContent = monthsWorked;
-                document.getElementById('vacationBalance').textContent = vacationBalance + ' يوم';
-                document.getElementById('remainingBalance').textContent = remainingBalance + ' يوم';
+                document.getElementById('daysWorked').textContent = daysWorked;
+                document.getElementById('vacationBalance').textContent = totalVacationBalance.toFixed(2) + ' يوم';
+                document.getElementById('officialHolidaysTotal').textContent = totalHolidayDays + ' يوم';
+                document.getElementById('remainingBalance').textContent = remainingBalance.toFixed(2) + ' يوم';
                 
                 // تحديث قائمة الإجازات
                 updateVacationList();
+                updateHolidayList();
                 
                 // إظهار النتائج
                 resultsDiv.style.display = 'block';
@@ -281,17 +465,58 @@
                 vacationEndInput.value = '';
             }
             
+            function addOfficialHoliday() {
+                const name = holidayNameInput.value;
+                const startDate = new Date(holidayStartInput.value);
+                const endDate = new Date(holidayEndInput.value);
+                
+                if (!name || !holidayStartInput.value || !holidayEndInput.value) {
+                    alert('يرجى إدخال جميع بيانات الإجازة الرسمية');
+                    return;
+                }
+                
+                if (startDate > endDate) {
+                    alert('يجب أن يكون تاريخ البداية قبل تاريخ النهاية');
+                    return;
+                }
+                
+                // حساب عدد أيام الإجازة الرسمية
+                const timeDiff = endDate.getTime() - startDate.getTime();
+                const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // +1 لتضمين اليوم الأول
+                
+                // إضافة الإجازة الرسمية إلى القائمة
+                officialHolidays.push({
+                    name: name,
+                    start: startDate,
+                    end: endDate,
+                    days: daysDiff
+                });
+                
+                // إعادة حساب الرصيد
+                calculateVacationBalance();
+                
+                // مسح حقول الإدخال
+                holidayNameInput.value = '';
+                holidayStartInput.value = '';
+                holidayEndInput.value = '';
+            }
+            
             function removeVacation(index) {
                 vacations.splice(index, 1);
                 calculateVacationBalance();
             }
             
+            function removeHoliday(index) {
+                officialHolidays.splice(index, 1);
+                calculateVacationBalance();
+            }
+            
             function updateVacationList() {
                 const vacationList = document.getElementById('vacationList');
-                vacationList.innerHTML = '';
+                vacationList.innerHTML = '<h3>الإجازات العادية المضافة</h3>';
                 
                 if (vacations.length === 0) {
-                    vacationList.innerHTML = '<p>لا توجد إجازات مضافة</p>';
+                    vacationList.innerHTML += '<p>لا توجد إجازات عادية مضافة</p>';
                     return;
                 }
                 
@@ -311,12 +536,34 @@
                 });
             }
             
-            function formatDate(date) {
-                return date.toLocaleDateString('ar-EG');
+            function updateHolidayList() {
+                const holidayList = document.getElementById('holidayList');
+                holidayList.innerHTML = '<h3>الإجازات الرسمية المضافة</h3>';
+                
+                if (officialHolidays.length === 0) {
+                    holidayList.innerHTML += '<p>لا توجد إجازات رسمية مضافة</p>';
+                    return;
+                }
+                
+                officialHolidays.forEach((holiday, index) => {
+                    const holidayItem = document.createElement('div');
+                    holidayItem.className = 'holiday-list-item';
+                    holidayItem.innerHTML = `
+                        <div>
+                            <span>${holiday.name}: ${formatDate(holiday.start)} - ${formatDate(holiday.end)}</span>
+                        </div>
+                        <div>
+                            <span>${holiday.days} يوم</span>
+                            <button class="remove-btn" onclick="removeHoliday(${index})">حذف</button>
+                        </div>
+                    `;
+                    holidayList.appendChild(holidayItem);
+                });
             }
             
-            // جعل الدالة removeVacation متاحة بشكل عام
+            // جعل الدوال متاحة بشكل عام
             window.removeVacation = removeVacation;
+            window.removeHoliday = removeHoliday;
             
             // حساب الرصيد عند تحميل الصفحة
             calculateVacationBalance();
