@@ -210,6 +210,14 @@
             color: #c62828;
             font-weight: bold;
         }
+        .info-box {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e3f2fd;
+            border-radius: 5px;
+            border: 1px solid #bbdefb;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -241,6 +249,9 @@
         
         <h3 class="section-title">الإجازات الرسمية</h3>
         <div class="official-holidays">
+            <div class="info-box">
+                ملاحظة: سيتم إضافة الإجازات الرسمية إلى الرصيد المتبقي فقط إذا كانت متقاطعة مع إجازات عادية
+            </div>
             <div class="holiday-item">
                 <div>
                     <label for="holidayName">اسم الإجازة الرسمية:</label>
@@ -279,7 +290,7 @@
                 <span id="vacationBalance"></span>
             </div>
             <div class="result-item">
-                <span>الإجازات الرسمية المضافة:</span>
+                <span>الإجازات الرسمية المتقاطعة المضافة:</span>
                 <span id="officialHolidaysTotal"></span>
             </div>
             
@@ -500,13 +511,12 @@
                 
                 compensationInfo.innerHTML = compensationDetailsHTML;
                 
-                // حساب إجمالي أيام الإجازات الرسمية المضافة
-                const totalHolidayDays = officialHolidays.reduce((total, holiday) => {
-                    return total + holiday.days;
-                }, 0);
+                // حساب إجمالي أيام الإجازات الرسمية المتقاطعة فقط
+                // (لا نضيف الإجازات الرسمية غير المتقاطعة)
+                const totalHolidayDays = totalCompensationDays;
                 
-                // حساب الرصيد المتبقي (يشمل الإجازات الرسمية والتعويض عن الأيام المتقاطعة)
-                const remainingBalance = (totalVacationBalance + totalHolidayDays + totalCompensationDays) - totalVacationDays;
+                // حساب الرصيد المتبقي (يشمل فقط الإجازات الرسمية المتقاطعة)
+                const remainingBalance = (totalVacationBalance + totalHolidayDays) - totalVacationDays;
                 
                 // حساب الأيام الزائدة عن الرصيد (التي سيتم خصمها من الراتب)
                 let exceededDaysHTML = '<h3 class="warning">الأيام الزائدة عن الرصيد (خصم من الراتب)</h3>';
@@ -527,7 +537,7 @@
                     `;
                     
                     // حساب الأيام الزائدة لكل إجازة
-                    let tempBalance = totalVacationBalance + totalHolidayDays + totalCompensationDays;
+                    let tempBalance = totalVacationBalance + totalHolidayDays;
                     
                     vacations.forEach((vacation, index) => {
                         let vacationDays = vacation.days;
@@ -721,9 +731,27 @@
                 officialHolidays.forEach((holiday, index) => {
                     const holidayItem = document.createElement('div');
                     holidayItem.className = 'holiday-list-item';
+                    
+                    // التحقق مما إذا كانت الإجازة الرسمية متقاطعة مع أي إجازة عادية
+                    let isOverlapping = false;
+                    vacations.forEach(vacation => {
+                        if (dateRangesOverlap(
+                            vacation.start, vacation.end, 
+                            holiday.start, holiday.end
+                        )) {
+                            isOverlapping = true;
+                        }
+                    });
+                    
+                    const statusText = isOverlapping ? 
+                        '<small style="color: green;">(متقاطعة مع إجازة عادية - سيتم إضافتها للرصيد)</small>' : 
+                        '<small style="color: orange;">(غير متقاطعة - لن تضاف للرصيد)</small>';
+                    
                     holidayItem.innerHTML = `
                         <div>
                             <span>${holiday.name}: ${formatDate(holiday.start)} - ${formatDate(holiday.end)}</span>
+                            <br>
+                            ${statusText}
                         </div>
                         <div>
                             <span>${holiday.days} يوم</span>
