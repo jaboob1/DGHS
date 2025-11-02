@@ -179,6 +179,37 @@
         .month-item:last-child {
             border-bottom: none;
         }
+        .compensation-info {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e8f6ef;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .compensation-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .exceeded-days {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ffebee;
+            border-radius: 5px;
+            border: 1px solid #ffcdd2;
+        }
+        .exceeded-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #ffcdd2;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .warning {
+            color: #c62828;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -257,6 +288,11 @@
                 <!-- سيتم إضافة تفاصيل الحساب الشهري هنا -->
             </div>
             
+            <div class="compensation-info" id="compensationInfo">
+                <h4>تعويض الإجازات الرسمية المتقاطعة مع الإجازات العادية</h4>
+                <!-- سيتم إضافة تفاصيل التعويض هنا -->
+            </div>
+            
             <div class="vacation-list" id="vacationList">
                 <h3>الإجازات العادية المضافة</h3>
                 <!-- سيتم إضافة فترات الإجازة العادية هنا -->
@@ -265,6 +301,11 @@
             <div class="holiday-list" id="holidayList">
                 <h3>الإجازات الرسمية المضافة</h3>
                 <!-- سيتم إضافة فترات الإجازة الرسمية هنا -->
+            </div>
+            
+            <div class="exceeded-days" id="exceededDays">
+                <h3 class="warning">الأيام الزائدة عن الرصيد (خصم من الراتب)</h3>
+                <!-- سيتم إضافة الأيام الزائدة هنا -->
             </div>
             
             <div class="result-item total">
@@ -288,6 +329,8 @@
             const resultsDiv = document.getElementById('results');
             const dateError = document.getElementById('dateError');
             const calculationDetails = document.getElementById('calculationDetails');
+            const compensationInfo = document.getElementById('compensationInfo');
+            const exceededDaysDiv = document.getElementById('exceededDays');
             
             let vacations = [];
             let officialHolidays = [];
@@ -323,6 +366,24 @@
                     "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
                 ];
                 return months[monthIndex];
+            }
+            
+            // دالة للتحقق من التقاطع بين فترتين
+            function dateRangesOverlap(start1, end1, start2, end2) {
+                return start1 <= end2 && end1 >= start2;
+            }
+            
+            // دالة لحساب عدد أيام التقاطع بين فترتين
+            function calculateOverlapDays(start1, end1, start2, end2) {
+                if (!dateRangesOverlap(start1, end1, start2, end2)) {
+                    return 0;
+                }
+                
+                const overlapStart = new Date(Math.max(start1.getTime(), start2.getTime()));
+                const overlapEnd = new Date(Math.min(end1.getTime(), end2.getTime()));
+                
+                const timeDiff = overlapEnd.getTime() - overlapStart.getTime();
+                return Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // +1 لتضمين اليوم الأول
             }
             
             function calculateVacationBalance() {
@@ -402,17 +463,114 @@
                 calculationDetails.innerHTML = calculationDetailsHTML;
                 
                 // حساب إجمالي أيام الإجازة العادية المأخوذة
-                const totalVacationDays = vacations.reduce((total, vacation) => {
-                    return total + vacation.days;
-                }, 0);
+                let totalVacationDays = 0;
+                let compensationDetailsHTML = '<h4>تعويض الإجازات الرسمية المتقاطعة مع الإجازات العادية</h4>';
+                let totalCompensationDays = 0;
+                
+                // حساب الإجازات العادية مع استبعاد الأيام التي تتقاطع مع الإجازات الرسمية
+                vacations.forEach((vacation, index) => {
+                    let vacationDays = vacation.days;
+                    
+                    // التحقق من التقاطع مع الإجازات الرسمية
+                    officialHolidays.forEach(holiday => {
+                        const overlapDays = calculateOverlapDays(
+                            vacation.start, vacation.end, 
+                            holiday.start, holiday.end
+                        );
+                        
+                        if (overlapDays > 0) {
+                            vacationDays -= overlapDays;
+                            totalCompensationDays += overlapDays;
+                            
+                            compensationDetailsHTML += `
+                                <div class="compensation-item">
+                                    <span>${holiday.name} (${formatDate(holiday.start)} - ${formatDate(holiday.end)})</span>
+                                    <span>+${overlapDays} يوم تعويض</span>
+                                </div>
+                            `;
+                        }
+                    });
+                    
+                    totalVacationDays += vacationDays;
+                });
+                
+                if (totalCompensationDays === 0) {
+                    compensationDetailsHTML += '<p>لا توجد إجازات رسمية متقاطعة مع إجازات عادية</p>';
+                }
+                
+                compensationInfo.innerHTML = compensationDetailsHTML;
                 
                 // حساب إجمالي أيام الإجازات الرسمية المضافة
                 const totalHolidayDays = officialHolidays.reduce((total, holiday) => {
                     return total + holiday.days;
                 }, 0);
                 
-                // حساب الرصيد المتبقي
-                const remainingBalance = (totalVacationBalance + totalHolidayDays) - totalVacationDays;
+                // حساب الرصيد المتبقي (يشمل الإجازات الرسمية والتعويض عن الأيام المتقاطعة)
+                const remainingBalance = (totalVacationBalance + totalHolidayDays + totalCompensationDays) - totalVacationDays;
+                
+                // حساب الأيام الزائدة عن الرصيد (التي سيتم خصمها من الراتب)
+                let exceededDaysHTML = '<h3 class="warning">الأيام الزائدة عن الرصيد (خصم من الراتب)</h3>';
+                let totalExceededDays = 0;
+                
+                if (remainingBalance < 0) {
+                    totalExceededDays = Math.abs(remainingBalance);
+                    exceededDaysHTML += `
+                        <div class="exceeded-item">
+                            <div>
+                                <span>إجمالي الأيام الزائدة:</span>
+                            </div>
+                            <div>
+                                <span class="warning">${totalExceededDays} يوم</span>
+                            </div>
+                        </div>
+                        <p class="warning">سيتم خصم ${totalExceededDays} يوم من الراتب لعدم توفر رصيد إجازة كافي</p>
+                    `;
+                    
+                    // حساب الأيام الزائدة لكل إجازة
+                    let tempBalance = totalVacationBalance + totalHolidayDays + totalCompensationDays;
+                    
+                    vacations.forEach((vacation, index) => {
+                        let vacationDays = vacation.days;
+                        
+                        // استبعاد الأيام المتقاطعة مع الإجازات الرسمية
+                        officialHolidays.forEach(holiday => {
+                            const overlapDays = calculateOverlapDays(
+                                vacation.start, vacation.end, 
+                                holiday.start, holiday.end
+                            );
+                            
+                            if (overlapDays > 0) {
+                                vacationDays -= overlapDays;
+                            }
+                        });
+                        
+                        if (tempBalance >= vacationDays) {
+                            // لا توجد أيام زائدة في هذه الإجازة
+                            tempBalance -= vacationDays;
+                        } else {
+                            // هناك أيام زائدة في هذه الإجازة
+                            const exceededInThisVacation = vacationDays - tempBalance;
+                            totalExceededDays += exceededInThisVacation;
+                            
+                            exceededDaysHTML += `
+                                <div class="exceeded-item">
+                                    <div>
+                                        <span>${formatDate(vacation.start)} - ${formatDate(vacation.end)}</span>
+                                    </div>
+                                    <div>
+                                        <span class="warning">${exceededInThisVacation} يوم</span>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            tempBalance = 0;
+                        }
+                    });
+                } else {
+                    exceededDaysHTML += '<p>لا توجد أيام زائدة عن الرصيد</p>';
+                }
+                
+                exceededDaysDiv.innerHTML = exceededDaysHTML;
                 
                 // عرض النتائج
                 document.getElementById('hiringDateResult').textContent = formatDate(hiringDate);
@@ -420,7 +578,7 @@
                 document.getElementById('daysWorked').textContent = daysWorked;
                 document.getElementById('vacationBalance').textContent = totalVacationBalance.toFixed(2) + ' يوم';
                 document.getElementById('officialHolidaysTotal').textContent = totalHolidayDays + ' يوم';
-                document.getElementById('remainingBalance').textContent = remainingBalance.toFixed(2) + ' يوم';
+                document.getElementById('remainingBalance').textContent = Math.max(remainingBalance, 0).toFixed(2) + ' يوم';
                 
                 // تحديث قائمة الإجازات
                 updateVacationList();
@@ -523,9 +681,24 @@
                 vacations.forEach((vacation, index) => {
                     const vacationItem = document.createElement('div');
                     vacationItem.className = 'vacation-item';
+                    
+                    // حساب الأيام الفعلية المخصومة بعد استبعاد الأيام المتقاطعة مع الإجازات الرسمية
+                    let actualDays = vacation.days;
+                    officialHolidays.forEach(holiday => {
+                        const overlapDays = calculateOverlapDays(
+                            vacation.start, vacation.end, 
+                            holiday.start, holiday.end
+                        );
+                        if (overlapDays > 0) {
+                            actualDays -= overlapDays;
+                        }
+                    });
+                    
                     vacationItem.innerHTML = `
                         <div>
                             <span>${formatDate(vacation.start)} - ${formatDate(vacation.end)}</span>
+                            <br>
+                            <small>${actualDays} يوم فعلي (${vacation.days} يوم - ${vacation.days - actualDays} يوم إجازة رسمية)</small>
                         </div>
                         <div>
                             <span>${vacation.days} يوم</span>
