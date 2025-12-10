@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منتجاتنا - متجر روائح</title>
+    <style>
+        body { font-family: 'Tajawal', sans-serif; margin: 0; background-color: #f9f9f9; }
+        header, footer { background-color: #2c3e50; color: #fff; text-align: center; padding: 15px; }
+        nav a { color: #fff; margin: 0 15px; text-decoration: none; }
+        
+        /* تنسيق شبكة المنتجات */
+        .products-grid { 
+            display: flex; 
+            justify-content: center; 
+            flex-wrap: wrap; 
+            padding: 40px 20px; 
+            gap: 20px; 
+        }
+        .product-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 300px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .product-img {
+            background-color: #eee;
+            height: 200px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .price { color: #c5a059; font-size: 1.2em; font-weight: bold; margin: 10px 0; }
+        .buy-btn {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .buy-btn:hover { background-color: #c5a059; }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <h1>RAWAH | روائح</h1>
+        <nav>
+            <a href="index.html">الرئيسية</a>
+            <a href="about.html">من نحن</a>
+            <a href="products.html">المتجر</a>
+            <a href="contact.html">تواصل معنا</a>
+        </nav>
+    </header>
+
+    <h2 style="text-align: center; margin-top: 30px;">تشكيلة العطور الحصرية</h2>
+
+    <div class="products-grid">
+        <div class="product-card">
+            <div class="product-img">[صورة عطر اللبان]</div>
+            <h3>عطر اللبان العماني</h3>
+            <p>مستخلص من أجود أنواع اللبان الحوجري، رائحة الفخامة.</p>
+            <div class="price">6.00 ريال عماني</div>
+            <button class="buy-btn" onclick="alert('تمت إضافة المنتج للسلة')">أضف إلى السلة</button>
+        </div>
+
+        <div class="product-card">
+            <div class="product-img">[صورة عطر شتوي]</div>
+            <h3>عطر شتوي دافيء</h3>
+            <p>مزيج دافئ رجالي ونسائي يناسب الأجواء الشتوية.</p>
+            <div class="price">6.00 ريال عماني</div>
+            <button class="buy-btn" onclick="alert('تمت إضافة المنتج للسلة')">أضف إلى السلة</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>جميع الأسعار تشمل ضريبة القيمة المضافة</p>
+    </footer>
+
+</body>
+</html>
