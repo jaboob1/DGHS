@@ -1,801 +1,485 @@
 <!DOCTYPE html>
 
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>حاسبة dghs</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <style>
-    @font-face {
-      font-family: 'Diwani';
-      src: url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حاسبة DGHS</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
 
-```
-* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+–primary: #1a3a5c;
+–secondary: #0e7c5b;
+–accent: #d4a017;
+–light: #f4f7fb;
+–border: #c8d6e5;
+–text: #1e2a3a;
+–muted: #6b7a8d;
+}
+
+- { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: Arial, sans-serif;
-  direction: rtl;
-  margin: 0;
-  padding: 10px;
-  background: #f5f5f5;
-  min-height: 100vh;
-  padding-bottom: 50px;
-  font-size: 13px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+font-family: ‘Cairo’, sans-serif;
+background: var(–light);
+color: var(–text);
+direction: rtl;
 }
 
-.container {
-  padding: 15px;
-  border: 2px solid #8B0000;
-  border-radius: 8px;
-  width: 95%;
-  max-width: 780px;
-  margin: 10px auto;
-  background: white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+.page-wrapper {
+max-width: 900px;
+margin: 24px auto;
+background: #fff;
+border-radius: 16px;
+overflow: hidden;
+box-shadow: 0 8px 40px rgba(26,58,92,0.12);
 }
 
-/* ─── الرأس ─── */
-.inner-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid #8B0000;
+/* HEADER */
+.header {
+background: linear-gradient(135deg, var(–primary) 0%, #1e5276 100%);
+padding: 24px 32px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 16px;
 }
-.inner-logo img { height: 50px; width: auto; }
-.inner-title { text-align: center; flex: 1; }
-.directorate-title {
-  font-family: 'Diwani','Lateef',serif;
-  font-size: 16px; color: #8B0000; font-weight: bold;
+.header img { height: 64px; object-fit: contain; filter: brightness(1.1); }
+.header-center { text-align: center; flex: 1; }
+.header-center h1 { color: #fff; font-size: 1.05rem; font-weight: 700; line-height: 1.6; }
+.header-center h2 {
+color: var(–accent);
+font-size: 1.25rem;
+font-weight: 900;
+margin-top: 6px;
+letter-spacing: 0.5px;
 }
-.department-title {
-  font-family: 'Diwani','Lateef',serif;
-  font-size: 13px; color: #8B0000; margin-top: 2px;
-}
-
-h3 {
-  text-align: center; color: #8B0000;
-  margin: 0 0 12px 0; font-size: 18px;
-  padding: 8px; background: #f8f8f8;
-  border-radius: 4px; border: 1px solid #8B0000;
+.green-bar {
+background: var(–secondary);
+height: 5px;
 }
 
-/* ─── المدخلات ─── */
-.input-section { display: flex; flex-direction: column; width: 100%; margin-bottom: 8px; }
-.input-row { display: flex; align-items: center; margin-bottom: 6px; width: 100%; }
+/* BODY */
+.form-body { padding: 28px 32px; }
 
-label {
-  display: inline-block; width: 160px; margin-left: 8px;
-  font-weight: bold; text-align: right;
-  padding-right: 25px; font-size: 13px;
-}
-input {
-  padding: 5px; margin: 3px;
-  border: 1px solid #ccc; border-radius: 3px;
-  font-size: 12px; height: 30px;
-}
-input.employee-input { width: 210px; }
-input.amount-input  { width: 120px; border: 1px solid #ddd; }
-select.contract-type {
-  padding: 5px; width: 120px; margin: 3px;
-  border: 1px solid #ccc; border-radius: 3px;
-  font-size: 12px; height: 30px;
-}
-input[readonly] { background: #f5f5f5; color: #333; width: 120px; border: 1px solid #ddd; }
-input.after-deduction {
-  background: #f0f9f0; color: #2E8B57;
-  width: 120px; font-weight: bold; border: 1px solid #ddd;
-}
-.column-title {
-  font-size: 12px; color: #8B0000; margin: 0 3px;
-  text-align: center; width: 120px; font-weight: bold;
-  padding: 5px; border: 1px solid #ddd; background: #f8f8f8;
-}
-input.column-total { font-weight: bold; background: #f0f0f0; color: #8B0000; border: 1px solid #ddd; }
-
-/* ─── صف التاريخ ─── */
-.date-row {
-  display: flex; align-items: center;
-  margin-bottom: 8px; width: 100%; flex-wrap: wrap;
-}
-.date-label {
-  width: 160px; margin-left: 5px; font-weight: bold;
-  text-align: right; padding-right: 25px; font-size: 13px; flex-shrink: 0;
-}
-.date-input-container { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.date-input {
-  width: 140px; padding: 5px; border: 1px solid #ccc;
-  border-radius: 3px; font-size: 12px; height: 30px; text-align: center;
-}
-.date-separator { font-weight: bold; color: #000; }
-
-/* ─── شارة التاريخ الهجري ─── */
-.hijri-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: linear-gradient(135deg, #fff8e1, #fff3cd);
-  border: 1px solid #f0c040;
-  border-radius: 20px;
-  padding: 3px 10px;
-  font-size: 11px;
-  color: #7a5c00;
-  font-weight: bold;
-  margin-top: 4px;
-}
-.hijri-badge .hi-icon { font-size: 13px; }
-
-/* ─── لوحة الملخص ─── */
-.summary-cards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin: 14px 0;
-  direction: rtl;
-}
-.card {
-  border-radius: 10px;
-  padding: 12px 8px;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  transition: transform 0.2s;
-}
-.card:hover { transform: translateY(-2px); }
-.card .card-icon { font-size: 22px; margin-bottom: 4px; }
-.card .card-label { font-size: 10px; font-weight: bold; margin-bottom: 6px; opacity: 0.85; }
-.card .card-value { font-size: 16px; font-weight: bold; direction: ltr; }
-
-.card-monthly  { background: linear-gradient(135deg,#e3f2fd,#bbdefb); color: #1565c0; }
-.card-period   { background: linear-gradient(135deg,#e8f5e9,#c8e6c9); color: #2e7d32; }
-.card-deduct   { background: linear-gradient(135deg,#fce4ec,#f8bbd0); color: #880e4f; }
-.card-net      { background: linear-gradient(135deg,#fff8e1,#ffecb3); color: #e65100; }
-
-/* ─── النتيجة النصية ─── */
-.result {
-  margin-top: 4px;
-  font-weight: bold; color: green;
-  line-height: 1.6; padding: 14px 20px;
-  font-size: 11px; background: #f0f9f0;
-  border-radius: 8px; border: 1px solid #c3e6c3;
+.section-title {
+font-size: 0.78rem;
+font-weight: 700;
+color: var(–primary);
+background: var(–light);
+border: 1px solid var(–border);
+border-radius: 6px;
+padding: 6px 14px;
+display: inline-block;
+margin-bottom: 14px;
+letter-spacing: 0.3px;
 }
 
-/* ─── الفواصل والأقسام ─── */
-.separator { border-top: 2px solid #8B0000; margin: 12px 0; }
-.approval-section {
-  display: flex; justify-content: space-between;
-  margin-top: 10px; padding: 15px 0;
-  border-top: 2px solid #8B0000;
-  font-size: 13px; font-weight: bold; min-height: 45px;
-}
-.approval-right { text-align: right; flex: 2; }
-.preparation { text-align: right; margin-right: 5ch; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
 
-/* ─── الأزرار ─── */
-.button-container {
-  display: flex; justify-content: center;
-  gap: 10px; margin-top: 15px; flex-wrap: wrap;
+.field label {
+display: block;
+font-size: 0.75rem;
+font-weight: 600;
+color: var(–muted);
+margin-bottom: 5px;
 }
-.print-btn,.reset-btn,.site-btn,.pdf-btn {
-  padding: 8px 16px; font-size: 13px; color: white;
-  border: none; cursor: pointer; border-radius: 4px; transition: background 0.3s;
+.field input, .field select {
+width: 100%;
+padding: 9px 12px;
+border: 1.5px solid var(–border);
+border-radius: 8px;
+font-family: ‘Cairo’, sans-serif;
+font-size: 0.88rem;
+color: var(–text);
+background: #fff;
+outline: none;
+transition: border-color 0.2s;
+direction: rtl;
 }
-.print-btn { background: #8B0000; }
-.print-btn:hover { background: #700000; }
-.pdf-btn { background: #6a0dad; }
-.pdf-btn:hover { background: #520aa8; }
-.pdf-btn.loading { background: #999; cursor: not-allowed; }
-.reset-btn { background: #2E8B57; }
-.reset-btn:hover { background: #267349; }
-.excel-btn { background: #1d6f42; }
-.excel-btn:hover { background: #155234; }
+.field input:focus, .field select:focus { border-color: var(–secondary); }
 
-/* ─── إخفاء عقود موقتة ─── */
-.temporary-allowances { display: none; }
-.temporary-contract .after-deduction-column,
-.temporary-contract .after-deduction {
-  color: white !important; background: white !important; border-color: white !important;
+/* TABS for allowances */
+.tabs-header {
+display: flex;
+gap: 4px;
+border-bottom: 2px solid var(–border);
+margin-bottom: 16px;
+}
+.tab-btn {
+padding: 8px 18px;
+border: none;
+background: transparent;
+font-family: ‘Cairo’, sans-serif;
+font-size: 0.82rem;
+font-weight: 600;
+color: var(–muted);
+cursor: pointer;
+border-radius: 6px 6px 0 0;
+border-bottom: 2px solid transparent;
+margin-bottom: -2px;
+transition: all 0.2s;
+}
+.tab-btn.active { color: var(–secondary); border-bottom-color: var(–secondary); background: #f0fdf8; }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* RESULTS */
+.results-box {
+background: linear-gradient(135deg, #f0fdf8 0%, #eaf4ff 100%);
+border: 1.5px solid #b2dfd0;
+border-radius: 12px;
+padding: 20px 24px;
+margin: 20px 0;
+}
+.results-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.result-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 9px 14px;
+background: #fff;
+border-radius: 8px;
+border: 1px solid #d8eee7;
+font-size: 0.84rem;
+}
+.result-item span:first-child { color: var(–muted); font-weight: 600; }
+.result-item span:last-child { color: var(–primary); font-weight: 700; font-size: 0.9rem; }
+.result-item.highlight { background: var(–secondary); border-color: var(–secondary); }
+.result-item.highlight span { color: #fff !important; }
+.result-item.full { grid-column: 1 / -1; }
+
+/* SIGNATURES */
+.signatures {
+display: flex;
+justify-content: space-between;
+margin-top: 18px;
+gap: 20px;
+}
+.sig-box {
+flex: 1;
+border-top: 2px dashed var(–border);
+padding-top: 10px;
+text-align: center;
+font-size: 0.78rem;
+color: var(–muted);
+font-weight: 600;
 }
 
-/* ─── التذييل المتحرك ─── */
-.footer-animation {
-  position: fixed; bottom: 0; left: 0; width: 100%;
-  background: #8B0000; color: white;
-  padding: 6px 0; text-align: center;
-  overflow: hidden; box-shadow: 0 -2px 5px rgba(0,0,0,0.3); z-index: 1000;
+/* BUTTONS */
+.btn-row { display: flex; gap: 12px; margin-top: 20px; justify-content: center; }
+.btn {
+padding: 11px 28px;
+border: none;
+border-radius: 10px;
+font-family: ‘Cairo’, sans-serif;
+font-size: 0.88rem;
+font-weight: 700;
+cursor: pointer;
+display: flex;
+align-items: center;
+gap: 7px;
+transition: all 0.2s;
 }
-.marquee { display: block; width: 100%; white-space: nowrap; overflow: hidden; }
-.marquee span {
-  display: inline-block; padding-right: 100%;
-  animation: marquee 20s linear infinite;
-  font-weight: bold; font-size: 16px;
-}
-@keyframes marquee {
-  0%   { transform: translate(0,0); }
-  100% { transform: translate(100%,0); }
-}
+.btn-print { background: var(–primary); color: #fff; }
+.btn-print:hover { background: #0e2a45; transform: translateY(-1px); }
+.btn-clear { background: #fee2e2; color: #c0392b; }
+.btn-clear:hover { background: #fecaca; }
+.btn-save { background: var(–secondary); color: #fff; }
+.btn-save:hover { background: #0b6649; transform: translateY(-1px); }
 
-.disclaimer {
-  text-align: center; margin-top: 15px; padding: 6px;
-  background: #fff3cd; border: 1px solid #ffeaa7;
-  border-radius: 4px; color: #856404; font-size: 11px;
+/* QR section - screen: hidden, print: visible */
+.qr-section {
+display: none;
+border-top: 2px dashed var(–border);
+padding-top: 16px;
+margin-top: 16px;
+text-align: center;
 }
+.qr-section p { font-size: 0.75rem; color: var(–muted); margin-top: 8px; }
 
-/* ─── طباعة ─── */
+/* FOOTER */
+.footer {
+text-align: center;
+padding: 14px;
+font-size: 0.72rem;
+color: var(–muted);
+border-top: 1px solid var(–border);
+margin-top: 8px;
+}
+.footer a { color: var(–secondary); text-decoration: none; }
+
+/* ===================== PRINT ===================== */
 @media print {
-  body { margin:0; padding:0; background:white; font-size:10px; display:block; }
-  .container { border:2px solid #8B0000 !important; box-shadow:none; margin:0; padding:5px; width:100%; max-width:100%; }
-  label { width:140px; font-size:11px; }
-  input,select { font-size:10px; height:26px; }
-  input.employee-input { width:180px; }
-  input.amount-input,input[readonly],input.after-deduction { width:100px; }
-  .column-title { font-size:10px; width:100px; }
-  .summary-cards { grid-template-columns: repeat(4,1fr); gap:6px; }
-  .card { padding:8px 4px; }
-  .card .card-value { font-size:13px; }
-  .result { font-size:11px; padding:6px; }
-  .button-container,.footer-animation,.disclaimer { display:none; }
-  .hijri-badge { font-size:10px; }
-  .temporary-contract .after-deduction-column,
-  .temporary-contract .after-deduction {
-    color:white !important; background:white !important; border-color:white !important;
-  }
-  .preparation { margin-right:5ch !important; }
+body { background: #fff; }
+.page-wrapper { box-shadow: none; margin: 0; border-radius: 0; }
+.btn-row, .tabs-header { display: none !important; }
+.tab-panel { display: block !important; }
+.qr-section { display: flex !important; flex-direction: column; align-items: center; }
+.field input, .field select {
+border: none;
+border-bottom: 1px solid #ccc;
+border-radius: 0;
+padding: 4px 6px;
 }
-```
+.results-box { break-inside: avoid; }
+}
+</style>
 
-  </style>
 </head>
 <body>
 
-<div class="container">
+<div class="page-wrapper" id="mainDoc">
 
-  <!-- الرأس -->
+  <!-- HEADER -->
 
-  <div class="inner-header">
-    <div class="inner-logo">
-      <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="شعار وزارة الصحة">
+  <div class="header">
+    <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="شعار وزارة الصحة" onerror="this.style.display='none'">
+    <div class="header-center">
+      <h1>المديرية العامة للخدمات الصحية لمحافظة ظفار<br>دائرة الشؤون المالية - قسم الرواتب والمصروفات</h1>
+      <h2>⚙️ حاسبة الرواتب المتقدمة</h2>
     </div>
-    <div class="inner-title">
-      <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
-      <div class="department-title">دائرة الشؤون المالية - قسم الرواتب والمصروفات</div>
-    </div>
-    <div class="inner-logo">
-      <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="شعار عمان فيجن">
-    </div>
+    <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="شعار عمان فيجن" onerror="this.style.display='none'">
   </div>
+  <div class="green-bar"></div>
 
-  <h3>حاسبة الرواتب المتقدمة</h3>
+  <!-- BODY -->
 
-  <div class="input-section">
+  <div class="form-body">
 
 ```
-<div class="input-row">
-  <label for="employeeName">اسم الموظف:</label>
-  <input type="text" id="employeeName" class="employee-input" placeholder="أسم الموظف">
+<!-- Basic Info -->
+<div class="section-title">📋 المعلومات الأساسية</div>
+<div class="grid-2">
+  <div class="field"><label>اسم الموظف</label><input type="text" id="empName" placeholder="أدخل الاسم الكامل"></div>
+  <div class="field"><label>رقم الموظف</label><input type="text" id="empNum" placeholder="مثال: 12345"></div>
+</div>
+<div class="grid-3">
+  <div class="field">
+    <label>نوع العقد</label>
+    <select id="contractType">
+      <option value="دائم">عقود دائمة</option>
+      <option value="موقت">عقود موقتة</option>
+    </select>
+  </div>
+  <div class="field"><label>تاريخ الاحتساب من</label><input type="date" id="dateFrom"></div>
+  <div class="field"><label>تاريخ الاحتساب إلى</label><input type="date" id="dateTo"></div>
 </div>
 
-<div class="input-row">
-  <label for="employeeNumber">رقم الموظف:</label>
-  <input type="text" id="employeeNumber" class="employee-input" placeholder="رقم الموظف">
+<!-- Allowances Tabs -->
+<div class="section-title">💰 البدلات والرواتب</div>
+<div class="tabs-header">
+  <button class="tab-btn active" onclick="switchTab('tab1',this)">بدلات التعيين</button>
+  <button class="tab-btn" onclick="switchTab('tab2',this)">إجمالي قبل الخصم</button>
+  <button class="tab-btn" onclick="switchTab('tab3',this)">إجمالي بعد الخصم</button>
 </div>
 
-<div class="input-row">
-  <label for="contractType">نوع العقد:</label>
-  <select id="contractType" class="contract-type">
-    <option value="permanent">عقود دائمة</option>
-    <option value="temporary">عقود موقتة</option>
-  </select>
-</div>
-
-<!-- التواريخ مع الهجري -->
-<div class="date-row">
-  <span class="date-label">تاريخ الاحتساب من:</span>
-  <div class="date-input-container">
-    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
-      <input type="date" id="startDate" class="date-input">
-      <span class="hijri-badge"><span class="hi-icon">🌙</span><span id="startHijri">—</span></span>
-    </div>
-    <span class="date-separator">إلى</span>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
-      <input type="date" id="endDate" class="date-input">
-      <span class="hijri-badge"><span class="hi-icon">🌙</span><span id="endHijri">—</span></span>
-    </div>
+<div id="tab1" class="tab-panel active">
+  <div class="grid-4">
+    <div class="field"><label>البدل الأساسي</label><input type="number" id="basic" min="0" oninput="calc()"></div>
+    <div class="field"><label>بدلات أخرى</label><input type="number" id="other" min="0" oninput="calc()"></div>
+    <div class="field"><label>بدل السكن</label><input type="number" id="housing" min="0" oninput="calc()"></div>
+    <div class="field"><label>بدل الكهرباء</label><input type="number" id="electric" min="0" oninput="calc()"></div>
+    <div class="field"><label>بدل الماء</label><input type="number" id="water" min="0" oninput="calc()"></div>
+    <div class="field"><label>بدل الهاتف</label><input type="number" id="phone" min="0" oninput="calc()"></div>
+    <div class="field"><label>بدل النقل</label><input type="number" id="transport" min="0" oninput="calc()"></div>
+    <div class="field"><label>بدل مهني</label><input type="number" id="professional" min="0" oninput="calc()"></div>
+    <div class="field"><label>بدل غلاء معيشة</label><input type="number" id="living" min="0" oninput="calc()"></div>
   </div>
 </div>
+<div id="tab2" class="tab-panel"></div>
+<div id="tab3" class="tab-panel"></div>
 
-<!-- رؤوس الأعمدة -->
-<div class="input-row">
-  <label></label>
-  <span class="column-title">بدلات التعيين</span>
-  <span class="column-title">إجمالي قبل الخصم</span>
-  <span class="column-title after-deduction-column">إجمالي بعد الخصم</span>
-</div>
-
-<div class="input-row">
-  <label for="basic">البدل الأساسي:</label>
-  <input type="number" id="basic" class="amount-input" placeholder="أدخل المبلغ">
-  <input type="text" id="basicResult" readonly>
-  <input type="text" id="basicAfterDeduction" class="after-deduction" readonly>
-</div>
-
-<!-- البدلات المؤقتة -->
-<div id="temporaryAllowances" class="temporary-allowances">
-  <div class="input-row">
-    <label for="otherAllowances">بدلات أخرى:</label>
-    <input type="number" id="otherAllowances" class="amount-input" placeholder="أدخل المبلغ">
-    <input type="text" id="otherAllowancesResult" readonly>
-    <input type="text" id="otherAllowancesAfterDeduction" class="after-deduction" readonly>
+<!-- Results -->
+<div class="results-box">
+  <div class="section-title">📊 ملخص الراتب</div>
+  <div class="results-grid">
+    <div class="result-item"><span>عدد الأيام المحتسبة</span><span id="r_days">0</span></div>
+    <div class="result-item"><span>الإجمالي قبل الخصم</span><span id="r_gross">0.000 ر.ع</span></div>
+    <div class="result-item"><span>إجمالي الراتب الشهري</span><span id="r_monthly">0.000 ر.ع</span></div>
+    <div class="result-item"><span>استقطاع صندوق الحماية (8%)</span><span id="r_deduction">0.000 ر.ع</span></div>
+    <div class="result-item full"><span>إجمالي الاستحقاق للفترة</span><span id="r_period">0.000 ر.ع</span></div>
+    <div class="result-item highlight full"><span>💳 صافي المستحق</span><span id="r_net">0.000 ر.ع</span></div>
   </div>
 </div>
 
-<!-- البدلات الدائمة -->
-<div id="permanentAllowances">
-  <div class="input-row">
-    <label for="housing">بدل السكن:</label>
-    <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
-    <input type="text" id="housingResult" readonly>
-    <input type="text" id="housingAfterDeduction" class="after-deduction" readonly>
-  </div>
-  <div class="input-row">
-    <label for="electricity">بدل الكهرباء:</label>
-    <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
-    <input type="text" id="electricityResult" readonly>
-    <input type="text" id="electricityAfterDeduction" class="after-deduction" readonly>
-  </div>
-  <div class="input-row">
-    <label for="water">بدل الماء:</label>
-    <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
-    <input type="text" id="waterResult" readonly>
-    <input type="text" id="waterAfterDeduction" class="after-deduction" readonly>
-  </div>
-  <div class="input-row">
-    <label for="phone">بدل الهاتف:</label>
-    <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
-    <input type="text" id="phoneResult" readonly>
-    <input type="text" id="phoneAfterDeduction" class="after-deduction" readonly>
-  </div>
-  <div class="input-row">
-    <label for="transport">بدل النقل:</label>
-    <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
-    <input type="text" id="transportResult" readonly>
-    <input type="text" id="transportAfterDeduction" class="after-deduction" readonly>
-  </div>
-  <div class="input-row">
-    <label for="professional">بدل مهني:</label>
-    <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
-    <input type="text" id="professionalResult" readonly>
-    <input type="text" id="professionalAfterDeduction" class="after-deduction" readonly>
-  </div>
-  <div class="input-row">
-    <label for="costLiving">بدل غلاء معيشة:</label>
-    <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
-    <input type="text" id="costLivingResult" readonly>
-    <input type="text" id="costLivingAfterDeduction" class="after-deduction" readonly>
-  </div>
+<!-- Signatures -->
+<div class="signatures">
+  <div class="sig-box">إعداد ومراجعة: _______________</div>
+  <div class="sig-box">اعتمده: _______________</div>
+</div>
 
-  <!-- الإجماليات -->
-  <div class="input-row">
-    <label>الإجمالي:</label>
-    <input type="text" id="monthlyTotal" class="amount-input column-total" readonly>
-    <input type="text" id="periodTotal" class="column-total" readonly>
-    <input type="text" id="afterDeductionTotal" class="after-deduction column-total" readonly>
-  </div>
+<!-- QR Section (shows on print) -->
+<div class="qr-section" id="qrSection">
+  <div id="qrCode"></div>
+  <p>امسح الرمز للاطلاع على تفاصيل الراتب</p>
+</div>
+
+<!-- Buttons -->
+<div class="btn-row">
+  <button class="btn btn-save" onclick="saveAndPrint()">🖨️ حفظ وطباعة</button>
+  <button class="btn btn-print" onclick="justPrint()">🖨️ طباعة فقط</button>
+  <button class="btn btn-clear" onclick="clearAll()">🗑️ تفريغ الحقول</button>
 </div>
 ```
 
-  </div><!-- /input-section -->
+  </div><!-- /form-body -->
 
-  <div class="separator"></div>
-
-  <!-- ✨ لوحة الملخص البصرية -->
-
-  <div class="summary-cards">
-    <div class="card card-monthly">
-      <div class="card-icon">💼</div>
-      <div class="card-label">الراتب الشهري</div>
-      <div class="card-value" id="cardMonthly">0.000</div>
-    </div>
-    <div class="card card-period">
-      <div class="card-icon">📅</div>
-      <div class="card-label">إجمالي الفترة</div>
-      <div class="card-value" id="cardPeriod">0.000</div>
-    </div>
-    <div class="card card-deduct" id="cardDeductWrapper">
-      <div class="card-icon">📉</div>
-      <div class="card-label">استقطاع 8%</div>
-      <div class="card-value" id="cardDeduct">0.000</div>
-    </div>
-    <div class="card card-net">
-      <div class="card-icon">✅</div>
-      <div class="card-label">الصافي المستحق</div>
-      <div class="card-value" id="cardNet">0.000</div>
-    </div>
+  <div class="footer">
+    للتنويه: محتوى الصفحة لا يتبع وزارة الصحة، تم إنشاء هذه الأداة وتطويرها بمبادرة فردية<br>
+    جميع الحقوق محفوظة © 2025 محمد جعبوب - قسم الرواتب - دائرة الشؤون المالية
   </div>
-
-  <!-- النتيجة النصية -->
-
-  <div class="result">
-    عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
-    إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
-    إجمالي الاستحقاق لفترة الاحتساب: <span id="totalPeriod">0</span><br>
-    <span id="deductionLine">استقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
-    <span id="netLine">صافي المستحق: <span id="net">0</span></span>
-  </div>
-
-  <!-- التوقيعات -->
-
-  <div class="approval-section">
-    <div class="approval-right preparation">إعداد ومراجعة: _______________</div>
-    <div class="approval-right">اعتمده: _______________</div>
-  </div>
-
-  <div class="button-container">
-    <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
-    <button class="pdf-btn" onclick="exportPDF()">📄 تصدير PDF</button>
-    <button class="excel-btn" onclick="exportExcel()">📊 تصدير Excel</button>
-    <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ الحقول</button>
-    <button class="site-btn" onclick="window.open('https://jaboob.com','_blank')">الصفحة الرئيسية</button>
-  </div>
-
-  <div class="disclaimer">
-    للتنويه: محتوى الصفحة لا يتبع وزارة الصحة، تم إنشاء هذه الأداة وتطويرها بمبادرة فردية
-  </div>
-
-</div><!-- /container -->
-
-<div class="footer-animation">
-  <div class="marquee">
-    <span>جميع الحقوق محفوظة © 2025 محمد جعبوب - قسم الرواتب - دائرة الشؤون المالية</span>
-  </div>
-</div>
+</div><!-- /page-wrapper -->
 
 <script>
-// ════════════════════════════════════════════
-//  تحويل التاريخ الميلادي → الهجري
-// ════════════════════════════════════════════
-function toHijri(dateStr) {
-  if (!dateStr) return '—';
-  try {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString('ar-SA-u-ca-islamic', {
-      year: 'numeric', month: 'long', day: 'numeric'
-    });
-  } catch(e) { return '—'; }
+/* ─── STORAGE KEY ─── */
+const STORAGE_PREFIX = 'emp_record_';
+
+/* ─── TAB SWITCH ─── */
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
 }
 
-function updateHijri() {
-  document.getElementById('startHijri').textContent = toHijri(document.getElementById('startDate').value);
-  document.getElementById('endHijri').textContent   = toHijri(document.getElementById('endDate').value);
+/* ─── CALCULATE ─── */
+function calc() {
+  const get = id => parseFloat(document.getElementById(id)?.value) || 0;
+  const monthly = get('basic') + get('other') + get('housing') + get('electric') +
+                  get('water') + get('phone') + get('transport') + get('professional') + get('living');
+
+  const from = document.getElementById('dateFrom').value;
+  const to   = document.getElementById('dateTo').value;
+  let days = 0, period = 0;
+  if (from && to) {
+    const d1 = new Date(from), d2 = new Date(to);
+    days = Math.max(0, Math.round((d2 - d1) / 86400000) + 1);
+    period = (monthly / 30) * days;
+  }
+  const deduction = period * 0.08;
+  const net = period - deduction;
+
+  document.getElementById('r_days').textContent = days;
+  document.getElementById('r_gross').textContent = monthly.toFixed(3) + ' ر.ع';
+  document.getElementById('r_monthly').textContent = monthly.toFixed(3) + ' ر.ع';
+  document.getElementById('r_deduction').textContent = deduction.toFixed(3) + ' ر.ع';
+  document.getElementById('r_period').textContent = period.toFixed(3) + ' ر.ع';
+  document.getElementById('r_net').textContent = net.toFixed(3) + ' ر.ع';
 }
 
-// ════════════════════════════════════════════
-//  التهيئة الرئيسية
-// ════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', function () {
-
-  const startDate   = document.getElementById("startDate");
-  const endDate     = document.getElementById("endDate");
-  const contractType= document.getElementById("contractType");
-  const container   = document.querySelector('.container');
-  const permDiv     = document.getElementById("permanentAllowances");
-  const tempDiv     = document.getElementById("temporaryAllowances");
-  const deductionLine = document.getElementById("deductionLine");
-  const netLine       = document.getElementById("netLine");
-  const cardDeductWrap= document.getElementById("cardDeductWrapper");
-
-  // ─── التواريخ الافتراضية (أول الشهر / آخره) ───
-  const today = new Date();
-  const y = today.getFullYear(), m = today.getMonth();
-  const firstDay = new Date(y, m, 1);
-  const lastDay  = new Date(y, m + 1, 0);
-
-  function fmt(d) {
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-  }
-
-  startDate.value = fmt(firstDay);
-  endDate.value   = fmt(lastDay);
-  updateHijri();
-
-  // ─── قائمة البدلات ───
-  const allowances = [
-    {id:"basic",         result:"basicResult",         afterDeduction:"basicAfterDeduction"},
-    {id:"housing",       result:"housingResult",        afterDeduction:"housingAfterDeduction"},
-    {id:"electricity",   result:"electricityResult",    afterDeduction:"electricityAfterDeduction"},
-    {id:"water",         result:"waterResult",          afterDeduction:"waterAfterDeduction"},
-    {id:"phone",         result:"phoneResult",          afterDeduction:"phoneAfterDeduction"},
-    {id:"transport",     result:"transportResult",      afterDeduction:"transportAfterDeduction"},
-    {id:"professional",  result:"professionalResult",   afterDeduction:"professionalAfterDeduction"},
-    {id:"otherAllowances",result:"otherAllowancesResult",afterDeduction:"otherAllowancesAfterDeduction"},
-    {id:"costLiving",    result:"costLivingResult",     afterDeduction:"costLivingAfterDeduction"}
-  ];
-
-  function daysInMonth(y, m) { return new Date(y, m+1, 0).getDate(); }
-
-  // ─── تحديث واجهة نوع العقد ───
-  function updateContractDisplay() {
-    const isTemp = contractType.value === "temporary";
-    permDiv.style.display = isTemp ? "none" : "block";
-    tempDiv.style.display = isTemp ? "block" : "none";
-    deductionLine.style.display = isTemp ? "none" : "block";
-    netLine.style.display       = isTemp ? "none" : "block";
-    cardDeductWrap.style.opacity = isTemp ? "0.3" : "1";
-    isTemp ? container.classList.add('temporary-contract')
-           : container.classList.remove('temporary-contract');
-  }
-
-  // ─── الحساب الرئيسي ───
-  function calculate() {
-    if (!(startDate.value && endDate.value)) return;
-
-    const start = new Date(startDate.value);
-    const end   = new Date(endDate.value);
-
-    if (end < start) {
-      document.getElementById("totalPeriod").textContent = "❌ تاريخ النهاية قبل البداية";
-      document.getElementById("daysCount").textContent = "0";
-      return;
-    }
-
-    const days = Math.floor((end - start) / 86400000) + 1;
-    document.getElementById("daysCount").textContent = days;
-
-    const isTemp = contractType.value === "temporary";
-    let totalBase = 0, totalCalc = 0, totalAfter = 0;
-
-    allowances.forEach(item => {
-      const inp   = document.getElementById(item.id);
-      const resEl = document.getElementById(item.result);
-      const afdEl = document.getElementById(item.afterDeduction);
-      const monthly = parseFloat(inp.value) || 0;
-
-      // تخطي الحقول غير المناسبة لنوع العقد
-      if (isTemp  && item.id !== "basic" && item.id !== "otherAllowances") return;
-      if (!isTemp && item.id === "otherAllowances") return;
-
-      totalBase += monthly;
-
-      // احتساب يومي دقيق (يراعي أيام الشهر المختلفة)
-      let sum = 0;
-      const cur = new Date(start);
-      while (cur <= end) {
-        sum += monthly / daysInMonth(cur.getFullYear(), cur.getMonth());
-        cur.setDate(cur.getDate() + 1);
-      }
-
-      resEl.value = sum.toFixed(3);
-
-      const after = isTemp ? sum : sum * 0.92;
-      afdEl.value = after.toFixed(3);
-      totalCalc  += sum;
-      totalAfter += after;
-    });
-
-    // إجماليات الصفوف (عقود دائمة فقط)
-    if (!isTemp) {
-      document.getElementById("monthlyTotal").value    = totalBase.toFixed(3);
-      document.getElementById("periodTotal").value     = totalCalc.toFixed(3);
-      document.getElementById("afterDeductionTotal").value = totalAfter.toFixed(3);
-    }
-
-    const ded = isTemp ? 0 : totalCalc * 0.08;
-    const net = isTemp ? totalCalc : totalCalc - ded;
-
-    document.getElementById("totalAllowances").textContent = totalBase.toFixed(3);
-    document.getElementById("totalPeriod").textContent     = totalCalc.toFixed(3);
-    document.getElementById("deduction").textContent       = ded.toFixed(3);
-    document.getElementById("net").textContent             = net.toFixed(3);
-
-    // ✨ تحديث بطاقات الملخص
-    document.getElementById("cardMonthly").textContent = totalBase.toFixed(3);
-    document.getElementById("cardPeriod").textContent  = totalCalc.toFixed(3);
-    document.getElementById("cardDeduct").textContent  = ded.toFixed(3);
-    document.getElementById("cardNet").textContent     = net.toFixed(3);
-
-    updateContractDisplay();
-  }
-
-  // ─── إعادة تعيين النموذج ───
-  function resetForm() {
-    document.getElementById("employeeName").value   = "";
-    document.getElementById("employeeNumber").value = "";
-    startDate.value = fmt(firstDay);
-    endDate.value   = fmt(lastDay);
-    updateHijri();
-    contractType.value = "permanent";
-
-    allowances.forEach(item => {
-      document.getElementById(item.id).value            = "";
-      document.getElementById(item.result).value        = "";
-      document.getElementById(item.afterDeduction).value= "";
-    });
-
-    ["monthlyTotal","periodTotal","afterDeductionTotal"].forEach(id => {
-      document.getElementById(id).value = "";
-    });
-    ["totalAllowances","totalPeriod","deduction","net","daysCount"].forEach(id => {
-      document.getElementById(id).textContent = "0";
-    });
-    ["cardMonthly","cardPeriod","cardDeduct","cardNet"].forEach(id => {
-      document.getElementById(id).textContent = "0.000";
-    });
-
-    container.classList.remove('temporary-contract');
-    updateContractDisplay();
-  }
-
-  window.resetForm = resetForm;
-
-  // ─── تصدير Excel ───
-  window.exportExcel = function () {
-    const isTemp = document.getElementById('contractType').value === 'temporary';
-
-    const empName   = document.getElementById('employeeName').value  || '—';
-    const empNum    = document.getElementById('employeeNumber').value || '—';
-    const contract  = isTemp ? 'عقود موقتة' : 'عقود دائمة';
-    const startVal  = document.getElementById('startDate').value;
-    const endVal    = document.getElementById('endDate').value;
-    const days      = document.getElementById('daysCount').textContent;
-
-    // جمع بنود البدلات حسب نوع العقد
-    const rows = [];
-    const allItems = [
-      { label: 'البدل الأساسي',      id: 'basic',          always: true },
-      { label: 'بدلات أخرى',         id: 'otherAllowances', tempOnly: true },
-      { label: 'بدل السكن',          id: 'housing' },
-      { label: 'بدل الكهرباء',       id: 'electricity' },
-      { label: 'بدل الماء',          id: 'water' },
-      { label: 'بدل الهاتف',         id: 'phone' },
-      { label: 'بدل النقل',          id: 'transport' },
-      { label: 'بدل مهني',           id: 'professional' },
-      { label: 'بدل غلاء معيشة',     id: 'costLiving' },
-    ];
-
-    allItems.forEach(item => {
-      if (item.tempOnly && !isTemp) return;
-      if (!item.tempOnly && !item.always && isTemp) return;
-
-      const monthly = parseFloat(document.getElementById(item.id)?.value) || 0;
-      if (monthly === 0) return; // تخطي الحقول الفارغة
-
-      const resultEl = document.getElementById(item.id + 'Result');
-      const afdEl    = document.getElementById(item.id + 'AfterDeduction');
-      const period   = resultEl ? parseFloat(resultEl.value) || 0 : 0;
-      const afterDed = afdEl    ? parseFloat(afdEl.value)   || 0 : 0;
-
-      const row = {
-        'البند':                   item.label,
-        'بدل التعيين (ريال)':      monthly,
-        'إجمالي الفترة (ريال)':    period,
-      };
-      if (!isTemp) row['بعد الخصم (ريال)'] = afterDed;
-      rows.push(row);
-    });
-
-    // صف الإجمالي
-    const totalMonthly = parseFloat(document.getElementById('totalAllowances').textContent) || 0;
-    const totalPeriod  = parseFloat(document.getElementById('totalPeriod').textContent)     || 0;
-    const deductionVal = isTemp ? 0 : parseFloat(document.getElementById('deduction').textContent) || 0;
-    const netVal       = parseFloat(document.getElementById('net').textContent) || 0;
-
-    const totalRow = {
-      'البند': 'الإجمالي',
-      'بدل التعيين (ريال)': totalMonthly,
-      'إجمالي الفترة (ريال)': totalPeriod,
-    };
-    if (!isTemp) totalRow['بعد الخصم (ريال)'] = netVal + deductionVal;
-    rows.push(totalRow);
-
-    // ─── بناء ورقة العمل ───
-    const wb = XLSX.utils.book_new();
-
-    // ورقة 1: معلومات الموظف
-    const infoData = [
-      ['اسم الموظف',          empName],
-      ['رقم الموظف',          empNum],
-      ['نوع العقد',           contract],
-      ['تاريخ البداية',       startVal],
-      ['تاريخ النهاية',       endVal],
-      ['عدد الأيام المحتسبة', days],
-    ];
-    const wsInfo = XLSX.utils.aoa_to_sheet(infoData);
-    wsInfo['!cols'] = [{ wch: 26 }, { wch: 28 }];
-    XLSX.utils.book_append_sheet(wb, wsInfo, 'معلومات الموظف');
-
-    // ورقة 2: تفاصيل الراتب
-    const wsSalary = XLSX.utils.json_to_sheet(rows, { skipHeader: false });
-    const colCount = isTemp ? 3 : 4;
-    wsSalary['!cols'] = Array(colCount).fill({ wch: 24 });
-    XLSX.utils.book_append_sheet(wb, wsSalary, 'تفاصيل الراتب');
-
-    // ورقة 3: ملخص
-    const summaryData = [
-      ['البيان',                                    'المبلغ (ريال)'],
-      ['إجمالي الراتب الشهري',                      totalMonthly],
-      ['إجمالي الاستحقاق للفترة',                   totalPeriod],
-    ];
-    if (!isTemp) {
-      summaryData.push(['استقطاع صندوق الحماية الاجتماعية (8%)', deductionVal]);
-      summaryData.push(['صافي المستحق',                          netVal]);
-    } else {
-      summaryData.push(['صافي المستحق',                          totalPeriod]);
-    }
-    const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
-    wsSummary['!cols'] = [{ wch: 38 }, { wch: 20 }];
-    XLSX.utils.book_append_sheet(wb, wsSummary, 'الملخص');
-
-    // تنزيل الملف
-    const fileName = empName !== '—' ? `راتب_${empName}.xlsx` : 'كشف_الراتب.xlsx';
-    XLSX.writeFile(wb, fileName);
+/* ─── GATHER DATA ─── */
+function gatherData() {
+  const get = id => document.getElementById(id)?.value || '';
+  const getN = id => parseFloat(document.getElementById(id)?.value) || 0;
+  return {
+    empName: get('empName'),
+    empNum: get('empNum'),
+    contractType: get('contractType'),
+    dateFrom: get('dateFrom'),
+    dateTo: get('dateTo'),
+    basic: getN('basic'),
+    other: getN('other'),
+    housing: getN('housing'),
+    electric: getN('electric'),
+    water: getN('water'),
+    phone: getN('phone'),
+    transport: getN('transport'),
+    professional: getN('professional'),
+    living: getN('living'),
+    net: document.getElementById('r_net').textContent,
+    savedAt: new Date().toISOString()
   };
+}
 
-  // ─── تصدير PDF ───
-  window.exportPDF = function () {
-    const btn = document.querySelector('.pdf-btn');
-    btn.textContent = '⏳ جاري التصدير...';
-    btn.classList.add('loading');
-    btn.disabled = true;
+/* ─── SAVE TO LOCALSTORAGE & GENERATE QR ─── */
+function saveData() {
+  const data = gatherData();
+  const key = STORAGE_PREFIX + (data.empNum || Date.now());
+  localStorage.setItem(key, JSON.stringify(data));
 
-    // اسم الملف من اسم الموظف إن وُجد
-    const empName = document.getElementById('employeeName').value.trim();
-    const fileName = empName ? `راتب_${empName}.pdf` : 'كشف_الراتب.pdf';
+  // Build URL pointing to viewer page with key as param
+  const baseUrl = window.location.href.split('?')[0];
+  const viewUrl = baseUrl + '?view=' + encodeURIComponent(key);
 
-    const element = document.querySelector('.container');
-
-    const opt = {
-      margin:       [8, 6, 8, 6],   // top, left, bottom, right (mm)
-      filename:     fileName,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        letterRendering: true
-      },
-      jsPDF: {
-        unit: 'mm',
-        format: 'a4',
-        orientation: 'portrait'
-      },
-      pagebreak: { mode: ['avoid-all'] }
-    };
-
-    // إخفاء الأزرار والتذييل مؤقتاً من الـ PDF
-    const hideEls = document.querySelectorAll('.button-container, .footer-animation, .disclaimer');
-    hideEls.forEach(el => el.style.visibility = 'hidden');
-
-    html2pdf().set(opt).from(element).save().then(() => {
-      hideEls.forEach(el => el.style.visibility = '');
-      btn.textContent = '📄 تصدير PDF';
-      btn.classList.remove('loading');
-      btn.disabled = false;
-    }).catch(() => {
-      hideEls.forEach(el => el.style.visibility = '');
-      btn.textContent = '📄 تصدير PDF';
-      btn.classList.remove('loading');
-      btn.disabled = false;
-    });
-  };
-
-  // ─── مستمعو الأحداث ───
-  startDate.addEventListener("change", () => { updateHijri(); calculate(); });
-  endDate.addEventListener("change",   () => { updateHijri(); calculate(); });
-  contractType.addEventListener("change", () => { updateContractDisplay(); calculate(); });
-  allowances.forEach(item => {
-    document.getElementById(item.id).addEventListener("input", calculate);
+  // Generate QR
+  const qrDiv = document.getElementById('qrCode');
+  qrDiv.innerHTML = '';
+  new QRCode(qrDiv, {
+    text: viewUrl,
+    width: 120,
+    height: 120,
+    colorDark: '#1a3a5c',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
   });
 
-  // التهيئة الأولية
-  calculate();
-  updateContractDisplay();
-});
+  return viewUrl;
+}
+
+/* ─── SAVE + PRINT ─── */
+function saveAndPrint() {
+  calc();
+  saveData();
+  document.getElementById('qrSection').style.display = 'flex';
+  document.getElementById('qrSection').style.flexDirection = 'column';
+  document.getElementById('qrSection').style.alignItems = 'center';
+  setTimeout(() => { window.print(); }, 400);
+}
+
+function justPrint() {
+  calc();
+  setTimeout(() => { window.print(); }, 100);
+}
+
+/* ─── CLEAR ─── */
+function clearAll() {
+  ['empName','empNum','dateFrom','dateTo','basic','other','housing','electric',
+   'water','phone','transport','professional','living'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('contractType').value = 'دائم';
+  document.getElementById('qrCode').innerHTML = '';
+  document.getElementById('qrSection').style.display = 'none';
+  calc();
+}
+
+/* ─── LOAD DATA FROM URL PARAM ─── */
+function loadFromParam() {
+  const params = new URLSearchParams(window.location.search);
+  const key = params.get('view');
+  if (!key) return;
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) { alert('لم يتم العثور على البيانات. ربما تم فتحها على جهاز مختلف.'); return; }
+    const d = JSON.parse(raw);
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+    set('empName', d.empName); set('empNum', d.empNum);
+    set('dateFrom', d.dateFrom); set('dateTo', d.dateTo);
+    document.getElementById('contractType').value = d.contractType || 'دائم';
+    ['basic','other','housing','electric','water','phone','transport','professional','living']
+      .forEach(id => set(id, d[id]));
+    calc();
+    // Show a notice
+    const notice = document.createElement('div');
+    notice.style.cssText = 'background:#d1fae5;border:1px solid #6ee7b7;border-radius:8px;padding:10px 16px;margin-bottom:16px;font-size:0.82rem;color:#065f46;font-weight:600;';
+    notice.textContent = '✅ تم تحميل بيانات الموظف من السجل المحفوظ بتاريخ: ' + new Date(d.savedAt).toLocaleString('ar-OM');
+    document.querySelector('.form-body').prepend(notice);
+  } catch(e) { console.error(e); }
+}
+
+/* ─── INIT ─── */
+loadFromParam();
+calc();
+
+document.getElementById('dateFrom').addEventListener('change', calc);
+document.getElementById('dateTo').addEventListener('change', calc);
 </script>
 
 </body>
