@@ -4,482 +4,832 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>حاسبة DGHS</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<title>نظام إدارة الموظفين</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
 
 :root {
-–primary: #1a3a5c;
-–secondary: #0e7c5b;
-–accent: #d4a017;
-–light: #f4f7fb;
-–border: #c8d6e5;
-–text: #1e2a3a;
-–muted: #6b7a8d;
+–bg: #0d1117;
+–surface: #161b22;
+–surface2: #21262d;
+–border: #30363d;
+–accent: #f0a500;
+–accent2: #e8720c;
+–text: #e6edf3;
+–text-muted: #8b949e;
+–green: #3fb950;
+–red: #f85149;
+–blue: #58a6ff;
+–radius: 10px;
 }
 
-- { box-sizing: border-box; margin: 0; padding: 0; }
+- { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-font-family: ‘Cairo’, sans-serif;
-background: var(–light);
+font-family: ‘IBM Plex Sans Arabic’, sans-serif;
+background: var(–bg);
 color: var(–text);
-direction: rtl;
+min-height: 100vh;
 }
 
-.page-wrapper {
-max-width: 900px;
-margin: 24px auto;
-background: #fff;
-border-radius: 16px;
-overflow: hidden;
-box-shadow: 0 8px 40px rgba(26,58,92,0.12);
-}
-
-/* HEADER */
-.header {
-background: linear-gradient(135deg, var(–primary) 0%, #1e5276 100%);
-padding: 24px 32px;
+/* ─── Header ─── */
+header {
+background: var(–surface);
+border-bottom: 1px solid var(–border);
+padding: 0 32px;
 display: flex;
 align-items: center;
 justify-content: space-between;
-gap: 16px;
+height: 64px;
+position: sticky;
+top: 0;
+z-index: 100;
 }
-.header img { height: 64px; object-fit: contain; filter: brightness(1.1); }
-.header-center { text-align: center; flex: 1; }
-.header-center h1 { color: #fff; font-size: 1.05rem; font-weight: 700; line-height: 1.6; }
-.header-center h2 {
+
+.logo {
+display: flex;
+align-items: center;
+gap: 12px;
+font-size: 1.15rem;
+font-weight: 700;
 color: var(–accent);
-font-size: 1.25rem;
-font-weight: 900;
-margin-top: 6px;
-letter-spacing: 0.5px;
-}
-.green-bar {
-background: var(–secondary);
-height: 5px;
 }
 
-/* BODY */
-.form-body { padding: 28px 32px; }
-
-.section-title {
-font-size: 0.78rem;
-font-weight: 700;
-color: var(–primary);
-background: var(–light);
-border: 1px solid var(–border);
-border-radius: 6px;
-padding: 6px 14px;
-display: inline-block;
-margin-bottom: 14px;
-letter-spacing: 0.3px;
-}
-
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
-.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
-
-.field label {
-display: block;
-font-size: 0.75rem;
-font-weight: 600;
-color: var(–muted);
-margin-bottom: 5px;
-}
-.field input, .field select {
-width: 100%;
-padding: 9px 12px;
-border: 1.5px solid var(–border);
+.logo-icon {
+width: 36px; height: 36px;
+background: linear-gradient(135deg, var(–accent), var(–accent2));
 border-radius: 8px;
-font-family: ‘Cairo’, sans-serif;
-font-size: 0.88rem;
-color: var(–text);
-background: #fff;
-outline: none;
-transition: border-color 0.2s;
-direction: rtl;
+display: grid;
+place-items: center;
+font-size: 18px;
 }
-.field input:focus, .field select:focus { border-color: var(–secondary); }
 
-/* TABS for allowances */
-.tabs-header {
+.header-actions {
 display: flex;
-gap: 4px;
-border-bottom: 2px solid var(–border);
-margin-bottom: 16px;
-}
-.tab-btn {
-padding: 8px 18px;
-border: none;
-background: transparent;
-font-family: ‘Cairo’, sans-serif;
-font-size: 0.82rem;
-font-weight: 600;
-color: var(–muted);
-cursor: pointer;
-border-radius: 6px 6px 0 0;
-border-bottom: 2px solid transparent;
-margin-bottom: -2px;
-transition: all 0.2s;
-}
-.tab-btn.active { color: var(–secondary); border-bottom-color: var(–secondary); background: #f0fdf8; }
-
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
-
-/* RESULTS */
-.results-box {
-background: linear-gradient(135deg, #f0fdf8 0%, #eaf4ff 100%);
-border: 1.5px solid #b2dfd0;
-border-radius: 12px;
-padding: 20px 24px;
-margin: 20px 0;
-}
-.results-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.result-item {
-display: flex;
-justify-content: space-between;
 align-items: center;
-padding: 9px 14px;
-background: #fff;
-border-radius: 8px;
-border: 1px solid #d8eee7;
-font-size: 0.84rem;
-}
-.result-item span:first-child { color: var(–muted); font-weight: 600; }
-.result-item span:last-child { color: var(–primary); font-weight: 700; font-size: 0.9rem; }
-.result-item.highlight { background: var(–secondary); border-color: var(–secondary); }
-.result-item.highlight span { color: #fff !important; }
-.result-item.full { grid-column: 1 / -1; }
-
-/* SIGNATURES */
-.signatures {
-display: flex;
-justify-content: space-between;
-margin-top: 18px;
-gap: 20px;
-}
-.sig-box {
-flex: 1;
-border-top: 2px dashed var(–border);
-padding-top: 10px;
-text-align: center;
-font-size: 0.78rem;
-color: var(–muted);
-font-weight: 600;
+gap: 10px;
 }
 
-/* BUTTONS */
-.btn-row { display: flex; gap: 12px; margin-top: 20px; justify-content: center; }
+/* ─── Buttons ─── */
 .btn {
-padding: 11px 28px;
-border: none;
-border-radius: 10px;
-font-family: ‘Cairo’, sans-serif;
-font-size: 0.88rem;
-font-weight: 700;
-cursor: pointer;
-display: flex;
+display: inline-flex;
 align-items: center;
 gap: 7px;
-transition: all 0.2s;
-}
-.btn-print { background: var(–primary); color: #fff; }
-.btn-print:hover { background: #0e2a45; transform: translateY(-1px); }
-.btn-clear { background: #fee2e2; color: #c0392b; }
-.btn-clear:hover { background: #fecaca; }
-.btn-save { background: var(–secondary); color: #fff; }
-.btn-save:hover { background: #0b6649; transform: translateY(-1px); }
-
-/* QR section - screen: hidden, print: visible */
-.qr-section {
-display: none;
-border-top: 2px dashed var(–border);
-padding-top: 16px;
-margin-top: 16px;
-text-align: center;
-}
-.qr-section p { font-size: 0.75rem; color: var(–muted); margin-top: 8px; }
-
-/* FOOTER */
-.footer {
-text-align: center;
-padding: 14px;
-font-size: 0.72rem;
-color: var(–muted);
-border-top: 1px solid var(–border);
-margin-top: 8px;
-}
-.footer a { color: var(–secondary); text-decoration: none; }
-
-/* ===================== PRINT ===================== */
-@media print {
-body { background: #fff; }
-.page-wrapper { box-shadow: none; margin: 0; border-radius: 0; }
-.btn-row, .tabs-header { display: none !important; }
-.tab-panel { display: block !important; }
-.qr-section { display: flex !important; flex-direction: column; align-items: center; }
-.field input, .field select {
+padding: 8px 16px;
+border-radius: 7px;
 border: none;
-border-bottom: 1px solid #ccc;
-border-radius: 0;
-padding: 4px 6px;
+font-family: inherit;
+font-size: 0.85rem;
+font-weight: 600;
+cursor: pointer;
+transition: all .18s;
 }
-.results-box { break-inside: avoid; }
+
+.btn-primary {
+background: var(–accent);
+color: #000;
+}
+.btn-primary:hover { background: #ffc333; transform: translateY(-1px); }
+
+.btn-outline {
+background: transparent;
+border: 1px solid var(–border);
+color: var(–text);
+}
+.btn-outline:hover { background: var(–surface2); border-color: var(–accent); }
+
+.btn-danger {
+background: transparent;
+border: 1px solid var(–red);
+color: var(–red);
+}
+.btn-danger:hover { background: rgba(248,81,73,.15); }
+
+.btn-green {
+background: var(–green);
+color: #000;
+}
+.btn-green:hover { filter: brightness(1.15); }
+
+/* ─── Main layout ─── */
+main { padding: 32px; max-width: 1400px; margin: 0 auto; }
+
+/* ─── Stats ─── */
+.stats {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+gap: 16px;
+margin-bottom: 28px;
+}
+
+.stat-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+padding: 18px 20px;
+transition: border-color .2s;
+}
+
+.stat-card:hover { border-color: var(–accent); }
+
+.stat-label {
+font-size: .75rem;
+color: var(–text-muted);
+text-transform: uppercase;
+letter-spacing: .04em;
+margin-bottom: 8px;
+}
+
+.stat-value {
+font-size: 1.8rem;
+font-weight: 700;
+color: var(–accent);
+}
+
+/* ─── Toolbar ─── */
+.toolbar {
+display: flex;
+align-items: center;
+gap: 12px;
+margin-bottom: 20px;
+flex-wrap: wrap;
+}
+
+.search-wrap {
+position: relative;
+flex: 1;
+min-width: 200px;
+}
+
+.search-wrap svg {
+position: absolute;
+right: 12px;
+top: 50%;
+transform: translateY(-50%);
+color: var(–text-muted);
+pointer-events: none;
+}
+
+.search-input {
+width: 100%;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 8px;
+padding: 9px 38px 9px 14px;
+color: var(–text);
+font-family: inherit;
+font-size: .9rem;
+outline: none;
+transition: border-color .2s;
+}
+.search-input:focus { border-color: var(–accent); }
+.search-input::placeholder { color: var(–text-muted); }
+
+.filter-select {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 8px;
+padding: 9px 14px;
+color: var(–text);
+font-family: inherit;
+font-size: .9rem;
+outline: none;
+cursor: pointer;
+transition: border-color .2s;
+}
+.filter-select:focus { border-color: var(–accent); }
+.filter-select option { background: var(–surface2); }
+
+/* ─── Table ─── */
+.table-wrap {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+overflow: hidden;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+font-size: .88rem;
+}
+
+thead tr {
+background: var(–surface2);
+border-bottom: 1px solid var(–border);
+}
+
+th {
+padding: 12px 16px;
+text-align: right;
+font-weight: 600;
+color: var(–text-muted);
+font-size: .78rem;
+text-transform: uppercase;
+letter-spacing: .04em;
+white-space: nowrap;
+cursor: pointer;
+user-select: none;
+}
+th:hover { color: var(–accent); }
+
+td {
+padding: 13px 16px;
+border-bottom: 1px solid var(–border);
+vertical-align: middle;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+
+tbody tr {
+transition: background .15s;
+}
+tbody tr:hover { background: rgba(240,165,0,.05); }
+
+.badge {
+display: inline-block;
+padding: 3px 10px;
+border-radius: 20px;
+font-size: .76rem;
+font-weight: 600;
+}
+
+.badge-active { background: rgba(63,185,80,.15); color: var(–green); }
+.badge-inactive { background: rgba(248,81,73,.15); color: var(–red); }
+
+.actions-cell { display: flex; gap: 6px; justify-content: flex-end; }
+
+.icon-btn {
+width: 30px; height: 30px;
+border-radius: 6px;
+border: 1px solid var(–border);
+background: transparent;
+color: var(–text-muted);
+cursor: pointer;
+display: grid;
+place-items: center;
+transition: all .15s;
+}
+.icon-btn:hover { border-color: var(–accent); color: var(–accent); background: rgba(240,165,0,.08); }
+.icon-btn.del:hover { border-color: var(–red); color: var(–red); background: rgba(248,81,73,.08); }
+
+/* ─── Empty state ─── */
+.empty-state {
+text-align: center;
+padding: 60px 20px;
+color: var(–text-muted);
+}
+
+.empty-state .icon { font-size: 3rem; margin-bottom: 14px; }
+.empty-state p { font-size: 1rem; }
+
+/* ─── Pagination ─── */
+.pagination {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 14px 20px;
+border-top: 1px solid var(–border);
+font-size: .85rem;
+color: var(–text-muted);
+}
+
+.page-btns { display: flex; gap: 6px; }
+
+.page-btn {
+width: 32px; height: 32px;
+border-radius: 6px;
+border: 1px solid var(–border);
+background: transparent;
+color: var(–text);
+cursor: pointer;
+font-family: inherit;
+font-size: .85rem;
+display: grid;
+place-items: center;
+transition: all .15s;
+}
+.page-btn:hover { border-color: var(–accent); color: var(–accent); }
+.page-btn.active { background: var(–accent); color: #000; border-color: var(–accent); }
+.page-btn:disabled { opacity: .35; pointer-events: none; }
+
+/* ─── Modal ─── */
+.overlay {
+display: none;
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,.65);
+z-index: 200;
+place-items: center;
+}
+.overlay.open { display: grid; }
+
+.modal {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 14px;
+width: 560px;
+max-width: 95vw;
+max-height: 90vh;
+overflow-y: auto;
+animation: slideUp .25s ease;
+}
+
+@keyframes slideUp {
+from { opacity: 0; transform: translateY(30px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header {
+padding: 20px 24px;
+border-bottom: 1px solid var(–border);
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.modal-title { font-size: 1.05rem; font-weight: 700; }
+
+.modal-close {
+background: none;
+border: none;
+color: var(–text-muted);
+cursor: pointer;
+font-size: 1.4rem;
+line-height: 1;
+padding: 2px 6px;
+border-radius: 4px;
+transition: color .15s;
+}
+.modal-close:hover { color: var(–text); }
+
+.modal-body { padding: 24px; }
+
+.form-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 16px;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: span 2; }
+
+.form-label {
+font-size: .8rem;
+font-weight: 600;
+color: var(–text-muted);
+text-transform: uppercase;
+letter-spacing: .04em;
+}
+
+.form-input, .form-select {
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 7px;
+padding: 9px 12px;
+color: var(–text);
+font-family: inherit;
+font-size: .9rem;
+outline: none;
+transition: border-color .2s;
+}
+.form-input:focus, .form-select:focus { border-color: var(–accent); }
+.form-select option { background: var(–surface2); }
+
+.modal-footer {
+padding: 16px 24px;
+border-top: 1px solid var(–border);
+display: flex;
+gap: 10px;
+justify-content: flex-end;
+}
+
+/* ─── Toast ─── */
+.toast {
+position: fixed;
+bottom: 28px;
+left: 50%;
+transform: translateX(-50%) translateY(80px);
+background: var(–surface2);
+border: 1px solid var(–border);
+padding: 12px 22px;
+border-radius: 30px;
+font-size: .88rem;
+display: flex;
+align-items: center;
+gap: 8px;
+z-index: 999;
+transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.success { border-color: var(–green); color: var(–green); }
+.toast.error   { border-color: var(–red);   color: var(–red);   }
+
+/* ─── Upload zone ─── */
+.upload-zone {
+border: 2px dashed var(–border);
+border-radius: 12px;
+padding: 40px;
+text-align: center;
+cursor: pointer;
+transition: all .2s;
+margin-bottom: 24px;
+}
+.upload-zone:hover, .upload-zone.drag-over {
+border-color: var(–accent);
+background: rgba(240,165,0,.04);
+}
+.upload-zone .upload-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.upload-zone p { color: var(–text-muted); font-size: .9rem; }
+.upload-zone strong { color: var(–accent); }
+
+#fileInput { display: none; }
+
+.count-badge {
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 20px;
+padding: 2px 10px;
+font-size: .75rem;
+color: var(–text-muted);
+margin-right: 6px;
 }
 </style>
 
 </head>
 <body>
 
-<div class="page-wrapper" id="mainDoc">
+<!-- Header -->
 
-  <!-- HEADER -->
-
-  <div class="header">
-    <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="شعار وزارة الصحة" onerror="this.style.display='none'">
-    <div class="header-center">
-      <h1>المديرية العامة للخدمات الصحية لمحافظة ظفار<br>دائرة الشؤون المالية - قسم الرواتب والمصروفات</h1>
-      <h2>⚙️ حاسبة الرواتب المتقدمة</h2>
-    </div>
-    <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="شعار عمان فيجن" onerror="this.style.display='none'">
+<header>
+  <div class="logo">
+    <div class="logo-icon">👥</div>
+    نظام إدارة الموظفين
   </div>
-  <div class="green-bar"></div>
+  <div class="header-actions">
+    <button class="btn btn-outline" onclick="exportExcel()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      تصدير Excel
+    </button>
+    <button class="btn btn-primary" onclick="openModal()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      إضافة موظف
+    </button>
+  </div>
+</header>
 
-  <!-- BODY -->
+<main>
 
-  <div class="form-body">
+  <!-- Upload Zone -->
 
-```
-<!-- Basic Info -->
-<div class="section-title">📋 المعلومات الأساسية</div>
-<div class="grid-2">
-  <div class="field"><label>اسم الموظف</label><input type="text" id="empName" placeholder="أدخل الاسم الكامل"></div>
-  <div class="field"><label>رقم الموظف</label><input type="text" id="empNum" placeholder="مثال: 12345"></div>
-</div>
-<div class="grid-3">
-  <div class="field">
-    <label>نوع العقد</label>
-    <select id="contractType">
-      <option value="دائم">عقود دائمة</option>
-      <option value="موقت">عقود موقتة</option>
+  <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()"
+       ondragover="event.preventDefault();this.classList.add('drag-over')"
+       ondragleave="this.classList.remove('drag-over')"
+       ondrop="handleDrop(event)">
+    <div class="upload-icon">📊</div>
+    <p><strong>اسحب ملف Excel هنا</strong> أو انقر للاختيار</p>
+    <p style="margin-top:6px;font-size:.8rem">يدعم ملفات .xlsx و .xls</p>
+  </div>
+  <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="handleFile(this.files[0])">
+
+  <!-- Stats -->
+
+  <div class="stats" id="statsRow">
+    <div class="stat-card"><div class="stat-label">إجمالي الموظفين</div><div class="stat-value" id="statTotal">0</div></div>
+    <div class="stat-card"><div class="stat-label">نشط</div><div class="stat-value" id="statActive" style="color:var(--green)">0</div></div>
+    <div class="stat-card"><div class="stat-label">غير نشط</div><div class="stat-value" id="statInactive" style="color:var(--red)">0</div></div>
+    <div class="stat-card"><div class="stat-label">الأقسام</div><div class="stat-value" id="statDepts">0</div></div>
+  </div>
+
+  <!-- Toolbar -->
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="search-input" id="searchInput" type="text" placeholder="بحث بالاسم أو الرقم الوظيفي..." oninput="render()">
+    </div>
+    <select class="filter-select" id="deptFilter" onchange="render()">
+      <option value="">كل الأقسام</option>
+    </select>
+    <select class="filter-select" id="statusFilter" onchange="render()">
+      <option value="">كل الحالات</option>
+      <option value="نشط">نشط</option>
+      <option value="غير نشط">غير نشط</option>
     </select>
   </div>
-  <div class="field"><label>تاريخ الاحتساب من</label><input type="date" id="dateFrom"></div>
-  <div class="field"><label>تاريخ الاحتساب إلى</label><input type="date" id="dateTo"></div>
-</div>
 
-<!-- Allowances Tabs -->
-<div class="section-title">💰 البدلات والرواتب</div>
-<div class="tabs-header">
-  <button class="tab-btn active" onclick="switchTab('tab1',this)">بدلات التعيين</button>
-  <button class="tab-btn" onclick="switchTab('tab2',this)">إجمالي قبل الخصم</button>
-  <button class="tab-btn" onclick="switchTab('tab3',this)">إجمالي بعد الخصم</button>
-</div>
+  <!-- Table -->
 
-<div id="tab1" class="tab-panel active">
-  <div class="grid-4">
-    <div class="field"><label>البدل الأساسي</label><input type="number" id="basic" min="0" oninput="calc()"></div>
-    <div class="field"><label>بدلات أخرى</label><input type="number" id="other" min="0" oninput="calc()"></div>
-    <div class="field"><label>بدل السكن</label><input type="number" id="housing" min="0" oninput="calc()"></div>
-    <div class="field"><label>بدل الكهرباء</label><input type="number" id="electric" min="0" oninput="calc()"></div>
-    <div class="field"><label>بدل الماء</label><input type="number" id="water" min="0" oninput="calc()"></div>
-    <div class="field"><label>بدل الهاتف</label><input type="number" id="phone" min="0" oninput="calc()"></div>
-    <div class="field"><label>بدل النقل</label><input type="number" id="transport" min="0" oninput="calc()"></div>
-    <div class="field"><label>بدل مهني</label><input type="number" id="professional" min="0" oninput="calc()"></div>
-    <div class="field"><label>بدل غلاء معيشة</label><input type="number" id="living" min="0" oninput="calc()"></div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr id="tableHead"></tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div id="emptyState" class="empty-state" style="display:none">
+      <div class="icon">🔍</div>
+      <p>لا توجد نتائج مطابقة</p>
+    </div>
+    <div class="pagination">
+      <span id="pageInfo" style="font-size:.85rem"></span>
+      <div class="page-btns" id="pageBtns"></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Modal -->
+
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">إضافة موظف جديد</span>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid" id="formGrid"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal()">إلغاء</button>
+      <button class="btn btn-primary" onclick="saveEmployee()">حفظ</button>
+    </div>
   </div>
 </div>
-<div id="tab2" class="tab-panel"></div>
-<div id="tab3" class="tab-panel"></div>
 
-<!-- Results -->
-<div class="results-box">
-  <div class="section-title">📊 ملخص الراتب</div>
-  <div class="results-grid">
-    <div class="result-item"><span>عدد الأيام المحتسبة</span><span id="r_days">0</span></div>
-    <div class="result-item"><span>الإجمالي قبل الخصم</span><span id="r_gross">0.000 ر.ع</span></div>
-    <div class="result-item"><span>إجمالي الراتب الشهري</span><span id="r_monthly">0.000 ر.ع</span></div>
-    <div class="result-item"><span>استقطاع صندوق الحماية (8%)</span><span id="r_deduction">0.000 ر.ع</span></div>
-    <div class="result-item full"><span>إجمالي الاستحقاق للفترة</span><span id="r_period">0.000 ر.ع</span></div>
-    <div class="result-item highlight full"><span>💳 صافي المستحق</span><span id="r_net">0.000 ر.ع</span></div>
-  </div>
-</div>
+<!-- Toast -->
 
-<!-- Signatures -->
-<div class="signatures">
-  <div class="sig-box">إعداد ومراجعة: _______________</div>
-  <div class="sig-box">اعتمده: _______________</div>
-</div>
-
-<!-- QR Section (shows on print) -->
-<div class="qr-section" id="qrSection">
-  <div id="qrCode"></div>
-  <p>امسح الرمز للاطلاع على تفاصيل الراتب</p>
-</div>
-
-<!-- Buttons -->
-<div class="btn-row">
-  <button class="btn btn-save" onclick="saveAndPrint()">🖨️ حفظ وطباعة</button>
-  <button class="btn btn-print" onclick="justPrint()">🖨️ طباعة فقط</button>
-  <button class="btn btn-clear" onclick="clearAll()">🗑️ تفريغ الحقول</button>
-</div>
-```
-
-  </div><!-- /form-body -->
-
-  <div class="footer">
-    للتنويه: محتوى الصفحة لا يتبع وزارة الصحة، تم إنشاء هذه الأداة وتطويرها بمبادرة فردية<br>
-    جميع الحقوق محفوظة © 2025 محمد جعبوب - قسم الرواتب - دائرة الشؤون المالية
-  </div>
-</div><!-- /page-wrapper -->
+<div class="toast" id="toast"></div>
 
 <script>
-/* ─── STORAGE KEY ─── */
-const STORAGE_PREFIX = 'emp_record_';
+// ─── State ───────────────────────────────────────────────
+let employees = [];
+let columns   = [];
+let editIndex = null;
+let page      = 1;
+const PER_PAGE = 10;
 
-/* ─── TAB SWITCH ─── */
-function switchTab(id, btn) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
+// ─── Default columns when no file uploaded ───────────────
+const DEFAULT_COLS = ['رقم الموظف','الاسم','القسم','المسمى الوظيفي','الراتب','تاريخ التعيين','الحالة'];
+
+// ─── Sample data ─────────────────────────────────────────
+const SAMPLE = [
+  {' رقم الموظف':'EMP001','الاسم':'أحمد محمد الزهراني','القسم':'تقنية المعلومات','المسمى الوظيفي':'مطور برمجيات','الراتب':'12000','تاريخ التعيين':'2021-03-15','الحالة':'نشط'},
+  {' رقم الموظف':'EMP002','الاسم':'سارة علي الغامدي','القسم':'الموارد البشرية','المسمى الوظيفي':'مدير موارد بشرية','الراتب':'15000','تاريخ التعيين':'2019-07-01','الحالة':'نشط'},
+  {' رقم الموظف':'EMP003','الاسم':'خالد عبدالله القحطاني','القسم':'المالية','المسمى الوظيفي':'محاسب','الراتب':'10000','تاريخ التعيين':'2020-11-20','الحالة':'نشط'},
+  {' رقم الموظف':'EMP004','الاسم':'نورة سعد العتيبي','القسم':'التسويق','المسمى الوظيفي':'مديرة تسويق','الراتب':'14000','تاريخ التعيين':'2018-02-10','الحالة':'نشط'},
+  {' رقم الموظف':'EMP005','الاسم':'محمد فهد الدوسري','القسم':'تقنية المعلومات','المسمى الوظيفي':'مهندس شبكات','الراتب':'11000','تاريخ التعيين':'2022-05-08','الحالة':'غير نشط'},
+  {' رقم الموظف':'EMP006','الاسم':'فاطمة حسن الشمري','القسم':'العمليات','المسمى الوظيفي':'مشرفة عمليات','الراتب':'9500','تاريخ التعيين':'2021-09-14','الحالة':'نشط'},
+  {' رقم الموظف':'EMP007','الاسم':'عبدالرحمن يوسف المالكي','القسم':'المبيعات','المسمى الوظيفي':'مندوب مبيعات','الراتب':'8000','تاريخ التعيين':'2023-01-03','الحالة':'نشط'},
+  {' رقم الموظف':'EMP008','الاسم':'ريم تركي الحربي','القسم':'المالية','المسمى الوظيفي':'مدققة حسابات','الراتب':'13000','تاريخ التعيين':'2017-06-22','الحالة':'غير نشط'},
+];
+
+// ─── Init ─────────────────────────────────────────────────
+function init() {
+  employees = SAMPLE.map(r => ({...r}));
+  columns   = Object.keys(employees[0]).map(c => c.trim());
+  // normalize keys
+  employees = employees.map(r => {
+    const obj = {};
+    Object.keys(r).forEach(k => obj[k.trim()] = r[k]);
+    return obj;
+  });
+  updateStats();
+  updateFilters();
+  buildHead();
+  render();
 }
 
-/* ─── CALCULATE ─── */
-function calc() {
-  const get = id => parseFloat(document.getElementById(id)?.value) || 0;
-  const monthly = get('basic') + get('other') + get('housing') + get('electric') +
-                  get('water') + get('phone') + get('transport') + get('professional') + get('living');
-
-  const from = document.getElementById('dateFrom').value;
-  const to   = document.getElementById('dateTo').value;
-  let days = 0, period = 0;
-  if (from && to) {
-    const d1 = new Date(from), d2 = new Date(to);
-    days = Math.max(0, Math.round((d2 - d1) / 86400000) + 1);
-    period = (monthly / 30) * days;
-  }
-  const deduction = period * 0.08;
-  const net = period - deduction;
-
-  document.getElementById('r_days').textContent = days;
-  document.getElementById('r_gross').textContent = monthly.toFixed(3) + ' ر.ع';
-  document.getElementById('r_monthly').textContent = monthly.toFixed(3) + ' ر.ع';
-  document.getElementById('r_deduction').textContent = deduction.toFixed(3) + ' ر.ع';
-  document.getElementById('r_period').textContent = period.toFixed(3) + ' ر.ع';
-  document.getElementById('r_net').textContent = net.toFixed(3) + ' ر.ع';
+// ─── File handling ────────────────────────────────────────
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('drag-over');
+  handleFile(e.dataTransfer.files[0]);
 }
 
-/* ─── GATHER DATA ─── */
-function gatherData() {
-  const get = id => document.getElementById(id)?.value || '';
-  const getN = id => parseFloat(document.getElementById(id)?.value) || 0;
-  return {
-    empName: get('empName'),
-    empNum: get('empNum'),
-    contractType: get('contractType'),
-    dateFrom: get('dateFrom'),
-    dateTo: get('dateTo'),
-    basic: getN('basic'),
-    other: getN('other'),
-    housing: getN('housing'),
-    electric: getN('electric'),
-    water: getN('water'),
-    phone: getN('phone'),
-    transport: getN('transport'),
-    professional: getN('professional'),
-    living: getN('living'),
-    net: document.getElementById('r_net').textContent,
-    savedAt: new Date().toISOString()
+function handleFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb = XLSX.read(e.target.result, {type:'binary'});
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const data = XLSX.utils.sheet_to_json(ws, {defval:''});
+      if (!data.length) { toast('الملف فارغ','error'); return; }
+      columns   = Object.keys(data[0]).map(c => String(c).trim());
+      employees = data.map(r => {
+        const obj = {};
+        Object.keys(r).forEach(k => obj[String(k).trim()] = String(r[k]));
+        return obj;
+      });
+      // hide upload zone
+      document.getElementById('uploadZone').style.display = 'none';
+      updateStats();
+      updateFilters();
+      buildHead();
+      render();
+      toast(`✅ تم تحميل ${employees.length} موظف من الملف`,'success');
+    } catch(err) {
+      toast('خطأ في قراءة الملف','error');
+    }
   };
+  reader.readAsBinaryString(file);
 }
 
-/* ─── SAVE TO LOCALSTORAGE & GENERATE QR ─── */
-function saveData() {
-  const data = gatherData();
-  const key = STORAGE_PREFIX + (data.empNum || Date.now());
-  localStorage.setItem(key, JSON.stringify(data));
+// ─── Stats ────────────────────────────────────────────────
+function updateStats() {
+  document.getElementById('statTotal').textContent = employees.length;
+  const statusCol = columns.find(c => c.includes('حال') || c.includes('stat')) || '';
+  const active   = employees.filter(e => String(e[statusCol]||'').includes('نشط') && !String(e[statusCol]||'').includes('غير')).length;
+  document.getElementById('statActive').textContent = statusCol ? active : '—';
+  document.getElementById('statInactive').textContent = statusCol ? employees.length - active : '—';
+  const deptCol = columns.find(c => c.includes('قسم') || c.includes('dept')) || '';
+  const depts = deptCol ? new Set(employees.map(e => e[deptCol])).size : '—';
+  document.getElementById('statDepts').textContent = depts;
+}
 
-  // Build URL pointing to viewer page with key as param
-  const baseUrl = window.location.href.split('?')[0];
-  const viewUrl = baseUrl + '?view=' + encodeURIComponent(key);
+// ─── Filters ──────────────────────────────────────────────
+function updateFilters() {
+  const deptCol = columns.find(c => c.includes('قسم') || c.includes('dept')) || '';
+  const sel = document.getElementById('deptFilter');
+  sel.innerHTML = '<option value="">كل الأقسام</option>';
+  if (deptCol) {
+    [...new Set(employees.map(e => e[deptCol]))].filter(Boolean).sort().forEach(d => {
+      sel.innerHTML += `<option value="${d}">${d}</option>`;
+    });
+  }
+}
 
-  // Generate QR
-  const qrDiv = document.getElementById('qrCode');
-  qrDiv.innerHTML = '';
-  new QRCode(qrDiv, {
-    text: viewUrl,
-    width: 120,
-    height: 120,
-    colorDark: '#1a3a5c',
-    colorLight: '#ffffff',
-    correctLevel: QRCode.CorrectLevel.H
+// ─── Table head ───────────────────────────────────────────
+function buildHead() {
+  const tr = document.getElementById('tableHead');
+  tr.innerHTML = columns.map(c => `<th>${c}</th>`).join('') + '<th style="text-align:left">إجراءات</th>';
+}
+
+// ─── Render ───────────────────────────────────────────────
+function filtered() {
+  const q      = document.getElementById('searchInput').value.toLowerCase();
+  const dept   = document.getElementById('deptFilter').value;
+  const status = document.getElementById('statusFilter').value;
+  const deptCol   = columns.find(c => c.includes('قسم') || c.includes('dept')) || '';
+  const statusCol = columns.find(c => c.includes('حال') || c.includes('stat')) || '';
+
+  return employees.filter(e => {
+    const matchQ = !q || Object.values(e).some(v => String(v).toLowerCase().includes(q));
+    const matchD = !dept   || e[deptCol]   === dept;
+    const matchS = !status || e[statusCol] === status;
+    return matchQ && matchD && matchS;
   });
-
-  return viewUrl;
 }
 
-/* ─── SAVE + PRINT ─── */
-function saveAndPrint() {
-  calc();
-  saveData();
-  document.getElementById('qrSection').style.display = 'flex';
-  document.getElementById('qrSection').style.flexDirection = 'column';
-  document.getElementById('qrSection').style.alignItems = 'center';
-  setTimeout(() => { window.print(); }, 400);
+function render() {
+  const data = filtered();
+  const totalPages = Math.max(1, Math.ceil(data.length / PER_PAGE));
+  if (page > totalPages) page = totalPages;
+
+  const slice = data.slice((page-1)*PER_PAGE, page*PER_PAGE);
+  const tbody = document.getElementById('tableBody');
+  const empty = document.getElementById('emptyState');
+  const statusCol = columns.find(c => c.includes('حال') || c.includes('stat')) || '';
+
+  if (!slice.length) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    tbody.innerHTML = slice.map((emp, i) => {
+      const realIndex = employees.indexOf(emp);
+      const cells = columns.map(c => {
+        const v = emp[c] ?? '';
+        if (c === statusCol) {
+          const active = String(v).includes('نشط') && !String(v).includes('غير');
+          return `<td><span class="badge ${active?'badge-active':'badge-inactive'}">${v||'—'}</span></td>`;
+        }
+        return `<td>${v||'—'}</td>`;
+      }).join('');
+      return `<tr>
+        ${cells}
+        <td>
+          <div class="actions-cell">
+            <button class="icon-btn" title="تعديل" onclick="editEmployee(${realIndex})">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <button class="icon-btn del" title="حذف" onclick="deleteEmployee(${realIndex})">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Pagination info
+  document.getElementById('pageInfo').textContent =
+    `عرض ${Math.min((page-1)*PER_PAGE+1, data.length)}–${Math.min(page*PER_PAGE, data.length)} من ${data.length}`;
+
+  // Page buttons
+  const pb = document.getElementById('pageBtns');
+  pb.innerHTML = '';
+  const prevBtn = btn('‹', page===1, () => { page--; render(); });
+  pb.appendChild(prevBtn);
+  for (let i=1; i<=totalPages; i++) {
+    const b = btn(i, false, () => { page=i; render(); });
+    if (i===page) b.classList.add('active');
+    pb.appendChild(b);
+  }
+  const nextBtn = btn('›', page===totalPages, () => { page++; render(); });
+  pb.appendChild(nextBtn);
+
+  updateStats();
 }
 
-function justPrint() {
-  calc();
-  setTimeout(() => { window.print(); }, 100);
+function btn(label, disabled, fn) {
+  const b = document.createElement('button');
+  b.className = 'page-btn';
+  b.textContent = label;
+  b.disabled = disabled;
+  b.onclick = fn;
+  return b;
 }
 
-/* ─── CLEAR ─── */
-function clearAll() {
-  ['empName','empNum','dateFrom','dateTo','basic','other','housing','electric',
-   'water','phone','transport','professional','living'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  document.getElementById('contractType').value = 'دائم';
-  document.getElementById('qrCode').innerHTML = '';
-  document.getElementById('qrSection').style.display = 'none';
-  calc();
+// ─── Modal ────────────────────────────────────────────────
+function openModal(emp, idx) {
+  editIndex = idx !== undefined ? idx : null;
+  document.getElementById('modalTitle').textContent = emp ? 'تعديل بيانات الموظف' : 'إضافة موظف جديد';
+
+  const grid = document.getElementById('formGrid');
+  grid.innerHTML = columns.map(c => {
+    const val = emp ? (emp[c]||'') : '';
+    if (c.includes('حال') || c.includes('stat')) {
+      return `<div class="form-group">
+        <label class="form-label">${c}</label>
+        <select class="form-select" data-col="${c}">
+          <option ${val==='نشط'?'selected':''}>نشط</option>
+          <option ${val==='غير نشط'?'selected':''}>غير نشط</option>
+        </select>
+      </div>`;
+    }
+    return `<div class="form-group">
+      <label class="form-label">${c}</label>
+      <input class="form-input" type="text" data-col="${c}" value="${val}" placeholder="${c}">
+    </div>`;
+  }).join('');
+
+  document.getElementById('overlay').classList.add('open');
 }
 
-/* ─── LOAD DATA FROM URL PARAM ─── */
-function loadFromParam() {
-  const params = new URLSearchParams(window.location.search);
-  const key = params.get('view');
-  if (!key) return;
-  try {
-    const raw = localStorage.getItem(key);
-    if (!raw) { alert('لم يتم العثور على البيانات. ربما تم فتحها على جهاز مختلف.'); return; }
-    const d = JSON.parse(raw);
-    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
-    set('empName', d.empName); set('empNum', d.empNum);
-    set('dateFrom', d.dateFrom); set('dateTo', d.dateTo);
-    document.getElementById('contractType').value = d.contractType || 'دائم';
-    ['basic','other','housing','electric','water','phone','transport','professional','living']
-      .forEach(id => set(id, d[id]));
-    calc();
-    // Show a notice
-    const notice = document.createElement('div');
-    notice.style.cssText = 'background:#d1fae5;border:1px solid #6ee7b7;border-radius:8px;padding:10px 16px;margin-bottom:16px;font-size:0.82rem;color:#065f46;font-weight:600;';
-    notice.textContent = '✅ تم تحميل بيانات الموظف من السجل المحفوظ بتاريخ: ' + new Date(d.savedAt).toLocaleString('ar-OM');
-    document.querySelector('.form-body').prepend(notice);
-  } catch(e) { console.error(e); }
+function editEmployee(idx) { openModal(employees[idx], idx); }
+
+function closeModal() { document.getElementById('overlay').classList.remove('open'); editIndex=null; }
+
+function saveEmployee() {
+  const inputs = document.querySelectorAll('#formGrid [data-col]');
+  const obj = {};
+  inputs.forEach(el => obj[el.dataset.col] = el.value.trim());
+
+  if (editIndex !== null) {
+    employees[editIndex] = obj;
+    toast('✅ تم تحديث بيانات الموظف','success');
+  } else {
+    employees.unshift(obj);
+    toast('✅ تمت إضافة الموظف بنجاح','success');
+  }
+  closeModal();
+  page = 1;
+  updateStats();
+  updateFilters();
+  render();
 }
 
-/* ─── INIT ─── */
-loadFromParam();
-calc();
+function deleteEmployee(idx) {
+  if (!confirm('هل أنت متأكد من حذف هذا الموظف؟')) return;
+  employees.splice(idx,1);
+  render();
+  toast('🗑️ تم حذف الموظف','error');
+}
 
-document.getElementById('dateFrom').addEventListener('change', calc);
-document.getElementById('dateTo').addEventListener('change', calc);
+// ─── Export ───────────────────────────────────────────────
+function exportExcel() {
+  const ws = XLSX.utils.json_to_sheet(employees);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'الموظفين');
+  XLSX.writeFile(wb, 'employees_export.xlsx');
+  toast('📥 جاري تحميل الملف...','success');
+}
+
+// ─── Toast ────────────────────────────────────────────────
+function toast(msg, type='success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast ${type}`;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ─── Boot ─────────────────────────────────────────────────
+init();
 </script>
 
 </body>
