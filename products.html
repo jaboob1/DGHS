@@ -1,91 +1,794 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منتجاتنا - متجر روائح</title>
-    <style>
-        body { font-family: 'Tajawal', sans-serif; margin: 0; background-color: #f9f9f9; }
-        header, footer { background-color: #2c3e50; color: #fff; text-align: center; padding: 15px; }
-        nav a { color: #fff; margin: 0 15px; text-decoration: none; }
-        
-        /* تنسيق شبكة المنتجات */
-        .products-grid { 
-            display: flex; 
-            justify-content: center; 
-            flex-wrap: wrap; 
-            padding: 40px 20px; 
-            gap: 20px; 
-        }
-        .product-card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            width: 300px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .product-img {
-            background-color: #eee;
-            height: 200px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #888;
-            margin-bottom: 15px;
-            border-radius: 5px;
-        }
-        .price { color: #c5a059; font-size: 1.2em; font-weight: bold; margin: 10px 0; }
-        .buy-btn {
-            background-color: #2c3e50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-        }
-        .buy-btn:hover { background-color: #c5a059; }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة بيانات الموظفين</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #112240;
+    --navy-light: #1a3160;
+    --gold: #c9a227;
+    --gold-light: #e8c05a;
+    --gold-pale: #f5e6b0;
+    --silver: #8892a4;
+    --white: #f0f4ff;
+    --success: #22c55e;
+    --danger: #ef4444;
+  }
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+font-family: ‘Tajawal’, sans-serif;
+background: var(–navy);
+color: var(–white);
+min-height: 100vh;
+overflow-x: hidden;
+}
+
+/* Background Pattern */
+body::before {
+content: ‘’;
+position: fixed;
+inset: 0;
+background:
+radial-gradient(ellipse at 20% 20%, rgba(201,162,39,0.08) 0%, transparent 50%),
+radial-gradient(ellipse at 80% 80%, rgba(17,34,64,0.9) 0%, transparent 50%),
+repeating-linear-gradient(
+45deg,
+transparent,
+transparent 40px,
+rgba(255,255,255,0.01) 40px,
+rgba(255,255,255,0.01) 41px
+);
+pointer-events: none;
+z-index: 0;
+}
+
+.container {
+position: relative;
+z-index: 1;
+max-width: 900px;
+margin: 0 auto;
+padding: 40px 20px;
+}
+
+/* Header */
+.header {
+text-align: center;
+margin-bottom: 50px;
+animation: fadeDown 0.8s ease;
+}
+
+.header-badge {
+display: inline-flex;
+align-items: center;
+gap: 10px;
+background: rgba(201,162,39,0.1);
+border: 1px solid rgba(201,162,39,0.3);
+border-radius: 50px;
+padding: 8px 20px;
+margin-bottom: 20px;
+font-size: 13px;
+color: var(–gold-light);
+letter-spacing: 1px;
+}
+
+.header-badge::before {
+content: ‘◆’;
+font-size: 8px;
+}
+
+h1 {
+font-size: clamp(28px, 5vw, 44px);
+font-weight: 800;
+background: linear-gradient(135deg, var(–white) 30%, var(–gold-light));
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+line-height: 1.2;
+margin-bottom: 10px;
+}
+
+.header-sub {
+color: var(–silver);
+font-size: 16px;
+font-weight: 300;
+}
+
+/* Decorative line */
+.deco-line {
+display: flex;
+align-items: center;
+gap: 15px;
+margin: 20px auto;
+max-width: 300px;
+}
+.deco-line::before, .deco-line::after {
+content: ‘’;
+flex: 1;
+height: 1px;
+background: linear-gradient(90deg, transparent, var(–gold), transparent);
+}
+.deco-line span { color: var(–gold); font-size: 18px; }
+
+/* Upload Section */
+.upload-card {
+background: rgba(17,34,64,0.6);
+border: 1px dashed rgba(201,162,39,0.4);
+border-radius: 16px;
+padding: 30px;
+text-align: center;
+margin-bottom: 30px;
+cursor: pointer;
+transition: all 0.3s ease;
+animation: fadeUp 0.8s ease 0.2s both;
+}
+
+.upload-card:hover {
+border-color: var(–gold);
+background: rgba(201,162,39,0.05);
+transform: translateY(-2px);
+}
+
+.upload-card.has-file {
+border-style: solid;
+border-color: var(–success);
+background: rgba(34,197,94,0.05);
+}
+
+.upload-icon {
+font-size: 48px;
+margin-bottom: 12px;
+display: block;
+}
+
+.upload-title {
+font-size: 18px;
+font-weight: 700;
+margin-bottom: 6px;
+}
+
+.upload-sub {
+font-size: 14px;
+color: var(–silver);
+}
+
+#fileInput { display: none; }
+
+.file-status {
+display: none;
+align-items: center;
+justify-content: center;
+gap: 10px;
+margin-top: 15px;
+padding: 10px 20px;
+background: rgba(34,197,94,0.1);
+border-radius: 10px;
+color: var(–success);
+font-weight: 600;
+}
+
+/* Search Section */
+.search-card {
+background: rgba(17,34,64,0.8);
+border: 1px solid rgba(255,255,255,0.08);
+border-radius: 20px;
+padding: 35px;
+margin-bottom: 30px;
+backdrop-filter: blur(10px);
+animation: fadeUp 0.8s ease 0.4s both;
+}
+
+.search-label {
+display: block;
+font-size: 14px;
+font-weight: 600;
+color: var(–gold-light);
+margin-bottom: 12px;
+letter-spacing: 0.5px;
+}
+
+.search-row {
+display: flex;
+gap: 12px;
+align-items: center;
+}
+
+.input-wrapper {
+position: relative;
+flex: 1;
+}
+
+.input-icon {
+position: absolute;
+right: 16px;
+top: 50%;
+transform: translateY(-50%);
+font-size: 20px;
+opacity: 0.5;
+}
+
+#civilInput {
+width: 100%;
+background: rgba(255,255,255,0.05);
+border: 1.5px solid rgba(255,255,255,0.1);
+border-radius: 12px;
+padding: 16px 50px 16px 20px;
+color: var(–white);
+font-family: ‘Tajawal’, sans-serif;
+font-size: 18px;
+font-weight: 500;
+letter-spacing: 2px;
+text-align: center;
+transition: all 0.3s ease;
+outline: none;
+}
+
+#civilInput:focus {
+border-color: var(–gold);
+background: rgba(201,162,39,0.05);
+box-shadow: 0 0 0 3px rgba(201,162,39,0.1);
+}
+
+#civilInput::placeholder { color: rgba(255,255,255,0.2); letter-spacing: 1px; }
+
+.fetch-btn {
+background: linear-gradient(135deg, var(–gold), var(–gold-light));
+border: none;
+border-radius: 12px;
+padding: 16px 30px;
+color: var(–navy);
+font-family: ‘Tajawal’, sans-serif;
+font-size: 16px;
+font-weight: 800;
+cursor: pointer;
+transition: all 0.3s ease;
+white-space: nowrap;
+display: flex;
+align-items: center;
+gap: 8px;
+box-shadow: 0 4px 20px rgba(201,162,39,0.3);
+}
+
+.fetch-btn:hover {
+transform: translateY(-2px);
+box-shadow: 0 8px 30px rgba(201,162,39,0.5);
+}
+
+.fetch-btn:active { transform: translateY(0); }
+
+.fetch-btn:disabled {
+opacity: 0.5;
+cursor: not-allowed;
+transform: none;
+}
+
+/* Result Card */
+.result-card {
+background: rgba(17,34,64,0.9);
+border: 1px solid rgba(201,162,39,0.2);
+border-radius: 20px;
+padding: 35px;
+display: none;
+animation: fadeUp 0.5s ease;
+backdrop-filter: blur(10px);
+position: relative;
+overflow: hidden;
+}
+
+.result-card::before {
+content: ‘’;
+position: absolute;
+top: 0; right: 0;
+width: 200px; height: 200px;
+background: radial-gradient(circle, rgba(201,162,39,0.08), transparent 70%);
+pointer-events: none;
+}
+
+.result-header {
+display: flex;
+align-items: center;
+gap: 20px;
+margin-bottom: 30px;
+padding-bottom: 25px;
+border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.avatar {
+width: 80px;
+height: 80px;
+background: linear-gradient(135deg, var(–navy-light), var(–navy-mid));
+border: 2px solid var(–gold);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 32px;
+flex-shrink: 0;
+box-shadow: 0 0 20px rgba(201,162,39,0.2);
+}
+
+.result-name { font-size: 24px; font-weight: 800; margin-bottom: 5px; }
+
+.result-id {
+font-size: 13px;
+color: var(–gold-light);
+background: rgba(201,162,39,0.1);
+border: 1px solid rgba(201,162,39,0.2);
+border-radius: 20px;
+padding: 4px 14px;
+display: inline-block;
+letter-spacing: 1px;
+}
+
+.result-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+gap: 15px;
+}
+
+.result-item {
+background: rgba(255,255,255,0.03);
+border: 1px solid rgba(255,255,255,0.06);
+border-radius: 12px;
+padding: 16px;
+transition: all 0.2s ease;
+}
+
+.result-item:hover {
+background: rgba(201,162,39,0.04);
+border-color: rgba(201,162,39,0.2);
+}
+
+.result-item-label {
+font-size: 11px;
+font-weight: 600;
+color: var(–silver);
+letter-spacing: 0.5px;
+margin-bottom: 6px;
+text-transform: uppercase;
+}
+
+.result-item-value {
+font-size: 16px;
+font-weight: 600;
+color: var(–white);
+}
+
+.status-badge {
+display: inline-flex;
+align-items: center;
+gap: 6px;
+padding: 4px 12px;
+border-radius: 20px;
+font-size: 14px;
+font-weight: 700;
+}
+
+.status-active { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+.status-inactive { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+
+/* Error */
+.error-card {
+background: rgba(239,68,68,0.08);
+border: 1px solid rgba(239,68,68,0.3);
+border-radius: 16px;
+padding: 25px;
+text-align: center;
+display: none;
+animation: shake 0.4s ease;
+}
+
+.error-icon { font-size: 40px; margin-bottom: 10px; display: block; }
+.error-text { font-size: 16px; font-weight: 600; color: #ef4444; }
+
+/* Demo Table */
+.demo-section {
+margin-top: 40px;
+animation: fadeUp 0.8s ease 0.6s both;
+}
+
+.section-title {
+font-size: 14px;
+font-weight: 700;
+color: var(–silver);
+letter-spacing: 2px;
+text-transform: uppercase;
+margin-bottom: 15px;
+display: flex;
+align-items: center;
+gap: 10px;
+}
+
+.section-title::after {
+content: ‘’;
+flex: 1;
+height: 1px;
+background: rgba(255,255,255,0.07);
+}
+
+.demo-table-wrap {
+background: rgba(17,34,64,0.6);
+border: 1px solid rgba(255,255,255,0.06);
+border-radius: 16px;
+overflow: hidden;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+font-size: 14px;
+}
+
+thead {
+background: rgba(201,162,39,0.1);
+border-bottom: 1px solid rgba(201,162,39,0.2);
+}
+
+th {
+padding: 14px 16px;
+text-align: right;
+font-weight: 700;
+color: var(–gold-light);
+font-size: 13px;
+letter-spacing: 0.5px;
+}
+
+td {
+padding: 13px 16px;
+text-align: right;
+color: rgba(255,255,255,0.75);
+border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+.download-btn {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+background: rgba(255,255,255,0.05);
+border: 1px solid rgba(255,255,255,0.1);
+border-radius: 10px;
+padding: 10px 18px;
+color: var(–white);
+font-family: ‘Tajawal’, sans-serif;
+font-size: 14px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s;
+margin-bottom: 15px;
+}
+
+.download-btn:hover {
+background: rgba(201,162,39,0.1);
+border-color: var(–gold);
+color: var(–gold-light);
+}
+
+/* Animations */
+@keyframes fadeDown {
+from { opacity: 0; transform: translateY(-30px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(30px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+0%, 100% { transform: translateX(0); }
+25% { transform: translateX(-8px); }
+75% { transform: translateX(8px); }
+}
+
+/* Loading spinner */
+.spinner {
+display: inline-block;
+width: 18px;
+height: 18px;
+border: 2px solid rgba(10,22,40,0.3);
+border-top-color: var(–navy);
+border-radius: 50%;
+animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 600px) {
+.search-row { flex-direction: column; }
+.fetch-btn { width: 100%; justify-content: center; }
+.result-header { flex-direction: column; text-align: center; }
+}
+</style>
+
 </head>
 <body>
+<div class="container">
 
-    <header>
-        <h1>RAWAH | روائح</h1>
-        <nav>
-            <a href="index.html">الرئيسية</a>
-            <a href="about.html">من نحن</a>
-            <a href="products.html">المتجر</a>
-            <a href="contact.html">تواصل معنا</a>
-        </nav>
-    </header>
+  <!-- Header -->
 
-    <h2 style="text-align: center; margin-top: 30px;">تشكيلة العطور الحصرية</h2>
+  <div class="header">
+    <div class="header-badge">نظام إدارة الموظفين</div>
+    <h1>منصة بيانات الموظفين</h1>
+    <p class="header-sub">ابحث عن بيانات أي موظف باستخدام رقمه المدني</p>
+    <div class="deco-line"><span>◇</span></div>
+  </div>
 
-    <div class="products-grid">
-        <div class="product-card">
-            <div class="product-img">[صورة عطر اللبان]</div>
-            <h3>عطر اللبان العماني</h3>
-            <p>مستخلص من أجود أنواع اللبان الحوجري، رائحة الفخامة.</p>
-            <div class="price">6.00 ريال عماني</div>
-            <button class="buy-btn" onclick="alert('تمت إضافة المنتج للسلة')">أضف إلى السلة</button>
-        </div>
+  <!-- Upload Section -->
 
-        <div class="product-card">
-            <div class="product-img">[صورة عطر شتوي]</div>
-            <h3>عطر شتوي دافيء</h3>
-            <p>مزيج دافئ رجالي ونسائي يناسب الأجواء الشتوية.</p>
-            <div class="price">6.00 ريال عماني</div>
-            <button class="buy-btn" onclick="alert('تمت إضافة المنتج للسلة')">أضف إلى السلة</button>
-        </div>
+  <div class="upload-card" id="uploadCard" onclick="document.getElementById('fileInput').click()">
+    <span class="upload-icon" id="uploadIcon">📊</span>
+    <div class="upload-title" id="uploadTitle">رفع ملف Excel للموظفين</div>
+    <div class="upload-sub" id="uploadSub">اضغط هنا لتحميل ملف .xlsx أو .xls</div>
+    <div class="file-status" id="fileStatus">
+      <span>✅</span>
+      <span id="fileName">تم تحميل الملف</span>
     </div>
+    <input type="file" id="fileInput" accept=".xlsx,.xls" onchange="loadExcel(event)">
+  </div>
 
-    <footer>
-        <p>جميع الأسعار تشمل ضريبة القيمة المضافة</p>
-    </footer>
+  <!-- Search Section -->
+
+  <div class="search-card">
+    <label class="search-label">🔍 أدخل الرقم المدني للموظف</label>
+    <div class="search-row">
+      <div class="input-wrapper">
+        <span class="input-icon">🪪</span>
+        <input type="text" id="civilInput" placeholder="مثال: 123456789012" maxlength="20"
+          onkeydown="if(event.key==='Enter') fetchEmployee()" />
+      </div>
+      <button class="fetch-btn" onclick="fetchEmployee()" id="fetchBtn">
+        <span id="btnText">جلب البيانات</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Error -->
+
+  <div class="error-card" id="errorCard">
+    <span class="error-icon">⚠️</span>
+    <div class="error-text" id="errorText">لم يتم العثور على موظف بهذا الرقم المدني</div>
+  </div>
+
+  <!-- Result -->
+
+  <div class="result-card" id="resultCard">
+    <div class="result-header">
+      <div class="avatar" id="avatarEmoji">👤</div>
+      <div>
+        <div class="result-name" id="rName">—</div>
+        <div class="result-id" id="rCivil">—</div>
+      </div>
+    </div>
+    <div class="result-grid" id="resultGrid"></div>
+  </div>
+
+  <!-- Demo Section -->
+
+  <div class="demo-section">
+    <div class="section-title">بيانات تجريبية مدمجة</div>
+    <button class="download-btn" onclick="downloadSampleExcel()">⬇️ تحميل ملف Excel نموذجي</button>
+    <div class="demo-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>الرقم المدني</th>
+            <th>الاسم الكامل</th>
+            <th>المسمى الوظيفي</th>
+            <th>القسم</th>
+            <th>الراتب</th>
+            <th>الحالة</th>
+          </tr>
+        </thead>
+        <tbody id="demoTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================
+// بيانات افتراضية تجريبية
+// ============================
+const defaultData = [
+  { "الرقم المدني": "123456789001", "الاسم الكامل": "أحمد محمد الكندي", "المسمى الوظيفي": "مدير قسم", "القسم": "الموارد البشرية", "الراتب": "2500 د.ك", "الجنسية": "كويتي", "تاريخ التعيين": "2018-03-15", "رقم الهاتف": "9XXXXXXX1", "البريد الإلكتروني": "ahmed@company.com", "الحالة": "فعّال" },
+  { "الرقم المدني": "123456789002", "الاسم الكامل": "فاطمة علي العجمي", "المسمى الوظيفي": "محاسبة أولى", "القسم": "المالية", "الراتب": "1800 د.ك", "الجنسية": "كويتية", "تاريخ التعيين": "2020-07-01", "رقم الهاتف": "9XXXXXXX2", "البريد الإلكتروني": "fatima@company.com", "الحالة": "فعّال" },
+  { "الرقم المدني": "123456789003", "الاسم الكامل": "خالد يوسف الرشيد", "المسمى الوظيفي": "مهندس أنظمة", "القسم": "تقنية المعلومات", "الراتب": "2200 د.ك", "الجنسية": "كويتي", "تاريخ التعيين": "2019-01-20", "رقم الهاتف": "9XXXXXXX3", "البريد الإلكتروني": "khalid@company.com", "الحالة": "فعّال" },
+  { "الرقم المدني": "123456789004", "الاسم الكامل": "نورة سعد المطيري", "المسمى الوظيفي": "مستشارة قانونية", "القسم": "الشؤون القانونية", "الراتب": "3000 د.ك", "الجنسية": "كويتية", "تاريخ التعيين": "2016-09-10", "رقم الهاتف": "9XXXXXXX4", "البريد الإلكتروني": "noura@company.com", "الحالة": "إجازة" },
+  { "الرقم المدني": "123456789005", "الاسم الكامل": "عبدالله عمر الحربي", "المسمى الوظيفي": "أخصائي مبيعات", "القسم": "التسويق والمبيعات", "الراتب": "1500 د.ك", "الجنسية": "كويتي", "تاريخ التعيين": "2022-02-28", "رقم الهاتف": "9XXXXXXX5", "البريد الإلكتروني": "abdullah@company.com", "الحالة": "فعّال" },
+];
+
+let employeeData = [...defaultData];
+
+// ============================
+// تحميل ملف Excel
+// ============================
+function loadExcel(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const workbook = XLSX.read(e.target.result, { type: 'binary' });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const json = XLSX.utils.sheet_to_json(sheet);
+
+      if (json.length === 0) {
+        alert('الملف فارغ أو لا يحتوي على بيانات صحيحة');
+        return;
+      }
+
+      employeeData = json;
+
+      // Update UI
+      document.getElementById('uploadCard').classList.add('has-file');
+      document.getElementById('uploadIcon').textContent = '✅';
+      document.getElementById('uploadTitle').textContent = 'تم تحميل الملف بنجاح';
+      document.getElementById('uploadSub').textContent = `${json.length} موظف • ${file.name}`;
+      const fs = document.getElementById('fileStatus');
+      document.getElementById('fileName').textContent = file.name;
+      fs.style.display = 'flex';
+
+      renderDemoTable(employeeData.slice(0, 5));
+    } catch(err) {
+      alert('خطأ في قراءة الملف. تأكد أن الملف بصيغة Excel صحيحة.');
+    }
+  };
+  reader.readAsBinaryString(file);
+}
+
+// ============================
+// جلب بيانات الموظف
+// ============================
+function fetchEmployee() {
+  const input = document.getElementById('civilInput').value.trim();
+  const resultCard = document.getElementById('resultCard');
+  const errorCard = document.getElementById('errorCard');
+  const btn = document.getElementById('fetchBtn');
+  const btnText = document.getElementById('btnText');
+
+  resultCard.style.display = 'none';
+  errorCard.style.display = 'none';
+
+  if (!input) {
+    shakeInput();
+    return;
+  }
+
+  // Loading state
+  btn.disabled = true;
+  btnText.innerHTML = '<span class="spinner"></span>';
+
+  setTimeout(() => {
+    btn.disabled = false;
+    btnText.textContent = 'جلب البيانات';
+
+    // Search - try different column names
+    const emp = employeeData.find(row => {
+      const civil = (row['الرقم المدني'] || row['رقم مدني'] || row['civil_id'] || row['civilId'] || row['id'] || '').toString().trim();
+      return civil === input;
+    });
+
+    if (emp) {
+      showResult(emp);
+    } else {
+      errorCard.style.display = 'block';
+      document.getElementById('errorText').textContent = `لم يتم العثور على موظف بالرقم المدني: ${input}`;
+    }
+  }, 600);
+}
+
+// ============================
+// عرض نتيجة الموظف
+// ============================
+const fieldLabels = {
+  'الرقم المدني': '🪪 الرقم المدني',
+  'الاسم الكامل': '👤 الاسم الكامل',
+  'المسمى الوظيفي': '💼 المسمى الوظيفي',
+  'القسم': '🏢 القسم',
+  'الراتب': '💰 الراتب',
+  'الجنسية': '🌍 الجنسية',
+  'تاريخ التعيين': '📅 تاريخ التعيين',
+  'رقم الهاتف': '📞 رقم الهاتف',
+  'البريد الإلكتروني': '📧 البريد الإلكتروني',
+  'الحالة': '🔵 الحالة الوظيفية',
+};
+
+function showResult(emp) {
+  const card = document.getElementById('resultCard');
+  const grid = document.getElementById('resultGrid');
+
+  document.getElementById('rName').textContent = emp['الاسم الكامل'] || emp['name'] || '—';
+  document.getElementById('rCivil').textContent = '🪪 ' + (emp['الرقم المدني'] || emp['civil_id'] || '—');
+
+  // Avatar emoji based on gender clue
+  const name = (emp['الاسم الكامل'] || '');
+  document.getElementById('avatarEmoji').textContent = '👤';
+
+  grid.innerHTML = '';
+  for (const [key, value] of Object.entries(emp)) {
+    if (!value && value !== 0) continue;
+
+    const label = fieldLabels[key] || key;
+    const div = document.createElement('div');
+    div.className = 'result-item';
+
+    let valueHtml = `<div class="result-item-value">${value}</div>`;
+    if (key === 'الحالة') {
+      const isActive = value.toString().includes('فعّال') || value.toString().toLowerCase().includes('active');
+      valueHtml = `<div class="status-badge ${isActive ? 'status-active' : 'status-inactive'}">${isActive ? '● ' : '● '}${value}</div>`;
+    }
+
+    div.innerHTML = `<div class="result-item-label">${label}</div>${valueHtml}`;
+    grid.appendChild(div);
+  }
+
+  card.style.display = 'block';
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function shakeInput() {
+  const input = document.getElementById('civilInput');
+  input.style.borderColor = '#ef4444';
+  input.style.animation = 'shake 0.4s ease';
+  setTimeout(() => {
+    input.style.borderColor = '';
+    input.style.animation = '';
+  }, 500);
+}
+
+// ============================
+// جدول البيانات التجريبية
+// ============================
+function renderDemoTable(data) {
+  const tbody = document.getElementById('demoTableBody');
+  tbody.innerHTML = '';
+  data.forEach(emp => {
+    const status = (emp['الحالة'] || '');
+    const isActive = status.includes('فعّال') || status.toLowerCase().includes('active');
+    tbody.innerHTML += `
+      <tr>
+        <td style="font-family:monospace;letter-spacing:1px">${emp['الرقم المدني'] || '—'}</td>
+        <td style="font-weight:600;color:var(--white)">${emp['الاسم الكامل'] || '—'}</td>
+        <td>${emp['المسمى الوظيفي'] || '—'}</td>
+        <td>${emp['القسم'] || '—'}</td>
+        <td style="color:var(--gold-light);font-weight:600">${emp['الراتب'] || '—'}</td>
+        <td><span class="status-badge ${isActive ? 'status-active' : 'status-inactive'}" style="font-size:12px">${status || '—'}</span></td>
+      </tr>`;
+  });
+}
+
+// ============================
+// تحميل ملف Excel نموذجي
+// ============================
+function downloadSampleExcel() {
+  const ws = XLSX.utils.json_to_sheet(defaultData);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'الموظفون');
+
+  // Set column widths
+  ws['!cols'] = [
+    { wch: 16 }, { wch: 22 }, { wch: 20 }, { wch: 20 },
+    { wch: 12 }, { wch: 10 }, { wch: 14 }, { wch: 14 }, { wch: 25 }, { wch: 10 }
+  ];
+
+  XLSX.writeFile(wb, 'بيانات_الموظفين_نموذج.xlsx');
+}
+
+// Init demo table on load
+renderDemoTable(defaultData);
+</script>
 
 </body>
 </html>
