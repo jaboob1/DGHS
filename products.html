@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -27,7 +26,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--white);mi
 
 /* ── BG ── */
 .bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.bg-layer::before{content:’’;position:absolute;inset:0;
+.bg-layer::before{content:'';position:absolute;inset:0;
 background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(200,168,75,.13),transparent),
 radial-gradient(ellipse 60% 50% at 100% 100%,rgba(59,130,246,.06),transparent)}
 .grid-lines{position:absolute;inset:0;
@@ -59,38 +58,38 @@ animation:popIn .6s cubic-bezier(.34,1.56,.64,1);
 .login-logo{text-align:center;margin-bottom:36px}
 .logo-ring{
 width:76px;height:76px;margin:0 auto 16px;
-border-radius:50%;border:2px solid var(–gold);
+border-radius:50%;border:2px solid var(--gold);
 display:flex;align-items:center;justify-content:center;
 font-size:30px;
 background:radial-gradient(circle,rgba(200,168,75,.15),transparent);
 box-shadow:0 0 30px rgba(200,168,75,.2);
 }
-.login-title{font-size:22px;font-weight:800;color:var(–white);margin-bottom:4px}
-.login-sub{font-size:13px;color:var(–silver)}
+.login-title{font-size:22px;font-weight:800;color:var(--white);margin-bottom:4px}
+.login-sub{font-size:13px;color:var(--silver)}
 .form-group{margin-bottom:18px}
-.form-label{display:block;font-size:12px;font-weight:700;color:var(–gold2);letter-spacing:.8px;margin-bottom:8px;text-transform:uppercase}
+.form-label{display:block;font-size:12px;font-weight:700;color:var(--gold2);letter-spacing:.8px;margin-bottom:8px;text-transform:uppercase}
 .form-input{
 width:100%;background:rgba(255,255,255,.04);
 border:1.5px solid rgba(255,255,255,.1);
 border-radius:12px;padding:14px 16px;
-color:var(–white);font-family:‘Tajawal’,sans-serif;font-size:16px;
+color:var(--white);font-family:'Tajawal',sans-serif;font-size:16px;
 outline:none;transition:all .3s;
 }
-.form-input:focus{border-color:var(–gold);background:rgba(200,168,75,.06);box-shadow:0 0 0 3px rgba(200,168,75,.1)}
+.form-input:focus{border-color:var(--gold);background:rgba(200,168,75,.06);box-shadow:0 0 0 3px rgba(200,168,75,.1)}
 .role-select{
 width:100%;background:rgba(255,255,255,.04);
 border:1.5px solid rgba(255,255,255,.1);
 border-radius:12px;padding:14px 16px;
-color:var(–white);font-family:‘Tajawal’,sans-serif;font-size:15px;
+color:var(--white);font-family:'Tajawal',sans-serif;font-size:15px;
 outline:none;cursor:pointer;transition:all .3s;
 }
 .role-select option{background:#0d1e35}
 .login-btn{
 width:100%;margin-top:8px;
-background:linear-gradient(135deg,var(–gold),var(–gold2));
+background:linear-gradient(135deg,var(--gold),var(--gold2));
 border:none;border-radius:12px;
 padding:16px;color:#060d1a;
-font-family:‘Tajawal’,sans-serif;font-size:17px;font-weight:800;
+font-family:'Tajawal',sans-serif;font-size:17px;font-weight:800;
 cursor:pointer;transition:all .3s;
 box-shadow:0 8px 24px rgba(200,168,75,.3);
 }
@@ -113,59 +112,59 @@ MAIN APP
 .topbar{
 position:sticky;top:0;z-index:100;
 background:rgba(6,13,26,.92);
-border-bottom:1px solid var(–border);
+border-bottom:1px solid var(--border);
 backdrop-filter:blur(16px);
 padding:0 28px;
 display:flex;align-items:center;justify-content:space-between;
 height:64px;
 }
 .topbar-brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:17px}
-.brand-dot{width:8px;height:8px;border-radius:50%;background:var(–gold)}
+.brand-dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}
 .topbar-right{display:flex;align-items:center;gap:16px}
 .user-pill{
 display:flex;align-items:center;gap:8px;
-background:var(–gold-pale);border:1px solid rgba(200,168,75,.25);
-border-radius:30px;padding:6px 14px;font-size:13px;font-weight:700;color:var(–gold2)
+background:var(--gold-pale);border:1px solid rgba(200,168,75,.25);
+border-radius:30px;padding:6px 14px;font-size:13px;font-weight:700;color:var(--gold2)
 }
 .role-tag{
 font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700;
 }
-.role-hr{background:rgba(200,168,75,.15);color:var(–gold2);border:1px solid rgba(200,168,75,.3)}
+.role-hr{background:rgba(200,168,75,.15);color:var(--gold2);border:1px solid rgba(200,168,75,.3)}
 .role-emp{background:rgba(59,130,246,.1);color:#93c5fd;border:1px solid rgba(59,130,246,.3)}
 .logout-btn{
-background:rgba(255,255,255,.05);border:1px solid var(–border);
-border-radius:8px;padding:7px 14px;color:var(–silver);
-font-family:‘Tajawal’,sans-serif;font-size:13px;cursor:pointer;transition:all .25s
+background:rgba(255,255,255,.05);border:1px solid var(--border);
+border-radius:8px;padding:7px 14px;color:var(--silver);
+font-family:'Tajawal',sans-serif;font-size:13px;cursor:pointer;transition:all .25s
 }
-.logout-btn:hover{border-color:var(–red);color:var(–red)}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
 
 /* Main content */
 .main{max-width:1000px;margin:0 auto;padding:36px 24px}
 
 /* Section card */
 .card{
-background:rgba(13,30,53,.8);border:1px solid var(–border);
+background:rgba(13,30,53,.8);border:1px solid var(--border);
 border-radius:20px;padding:28px;margin-bottom:24px;
 backdrop-filter:blur(10px);
 }
 .card-title{
-font-size:13px;font-weight:700;color:var(–silver);
+font-size:13px;font-weight:700;color:var(--silver);
 letter-spacing:1.5px;text-transform:uppercase;
 margin-bottom:20px;display:flex;align-items:center;gap:10px;
 }
-.card-title::after{content:’’;flex:1;height:1px;background:var(–border)}
+.card-title::after{content:'';flex:1;height:1px;background:var(--border)}
 
 /* HR Upload area */
 .upload-zone{
 border:1.5px dashed rgba(200,168,75,.35);border-radius:14px;
 padding:28px;text-align:center;cursor:pointer;transition:all .3s;
 }
-.upload-zone:hover{border-color:var(–gold);background:var(–gold-pale)}
-.upload-zone.loaded{border-style:solid;border-color:var(–green);background:rgba(16,185,129,.05)}
+.upload-zone:hover{border-color:var(--gold);background:var(--gold-pale)}
+.upload-zone.loaded{border-style:solid;border-color:var(--green);background:rgba(16,185,129,.05)}
 #fileIn{display:none}
 .upload-icon{font-size:36px;margin-bottom:8px}
 .upload-text{font-size:15px;font-weight:700;margin-bottom:4px}
-.upload-hint{font-size:13px;color:var(–silver)}
+.upload-hint{font-size:13px;color:var(--silver)}
 
 /* Search bar */
 .search-row{display:flex;gap:12px;align-items:center}
@@ -175,16 +174,16 @@ padding:28px;text-align:center;cursor:pointer;transition:all .3s;
 width:100%;background:rgba(255,255,255,.04);
 border:1.5px solid rgba(255,255,255,.1);
 border-radius:12px;padding:15px 46px 15px 18px;
-color:var(–white);font-family:‘Tajawal’,sans-serif;
+color:var(--white);font-family:'Tajawal',sans-serif;
 font-size:18px;font-weight:600;letter-spacing:2px;
 outline:none;transition:all .3s;text-align:center;
 }
-.civil-inp:focus{border-color:var(–gold);background:rgba(200,168,75,.05);box-shadow:0 0 0 3px rgba(200,168,75,.1)}
+.civil-inp:focus{border-color:var(--gold);background:rgba(200,168,75,.05);box-shadow:0 0 0 3px rgba(200,168,75,.1)}
 .civil-inp::placeholder{color:rgba(255,255,255,.2);letter-spacing:1px}
 .fetch-btn{
-background:linear-gradient(135deg,var(–gold),var(–gold2));
+background:linear-gradient(135deg,var(--gold),var(--gold2));
 border:none;border-radius:12px;padding:15px 26px;
-color:#060d1a;font-family:‘Tajawal’,sans-serif;font-size:15px;font-weight:800;
+color:#060d1a;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:800;
 cursor:pointer;transition:all .3s;white-space:nowrap;
 box-shadow:0 4px 18px rgba(200,168,75,.3);
 }
@@ -195,7 +194,7 @@ box-shadow:0 4px 18px rgba(200,168,75,.3);
 .err-box{
 display:none;background:rgba(239,68,68,.08);
 border:1px solid rgba(239,68,68,.3);border-radius:14px;
-padding:20px;text-align:center;color:var(–red);
+padding:20px;text-align:center;color:var(--red);
 font-size:15px;font-weight:600;animation:shake .4s ease;
 }
 
@@ -205,36 +204,36 @@ font-size:15px;font-weight:600;animation:shake .4s ease;
 .result-head{
 display:flex;align-items:center;gap:20px;
 padding-bottom:24px;margin-bottom:24px;
-border-bottom:1px solid var(–border);
+border-bottom:1px solid var(--border);
 flex-wrap:wrap;gap:16px;
 }
 .avatar-ring{
 width:72px;height:72px;border-radius:50%;flex-shrink:0;
-border:2px solid var(–gold);
+border:2px solid var(--gold);
 display:flex;align-items:center;justify-content:center;font-size:28px;
 background:radial-gradient(circle,rgba(200,168,75,.15),transparent);
 box-shadow:0 0 20px rgba(200,168,75,.2);
 }
 .emp-name{font-size:22px;font-weight:800;margin-bottom:6px}
 .emp-civil{
-font-size:12px;color:var(–gold2);
-background:var(–gold-pale);border:1px solid rgba(200,168,75,.25);
+font-size:12px;color:var(--gold2);
+background:var(--gold-pale);border:1px solid rgba(200,168,75,.25);
 border-radius:20px;padding:4px 14px;display:inline-block;letter-spacing:1px;
 }
 .result-actions{margin-right:auto;display:flex;gap:10px;flex-wrap:wrap}
 .btn-print{
 display:flex;align-items:center;gap:8px;
-background:rgba(255,255,255,.05);border:1px solid var(–border);
-border-radius:10px;padding:10px 18px;color:var(–white);
-font-family:‘Tajawal’,sans-serif;font-size:14px;font-weight:700;
+background:rgba(255,255,255,.05);border:1px solid var(--border);
+border-radius:10px;padding:10px 18px;color:var(--white);
+font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;
 cursor:pointer;transition:all .3s;
 }
-.btn-print:hover{border-color:var(–blue);color:#93c5fd;background:rgba(59,130,246,.08)}
+.btn-print:hover{border-color:var(--blue);color:#93c5fd;background:rgba(59,130,246,.08)}
 .btn-save{
 display:flex;align-items:center;gap:8px;
-background:linear-gradient(135deg,var(–gold),var(–gold2));
+background:linear-gradient(135deg,var(--gold),var(--gold2));
 border:none;border-radius:10px;padding:10px 18px;color:#060d1a;
-font-family:‘Tajawal’,sans-serif;font-size:14px;font-weight:800;
+font-family:'Tajawal',sans-serif;font-size:14px;font-weight:800;
 cursor:pointer;transition:all .3s;display:none;
 box-shadow:0 4px 14px rgba(200,168,75,.25);
 }
@@ -243,20 +242,20 @@ box-shadow:0 4px 14px rgba(200,168,75,.25);
 /* Fields grid */
 .fields-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
 .field-box{
-background:rgba(255,255,255,.03);border:1px solid var(–border);
+background:rgba(255,255,255,.03);border:1px solid var(--border);
 border-radius:12px;padding:14px 16px;transition:all .25s;
 }
 .field-box:hover{border-color:rgba(200,168,75,.2);background:rgba(200,168,75,.03)}
-.field-label{font-size:11px;font-weight:700;color:var(–silver);letter-spacing:.5px;margin-bottom:6px;text-transform:uppercase}
-.field-view{font-size:15px;font-weight:600;color:var(–white);min-height:22px}
+.field-label{font-size:11px;font-weight:700;color:var(--silver);letter-spacing:.5px;margin-bottom:6px;text-transform:uppercase}
+.field-view{font-size:15px;font-weight:600;color:var(--white);min-height:22px}
 .field-edit{
 width:100%;background:rgba(255,255,255,.06);
 border:1px solid rgba(200,168,75,.4);border-radius:8px;
-padding:7px 10px;color:var(–white);
-font-family:‘Tajawal’,sans-serif;font-size:14px;font-weight:600;
+padding:7px 10px;color:var(--white);
+font-family:'Tajawal',sans-serif;font-size:14px;font-weight:600;
 outline:none;display:none;transition:all .3s;
 }
-.field-edit:focus{border-color:var(–gold);box-shadow:0 0 0 2px rgba(200,168,75,.15)}
+.field-edit:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(200,168,75,.15)}
 .status-badge{
 display:inline-flex;align-items:center;gap:5px;
 padding:4px 12px;border-radius:20px;font-size:13px;font-weight:700;
@@ -266,31 +265,31 @@ padding:4px 12px;border-radius:20px;font-size:13px;font-weight:700;
 .s-leave{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.3)}
 
 /* Employee table (HR) */
-.emp-table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(–border)}
+.emp-table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border)}
 table{width:100%;border-collapse:collapse;font-size:14px;min-width:700px}
-thead{background:var(–gold-pale);border-bottom:1px solid rgba(200,168,75,.25)}
-th{padding:13px 14px;text-align:right;font-weight:700;color:var(–gold2);font-size:12px;letter-spacing:.5px;text-transform:uppercase}
-td{padding:12px 14px;text-align:right;color:rgba(255,255,255,.7);border-bottom:1px solid var(–border)}
+thead{background:var(--gold-pale);border-bottom:1px solid rgba(200,168,75,.25)}
+th{padding:13px 14px;text-align:right;font-weight:700;color:var(--gold2);font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+td{padding:12px 14px;text-align:right;color:rgba(255,255,255,.7);border-bottom:1px solid var(--border)}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(255,255,255,.02)}
 .td-id{font-family:monospace;letter-spacing:1px;font-size:13px}
-.td-name{font-weight:700;color:var(–white)}
-.clickable{cursor:pointer;color:var(–gold2);text-decoration:underline;text-underline-offset:3px}
+.td-name{font-weight:700;color:var(--white)}
+.clickable{cursor:pointer;color:var(--gold2);text-decoration:underline;text-underline-offset:3px}
 
 /* Download btn */
 .dl-btn{
 display:inline-flex;align-items:center;gap:8px;
-background:rgba(255,255,255,.04);border:1px solid var(–border);
-border-radius:10px;padding:9px 16px;color:var(–silver);
-font-family:‘Tajawal’,sans-serif;font-size:13px;font-weight:700;
+background:rgba(255,255,255,.04);border:1px solid var(--border);
+border-radius:10px;padding:9px 16px;color:var(--silver);
+font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;
 cursor:pointer;transition:all .3s;margin-bottom:14px;
 }
-.dl-btn:hover{border-color:var(–gold);color:var(–gold2)}
+.dl-btn:hover{border-color:var(--gold);color:var(--gold2)}
 
 /* Save toast */
 .toast{
 position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);
-background:#10b981;color:#fff;font-family:‘Tajawal’,sans-serif;
+background:#10b981;color:#fff;font-family:'Tajawal',sans-serif;
 font-weight:700;font-size:15px;padding:14px 28px;border-radius:14px;
 box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:999;transition:transform .4s cubic-bezier(.34,1.56,.64,1);
 }
@@ -328,8 +327,8 @@ body{background:#fff;color:#000}
 
 /* Divider line */
 .deco{display:flex;align-items:center;gap:12px;margin:4px 0 24px}
-.deco::before,.deco::after{content:’’;flex:1;height:1px;background:linear-gradient(90deg,transparent,var(–gold),transparent)}
-.deco em{color:var(–gold);font-style:normal;font-size:14px}
+.deco::before,.deco::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.deco em{color:var(--gold);font-style:normal;font-size:14px}
 </style>
 
 </head>
@@ -348,27 +347,24 @@ body{background:#fff;color:#000}
     </div>
     <div class="deco"><em>◆</em></div>
 
-```
-<div class="form-group">
-  <label class="form-label">نوع المستخدم</label>
-  <select class="role-select" id="roleSelect">
-    <option value="hr">موظف موارد بشرية</option>
-    <option value="emp">موظف</option>
-  </select>
-</div>
-<div class="form-group">
-  <label class="form-label">اسم المستخدم</label>
-  <input class="form-input" id="userIn" type="text" placeholder="أدخل اسم المستخدم" autocomplete="off">
-</div>
-<div class="form-group">
-  <label class="form-label">كلمة المرور</label>
-  <input class="form-input" id="passIn" type="password" placeholder="••••••••"
-    onkeydown="if(event.key==='Enter')doLogin()">
-</div>
-<button class="login-btn" onclick="doLogin()">دخول</button>
-<div class="login-err" id="loginErr">❌ اسم المستخدم أو كلمة المرور غير صحيحة</div>
-```
-
+    <div class="form-group">
+      <label class="form-label">نوع المستخدم</label>
+      <select class="role-select" id="roleSelect">
+        <option value="hr">موظف موارد بشرية</option>
+        <option value="emp">موظف</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">اسم المستخدم</label>
+      <input class="form-input" id="userIn" type="text" placeholder="أدخل اسم المستخدم" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label class="form-label">كلمة المرور</label>
+      <input class="form-input" id="passIn" type="password" placeholder="••••••••"
+        onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" onclick="doLogin()">دخول</button>
+    <div class="login-err" id="loginErr">❌ اسم المستخدم أو كلمة المرور غير صحيحة</div>
   </div>
 </div>
 
@@ -394,90 +390,88 @@ body{background:#fff;color:#000}
 
   <div class="main">
 
-```
-<!-- ── HR ONLY: Upload + Full Table ── -->
-<div id="hrSection" style="display:none">
+    <!-- ── HR ONLY: Upload + Full Table ── -->
+    <div id="hrSection" style="display:none">
 
-  <!-- Upload -->
-  <div class="card upload-card" id="uploadCard">
-    <div class="card-title">📂 رفع ملف البيانات</div>
-    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileIn').click()">
-      <div class="upload-icon" id="upIco">📊</div>
-      <div class="upload-text" id="upText">رفع ملف Excel للموظفين</div>
-      <div class="upload-hint" id="upHint">اضغط هنا لتحميل ملف .xlsx أو .xls</div>
+      <!-- Upload -->
+      <div class="card upload-card" id="uploadCard">
+        <div class="card-title">📂 رفع ملف البيانات</div>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileIn').click()">
+          <div class="upload-icon" id="upIco">📊</div>
+          <div class="upload-text" id="upText">رفع ملف Excel للموظفين</div>
+          <div class="upload-hint" id="upHint">اضغط هنا لتحميل ملف .xlsx أو .xls</div>
+        </div>
+        <input type="file" id="fileIn" accept=".xlsx,.xls" onchange="loadExcel(event)">
+        <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="dl-btn" onclick="downloadSample()">⬇️ تحميل نموذج Excel</button>
+          <button class="dl-btn" id="exportBtn" style="display:none" onclick="exportExcel()">📤 تصدير البيانات</button>
+        </div>
+      </div>
+
+      <!-- Employee Table -->
+      <div class="card hr-table-card" id="hrTableCard" style="display:none">
+        <div class="card-title">👥 قائمة الموظفين</div>
+        <div class="emp-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>الرقم المدني</th>
+                <th>الاسم الكامل</th>
+                <th>المسمى الوظيفي</th>
+                <th>القسم</th>
+                <th>الراتب</th>
+                <th>الحالة</th>
+              </tr>
+            </thead>
+            <tbody id="hrTableBody"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
-    <input type="file" id="fileIn" accept=".xlsx,.xls" onchange="loadExcel(event)">
-    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-      <button class="dl-btn" onclick="downloadSample()">⬇️ تحميل نموذج Excel</button>
-      <button class="dl-btn" id="exportBtn" style="display:none" onclick="exportExcel()">📤 تصدير البيانات</button>
+
+    <!-- Search card -->
+    <div class="card search-card">
+      <div class="card-title">🔍 البحث برقم مدني</div>
+      <div class="search-row">
+        <div class="inp-wrap">
+          <span class="ico">🪪</span>
+          <input class="civil-inp" id="civilIn" type="text" placeholder="أدخل الرقم المدني للموظف" maxlength="20"
+            onkeydown="if(event.key==='Enter')fetchEmp()">
+        </div>
+        <button class="fetch-btn" id="fetchBtn" onclick="fetchEmp()">
+          <span id="btnTxt">جلب البيانات</span>
+        </button>
+      </div>
     </div>
-  </div>
 
-  <!-- Employee Table -->
-  <div class="card hr-table-card" id="hrTableCard" style="display:none">
-    <div class="card-title">👥 قائمة الموظفين</div>
-    <div class="emp-table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>الرقم المدني</th>
-            <th>الاسم الكامل</th>
-            <th>المسمى الوظيفي</th>
-            <th>القسم</th>
-            <th>الراتب</th>
-            <th>الحالة</th>
-          </tr>
-        </thead>
-        <tbody id="hrTableBody"></tbody>
-      </table>
+    <!-- Error -->
+    <div class="err-box" id="errBox">⚠️ <span id="errTxt">لم يتم العثور على موظف بهذا الرقم المدني</span></div>
+
+    <!-- Result -->
+    <div class="card result-wrap" id="resultWrap">
+
+      <!-- Print header (print only) -->
+      <div class="print-header">
+        <h2>بوابة الموارد البشرية</h2>
+        <p id="printDate"></p>
+        <p>بيانات الموظف</p>
+      </div>
+
+      <div class="result-head">
+        <div class="avatar-ring" id="empAvatar">👤</div>
+        <div>
+          <div class="emp-name" id="rName">—</div>
+          <div class="emp-civil" id="rCivil">—</div>
+        </div>
+        <div class="result-actions">
+          <button class="btn-print" onclick="printCard()">🖨️ طباعة</button>
+          <button class="btn-save" id="saveBtn" onclick="saveEdits()">💾 حفظ التعديلات</button>
+        </div>
+      </div>
+
+      <div class="fields-grid" id="fieldsGrid"></div>
     </div>
-  </div>
-</div>
-
-<!-- Search card -->
-<div class="card search-card">
-  <div class="card-title">🔍 البحث برقم مدني</div>
-  <div class="search-row">
-    <div class="inp-wrap">
-      <span class="ico">🪪</span>
-      <input class="civil-inp" id="civilIn" type="text" placeholder="أدخل الرقم المدني للموظف" maxlength="20"
-        onkeydown="if(event.key==='Enter')fetchEmp()">
-    </div>
-    <button class="fetch-btn" id="fetchBtn" onclick="fetchEmp()">
-      <span id="btnTxt">جلب البيانات</span>
-    </button>
-  </div>
-</div>
-
-<!-- Error -->
-<div class="err-box" id="errBox">⚠️ <span id="errTxt">لم يتم العثور على موظف بهذا الرقم المدني</span></div>
-
-<!-- Result -->
-<div class="card result-wrap" id="resultWrap">
-
-  <!-- Print header (print only) -->
-  <div class="print-header">
-    <h2>بوابة الموارد البشرية</h2>
-    <p id="printDate"></p>
-    <p>بيانات الموظف</p>
-  </div>
-
-  <div class="result-head">
-    <div class="avatar-ring" id="empAvatar">👤</div>
-    <div>
-      <div class="emp-name" id="rName">—</div>
-      <div class="emp-civil" id="rCivil">—</div>
-    </div>
-    <div class="result-actions">
-      <button class="btn-print" onclick="printCard()">🖨️ طباعة</button>
-      <button class="btn-save" id="saveBtn" onclick="saveEdits()">💾 حفظ التعديلات</button>
-    </div>
-  </div>
-
-  <div class="fields-grid" id="fieldsGrid"></div>
-</div>
-```
 
   </div><!-- /main -->
 </div><!-- /appScreen -->
