@@ -747,5 +747,24 @@
         calculatePreviousYears();
         calculateFutureYears();
     </script>
+    <div style="text-align:center; padding: 16px; font-family: Cairo, sans-serif; color: #64748b; font-size: 14px; direction: rtl;">
+  👁️ عدد الزوار: 
+  <span id="gc-count" style="font-weight:bold; color:#0ea5e9;">...</span>
+</div>
+
+<script>
+  fetch("https://jaboob.goatcounter.com/api/v0/stats/total", {
+    headers: { "Authorization": "Bearer YOUR_API_TOKEN" }
+  })
+  .then(r => r.json())
+  .then(d => {
+    document.getElementById("gc-count").textContent =
+      (d.total || 0).toLocaleString("ar-SA");
+  })
+  .catch(() => {
+    document.getElementById("gc-count").textContent = "—";
+  });
+</script>
+
 </body>
 </html>
