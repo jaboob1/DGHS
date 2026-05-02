@@ -18,6 +18,8 @@
             --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
             --hover-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
             --retirement: #B4653A;
+            --input-width: 80%; /* عرض موحد لجميع الحقول */
+            --input-height: 52px; /* ارتفاع موحد لجميع الحقول */
         }
 
         * {
@@ -119,27 +121,34 @@
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
             margin-bottom: 25px;
+            align-items: start;
         }
 
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 600;
             color: #5C4033;
-            text-align: center; /* توسيط العناوين لتتناسب مع توسيط الحقول */
+            text-align: center;
+            font-size: 15px;
+            width: var(--input-width);
         }
 
         input,
         select {
-            width: 60%; /* تقليص العرض بنسبة 40% */
-            padding: 14px 16px;
+            width: var(--input-width);
+            height: var(--input-height);
+            padding: 0 18px;
             border: 2px solid #E0CFBA;
             border-radius: 10px;
             font-size: 16px;
@@ -147,7 +156,8 @@
             font-family: 'Cairo', sans-serif;
             background-color: #FFFDF9;
             display: block;
-            margin: 0 auto; /* توسيط الحقل */
+            margin: 0 auto;
+            line-height: normal;
         }
 
         input:focus,
@@ -158,13 +168,30 @@
             background-color: #fff;
         }
 
+        /* توحيد مظهر placeholder */
+        input::placeholder {
+            color: #B9A99A;
+            font-size: 14px;
+        }
+
+        /* تنسيق خاص للـ select */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B85C3A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: left 16px center;
+            background-size: 20px;
+            padding-left: 45px;
+            cursor: pointer;
+        }
+
         .btn-container {
             text-align: center;
-            margin: 25px 0;
+            margin: 30px 0 15px;
         }
 
         button {
-            padding: 16px 45px;
+            padding: 16px 50px;
             background: var(--primary);
             color: #fff;
             border: none;
@@ -176,6 +203,7 @@
             box-shadow: 0 4px 6px rgba(184, 92, 58, 0.3);
             font-family: 'Cairo', sans-serif;
             letter-spacing: 0.3px;
+            height: 54px;
         }
 
         button:hover {
@@ -360,6 +388,10 @@
         }
 
         @media (max-width: 768px) {
+            :root {
+                --input-width: 90%;
+            }
+
             .card {
                 padding: 20px;
             }
@@ -370,6 +402,7 @@
 
             .form-grid {
                 grid-template-columns: 1fr;
+                gap: 16px;
             }
 
             .summary {
@@ -377,15 +410,25 @@
             }
 
             button {
-                width: 100%;
+                width: 90%;
             }
 
             .home-btn {
-                width: 100%;
+                width: 90%;
             }
 
-            input, select {
-                width: 90%; /* على الشاشات الصغيرة نزيد العرض قليلاً للسهولة */
+            label {
+                width: 90%;
+            }
+        }
+
+        @media (max-width: 400px) {
+            :root {
+                --input-width: 95%;
+            }
+
+            label {
+                width: 95%;
             }
         }
 
@@ -584,7 +627,6 @@
             const birthDate = document.getElementById('birthDate').value;
             if (birthDate) {
                 const birthYear = new Date(birthDate).getFullYear();
-                // حساب ثابت: سنة الميلاد + 60 - 2023
                 let futureYears = (birthYear + 60) - 2023;
                 if (futureYears < 0) futureYears = 0;
                 document.getElementById('futureYears').value = futureYears;
