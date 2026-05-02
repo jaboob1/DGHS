@@ -1,5 +1,4 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar">
 <head>
     <meta charset="utf-8">
@@ -35,59 +34,42 @@
             color: var(--dark);
             line-height: 1.6;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .back-btn-container {
-            max-width: 900px;
-            margin: 0 auto 10px;
-            width: 100%;
-            text-align: right;
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 22px;
-            background: #fff;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-family: 'Cairo', sans-serif;
-            cursor: pointer;
-        }
-
-        .back-btn:hover {
-            background: var(--primary);
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 14px rgba(43, 108, 176, 0.3);
-        }
-
-        .back-btn:active {
-            transform: translateY(0);
-        }
-
-        .back-btn .arrow {
-            font-size: 18px;
-            transition: transform 0.3s;
-        }
-
-        .back-btn:hover .arrow {
-            transform: translateX(-4px);
         }
 
         .container {
             max-width: 900px;
             margin: 0 auto;
-            width: 100%;
-            flex: 1;
+        }
+
+        .home-btn-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .home-btn {
+            display: inline-block;
+            padding: 14px 35px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(43, 108, 176, 0.3);
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .home-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(43, 108, 176, 0.4);
+        }
+
+        .home-btn:active {
+            transform: translateY(0);
         }
 
         .card {
@@ -147,7 +129,7 @@
         label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
+            font-weight: 55;
             color: var(--dark);
         }
 
@@ -185,7 +167,6 @@
             font-weight: 600;
             transition: all 0.3s;
             box-shadow: 0 4px 6px rgba(43, 108, 176, 0.3);
-            font-family: 'Cairo', sans-serif;
         }
 
         button:hover {
@@ -350,6 +331,22 @@
             color: var(--retirement);
         }
 
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            padding: 18px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            color: #4a5568;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .footer span {
+            color: var(--primary);
+        }
+
         @media (max-width: 768px) {
             .card {
                 padding: 20px;
@@ -371,9 +368,8 @@
                 width: 100%;
             }
 
-            .back-btn {
+            .home-btn {
                 width: 100%;
-                justify-content: center;
             }
         }
 
@@ -385,34 +381,15 @@
             border-right: 4px solid var(--accent);
             font-size: 14px;
         }
-
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #718096;
-            font-size: 14px;
-            margin-top: 10px;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-            width: 100%;
-        }
-
-        .footer span {
-            color: var(--primary);
-            font-weight: 600;
-        }
     </style>
 </head>
 <body>
-
-    <div class="back-btn-container">
-        <a href="https://www.jaboob.com" class="back-btn" title="العودة إلى الموقع الرئيسي">
-            <span class="arrow"></span> الصفحة الرئيسية 
-        </a>
-    </div>
-
     <div class="container">
+        <!-- زر الصفحة الرئيسية -->
+        <div class="home-btn-container">
+            <a href="https://www.jaboob.com" target="_blank" class="home-btn">الصفحة الرئيسية</a>
+        </div>
+
         <div class="card">
             <div class="header">
                 <h1>حاسبة الراتب التقاعدي لصندوق الحماية الاجتماعية</h1>
@@ -507,6 +484,7 @@
             <div class="formula" id="formulaText"></div>
         </div>
 
+        <!-- قسم التقاعد المبكر -->
         <div class="card">
             <div class="header">
                 <h1>حاسبة التقاعد المبكر</h1>
@@ -555,23 +533,25 @@
             <div class="formula" id="retirementFormulaText"></div>
 
             <div class="note">
-                ملاحظة: هذه الحاسبة غير مرتبطة بصندوق الحماية الاجتماعية ، تم أنشاء الحاسبة من واقع البيانات المتوفرة على موقع  الصندوق. يرجى الرجوع إلى الصندوق  للحصول على البيانات الدقيقة.
+                ملاحظة: هذه الحاسبة إجتهاد شخصي وغير مرتبطة بصندوق الحماية الاجتماعية ، يرجى الرجوع إلى الصندوق للحصول على البيانات الرسمية.
                 <br>• سن التقاعد للذكور: 55 سنة
                 <br>• سن التقاعد للإناث: 50 سنة
                 <br>• نسبة الخصم: 5% لكل سنة من أول 5 سنوات متبقية، ثم 1% لكل سنة إضافية
             </div>
         </div>
-    </div>
 
-    <footer class="footer">
-        جميع الحقوق محفوظة <span>2025</span> - <span>مبتكر الحاسبة محمد جعبوب</span>
-    </footer>
+        <!-- تذييل حقوق الملكية -->
+        <div class="footer">
+            جميع الحقوق محفوظة &copy; 2025 - مبتكر الحاسبة <span>محمد جعبوب</span>
+        </div>
+    </div>
 
     <script>
         function format(x) {
             return Number(x).toLocaleString('ar-EG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
+        // دالة حساب السنوات السابقة من تاريخ التعيين إلى نهاية 2023
         function calculatePreviousYears() {
             const appointmentDate = document.getElementById('appointmentDate').value;
 
@@ -579,19 +559,24 @@
                 const appointment = new Date(appointmentDate);
                 const endOf2023 = new Date('2023-12-31');
 
+                // حساب الفرق بالسنوات بين تاريخ التعيين ونهاية 2023
                 let yearsDiff = endOf2023.getFullYear() - appointment.getFullYear();
                 const monthDiff = endOf2023.getMonth() - appointment.getMonth();
 
+                // إذا كان تاريخ التعيين بعد شهر ديسمبر من نفس السنة
                 if (monthDiff < 0 || (monthDiff === 0 && endOf2023.getDate() < appointment.getDate())) {
                     yearsDiff--;
                 }
 
+                // التأكد من أن القيمة غير سالبة
                 const previousYears = Math.max(0, yearsDiff);
 
+                // وضع النتيجة في حقل السنوات السابقة
                 document.getElementById('prevYears').value = previousYears;
             }
         }
 
+        // دالة حساب السنوات المستقبلية بناءً على تاريخ الميلاد
         function calculateFutureYears() {
             const birthDate = document.getElementById('birthDate').value;
 
@@ -599,18 +584,23 @@
                 const birthYear = new Date(birthDate).getFullYear();
                 const currentYear = new Date().getFullYear();
 
+                // حساب سنة الميلاد + 60 سنة
                 const retirementYear = birthYear + 60;
 
+                // حساب السنوات المستقبلية (العام الحالي - سنة التقاعد)
                 let futureYears = retirementYear - currentYear;
 
+                // التأكد من أن القيمة غير سالبة
                 if (futureYears < 0) {
                     futureYears = 0;
                 }
 
+                // وضع النتيجة في حقل السنوات المستقبلية
                 document.getElementById('futureYears').value = futureYears;
             }
         }
 
+        // دالة حساب العمر من تاريخ الميلاد
         function calculateAge(birthDate) {
             const today = new Date();
             const birth = new Date(birthDate);
@@ -624,9 +614,10 @@
             return age;
         }
 
+        // دالة حساب سنوات التقاعد المتبقية
         function calculateYearsToRetirement(birthDate, gender) {
             const age = calculateAge(birthDate);
-            let retirementAge = 55;
+            let retirementAge = 55; // Default for male
 
             if (gender === 'female') {
                 retirementAge = 50;
@@ -636,14 +627,17 @@
             return Math.max(0, yearsLeft);
         }
 
+        // دالة حساب نسبة الخصم
         function calculateDiscountRate(yearsToRetirement) {
             if (yearsToRetirement <= 0) return 0;
 
             let discountRate = 0;
 
+            // 5% لكل سنة من أول 5 سنوات
             const firstFiveYears = Math.min(yearsToRetirement, 5);
             discountRate += firstFiveYears * 5;
 
+            // 1% لكل سنة إضافية بعد الخمس سنوات الأولى
             const additionalYears = Math.max(yearsToRetirement - 5, 0);
             discountRate += additionalYears * 1;
 
@@ -651,6 +645,7 @@
         }
 
         function calculate() {
+            // الحصول على القيم من النموذج
             const birthDate = document.getElementById('birthDate').value;
             const appointmentDate = document.getElementById('appointmentDate').value;
             const gender = document.getElementById('gender').value;
@@ -660,13 +655,16 @@
             let futureYears = parseInt(document.getElementById('futureYears').value) || 0;
             let growthRate = parseFloat(document.getElementById('growthRate').value) || 0;
 
+            // حساب إجمالي سنوات الخدمة السابقة (بما في ذلك ضم الخدمة)
             const totalPreviousYears = prevYears + previousService;
 
+            // الحسابات الأساسية للراتب التقاعدي
             let g = growthRate / 100;
             let tbody = document.querySelector('#salaryTable tbody');
             tbody.innerHTML = '';
             let salaries = [];
 
+            // نمو الأجور يبدأ من الراتب الأخير مباشرة
             for (let i = 1; i <= futureYears; i++) {
                 let year = 2023 + i;
                 let salary = salaryStart * Math.pow(1 + g, i);
@@ -676,24 +674,29 @@
                 tbody.appendChild(tr);
             }
 
+            // متوسط الأجر للخدمة المستقبلية
             let avgSalary = salaries.reduce((a, b) => a + b, 0) / salaries.length;
 
+            // حساب أجزاء المعاش (معامل 2%)
             let prevPart = salaryStart * (totalPreviousYears * 0.02);
             let futurePart = avgSalary * (futureYears * 0.02);
             let totalPension = prevPart + futurePart;
 
+            // عرض النتائج الأساسية
             document.getElementById('prevPart').textContent = format(prevPart) + " ريال";
             document.getElementById('avgSalary').textContent = format(avgSalary);
             document.getElementById('futurePart').textContent = format(futurePart) + " ريال";
             document.getElementById('totalPension').textContent = format(totalPension) + " ريال";
 
+            // توضيح كتابي للمعادلة
             document.getElementById('formulaText').innerHTML = `
-        <strong>توضيح الحساب:</strong><br>
-        • <u>الخدمة السابقة (${prevYears} سنة من التعيين + ${previousService} سنة ضم خدمة = ${totalPreviousYears} سنة)</u> = 2% × ${format(salaryStart)} × ${totalPreviousYears} = <span class="highlight">${format(prevPart)} ريال</span><br>
-        • <u>الخدمة المستقبلية (${futureYears} سنة)</u> = 2% × ${format(avgSalary)} × ${futureYears} = <span class="highlight">${format(futurePart)} ريال</span><br>
-        • <u>المعاش الكلي</u> = ${format(prevPart)} + ${format(futurePart)} = <span class="highlight">${format(totalPension)} ريال</span>
-      `;
+                <strong>توضيح الحساب:</strong><br>
+                • <u>الخدمة السابقة (${prevYears} سنة من التعيين + ${previousService} سنة ضم خدمة = ${totalPreviousYears} سنة)</u> = 2% × ${format(salaryStart)} × ${totalPreviousYears} = <span class="highlight">${format(prevPart)} ريال</span><br>
+                • <u>الخدمة المستقبلية (${futureYears} سنة)</u> = 2% × ${format(avgSalary)} × ${futureYears} = <span class="highlight">${format(futurePart)} ريال</span><br>
+                • <u>المعاش الكلي</u> = ${format(prevPart)} + ${format(futurePart)} = <span class="highlight">${format(totalPension)} ريال</span>
+              `;
 
+            // حساب التقاعد المبكر
             if (birthDate && gender) {
                 const currentAge = calculateAge(birthDate);
                 const yearsToRetirement = calculateYearsToRetirement(birthDate, gender);
@@ -703,6 +706,7 @@
                 const discountAmount = totalPension * (discountRate / 100);
                 const pensionAfterDiscount = totalPension - discountAmount;
 
+                // عرض نتائج التقاعد المبكر
                 document.getElementById('currentAge').textContent = currentAge + ' سنة';
                 document.getElementById('retirementAge').textContent = retirementAge + ' سنة';
                 document.getElementById('yearsLeft').textContent = yearsToRetirement + ' سنة';
@@ -713,19 +717,21 @@
                     '%)';
                 document.getElementById('pensionAfterDiscount').textContent = format(pensionAfterDiscount) + ' ريال';
 
+                // توضيح معادلة التقاعد المبكر
                 const firstFive = Math.min(yearsToRetirement, 5);
                 const additional = Math.max(yearsToRetirement - 5, 0);
 
                 document.getElementById('retirementFormulaText').innerHTML = `
-          <strong>توضيح حساب التقاعد المبكر:</strong><br>
-          • <u>العمر الحالي</u>: ${currentAge} سنة<br>
-          • <u>سن التقاعد</u>: ${retirementAge} سنة (${gender === 'female' ? 'أنثى' : 'ذكر'})<br>
-          • <u>السنوات المتبقية</u>: ${yearsToRetirement} سنة<br>
-          • <u>حساب نسبة الخصم</u>: (${firstFive} سنة × 5%) + (${additional} سنة × 1%) = <span class="retirement-highlight">${discountRate}%</span><br>
-          • <u>قيمة الخصم</u>: ${format(totalPension)} × ${discountRate}% = <span class="retirement-highlight">${format(discountAmount)} ريال</span><br>
-          • <u>الراتب بعد الخصم</u>: ${format(totalPension)} - ${format(discountAmount)} = <span class="retirement-highlight">${format(pensionAfterDiscount)} ريال</span>
-        `;
+                    <strong>توضيح حساب التقاعد المبكر:</strong><br>
+                    • <u>العمر الحالي</u>: ${currentAge} سنة<br>
+                    • <u>سن التقاعد</u>: ${retirementAge} سنة (${gender === 'female' ? 'أنثى' : 'ذكر'})<br>
+                    • <u>السنوات المتبقية</u>: ${yearsToRetirement} سنة<br>
+                    • <u>حساب نسبة الخصم</u>: (${firstFive} سنة × 5%) + (${additional} سنة × 1%) = <span class="retirement-highlight">${discountRate}%</span><br>
+                    • <u>قيمة الخصم</u>: ${format(totalPension)} × ${discountRate}% = <span class="retirement-highlight">${format(discountAmount)} ريال</span><br>
+                    • <u>الراتب بعد الخصم</u>: ${format(totalPension)} - ${format(discountAmount)} = <span class="retirement-highlight">${format(pensionAfterDiscount)} ريال</span>
+                  `;
             } else {
+                // إخفاء قسم التقاعد المبكر إذا لم يتم إدخال البيانات المطلوبة
                 document.getElementById('currentAge').textContent = '--';
                 document.getElementById('retirementAge').textContent = '--';
                 document.getElementById('yearsLeft').textContent = '--';
@@ -740,15 +746,13 @@
             }
         }
 
+        // تعيين تاريخ افتراضي لتاريخ الميلاد وتاريخ التعيين (لأغراض التجربة)
         document.getElementById('birthDate').value = '1980-01-01';
         document.getElementById('appointmentDate').value = '2005-01-01';
 
+        // حساب السنوات السابقة والمستقبلية عند التحميل
         calculatePreviousYears();
         calculateFutureYears();
-         calculate();
-      updateContractDisplay();
-  
-
-
+    </script>
 </body>
 </html>
