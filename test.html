@@ -395,7 +395,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- زر الصفحة الرئيسية -->
         <div class="home-btn-container">
             <a href="https://www.jaboob.com" target="_blank" class="home-btn">الصفحة الرئيسية</a>
         </div>
@@ -444,7 +443,7 @@
 
                     <div class="input-group">
                         <label for="futureYears">عدد السنوات المستقبلية المتبقية الى سن 60 ابتداء من يناير 2024م:</label>
-                        <input type="number" id="futureYears" value="" placeholder="عدد السنوات">
+                        <input type="number" id="futureYears" value="" placeholder="عدد السنوات" readonly>
                     </div>
 
                     <div class="input-group">
@@ -494,7 +493,6 @@
             <div class="formula" id="formulaText"></div>
         </div>
 
-        <!-- قسم التقاعد المبكر -->
         <div class="card">
             <div class="header">
                 <h1>حاسبة التقاعد المبكر</h1>
@@ -550,7 +548,6 @@
             </div>
         </div>
 
-        <!-- تذييل حقوق الملكية -->
         <div class="footer">
             جميع الحقوق محفوظة &copy; 2025 - مبتكر الحاسبة <span>محمد جعبوب</span>
         </div>
@@ -580,9 +577,9 @@
             const birthDate = document.getElementById('birthDate').value;
             if (birthDate) {
                 const birthYear = new Date(birthDate).getFullYear();
-                const currentYear = new Date().getFullYear();
-                const retirementYear = birthYear + 60;
-                let futureYears = retirementYear - currentYear;
+                // حساب ثابت: سنة الميلاد + 60 - 2023
+                let futureYears = (birthYear + 60) - 2023;
+                // لا يمكن أن تكون سالبة (إذا كان الشخص أكبر من 60 سنة تصبح 0)
                 if (futureYears < 0) futureYears = 0;
                 document.getElementById('futureYears').value = futureYears;
             }
