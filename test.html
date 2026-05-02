@@ -133,11 +133,12 @@
             margin-bottom: 8px;
             font-weight: 600;
             color: #5C4033;
+            text-align: center; /* توسيط العناوين لتتناسب مع توسيط الحقول */
         }
 
         input,
         select {
-            width: 100%;
+            width: 60%; /* تقليص العرض بنسبة 40% */
             padding: 14px 16px;
             border: 2px solid #E0CFBA;
             border-radius: 10px;
@@ -145,6 +146,8 @@
             transition: all 0.3s;
             font-family: 'Cairo', sans-serif;
             background-color: #FFFDF9;
+            display: block;
+            margin: 0 auto; /* توسيط الحقل */
         }
 
         input:focus,
@@ -380,6 +383,10 @@
             .home-btn {
                 width: 100%;
             }
+
+            input, select {
+                width: 90%; /* على الشاشات الصغيرة نزيد العرض قليلاً للسهولة */
+            }
         }
 
         .note {
@@ -579,7 +586,6 @@
                 const birthYear = new Date(birthDate).getFullYear();
                 // حساب ثابت: سنة الميلاد + 60 - 2023
                 let futureYears = (birthYear + 60) - 2023;
-                // لا يمكن أن تكون سالبة (إذا كان الشخص أكبر من 60 سنة تصبح 0)
                 if (futureYears < 0) futureYears = 0;
                 document.getElementById('futureYears').value = futureYears;
             }
