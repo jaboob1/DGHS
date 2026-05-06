@@ -44,7 +44,6 @@
       position: relative;
     }
 
-    /* رأس الصفحة داخل الإطار مع الشعارات */
     .inner-header {
       display: flex;
       justify-content: space-between;
@@ -154,7 +153,6 @@
       border: 1px solid #ddd;
     }
     
-    /* إضافة نمط للحقل الجديد بعد الخصم */
     input.after-deduction {
       background-color: #f0f9f0;
       color: #2E8B57;
@@ -193,7 +191,6 @@
       width: 100%;
     }
     
-    /* تقليص قسم التوقيع ليتناسب مع الطباعة */
     .approval-section {
       display: flex;
       justify-content: space-between;
@@ -210,10 +207,9 @@
       flex: 2;
     }
     
-    /* إضافة محاذاة خاصة لعنصر "إعداد ومراجعة" */
     .preparation {
       text-align: right;
-      margin-right: 5ch; /* إزاحة بمقدار 5 أحرف */
+      margin-right: 5ch;
     }
     
     .button-container {
@@ -250,7 +246,6 @@
       background: #267349;
     }
     
-    /* زر الموقع الجديد */
     .site-btn {
       background: #1E90FF;
     }
@@ -259,7 +254,6 @@
       background: #0077CC;
     }
     
-    /* تذييل الصفحة المتحرك */
     .footer-animation {
       position: fixed;
       bottom: 0;
@@ -307,7 +301,6 @@
       direction: rtl;
     }
 
-    /* تحسين تنسيق صف التواريخ */
     .date-row {
       display: flex;
       align-items: center;
@@ -347,7 +340,6 @@
       color: #000000;
     }
 
-    /* إجماليات الأعمدة */
     .column-total {
       font-weight: bold;
       background-color: #f0f0f0;
@@ -355,12 +347,10 @@
       border: 1px solid #ddd;
     }
 
-    /* البدلات الخاصة بالعقود المؤقتة */
     .temporary-allowances {
       display: none;
     }
 
-    /* إخفاء عمود "بعد الخصم" للعقود المؤقتة بتغيير اللون إلى الأبيض */
     .temporary-contract .after-deduction-column,
     .temporary-contract .after-deduction {
       color: white !important;
@@ -462,7 +452,6 @@
         min-height: 60px;
       }
       
-      /* تحسين طباعة التواريخ */
       .date-input {
         width: 110px;
         font-size: 10px;
@@ -473,14 +462,12 @@
         display: none;
       }
       
-      /* ضمان عدم تقسيم المحتوى */
       .container, .inner-header, .result, .approval-section, .input-row {
         page-break-before: avoid;
         page-break-after: avoid;
         page-break-inside: avoid;
       }
 
-      /* إخفاء عمود "بعد الخصم" للعقود المؤقتة أثناء الطباعة */
       .temporary-contract .after-deduction-column,
       .temporary-contract .after-deduction {
         color: white !important;
@@ -488,7 +475,6 @@
         border-color: white !important;
       }
 
-      /* التعديل الجديد: إزاحة "إعداد ومراجعة" إلى اليسار بمقدار 5 أحرف */
       .preparation {
         margin-right: 5ch !important;
         text-align: right;
@@ -499,7 +485,6 @@
 <body>
 
   <div class="container">
-    <!-- رأس الصفحة داخل الإطار مع الشعارات -->
     <div class="inner-header">
       <div class="inner-logo">
         <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="شعار وزارة الصحة">
@@ -536,7 +521,6 @@
         </select>
       </div>
 
-      <!-- صف التواريخ في سطر واحد - محسّن -->
       <div class="date-row">
         <span class="date-label">تاريخ الاحتساب من:</span>
         <div class="date-input-container">
@@ -546,7 +530,6 @@
         </div>
       </div>
 
-      <!-- إضافة عناوين الأعمدة بعد التاريخ -->
       <div class="input-row">
         <label></label>
         <span class="column-title">بدلات التعيين</span>
@@ -561,7 +544,6 @@
         <input type="text" id="basicAfterDeduction" class="after-deduction" readonly>
       </div>
 
-      <!-- البدلات الخاصة بالعقود المؤقتة -->
       <div id="temporaryAllowances" class="temporary-allowances">
         <div class="input-row">
           <label for="otherAllowances">بدلات أخرى:</label>
@@ -571,7 +553,6 @@
         </div>
       </div>
 
-      <!-- الحقول التي سيتم إخفاؤها عند اختيار عقود موقتة -->
       <div id="permanentAllowances" class="temporary-hide">
         <div class="input-row">
           <label for="housing">بدل السكن:</label>
@@ -622,7 +603,6 @@
           <input type="text" id="costLivingAfterDeduction" class="after-deduction" readonly>
         </div>
 
-        <!-- إجماليات الأعمدة -->
         <div class="input-row">
           <label>الإجمالي:</label>
           <input type="text" id="monthlyTotal" class="amount-input column-total" readonly>
@@ -642,7 +622,6 @@
       <span id="netLine"> صافي المستحق: <span id="net">0</span></span>
     </div>
 
-    <!-- قسم الإعداد والمراجعة المعدل -->
     <div class="approval-section">
       <div class="approval-right preparation">
         إعداد ومراجعة: _______________
@@ -655,13 +634,11 @@
     <div class="button-container">
       <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
       <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ الحقول</button>
-      <!-- الزر الجديد لفتح موقع جعبوب -->
       <button class="site-btn" onclick="window.open('https://jaboob.com', '_blank')">الصفحة الرئيسية</button>
     </div>
     
-    <!-- التنويه -->
     <div class="disclaimer">
-      للتنويه: محتوى الصفحة لا يتبع وزارة الصحة ،تم أنشاء هذي الاداة وتطويرها بمبادرة فردية 
+      للتنويه: هذي الأداة أضافة غير رسمية لوزارة الصحة ،تم أنشاء هذي الاداة وتطويرها بمبادرة فردية لتسهيل الاحتساب وتجويد العمل
     </div>
   </div>
 
@@ -680,7 +657,6 @@
       const permanentAllowances = document.getElementById("permanentAllowances");
       const temporaryAllowances = document.getElementById("temporaryAllowances");
 
-      // تعيين التواريخ الافتراضية
       const today = new Date();
       const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
       const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
@@ -713,7 +689,6 @@
       const net = document.getElementById("net");
       const daysCount = document.getElementById("daysCount");
       
-      // حقول الإجمالي
       const monthlyTotal = document.getElementById("monthlyTotal");
       const periodTotal = document.getElementById("periodTotal");
       const afterDeductionTotal = document.getElementById("afterDeductionTotal");
@@ -727,30 +702,16 @@
 
       function updateContractDisplay() {
         if (contractType.value === "temporary") {
-          // إخفاء الحقول الخاصة بالعقود الدائمة
           permanentAllowances.style.display = "none";
-          
-          // إظهار الحقول الخاصة بالعقود المؤقتة
           temporaryAllowances.style.display = "block";
-          
-          // إخفاء حسابات الصندوق الاجتماعي
           deductionLine.style.display = "none";
           netLine.style.display = "none";
-          
-          // إضافة كلاس للتحكم في إخفاء عمود "بعد الخصم" بتغيير اللون
           container.classList.add('temporary-contract');
         } else {
-          // إظهار الحقول الخاصة بالعقود الدائمة
           permanentAllowances.style.display = "block";
-          
-          // إخفاء الحقول الخاصة بالعقود المؤقتة
           temporaryAllowances.style.display = "none";
-          
-          // إظهار حسابات الصندوق الاجتماعي
           deductionLine.style.display = "block";
           netLine.style.display = "block";
-          
-          // إزالة كلاس إخفاء عمود "بعد الخصم"
           container.classList.remove('temporary-contract');
         }
       }
@@ -781,15 +742,13 @@
           let afterDeductionBox = document.getElementById(item.afterDeduction);
           let monthly = parseFloat(input.value) || 0;
           
-          // إذا كان نوع العقد موقتاً، نتجاهل الحقول المخفية في الحساب
           if (contractType.value === "temporary" && 
               item.id !== "basic" && item.id !== "otherAllowances") {
-            return; // تخطي هذا الحقل
+            return;
           }
           
-          // إذا كان نوع العقد دائماً، نتجاهل الحقول المؤقتة
           if (contractType.value === "permanent" && item.id === "otherAllowances") {
-            return; // تخطي هذا الحقل
+            return;
           }
           
           totalBase += monthly;
@@ -805,52 +764,43 @@
             current.setDate(current.getDate() + 1);
           }
           
-          // تقريب المبلغ المحسوب إلى 3 خانات عشرية قبل العرض والتجميع
+          // تقريب كل قيمة إلى ٣ خانات قبل الجمع لضمان تطابق الإجمالي
           let sumRounded = Math.round(sum * 1000) / 1000;
           resultBox.value = sumRounded.toFixed(3);
-          
-          // إضافة القيمة المقربة إلى الإجمالي (قبل الخصم)
           totalCalc += sumRounded;
 
-          // حساب القيمة بعد خصم 8% فقط للعقود الدائمة (مع التقريب)
           if (contractType.value === "permanent") {
             let afterDeductionValue = sumRounded * 0.92;
             let afterDeductionRounded = Math.round(afterDeductionValue * 1000) / 1000;
             afterDeductionBox.value = afterDeductionRounded.toFixed(3);
             totalAfterDeduction += afterDeductionRounded;
           } else {
-            // في العقود المؤقتة، لا يوجد خصم ولكن نحتفظ بالعرض (مخفي)
             afterDeductionBox.value = sumRounded.toFixed(3);
-            // يمكن إضافتها إلى totalAfterDeduction للحفاظ على الاتساق رغم الإخفاء
             totalAfterDeduction += sumRounded;
           }
         });
 
-        // تحديث إجماليات الأعمدة باستخدام القيم التي تم جمعها (المقربة)
         if (contractType.value === "permanent") {
           monthlyTotal.value = totalBase.toFixed(3);
           periodTotal.value = totalCalc.toFixed(3);
           afterDeductionTotal.value = totalAfterDeduction.toFixed(3);
         } else {
-          // في العقود المؤقتة، نخفي صف الإجمالي (أو نحدثه بنفس الطريقة)
           monthlyTotal.value = totalBase.toFixed(3);
           periodTotal.value = totalCalc.toFixed(3);
           afterDeductionTotal.value = totalAfterDeduction.toFixed(3);
         }
 
-        // عرض النتائج النهائية
         totalAllowances.textContent = totalBase.toFixed(3);
         totalPeriod.textContent = totalCalc.toFixed(3);
         
-        // حساب اشتراكات الصندوق الاجتماعي فقط للعقود الدائمة
         if (contractType.value === "permanent") {
-          // استقطاع 8% من إجمالي المستحق (قبل الخصم، ومقرب)
           let ded = totalCalc * 0.08;
-          deduction.textContent = Math.round(ded * 1000) / 1000;
+          // عرض الاستقطاع بثلاث خانات عشرية دائماً
+          deduction.textContent = (Math.round(ded * 1000) / 1000).toFixed(3);
           let netValue = totalCalc - ded;
-          net.textContent = Math.round(netValue * 1000) / 1000;
+          net.textContent = (Math.round(netValue * 1000) / 1000).toFixed(3);
         } else {
-          deduction.textContent = "0";
+          deduction.textContent = "0.000";
           net.textContent = totalCalc.toFixed(3);
         }
 
@@ -878,27 +828,22 @@
           document.getElementById(item.afterDeduction).value = "";
         });
         
-        // إعادة تعيين الإجماليات
         monthlyTotal.value = "";
         periodTotal.value = "";
         afterDeductionTotal.value = "";
         
         totalAllowances.textContent = "0";
         totalPeriod.textContent = "0";
-        deduction.textContent = "0";
-        net.textContent = "0";
+        deduction.textContent = "0.000";
+        net.textContent = "0.000";
         daysCount.textContent = "0";
         
-        // إزالة كلاس العقود المؤقتة
         container.classList.remove('temporary-contract');
-        
         updateContractDisplay();
       }
 
-      // جعل الدالة متاحة عالمياً
       window.resetForm = resetForm;
 
-      // إضافة مستمعي الأحداث
       startDate.addEventListener("change", calculate);
       endDate.addEventListener("change", calculate);
       contractType.addEventListener("change", updateContractDisplay);
@@ -907,7 +852,6 @@
         document.getElementById(item.id).addEventListener("input", calculate);
       });
 
-      // التهيئة الأولية
       calculate();
       updateContractDisplay();
     });
