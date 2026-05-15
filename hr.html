@@ -6,34 +6,166 @@
     <title>نظام تأكيد الحضور الشهري - وزارة الصحة</title>
     <!-- Bootstrap 5 RTL -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <!-- مكتبة Leaflet للخرائط -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
     <!-- مكتبة SheetJS لتصدير Excel -->
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js">
+    </script>
     <style>
-        body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        .header { background: linear-gradient(135deg, #1e6f5c, #289672); color: white; padding: 15px 0; }
-        .card { border: none; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .btn-primary { background-color: #1e6f5c; border-color: #1e6f5c; }
-        .btn-primary:hover { background-color: #145c4a; }
-        .btn-export { background-color: #0d6efd; border-color: #0d6efd; color: white; }
-        .btn-export:hover { background-color: #0b5ed7; }
-        .btn-print { background-color: #6c757d; border-color: #6c757d; color: white; }
-        .btn-print:hover { background-color: #5c636a; }
-        .btn-add { background-color: #198754; border-color: #198754; color: white; }
-        .btn-add:hover { background-color: #157347; }
-        .hidden { display: none; }
-        .fade-in { animation: fadeIn 0.4s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        body {
+            background-color: #f4f7f6;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e6f5c, #289672);
+            color: white;
+            padding: 15px 0;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-primary {
+            background-color: #1e6f5c;
+            border-color: #1e6f5c;
+        }
+        .btn-primary:hover {
+            background-color: #145c4a;
+        }
+
+        .btn-export {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            color: white;
+        }
+        .btn-export:hover {
+            background-color: #0b5ed7;
+        }
+
+        .btn-print {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+        .btn-print:hover {
+            background-color: #5c636a;
+        }
+
+        .btn-add {
+            background-color: #198754;
+            border-color: #198754;
+            color: white;
+        }
+        .btn-add:hover {
+            background-color: #157347;
+        }
+
+        .btn-map {
+            background-color: #e67e22;
+            border-color: #e67e22;
+            color: white;
+        }
+        .btn-map:hover {
+            background-color: #d35400;
+        }
+
+        .hidden {
+            display: none;
+        }
+        .fade-in {
+            animation: fadeIn 0.4s ease-in;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         @media print {
-            body * { visibility: hidden; }
-            #printArea, #printArea * { visibility: visible; }
-            #printArea { position: absolute; top: 0; left: 0; width: 100%; }
-            .btn, .form-select, .form-control, input, select, .d-flex.justify-content-between, .mb-3 {
+            body * {
+                visibility: hidden;
+            }
+            #printArea,
+            #printArea * {
+                visibility: visible;
+            }
+            #printArea {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+            .btn,
+            .form-select,
+            .form-control,
+            input,
+            select,
+            .d-flex.justify-content-between,
+            .mb-3 {
                 display: none !important;
             }
         }
+
         /* تبويبات الموارد البشرية */
-        .hr-tabs .nav-link { cursor: pointer; }
-        .hr-tabs .nav-link.active { background-color: #1e6f5c; color: white; border-color: #1e6f5c; }
+        .hr-tabs .nav-link {
+            cursor: pointer;
+        }
+        .hr-tabs .nav-link.active {
+            background-color: #1e6f5c;
+            color: white;
+            border-color: #1e6f5c;
+        }
+
+        /* خريطة داخل المودال */
+        #centerMapContainer {
+            height: 320px;
+            width: 100%;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            margin-top: 5px;
+            z-index: 1;
+        }
+
+        .coord-badge {
+            display: inline-block;
+            background: #e9ecef;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 2px;
+        }
+
+        .center-type-badge {
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+        }
+        .type-center {
+            background: #d4edda;
+            color: #155724;
+        }
+        .type-hospital {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .table-clickable tr {
+            cursor: default;
+        }
+        .table-clickable tr:hover {
+            background-color: #f8f9fa;
+        }
     </style>
 </head>
 <body>
@@ -77,6 +209,7 @@
                 <h5>مرحباً، <span id="managerName"></span></h5>
                 <div>
                     <span class="badge bg-secondary">مركز: <span id="centerNameLabel"></span></span>
+                    <button class="btn btn-outline-info btn-sm ms-2" onclick="viewCenterLocation()">📍 موقع المركز</button>
                     <button class="btn btn-outline-danger btn-sm ms-2" onclick="logout()">تسجيل الخروج</button>
                 </div>
             </div>
@@ -125,6 +258,9 @@
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="employees-tab" data-bs-toggle="tab" data-bs-target="#employees-pane" type="button" role="tab">إدارة الموظفين</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="centers-tab" data-bs-toggle="tab" data-bs-target="#centers-pane" type="button" role="tab">🏥 إدارة المراكز والمواقع</button>
                 </li>
             </ul>
 
@@ -190,9 +326,38 @@
                         </table>
                     </div>
                 </div>
+
+                <!-- لوحة إدارة المراكز والمواقع الجغرافية -->
+                <div class="tab-pane fade" id="centers-pane" role="tabpanel">
+                    <div class="card p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">🏥 المراكز الصحية والمستشفيات</h5>
+                            <button class="btn btn-add" onclick="showAddCenterModal()">+ إضافة مركز / مستشفى جديد</button>
+                        </div>
+                        <div class="alert alert-info small">
+                            💡 يمكنك النقر على اسم المركز لعرض موقعه على الخريطة، أو استخدام أزرار التعديل لتحديث البيانات والموقع الجغرافي.
+                        </div>
+                        <table class="table table-striped table-bordered table-clickable" id="centersTable">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>المعرف</th>
+                                    <th>الاسم</th>
+                                    <th>النوع</th>
+                                    <th>العنوان</th>
+                                    <th>الهاتف</th>
+                                    <th>الإحداثيات</th>
+                                    <th>إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="centersTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- ========== المودالات ========== -->
 
     <!-- مودال إضافة/تعديل موظف -->
     <div class="modal fade" id="employeeModal" tabindex="-1" aria-hidden="true">
@@ -219,7 +384,6 @@
                     <div class="mb-3">
                         <label class="form-label">المركز</label>
                         <select id="empCenter" class="form-select">
-                            <!-- تملأ برمجياً -->
                         </select>
                     </div>
                     <div class="mb-3">
@@ -263,42 +427,151 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS (لعمل المودال والتبويبات) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- مودال إضافة/تعديل مركز صحي مع الموقع الجغرافي -->
+    <div class="modal fade" id="centerModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="centerModalTitle">إضافة مركز / مستشفى جديد</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editCenterId">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">معرف المركز <small class="text-muted">(مثلاً: center3)</small></label>
+                                <input type="text" id="centerIdInput" class="form-control" placeholder="center3">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">اسم المركز / المستشفى</label>
+                                <input type="text" id="centerNameInput" class="form-control" placeholder="مثلاً: مستشفى الملك فهد">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">النوع</label>
+                                <select id="centerTypeInput" class="form-select">
+                                    <option value="مركز صحي">مركز صحي</option>
+                                    <option value="مستشفى">مستشفى</option>
+                                    <option value="عيادة متخصصة">عيادة متخصصة</option>
+                                    <option value="مجمع طبي">مجمع طبي</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">العنوان</label>
+                                <input type="text" id="centerAddressInput" class="form-control" placeholder="الشارع، الحي، المدينة">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">رقم الهاتف</label>
+                                <input type="text" id="centerPhoneInput" class="form-control" placeholder="مثلاً: 0112345678">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">خط العرض (Latitude)</label>
+                                <input type="number" step="any" id="centerLatInput" class="form-control" placeholder="مثلاً: 24.7136" readonly>
+                                <small class="text-muted">يتم تحديده تلقائياً من الخريطة</small>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">خط الطول (Longitude)</label>
+                                <input type="number" step="any" id="centerLngInput" class="form-control" placeholder="مثلاً: 46.6753" readonly>
+                                <small class="text-muted">يتم تحديده تلقائياً من الخريطة</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">📍 اختر الموقع على الخريطة <small class="text-muted">(انقر لوضع العلامة)</small></label>
+                            <div id="centerMapContainer"></div>
+                            <small class="text-muted">يمكنك سحب العلامة 🔵 لتحديد الموقع بدقة</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-success" id="saveCenterBtn" onclick="saveCenter()">💾 حفظ المركز</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال عرض موقع المركز (للقراءة فقط) -->
+    <div class="modal fade" id="viewLocationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="viewLocationTitle">📍 موقع المركز</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="viewMapContainer" style="height: 400px; border-radius: 8px;"></div>
+                    <div class="mt-2 text-center">
+                        <span id="viewCenterInfo" class="text-muted"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+    </script>
 
     <script>
         // ========== البيانات التجريبية ==========
-        const centers = [
-            { id: 'center1', name: 'مركز صلالة الجديدة الصحي' },
-            { id: 'center2', name: 'مركز صلالة الغربية الصحي' }
-              { id: 'center1', name: 'مركزالسعادة الصحي' },
-            { id: 'center2', name: 'مركز الدهاريز الصحي' }
+        // المراكز مع البيانات الجغرافية
+        let centers = [
+            {
+                id: 'center1',
+                name: 'مركز صحي النزهة',
+                type: 'مركز صحي',
+                lat: 24.7136,
+                lng: 46.6753,
+                address: 'حي النزهة، شارع الأمير محمد بن عبدالعزيز، الرياض',
+                phone: '0112345678'
+            },
+            {
+                id: 'center2',
+                name: 'مركز صحي الروضة',
+                type: 'مركز صحي',
+                lat: 24.7247,
+                lng: 46.6892,
+                address: 'حي الروضة، طريق خريص، الرياض',
+                phone: '0118765432'
+            }
         ];
 
-        // الموظفون (معرف فريد لكل موظف)
+        // عداد المراكز الجديدة
+        let nextCenterNumber = 3;
+
+        // الموظفون
         let employees = [
-            { id: 1, empNo: '1025', name: 'سلمى محمد', title: 'ممرضة', centerId: 'center1', bankAccount: 'SA1234567890', bankName: 'بنك الرياض' },
-            { id: 2, empNo: '1088', name: 'خالد فهد', title: 'فني مختبر', centerId: 'center1', bankAccount: 'SA0987654321', bankName: 'البنك الأهلي' },
-            { id: 3, empNo: '1102', name: 'هند عبدالله', title: 'طبيب عام', centerId: 'center1', bankAccount: 'SA1122334455', bankName: 'مصرف الراجحي' },
-            { id: 4, empNo: '2045', name: 'أحمد سالم', title: 'صيدلي', centerId: 'center2', bankAccount: 'SA5566778899', bankName: 'بنك الرياض' },
-            { id: 5, empNo: '2077', name: 'نورة علي', title: 'ممرضة', centerId: 'center2', bankAccount: 'SA9988776655', bankName: 'البنك الأهلي' }
+            { id: 1, empNo: '1025', name: 'سلمى محمد', title: 'ممرضة', centerId: 'center1', bankAccount: 'SA1234567890',
+                bankName: 'بنك الرياض' },
+            { id: 2, empNo: '1088', name: 'خالد فهد', title: 'فني مختبر', centerId: 'center1', bankAccount: 'SA0987654321',
+                bankName: 'البنك الأهلي' },
+            { id: 3, empNo: '1102', name: 'هند عبدالله', title: 'طبيب عام', centerId: 'center1', bankAccount: 'SA1122334455',
+                bankName: 'مصرف الراجحي' },
+            { id: 4, empNo: '2045', name: 'أحمد سالم', title: 'صيدلي', centerId: 'center2', bankAccount: 'SA5566778899',
+                bankName: 'بنك الرياض' },
+            { id: 5, empNo: '2077', name: 'نورة علي', title: 'ممرضة', centerId: 'center2', bankAccount: 'SA9988776655',
+                bankName: 'البنك الأهلي' }
         ];
 
-        // العداد التلقائي لمعرف الموظف الجديد
-        let nextEmployeeId = 6; // لأن آخر id كان 5
-
-        // قاعدة بيانات التأكيدات الشهرية: مفتاح "empId_month"
+        let nextEmployeeId = 6;
         let confirmations = {};
 
-        // بيانات تسجيل الدخول المحاكاة
         const users = {
             center_manager: { id: 'manager1', name: 'مدير المركز', centerId: 'center1' },
             hr_officer: { id: 'hr1', name: 'موظف موارد بشرية', centerId: null }
         };
 
-        // الحالة الحالية
         let currentUser = null;
         let currentRole = null;
+
+        // متغيرات الخريطة في المودال
+        let modalMap = null;
+        let modalMarker = null;
+        let viewMap = null;
+        let viewMarker = null;
 
         // ========== دوال المساعدة ==========
         function getMonthKey(date) {
@@ -317,8 +590,9 @@
             document.getElementById('managerPage').classList.add('hidden');
             document.getElementById('hrPage').classList.add('hidden');
             if (pageId) {
-                document.getElementById(pageId).classList.remove('hidden');
-                document.getElementById(pageId).classList.add('fade-in');
+                const page = document.getElementById(pageId);
+                page.classList.remove('hidden');
+                page.classList.add('fade-in');
             }
         }
 
@@ -334,11 +608,12 @@
                 centerSelect.classList.remove('hidden');
                 centerSelect.innerHTML = '<option value="">-- اختر المركز --</option>';
                 centers.forEach(c => {
-                    centerSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+                    centerSelect.innerHTML +=
+                        `<option value="${c.id}">${c.name} (${c.type || 'مركز صحي'})</option>`;
                 });
             } else if (role === 'hr_officer') {
                 hrInput.classList.remove('hidden');
-                hrInput.value = 'hr1'; // افتراضي
+                hrInput.value = 'hr1';
             }
         });
 
@@ -353,7 +628,8 @@
                 currentRole = 'center_manager';
                 showPage('managerPage');
                 document.getElementById('managerName').textContent = currentUser.name;
-                document.getElementById('centerNameLabel').textContent = centers.find(c=>c.id===centerId).name;
+                const center = centers.find(c => c.id === centerId);
+                document.getElementById('centerNameLabel').textContent = center ? center.name : centerId;
                 document.getElementById('confirmMonth').value = getDefaultMonth();
                 loadManagerData();
             } else if (role === 'hr_officer') {
@@ -364,20 +640,26 @@
                 showPage('hrPage');
                 document.getElementById('hrFilterMonth').value = getDefaultMonth();
                 loadHRData();
-                // تفعيل التبويب الأول افتراضياً
                 document.getElementById('confirmations-tab').click();
-                // تحضير قائمة الموظفين
                 loadEmployeesTable();
+                loadCentersTable();
             }
         }
 
         function logout() {
             currentUser = null;
             currentRole = null;
+            // تنظيف الخرائط
+            if (modalMap) { modalMap.remove();
+                modalMap = null;
+                modalMarker = null; }
+            if (viewMap) { viewMap.remove();
+                viewMap = null;
+                viewMarker = null; }
             showPage('loginPage');
         }
 
-        // ========== مدير المركز (لم يتغير) ==========
+        // ========== مدير المركز ==========
         function loadManagerData() {
             const centerId = currentUser.centerId;
             const month = document.getElementById('confirmMonth').value;
@@ -440,8 +722,12 @@
                     confirmations[key].submittedAt = new Date().toISOString();
                 } else {
                     confirmations[key] = {
-                        absentDays: 0, leaveDays: 0, remarks: '',
-                        submitted: true, submittedBy: currentUser.id, submittedAt: new Date().toISOString()
+                        absentDays: 0,
+                        leaveDays: 0,
+                        remarks: '',
+                        submitted: true,
+                        submittedBy: currentUser.id,
+                        submittedAt: new Date().toISOString()
                     };
                 }
             });
@@ -449,7 +735,33 @@
             loadManagerData();
         }
 
-        // ========== تأكيدات الحضور للموارد البشرية (لم يتغير) ==========
+        /** عرض موقع المركز الحالي (لمدير المركز) */
+        function viewCenterLocation() {
+            const center = centers.find(c => c.id === currentUser.centerId);
+            if (!center) return alert('المركز غير موجود');
+            if (!center.lat || !center.lng) return alert('لم يتم تحديد الموقع الجغرافي لهذا المركز بعد. يرجى التواصل مع الموارد البشرية.');
+
+            document.getElementById('viewLocationTitle').textContent = '📍 ' + center.name;
+            document.getElementById('viewCenterInfo').textContent =
+                `${center.address || ''} | 📞 ${center.phone || 'غير متوفر'} | ${center.lat.toFixed(5)}, ${center.lng.toFixed(5)}`;
+
+            const modal = new bootstrap.Modal(document.getElementById('viewLocationModal'));
+            modal.show();
+
+            // تهيئة الخريطة بعد ظهور المودال
+            setTimeout(() => {
+                if (viewMap) { viewMap.remove(); }
+                viewMap = L.map('viewMapContainer').setView([center.lat, center.lng], 16);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(viewMap);
+                viewMarker = L.marker([center.lat, center.lng], { draggable: false }).addTo(viewMap);
+                viewMarker.bindPopup(`<b>${center.name}</b><br>${center.address || ''}`).openPopup();
+                setTimeout(() => { viewMap.invalidateSize(); }, 200);
+            }, 300);
+        }
+
+        // ========== تأكيدات الحضور للموارد البشرية ==========
         function loadHRData() {
             const filterMonth = document.getElementById('hrFilterMonth').value;
             if (!filterMonth) return;
@@ -470,8 +782,8 @@
             }
 
             confirmationsList.forEach(item => {
-                const status = (item.absentDays === 0 && item.leaveDays === 0) ? 'حاضر كامل' : 
-                               (item.absentDays > 0 ? `غياب ${item.absentDays} يوم` : `إجازة ${item.leaveDays} يوم`);
+                const status = (item.absentDays === 0 && item.leaveDays === 0) ? 'حاضر كامل' :
+                    (item.absentDays > 0 ? `غياب ${item.absentDays} يوم` : `إجازة ${item.leaveDays} يوم`);
                 const approved = item.hrApproved ? '✅ معتمد' : '';
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -519,43 +831,22 @@
 
         function printReport() {
             const filterMonth = document.getElementById('hrFilterMonth').value;
-            if (!filterMonth) {
-                alert('اختر الشهر أولاً');
-                return;
-            }
+            if (!filterMonth) { alert('اختر الشهر أولاً'); return; }
             const originalTable = document.getElementById('hrTable');
             const printWindow = window.open('', '_blank', 'width=900,height=600');
             printWindow.document.write(`
-                <html dir="rtl">
-                <head>
-                    <title>تقرير تأكيد الحضور - ${filterMonth}</title>
-                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-                    <style>
-                        body { padding: 20px; }
-                        table { width: 100%; }
-                        @media print {
-                            .no-print { display: none; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <h3>تقرير تأكيدات الحضور لشهر ${filterMonth}</h3>
-                    <div>${originalTable.outerHTML}</div>
-                    <script>
-                        window.onload = function() { window.print(); setTimeout(function(){ window.close(); }, 200); }
-                    <\/script>
-                </body>
-                </html>
+                <html dir="rtl"><head><title>تقرير تأكيد الحضور - ${filterMonth}</title>
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+                <style>body { padding: 20px; } table { width: 100%; } @media print { .no-print { display: none; } }</style></head>
+                <body><h3>تقرير تأكيدات الحضور لشهر ${filterMonth}</h3><div>${originalTable.outerHTML}</div>
+                <script>window.onload = function() { window.print(); setTimeout(function(){ window.close(); }, 200); }<\/script></body></html>
             `);
             printWindow.document.close();
         }
 
         function exportSalaryFile() {
             const filterMonth = document.getElementById('hrFilterMonth').value;
-            if (!filterMonth) {
-                alert('اختر الشهر أولاً');
-                return;
-            }
+            if (!filterMonth) { alert('اختر الشهر أولاً'); return; }
             const rows = [];
             for (const [key, conf] of Object.entries(confirmations)) {
                 if (!conf.submitted) continue;
@@ -578,20 +869,18 @@
                     'ملاحظات': conf.remarks || ''
                 });
             }
-            if (rows.length === 0) {
-                alert('لا توجد تأكيدات مقدمة لهذا الشهر لتصديرها');
-                return;
-            }
+            if (rows.length === 0) { alert('لا توجد تأكيدات مقدمة لهذا الشهر لتصديرها'); return; }
             const ws = XLSX.utils.json_to_sheet(rows);
             ws['!cols'] = [
-                {wch: 15}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 10}, {wch: 12}, {wch: 12}, {wch: 20}, {wch: 15}, {wch: 20}
+                { wch: 15 }, { wch: 25 }, { wch: 20 }, { wch: 20 }, { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 20 },
+                { wch: 15 }, { wch: 20 }
             ];
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'قائمة الرواتب');
             XLSX.writeFile(wb, `تقرير_الرواتب_${filterMonth}.xlsx`);
         }
 
-        // ========== إدارة الموظفين (الموارد البشرية) ==========
+        // ========== إدارة الموظفين ==========
         function loadEmployeesTable() {
             const tbody = document.getElementById('employeesTableBody');
             tbody.innerHTML = '';
@@ -614,7 +903,37 @@
             });
         }
 
-        // فتح المودال لإضافة موظف
+        function refreshCenterDropdowns() {
+            // تحديث قائمة المراكز في مودال الموظف
+            const empCenterSelect = document.getElementById('empCenter');
+            if (empCenterSelect) {
+                const currentVal = empCenterSelect.value;
+                empCenterSelect.innerHTML = '';
+                centers.forEach(c => {
+                    empCenterSelect.innerHTML +=
+                        `<option value="${c.id}" ${c.id === currentVal ? 'selected' : ''}>${c.name} (${c.type || 'مركز صحي'})</option>`;
+                });
+            }
+            // تحديث قائمة المراكز في مودال النقل
+            const transferSelect = document.getElementById('transferNewCenter');
+            if (transferSelect) {
+                transferSelect.innerHTML = '';
+                centers.forEach(c => {
+                    transferSelect.innerHTML +=
+                        `<option value="${c.id}">${c.name} (${c.type || 'مركز صحي'})</option>`;
+                });
+            }
+            // تحديث قائمة المراكز في صفحة تسجيل الدخول
+            const loginCenterSelect = document.getElementById('centerSelect');
+            if (loginCenterSelect && !loginCenterSelect.classList.contains('hidden')) {
+                loginCenterSelect.innerHTML = '<option value="">-- اختر المركز --</option>';
+                centers.forEach(c => {
+                    loginCenterSelect.innerHTML +=
+                        `<option value="${c.id}">${c.name} (${c.type || 'مركز صحي'})</option>`;
+                });
+            }
+        }
+
         function showAddEmployeeModal() {
             document.getElementById('employeeModalTitle').textContent = 'إضافة موظف جديد';
             document.getElementById('editEmpId').value = '';
@@ -623,17 +942,11 @@
             document.getElementById('empTitle').value = '';
             document.getElementById('empBankAccount').value = '';
             document.getElementById('empBankName').value = '';
-            // تعبئة قائمة المراكز
-            const centerSelect = document.getElementById('empCenter');
-            centerSelect.innerHTML = '';
-            centers.forEach(c => {
-                centerSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`;
-            });
+            refreshCenterDropdowns();
             const modal = new bootstrap.Modal(document.getElementById('employeeModal'));
             modal.show();
         }
 
-        // فتح المودال لتعديل موظف
         function editEmployee(empId) {
             const emp = employees.find(e => e.id === empId);
             if (!emp) return;
@@ -644,17 +957,12 @@
             document.getElementById('empTitle').value = emp.title;
             document.getElementById('empBankAccount').value = emp.bankAccount;
             document.getElementById('empBankName').value = emp.bankName;
-            // قائمة المراكز واختيار مركزه الحالي
-            const centerSelect = document.getElementById('empCenter');
-            centerSelect.innerHTML = '';
-            centers.forEach(c => {
-                centerSelect.innerHTML += `<option value="${c.id}" ${c.id === emp.centerId ? 'selected' : ''}>${c.name}</option>`;
-            });
+            refreshCenterDropdowns();
+            document.getElementById('empCenter').value = emp.centerId;
             const modal = new bootstrap.Modal(document.getElementById('employeeModal'));
             modal.show();
         }
 
-        // حفظ الموظف (إضافة أو تعديل)
         function saveEmployee() {
             const editId = document.getElementById('editEmpId').value;
             const empNo = document.getElementById('empNo').value.trim();
@@ -670,28 +978,17 @@
             }
 
             if (!editId) {
-                // إضافة جديد - التأكد من عدم تكرار الرقم الوظيفي
                 if (employees.some(e => e.empNo === empNo)) {
                     alert('الرقم الوظيفي موجود مسبقاً');
                     return;
                 }
-                const newEmp = {
-                    id: nextEmployeeId++,
-                    empNo,
-                    name,
-                    title,
-                    centerId,
-                    bankAccount,
-                    bankName
-                };
+                const newEmp = { id: nextEmployeeId++, empNo, name, title, centerId, bankAccount, bankName };
                 employees.push(newEmp);
                 alert('تمت إضافة الموظف بنجاح');
             } else {
-                // تعديل
                 const empId = parseInt(editId);
                 const emp = employees.find(e => e.id === empId);
                 if (!emp) return;
-                // التأكد من الرقم الوظيفي غير مكرر (إلا إذا كان نفس الموظف)
                 if (employees.some(e => e.empNo === empNo && e.id !== empId)) {
                     alert('الرقم الوظيفي مستخدم من قبل موظف آخر');
                     return;
@@ -705,28 +1002,18 @@
                 alert('تم تعديل بيانات الموظف بنجاح');
             }
 
-            // إغلاق المودال وتحديث الجدول
-            const modal = bootstrap.Modal.getInstance(document.getElementById('employeeModal'));
-            modal.hide();
+            bootstrap.Modal.getInstance(document.getElementById('employeeModal')).hide();
             loadEmployeesTable();
-
-            // إذا كان مدير مركز مسجلاً حالياً، نعيد تحميل بياناته (إذا كان يستخدم النظام في الخلفية)
-            if (currentRole === 'center_manager') {
-                loadManagerData();
-            }
+            if (currentRole === 'center_manager') loadManagerData();
         }
 
-        // نقل موظف
         function showTransferModal(empId) {
             const emp = employees.find(e => e.id === empId);
             if (!emp) return;
             document.getElementById('transferEmpId').value = empId;
             document.getElementById('transferEmpName').textContent = emp.name + ' (' + emp.empNo + ')';
-            const newCenterSelect = document.getElementById('transferNewCenter');
-            newCenterSelect.innerHTML = '';
-            centers.forEach(c => {
-                newCenterSelect.innerHTML += `<option value="${c.id}" ${c.id === emp.centerId ? 'selected' : ''}>${c.name}</option>`;
-            });
+            refreshCenterDropdowns();
+            document.getElementById('transferNewCenter').value = emp.centerId;
             const modal = new bootstrap.Modal(document.getElementById('transferModal'));
             modal.show();
         }
@@ -744,13 +1031,280 @@
             alert(`تم نقل الموظف ${emp.name} إلى المركز الجديد بنجاح`);
             bootstrap.Modal.getInstance(document.getElementById('transferModal')).hide();
             loadEmployeesTable();
-            if (currentRole === 'center_manager') {
-                loadManagerData();
+            if (currentRole === 'center_manager') loadManagerData();
+        }
+
+        // ========== إدارة المراكز والمواقع الجغرافية ==========
+
+        /** تحميل جدول المراكز */
+        function loadCentersTable() {
+            const tbody = document.getElementById('centersTableBody');
+            tbody.innerHTML = '';
+
+            if (centers.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">لا توجد مراكز مسجلة</td></tr>`;
+                return;
             }
+
+            centers.forEach(c => {
+                const typeBadgeClass = c.type === 'مستشفى' ? 'type-hospital' : 'type-center';
+                const hasCoords = (c.lat !== undefined && c.lng !== undefined && c.lat !== null && c.lng !==
+                    null);
+                const coordsDisplay = hasCoords ?
+                    `<span class="coord-badge">${c.lat.toFixed(5)}</span> <span class="coord-badge">${c.lng.toFixed(5)}</span>` :
+                    '<span class="text-warning">⚠️ غير محدد</span>';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><code>${c.id}</code></td>
+                    <td>
+                        <a href="javascript:void(0)" onclick="quickViewCenter('${c.id}')" title="عرض الموقع على الخريطة">
+                            ${c.name} 🔗
+                        </a>
+                    </td>
+                    <td><span class="center-type-badge ${typeBadgeClass}">${c.type || 'مركز صحي'}</span></td>
+                    <td>${c.address || '<span class="text-muted">—</span>'}</td>
+                    <td>${c.phone || '<span class="text-muted">—</span>'}</td>
+                    <td>${coordsDisplay}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editCenter('${c.id}')" title="تعديل البيانات والموقع">✏️ تعديل</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteCenter('${c.id}')" title="حذف المركز">🗑️ حذف</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        /** عرض سريع لموقع المركز */
+        function quickViewCenter(centerId) {
+            const center = centers.find(c => c.id === centerId);
+            if (!center) return;
+            if (!center.lat || !center.lng) {
+                alert('لم يتم تحديد الموقع الجغرافي لهذا المركز بعد. استخدم زر التعديل لإضافة الموقع.');
+                return;
+            }
+            document.getElementById('viewLocationTitle').textContent = '📍 ' + center.name;
+            document.getElementById('viewCenterInfo').textContent =
+                `${center.address || ''} | 📞 ${center.phone || 'غير متوفر'} | ${center.lat.toFixed(5)}, ${center.lng.toFixed(5)}`;
+
+            const modal = new bootstrap.Modal(document.getElementById('viewLocationModal'));
+            modal.show();
+
+            setTimeout(() => {
+                if (viewMap) { viewMap.remove(); }
+                viewMap = L.map('viewMapContainer').setView([center.lat, center.lng], 16);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(viewMap);
+                viewMarker = L.marker([center.lat, center.lng], { draggable: false }).addTo(viewMap);
+                viewMarker.bindPopup(`<b>${center.name}</b><br>${center.address || ''}`).openPopup();
+                setTimeout(() => { viewMap.invalidateSize(); }, 200);
+            }, 300);
+        }
+
+        /** إظهار مودال إضافة مركز جديد */
+        function showAddCenterModal() {
+            document.getElementById('centerModalTitle').textContent = 'إضافة مركز / مستشفى جديد';
+            document.getElementById('editCenterId').value = '';
+            document.getElementById('centerIdInput').value = 'center' + nextCenterNumber;
+            document.getElementById('centerIdInput').disabled = false;
+            document.getElementById('centerNameInput').value = '';
+            document.getElementById('centerTypeInput').value = 'مركز صحي';
+            document.getElementById('centerAddressInput').value = '';
+            document.getElementById('centerPhoneInput').value = '';
+            document.getElementById('centerLatInput').value = '';
+            document.getElementById('centerLngInput').value = '';
+
+            const modal = new bootstrap.Modal(document.getElementById('centerModal'));
+            modal.show();
+
+            // تهيئة الخريطة
+            initModalMap(24.7136, 46.6753); // افتراضي: الرياض
+        }
+
+        /** إظهار مودال تعديل مركز */
+        function editCenter(centerId) {
+            const center = centers.find(c => c.id === centerId);
+            if (!center) return;
+
+            document.getElementById('centerModalTitle').textContent = 'تعديل بيانات المركز / المستشفى';
+            document.getElementById('editCenterId').value = center.id;
+            document.getElementById('centerIdInput').value = center.id;
+            document.getElementById('centerIdInput').disabled = true; // لا يمكن تغيير المعرف
+            document.getElementById('centerNameInput').value = center.name;
+            document.getElementById('centerTypeInput').value = center.type || 'مركز صحي';
+            document.getElementById('centerAddressInput').value = center.address || '';
+            document.getElementById('centerPhoneInput').value = center.phone || '';
+            document.getElementById('centerLatInput').value = center.lat || '';
+            document.getElementById('centerLngInput').value = center.lng || '';
+
+            const modal = new bootstrap.Modal(document.getElementById('centerModal'));
+            modal.show();
+
+            const initLat = center.lat || 24.7136;
+            const initLng = center.lng || 46.6753;
+            initModalMap(initLat, initLng);
+        }
+
+        /** تهيئة خريطة Leaflet داخل المودال */
+        function initModalMap(lat, lng) {
+            // إزالة الخريطة السابقة إن وجدت
+            if (modalMap) {
+                modalMap.remove();
+                modalMap = null;
+                modalMarker = null;
+            }
+
+            const mapContainer = document.getElementById('centerMapContainer');
+            modalMap = L.map(mapContainer).setView([lat, lng], 14);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(modalMap);
+
+            // إضافة علامة قابلة للسحب
+            modalMarker = L.marker([lat, lng], { draggable: true }).addTo(modalMap);
+            modalMarker.bindPopup('📍 اسحب العلامة لتحديد الموقع بدقة').openPopup();
+
+            // تحديث الحقول عند النقر على الخريطة
+            modalMap.on('click', function(e) {
+                const newLat = e.latlng.lat;
+                const newLng = e.latlng.lng;
+                modalMarker.setLatLng([newLat, newLng]);
+                updateCoordFields(newLat, newLng);
+            });
+
+            // تحديث الحقول عند سحب العلامة
+            modalMarker.on('dragend', function() {
+                const pos = modalMarker.getLatLng();
+                updateCoordFields(pos.lat, pos.lng);
+            });
+
+            // تعيين القيم الأولية
+            updateCoordFields(lat, lng);
+
+            // إصلاح حجم الخريطة بعد ظهور المودال
+            setTimeout(() => {
+                if (modalMap) modalMap.invalidateSize();
+            }, 250);
+        }
+
+        /** تحديث حقول الإحداثيات من الخريطة */
+        function updateCoordFields(lat, lng) {
+            document.getElementById('centerLatInput').value = lat.toFixed(6);
+            document.getElementById('centerLngInput').value = lng.toFixed(6);
+        }
+
+        /** حفظ المركز (إضافة أو تعديل) */
+        function saveCenter() {
+            const editId = document.getElementById('editCenterId').value;
+            const centerId = document.getElementById('centerIdInput').value.trim();
+            const name = document.getElementById('centerNameInput').value.trim();
+            const type = document.getElementById('centerTypeInput').value;
+            const address = document.getElementById('centerAddressInput').value.trim();
+            const phone = document.getElementById('centerPhoneInput').value.trim();
+            const latStr = document.getElementById('centerLatInput').value;
+            const lngStr = document.getElementById('centerLngInput').value;
+
+            if (!centerId || !name) {
+                alert('الرجاء ملء معرف المركز والاسم على الأقل');
+                return;
+            }
+
+            const lat = latStr ? parseFloat(latStr) : null;
+            const lng = lngStr ? parseFloat(lngStr) : null;
+
+            if (!editId) {
+                // إضافة جديد
+                if (centers.some(c => c.id === centerId)) {
+                    alert('معرف المركز موجود مسبقاً، اختر معرفاً آخر');
+                    return;
+                }
+                const newCenter = {
+                    id: centerId,
+                    name,
+                    type,
+                    lat,
+                    lng,
+                    address,
+                    phone
+                };
+                centers.push(newCenter);
+                nextCenterNumber = Math.max(nextCenterNumber, parseInt(centerId.replace('center', '')) || 0) + 1;
+                alert('تمت إضافة المركز بنجاح مع الموقع الجغرافي');
+            } else {
+                // تعديل
+                const center = centers.find(c => c.id === editId);
+                if (!center) return;
+                // إذا تغير المعرف وكان موجوداً مسبقاً
+                if (centerId !== editId && centers.some(c => c.id === centerId)) {
+                    alert('معرف المركز الجديد موجود مسبقاً');
+                    return;
+                }
+                center.id = centerId;
+                center.name = name;
+                center.type = type;
+                center.lat = lat;
+                center.lng = lng;
+                center.address = address;
+                center.phone = phone;
+                alert('تم تعديل بيانات المركز والموقع الجغرافي بنجاح');
+            }
+
+            bootstrap.Modal.getInstance(document.getElementById('centerModal')).hide();
+            refreshCenterDropdowns();
+            loadCentersTable();
+            if (currentRole === 'center_manager') {
+                document.getElementById('centerNameLabel').textContent =
+                    centers.find(c => c.id === currentUser.centerId)?.name || currentUser.centerId;
+            }
+        }
+
+        /** حذف مركز */
+        function deleteCenter(centerId) {
+            // التحقق من وجود موظفين مرتبطين بالمركز
+            const linkedEmployees = employees.filter(e => e.centerId === centerId);
+            if (linkedEmployees.length > 0) {
+                const empNames = linkedEmployees.map(e => e.name).join('، ');
+                if (!confirm(
+                        `لا يمكن حذف المركز لأنه مرتبط بـ ${linkedEmployees.length} موظف(ين): ${empNames}\n\nيرجى نقلهم أولاً قبل الحذف.`
+                        )) return;
+                return;
+            }
+
+            if (!confirm(`هل أنت متأكد من حذف المركز "${centers.find(c => c.id === centerId)?.name || centerId}"؟`)) return;
+
+            centers = centers.filter(c => c.id !== centerId);
+            alert('تم حذف المركز بنجاح');
+            refreshCenterDropdowns();
+            loadCentersTable();
         }
 
         // ========== التهيئة ==========
         showPage('loginPage');
+
+        // تنظيف الخرائط عند إغلاق المودالات
+        document.getElementById('centerModal').addEventListener('hidden.bs.modal', function() {
+            if (modalMap) {
+                modalMap.remove();
+                modalMap = null;
+                modalMarker = null;
+            }
+        });
+        document.getElementById('viewLocationModal').addEventListener('hidden.bs.modal', function() {
+            if (viewMap) {
+                viewMap.remove();
+                viewMap = null;
+                viewMarker = null;
+            }
+        });
+
+        // تحميل تبويب المراكز عند النقر عليه
+        document.getElementById('centers-tab').addEventListener('shown.bs.tab', function() {
+            loadCentersTable();
+            refreshCenterDropdowns();
+        });
     </script>
 </body>
 </html>
