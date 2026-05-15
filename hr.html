@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام تأكيد الحضور الشهري - وزارة الصحة</title>
+    <!-- Bootstrap 5 RTL -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <!-- مكتبة SheetJS لتصدير Excel -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        .header { background: linear-gradient(135deg, #1e6f5c, #289672); color: white; padding: 15px 0; }
+        .card { border: none; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .status-badge { font-size: 0.9rem; }
+        .btn-primary { background-color: #1e6f5c; border-color: #1e6f5c; }
+        .btn-primary:hover { background-color: #145c4a; }
+        .btn-export { background-color: #0d6efd; border-color: #0d6efd; color: white; }
+        .btn-export:hover { background-color: #0b5ed7; }
+        .btn-print { background-color: #6c757d; border-color: #6c757d; color: white; }
+        .btn-print:hover { background-color: #5c636a; }
+        .hidden { display: none; }
+        .fade-in { animation: fadeIn 0.4s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @media print {
+            body * { visibility: hidden; }
+            #printArea, #printArea * { visibility: visible; }
+            #printArea { position: absolute; top: 0; left: 0; width: 100%; }
+            .btn, .form-select, .form-control, input, select, .d-flex.justify-content-between, .mb-3 {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- شريط علوي -->
+    <div class="header text-center mb-4">
+        <h4 class="mb-0">وزارة الصحة - نظام تأكيد الحضور الشهري</h4>
+    </div>
+
+    <!-- محتوى الصفحة -->
+    <div class="container" id="app">
+        <!-- شاشة تسجيل الدخول -->
+        <div id="loginPage" class="row justify-content-center fade-in">
+            <div class="col-md-5">
+                <div class="card p-4">
+                    <h5 class="card-title text-center mb-3">تسجيل الدخول</h5>
+                    <div class="mb-3">
+                        <label class="form-label">الدور</label>
+                        <select id="roleSelect" class="form-select">
+                            <option value="">-- اختر الدور --</option>
+                            <option value="center_manager">مدير مركز صحي</option>
+                            <option value="hr_officer">موارد بشرية</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">المركز / المعرف</label>
+                        <select id="centerSelect" class="form-select hidden">
+                            <!-- ستملأ حسب الدور -->
+                        </select>
+                        <input type="text" id="hrIdInput" class="form-control hidden" placeholder="معرف المستخدم (مثلاً hr1)">
+                    </div>
+                    <div class="d-grid">
+                        <button class="btn btn-primary" onclick="login()">دخول</button>
+                    </div>
+                    <p class="text-muted mt-3 small text-center">للاختبار: مدير مركز = center1 / موارد بشرية = hr1</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- لوحة مدير المركز -->
+        <div id="managerPage" class="hidden fade-in">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5>مرحباً، <span id="managerName"></span></h5>
+                <div>
+                    <span class="badge bg-secondary">مركز: <span id="centerNameLabel"></span></span>
+                    <button class="btn btn-outline-danger btn-sm ms-2" onclick="logout()">تسجيل الخروج</button>
+                </div>
+            </div>
+            <div class="card p-3 mb-3">
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <label>شهر التأكيد</label>
+                        <input type="month" id="confirmMonth" class="form-control" onchange="loadManagerData()">
+                    </div>
+                    <div class="col-md-4 mt-2 mt-md-0">
+                        <button class="btn btn-success" onclick="submitToHR()">✔ اعتماد وتسليم للموارد البشرية</button>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-2 mt-md-0">
+                        <span class="text-muted">إجمالي الموظفين: <span id="empCount"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card p-3">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>الرقم الوظيفي</th>
+                            <th>الاسم</th>
+                            <th>المسمى</th>
+                            <th>أيام الغياب</th>
+                            <th>أيام الإجازة</th>
+                            <th>ملاحظات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="managerTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- لوحة الموارد البشرية -->
+        <div id="hrPage" class="hidden fade-in">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5>لوحة الموارد البشرية - تأكيدات المراكز</h5>
+                <button class="btn btn-outline-danger btn-sm" onclick="logout()">تسجيل الخروج</button>
+            </div>
+            <div class="card p-3">
+                <div class="row mb-3 align-items-end">
+                    <div class="col-md-3">
+                        <label>تصفية حسب الشهر</label>
+                        <input type="month" id="hrFilterMonth" class="form-control" onchange="loadHRData()">
+                    </div>
+                    <div class="col-md-3 mt-2 mt-md-0">
+                        <button class="btn btn-print w-100" onclick="printReport()">🖨️ طباعة التقرير</button>
+                    </div>
+                    <div class="col-md-3 mt-2 mt-md-0">
+                        <button class="btn btn-export w-100" onclick="exportSalaryFile()">📥 تصدير ملف الرواتب (Excel)</button>
+                    </div>
+                    <div class="col-md-3 mt-2 mt-md-0">
+                        <button class="btn btn-primary w-100" onclick="approveAll()">اعتماد جميع التأكيدات الظاهرة</button>
+                    </div>
+                </div>
+                <!-- جدول التأكيدات (يستخدم للطباعة والتصدير) -->
+                <div id="printArea">
+                    <table class="table table-striped table-bordered" id="hrTable">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>المركز</th>
+                                <th>الموظف</th>
+                                <th>الشهر</th>
+                                <th>الغياب</th>
+                                <th>الإجازات</th>
+                                <th>الحالة</th>
+                                <th>موثق من</th>
+                                <th>اعتماد</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hrTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== البيانات التجريبية ==========
+        const centers = [
+            { id: 'center1', name: 'مركز صحي النزهة' },
+            { id: 'center2', name: 'مركز صحي الروضة' }
+        ];
+
+        const employees = [
+            { id: 1, empNo: '1025', name: 'سلمى محمد', title: 'ممرضة', centerId: 'center1', bankAccount: 'SA1234567890', bankName: 'بنك الرياض' },
+            { id: 2, empNo: '1088', name: 'خالد فهد', title: 'فني مختبر', centerId: 'center1', bankAccount: 'SA0987654321', bankName: 'البنك الأهلي' },
+            { id: 3, empNo: '1102', name: 'هند عبدالله', title: 'طبيب عام', centerId: 'center1', bankAccount: 'SA1122334455', bankName: 'مصرف الراجحي' },
+            { id: 4, empNo: '2045', name: 'أحمد سالم', title: 'صيدلي', centerId: 'center2', bankAccount: 'SA5566778899', bankName: 'بنك الرياض' },
+            { id: 5, empNo: '2077', name: 'نورة علي', title: 'ممرضة', centerId: 'center2', bankAccount: 'SA9988776655', bankName: 'البنك الأهلي' }
+        ];
+
+        // قاعدة بيانات التأكيدات الشهرية: مفتاح "empId_month"
+        let confirmations = {};
+
+        // بيانات تسجيل الدخول المحاكاة
+        const users = {
+            center_manager: { id: 'manager1', name: 'مدير المركز', centerId: 'center1' },
+            hr_officer: { id: 'hr1', name: 'موظف موارد بشرية', centerId: null }
+        };
+
+        // الحالة الحالية
+        let currentUser = null;
+        let currentRole = null;
+
+        // ========== دوال المساعدة ==========
+        function getMonthKey(date) {
+            const d = new Date(date);
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2,'0')}`;
+        }
+
+        function getDefaultMonth() {
+            const now = new Date();
+            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2,'0')}`;
+        }
+
+        // ========== التنقل بين الصفحات ==========
+        function showPage(pageId) {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('managerPage').classList.add('hidden');
+            document.getElementById('hrPage').classList.add('hidden');
+            if (pageId) {
+                document.getElementById(pageId).classList.remove('hidden');
+                document.getElementById(pageId).classList.add('fade-in');
+            }
+        }
+
+        // ========== إعدادات تسجيل الدخول ==========
+        document.getElementById('roleSelect').addEventListener('change', function() {
+            const role = this.value;
+            const centerSelect = document.getElementById('centerSelect');
+            const hrInput = document.getElementById('hrIdInput');
+            centerSelect.classList.add('hidden');
+            hrInput.classList.add('hidden');
+
+            if (role === 'center_manager') {
+                centerSelect.classList.remove('hidden');
+                centerSelect.innerHTML = '<option value="">-- اختر المركز --</option>';
+                centers.forEach(c => {
+                    centerSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+                });
+            } else if (role === 'hr_officer') {
+                hrInput.classList.remove('hidden');
+                hrInput.value = 'hr1'; // افتراضي
+            }
+        });
+
+        function login() {
+            const role = document.getElementById('roleSelect').value;
+            if (!role) return alert('اختر الدور');
+
+            if (role === 'center_manager') {
+                const centerId = document.getElementById('centerSelect').value;
+                if (!centerId) return alert('اختر المركز');
+                currentUser = { ...users.center_manager, centerId };
+                currentRole = 'center_manager';
+                showPage('managerPage');
+                document.getElementById('managerName').textContent = currentUser.name;
+                document.getElementById('centerNameLabel').textContent = centers.find(c=>c.id===centerId).name;
+                document.getElementById('confirmMonth').value = getDefaultMonth();
+                loadManagerData();
+            } else if (role === 'hr_officer') {
+                const hrId = document.getElementById('hrIdInput').value.trim();
+                if (!hrId) return alert('أدخل معرف الموارد البشرية');
+                currentUser = { ...users.hr_officer, id: hrId };
+                currentRole = 'hr_officer';
+                showPage('hrPage');
+                document.getElementById('hrFilterMonth').value = getDefaultMonth();
+                loadHRData();
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            currentRole = null;
+            showPage('loginPage');
+        }
+
+        // ========== مدير المركز ==========
+        function loadManagerData() {
+            const centerId = currentUser.centerId;
+            const month = document.getElementById('confirmMonth').value;
+            if (!month) return;
+
+            const centerEmps = employees.filter(e => e.centerId === centerId);
+            document.getElementById('empCount').textContent = centerEmps.length;
+
+            const tbody = document.getElementById('managerTableBody');
+            tbody.innerHTML = '';
+
+            centerEmps.forEach(emp => {
+                const key = `${emp.id}_${month}`;
+                let conf = confirmations[key] || { absentDays: 0, leaveDays: 0, remarks: '', submitted: false };
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${emp.empNo}</td>
+                    <td>${emp.name}</td>
+                    <td>${emp.title}</td>
+                    <td><input type="number" class="form-control form-control-sm absent-days" min="0" max="31" value="${conf.absentDays}" data-emp-id="${emp.id}" data-month="${month}" ${conf.submitted ? 'disabled' : ''}></td>
+                    <td><input type="number" class="form-control form-control-sm leave-days" min="0" max="31" value="${conf.leaveDays}" data-emp-id="${emp.id}" data-month="${month}" ${conf.submitted ? 'disabled' : ''}></td>
+                    <td><input type="text" class="form-control form-control-sm remarks" value="${conf.remarks || ''}" data-emp-id="${emp.id}" data-month="${month}" ${conf.submitted ? 'disabled' : ''}></td>
+                `;
+                tbody.appendChild(row);
+
+                if (!conf.submitted) {
+                    row.querySelector('.absent-days').addEventListener('change', function() {
+                        updateConfirmation(emp.id, month, 'absentDays', parseInt(this.value) || 0);
+                    });
+                    row.querySelector('.leave-days').addEventListener('change', function() {
+                        updateConfirmation(emp.id, month, 'leaveDays', parseInt(this.value) || 0);
+                    });
+                    row.querySelector('.remarks').addEventListener('change', function() {
+                        updateConfirmation(emp.id, month, 'remarks', this.value);
+                    });
+                }
+            });
+        }
+
+        function updateConfirmation(empId, month, field, value) {
+            const key = `${empId}_${month}`;
+            if (!confirmations[key]) {
+                confirmations[key] = { absentDays: 0, leaveDays: 0, remarks: '', submitted: false };
+            }
+            confirmations[key][field] = value;
+        }
+
+        function submitToHR() {
+            const month = document.getElementById('confirmMonth').value;
+            if (!month) return alert('اختر الشهر');
+            const centerId = currentUser.centerId;
+            const centerEmps = employees.filter(e => e.centerId === centerId);
+
+            centerEmps.forEach(emp => {
+                const key = `${emp.id}_${month}`;
+                if (confirmations[key]) {
+                    confirmations[key].submitted = true;
+                    confirmations[key].submittedBy = currentUser.id;
+                    confirmations[key].submittedAt = new Date().toISOString();
+                } else {
+                    confirmations[key] = {
+                        absentDays: 0, leaveDays: 0, remarks: '',
+                        submitted: true, submittedBy: currentUser.id, submittedAt: new Date().toISOString()
+                    };
+                }
+            });
+            alert('تم تسليم التأكيد للموارد البشرية بنجاح');
+            loadManagerData();
+        }
+
+        // ========== الموارد البشرية ==========
+        function loadHRData() {
+            const filterMonth = document.getElementById('hrFilterMonth').value;
+            if (!filterMonth) return;
+
+            const tbody = document.getElementById('hrTableBody');
+            tbody.innerHTML = '';
+
+            const confirmationsList = [];
+            for (const [key, conf] of Object.entries(confirmations)) {
+                if (!conf.submitted) continue;
+                const [empIdStr, month] = key.split('_');
+                if (month !== filterMonth) continue;
+                const empId = parseInt(empIdStr);
+                const emp = employees.find(e => e.id === empId);
+                if (!emp) continue;
+                const center = centers.find(c => c.id === emp.centerId);
+                confirmationsList.push({ emp, center, month, ...conf, key });
+            }
+
+            confirmationsList.forEach(item => {
+                const status = (item.absentDays === 0 && item.leaveDays === 0) ? 'حاضر كامل' : 
+                               (item.absentDays > 0 ? `غياب ${item.absentDays} يوم` : `إجازة ${item.leaveDays} يوم`);
+                const approved = item.hrApproved ? '✅ معتمد' : '';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.center ? item.center.name : 'غير محدد'}</td>
+                    <td>${item.emp.name} (${item.emp.empNo})</td>
+                    <td>${item.month}</td>
+                    <td>${item.absentDays}</td>
+                    <td>${item.leaveDays}</td>
+                    <td>${status} ${approved}</td>
+                    <td>${item.submittedBy || ''}</td>
+                    <td>
+                        ${!item.hrApproved ? `<button class="btn btn-sm btn-success" onclick="approveConfirmation('${item.key}')">اعتماد</button>` : 
+                        '<span class="badge bg-success">معتمد</span>'}
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            if (confirmationsList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted">لا توجد تأكيدات مقدمة لهذا الشهر</td></tr>`;
+            }
+        }
+
+        function approveConfirmation(key) {
+            if (confirmations[key]) {
+                confirmations[key].hrApproved = true;
+                loadHRData();
+            }
+        }
+
+        function approveAll() {
+            const filterMonth = document.getElementById('hrFilterMonth').value;
+            if (!filterMonth) return;
+            let count = 0;
+            for (const [key, conf] of Object.entries(confirmations)) {
+                const [empIdStr, month] = key.split('_');
+                if (month === filterMonth && conf.submitted && !conf.hrApproved) {
+                    conf.hrApproved = true;
+                    count++;
+                }
+            }
+            alert(`تم اعتماد ${count} تأكيد(ات).`);
+            loadHRData();
+        }
+
+        // ========== طباعة التقرير ==========
+        function printReport() {
+            const filterMonth = document.getElementById('hrFilterMonth').value;
+            if (!filterMonth) {
+                alert('اختر الشهر أولاً');
+                return;
+            }
+            // استنساخ الجدول للطباعة
+            const originalTable = document.getElementById('hrTable');
+            const printWindow = window.open('', '_blank', 'width=900,height=600');
+            printWindow.document.write(`
+                <html dir="rtl">
+                <head>
+                    <title>تقرير تأكيد الحضور - ${filterMonth}</title>
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+                    <style>
+                        body { padding: 20px; }
+                        table { width: 100%; }
+                        @media print {
+                            .no-print { display: none; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h3>تقرير تأكيدات الحضور لشهر ${filterMonth}</h3>
+                    <div>${originalTable.outerHTML}</div>
+                    <script>
+                        window.onload = function() { window.print(); setTimeout(function(){ window.close(); }, 200); }
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        // ========== تصدير ملف الرواتب (Excel) ==========
+        function exportSalaryFile() {
+            const filterMonth = document.getElementById('hrFilterMonth').value;
+            if (!filterMonth) {
+                alert('اختر الشهر أولاً');
+                return;
+            }
+
+            // جمع البيانات المقدمة للشهر المحدد
+            const rows = [];
+            for (const [key, conf] of Object.entries(confirmations)) {
+                if (!conf.submitted) continue;
+                const [empIdStr, month] = key.split('_');
+                if (month !== filterMonth) continue;
+                const empId = parseInt(empIdStr);
+                const emp = employees.find(e => e.id === empId);
+                if (!emp) continue;
+                const center = centers.find(c => c.id === emp.centerId);
+                rows.push({
+                    'الرقم الوظيفي': emp.empNo,
+                    'اسم الموظف': emp.name,
+                    'المسمى الوظيفي': emp.title,
+                    'المركز': center ? center.name : '',
+                    'الشهر': month,
+                    'أيام الغياب': conf.absentDays,
+                    'أيام الإجازة': conf.leaveDays,
+                    'الحساب البنكي': emp.bankAccount || 'غير متوفر',
+                    'اسم البنك': emp.bankName || 'غير متوفر',
+                    'ملاحظات': conf.remarks || ''
+                });
+            }
+
+            if (rows.length === 0) {
+                alert('لا توجد تأكيدات مقدمة لهذا الشهر لتصديرها');
+                return;
+            }
+
+            // إنشاء ملف Excel باستخدام SheetJS
+            const ws = XLSX.utils.json_to_sheet(rows);
+            // تحسين عرض الأعمدة (تقريبي)
+            ws['!cols'] = [
+                {wch: 15}, // الرقم الوظيفي
+                {wch: 25}, // اسم الموظف
+                {wch: 20}, // المسمى
+                {wch: 20}, // المركز
+                {wch: 10}, // الشهر
+                {wch: 12}, // الغياب
+                {wch: 12}, // الإجازات
+                {wch: 20}, // الحساب البنكي
+                {wch: 15}, // اسم البنك
+                {wch: 20}  // ملاحظات
+            ];
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'قائمة الرواتب');
+            XLSX.writeFile(wb, `تقرير_الرواتب_${filterMonth}.xlsx`);
+        }
+
+        // ========== التهيئة ==========
+        showPage('loginPage');
+    </script>
+</body>
+</html>
