@@ -12,13 +12,14 @@
         body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, sans-serif; }
         .header { background: linear-gradient(135deg, #1e6f5c, #289672); color: white; padding: 15px 0; }
         .card { border: none; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .status-badge { font-size: 0.9rem; }
         .btn-primary { background-color: #1e6f5c; border-color: #1e6f5c; }
         .btn-primary:hover { background-color: #145c4a; }
         .btn-export { background-color: #0d6efd; border-color: #0d6efd; color: white; }
         .btn-export:hover { background-color: #0b5ed7; }
         .btn-print { background-color: #6c757d; border-color: #6c757d; color: white; }
         .btn-print:hover { background-color: #5c636a; }
+        .btn-add { background-color: #198754; border-color: #198754; color: white; }
+        .btn-add:hover { background-color: #157347; }
         .hidden { display: none; }
         .fade-in { animation: fadeIn 0.4s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -30,6 +31,9 @@
                 display: none !important;
             }
         }
+        /* تبويبات الموارد البشرية */
+        .hr-tabs .nav-link { cursor: pointer; }
+        .hr-tabs .nav-link.active { background-color: #1e6f5c; color: white; border-color: #1e6f5c; }
     </style>
 </head>
 <body>
@@ -56,7 +60,6 @@
                     <div class="mb-3">
                         <label class="form-label">المركز / المعرف</label>
                         <select id="centerSelect" class="form-select hidden">
-                            <!-- ستملأ حسب الدور -->
                         </select>
                         <input type="text" id="hrIdInput" class="form-control hidden" placeholder="معرف المستخدم (مثلاً hr1)">
                     </div>
@@ -108,49 +111,160 @@
             </div>
         </div>
 
-        <!-- لوحة الموارد البشرية -->
+        <!-- لوحة الموارد البشرية (مع تبويبات) -->
         <div id="hrPage" class="hidden fade-in">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5>لوحة الموارد البشرية - تأكيدات المراكز</h5>
+                <h5>لوحة الموارد البشرية</h5>
                 <button class="btn btn-outline-danger btn-sm" onclick="logout()">تسجيل الخروج</button>
             </div>
-            <div class="card p-3">
-                <div class="row mb-3 align-items-end">
-                    <div class="col-md-3">
-                        <label>تصفية حسب الشهر</label>
-                        <input type="month" id="hrFilterMonth" class="form-control" onchange="loadHRData()">
-                    </div>
-                    <div class="col-md-3 mt-2 mt-md-0">
-                        <button class="btn btn-print w-100" onclick="printReport()">🖨️ طباعة التقرير</button>
-                    </div>
-                    <div class="col-md-3 mt-2 mt-md-0">
-                        <button class="btn btn-export w-100" onclick="exportSalaryFile()">📥 تصدير ملف الرواتب (Excel)</button>
-                    </div>
-                    <div class="col-md-3 mt-2 mt-md-0">
-                        <button class="btn btn-primary w-100" onclick="approveAll()">اعتماد جميع التأكيدات الظاهرة</button>
+
+            <!-- تبويبات الموارد البشرية -->
+            <ul class="nav nav-tabs hr-tabs mb-3" id="hrTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="confirmations-tab" data-bs-toggle="tab" data-bs-target="#confirmations-pane" type="button" role="tab">تأكيدات الحضور</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="employees-tab" data-bs-toggle="tab" data-bs-target="#employees-pane" type="button" role="tab">إدارة الموظفين</button>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <!-- لوحة تأكيدات الحضور -->
+                <div class="tab-pane fade show active" id="confirmations-pane" role="tabpanel">
+                    <div class="card p-3">
+                        <div class="row mb-3 align-items-end">
+                            <div class="col-md-3">
+                                <label>تصفية حسب الشهر</label>
+                                <input type="month" id="hrFilterMonth" class="form-control" onchange="loadHRData()">
+                            </div>
+                            <div class="col-md-3 mt-2 mt-md-0">
+                                <button class="btn btn-print w-100" onclick="printReport()">🖨️ طباعة التقرير</button>
+                            </div>
+                            <div class="col-md-3 mt-2 mt-md-0">
+                                <button class="btn btn-export w-100" onclick="exportSalaryFile()">📥 تصدير ملف الرواتب (Excel)</button>
+                            </div>
+                            <div class="col-md-3 mt-2 mt-md-0">
+                                <button class="btn btn-primary w-100" onclick="approveAll()">اعتماد جميع التأكيدات الظاهرة</button>
+                            </div>
+                        </div>
+                        <div id="printArea">
+                            <table class="table table-striped table-bordered" id="hrTable">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>المركز</th>
+                                        <th>الموظف</th>
+                                        <th>الشهر</th>
+                                        <th>الغياب</th>
+                                        <th>الإجازات</th>
+                                        <th>الحالة</th>
+                                        <th>موثق من</th>
+                                        <th>اعتماد</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="hrTableBody"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                <!-- جدول التأكيدات (يستخدم للطباعة والتصدير) -->
-                <div id="printArea">
-                    <table class="table table-striped table-bordered" id="hrTable">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>المركز</th>
-                                <th>الموظف</th>
-                                <th>الشهر</th>
-                                <th>الغياب</th>
-                                <th>الإجازات</th>
-                                <th>الحالة</th>
-                                <th>موثق من</th>
-                                <th>اعتماد</th>
-                            </tr>
-                        </thead>
-                        <tbody id="hrTableBody"></tbody>
-                    </table>
+
+                <!-- لوحة إدارة الموظفين -->
+                <div class="tab-pane fade" id="employees-pane" role="tabpanel">
+                    <div class="card p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">قائمة الموظفين</h5>
+                            <button class="btn btn-add" onclick="showAddEmployeeModal()">+ إضافة موظف جديد</button>
+                        </div>
+                        <table class="table table-striped table-bordered" id="employeesTable">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>الرقم الوظيفي</th>
+                                    <th>الاسم</th>
+                                    <th>المسمى</th>
+                                    <th>المركز</th>
+                                    <th>الحساب البنكي</th>
+                                    <th>البنك</th>
+                                    <th>إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeesTableBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- مودال إضافة/تعديل موظف -->
+    <div class="modal fade" id="employeeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="employeeModalTitle">إضافة موظف جديد</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editEmpId">
+                    <div class="mb-3">
+                        <label class="form-label">الرقم الوظيفي</label>
+                        <input type="text" id="empNo" class="form-control" placeholder="مثلاً 1234">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">الاسم الكامل</label>
+                        <input type="text" id="empName" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">المسمى الوظيفي</label>
+                        <input type="text" id="empTitle" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">المركز</label>
+                        <select id="empCenter" class="form-select">
+                            <!-- تملأ برمجياً -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">رقم الحساب البنكي</label>
+                        <input type="text" id="empBankAccount" class="form-control" placeholder="SA...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">اسم البنك</label>
+                        <input type="text" id="empBankName" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="saveEmployeeBtn" onclick="saveEmployee()">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- مودال نقل موظف -->
+    <div class="modal fade" id="transferModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title">نقل موظف</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="transferEmpId">
+                    <p>الموظف: <strong id="transferEmpName"></strong></p>
+                    <div class="mb-3">
+                        <label class="form-label">المركز الجديد</label>
+                        <select id="transferNewCenter" class="form-select"></select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-warning" onclick="transferEmployee()">تأكيد النقل</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (لعمل المودال والتبويبات) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         // ========== البيانات التجريبية ==========
@@ -159,13 +273,17 @@
             { id: 'center2', name: 'مركز صحي الروضة' }
         ];
 
-        const employees = [
+        // الموظفون (معرف فريد لكل موظف)
+        let employees = [
             { id: 1, empNo: '1025', name: 'سلمى محمد', title: 'ممرضة', centerId: 'center1', bankAccount: 'SA1234567890', bankName: 'بنك الرياض' },
             { id: 2, empNo: '1088', name: 'خالد فهد', title: 'فني مختبر', centerId: 'center1', bankAccount: 'SA0987654321', bankName: 'البنك الأهلي' },
             { id: 3, empNo: '1102', name: 'هند عبدالله', title: 'طبيب عام', centerId: 'center1', bankAccount: 'SA1122334455', bankName: 'مصرف الراجحي' },
             { id: 4, empNo: '2045', name: 'أحمد سالم', title: 'صيدلي', centerId: 'center2', bankAccount: 'SA5566778899', bankName: 'بنك الرياض' },
             { id: 5, empNo: '2077', name: 'نورة علي', title: 'ممرضة', centerId: 'center2', bankAccount: 'SA9988776655', bankName: 'البنك الأهلي' }
         ];
+
+        // العداد التلقائي لمعرف الموظف الجديد
+        let nextEmployeeId = 6; // لأن آخر id كان 5
 
         // قاعدة بيانات التأكيدات الشهرية: مفتاح "empId_month"
         let confirmations = {};
@@ -244,6 +362,10 @@
                 showPage('hrPage');
                 document.getElementById('hrFilterMonth').value = getDefaultMonth();
                 loadHRData();
+                // تفعيل التبويب الأول افتراضياً
+                document.getElementById('confirmations-tab').click();
+                // تحضير قائمة الموظفين
+                loadEmployeesTable();
             }
         }
 
@@ -253,7 +375,7 @@
             showPage('loginPage');
         }
 
-        // ========== مدير المركز ==========
+        // ========== مدير المركز (لم يتغير) ==========
         function loadManagerData() {
             const centerId = currentUser.centerId;
             const month = document.getElementById('confirmMonth').value;
@@ -325,7 +447,7 @@
             loadManagerData();
         }
 
-        // ========== الموارد البشرية ==========
+        // ========== تأكيدات الحضور للموارد البشرية (لم يتغير) ==========
         function loadHRData() {
             const filterMonth = document.getElementById('hrFilterMonth').value;
             if (!filterMonth) return;
@@ -393,14 +515,12 @@
             loadHRData();
         }
 
-        // ========== طباعة التقرير ==========
         function printReport() {
             const filterMonth = document.getElementById('hrFilterMonth').value;
             if (!filterMonth) {
                 alert('اختر الشهر أولاً');
                 return;
             }
-            // استنساخ الجدول للطباعة
             const originalTable = document.getElementById('hrTable');
             const printWindow = window.open('', '_blank', 'width=900,height=600');
             printWindow.document.write(`
@@ -428,15 +548,12 @@
             printWindow.document.close();
         }
 
-        // ========== تصدير ملف الرواتب (Excel) ==========
         function exportSalaryFile() {
             const filterMonth = document.getElementById('hrFilterMonth').value;
             if (!filterMonth) {
                 alert('اختر الشهر أولاً');
                 return;
             }
-
-            // جمع البيانات المقدمة للشهر المحدد
             const rows = [];
             for (const [key, conf] of Object.entries(confirmations)) {
                 if (!conf.submitted) continue;
@@ -459,30 +576,175 @@
                     'ملاحظات': conf.remarks || ''
                 });
             }
-
             if (rows.length === 0) {
                 alert('لا توجد تأكيدات مقدمة لهذا الشهر لتصديرها');
                 return;
             }
-
-            // إنشاء ملف Excel باستخدام SheetJS
             const ws = XLSX.utils.json_to_sheet(rows);
-            // تحسين عرض الأعمدة (تقريبي)
             ws['!cols'] = [
-                {wch: 15}, // الرقم الوظيفي
-                {wch: 25}, // اسم الموظف
-                {wch: 20}, // المسمى
-                {wch: 20}, // المركز
-                {wch: 10}, // الشهر
-                {wch: 12}, // الغياب
-                {wch: 12}, // الإجازات
-                {wch: 20}, // الحساب البنكي
-                {wch: 15}, // اسم البنك
-                {wch: 20}  // ملاحظات
+                {wch: 15}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 10}, {wch: 12}, {wch: 12}, {wch: 20}, {wch: 15}, {wch: 20}
             ];
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'قائمة الرواتب');
             XLSX.writeFile(wb, `تقرير_الرواتب_${filterMonth}.xlsx`);
+        }
+
+        // ========== إدارة الموظفين (الموارد البشرية) ==========
+        function loadEmployeesTable() {
+            const tbody = document.getElementById('employeesTableBody');
+            tbody.innerHTML = '';
+            employees.forEach(emp => {
+                const center = centers.find(c => c.id === emp.centerId);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${emp.empNo}</td>
+                    <td>${emp.name}</td>
+                    <td>${emp.title}</td>
+                    <td>${center ? center.name : 'غير محدد'}</td>
+                    <td>${emp.bankAccount || ''}</td>
+                    <td>${emp.bankName || ''}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editEmployee(${emp.id})">✏️ تعديل</button>
+                        <button class="btn btn-sm btn-outline-warning" onclick="showTransferModal(${emp.id})">🚚 نقل</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // فتح المودال لإضافة موظف
+        function showAddEmployeeModal() {
+            document.getElementById('employeeModalTitle').textContent = 'إضافة موظف جديد';
+            document.getElementById('editEmpId').value = '';
+            document.getElementById('empNo').value = '';
+            document.getElementById('empName').value = '';
+            document.getElementById('empTitle').value = '';
+            document.getElementById('empBankAccount').value = '';
+            document.getElementById('empBankName').value = '';
+            // تعبئة قائمة المراكز
+            const centerSelect = document.getElementById('empCenter');
+            centerSelect.innerHTML = '';
+            centers.forEach(c => {
+                centerSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+            });
+            const modal = new bootstrap.Modal(document.getElementById('employeeModal'));
+            modal.show();
+        }
+
+        // فتح المودال لتعديل موظف
+        function editEmployee(empId) {
+            const emp = employees.find(e => e.id === empId);
+            if (!emp) return;
+            document.getElementById('employeeModalTitle').textContent = 'تعديل بيانات الموظف';
+            document.getElementById('editEmpId').value = emp.id;
+            document.getElementById('empNo').value = emp.empNo;
+            document.getElementById('empName').value = emp.name;
+            document.getElementById('empTitle').value = emp.title;
+            document.getElementById('empBankAccount').value = emp.bankAccount;
+            document.getElementById('empBankName').value = emp.bankName;
+            // قائمة المراكز واختيار مركزه الحالي
+            const centerSelect = document.getElementById('empCenter');
+            centerSelect.innerHTML = '';
+            centers.forEach(c => {
+                centerSelect.innerHTML += `<option value="${c.id}" ${c.id === emp.centerId ? 'selected' : ''}>${c.name}</option>`;
+            });
+            const modal = new bootstrap.Modal(document.getElementById('employeeModal'));
+            modal.show();
+        }
+
+        // حفظ الموظف (إضافة أو تعديل)
+        function saveEmployee() {
+            const editId = document.getElementById('editEmpId').value;
+            const empNo = document.getElementById('empNo').value.trim();
+            const name = document.getElementById('empName').value.trim();
+            const title = document.getElementById('empTitle').value.trim();
+            const centerId = document.getElementById('empCenter').value;
+            const bankAccount = document.getElementById('empBankAccount').value.trim();
+            const bankName = document.getElementById('empBankName').value.trim();
+
+            if (!empNo || !name || !title || !centerId) {
+                alert('الرجاء ملء جميع الحقول المطلوبة');
+                return;
+            }
+
+            if (!editId) {
+                // إضافة جديد - التأكد من عدم تكرار الرقم الوظيفي
+                if (employees.some(e => e.empNo === empNo)) {
+                    alert('الرقم الوظيفي موجود مسبقاً');
+                    return;
+                }
+                const newEmp = {
+                    id: nextEmployeeId++,
+                    empNo,
+                    name,
+                    title,
+                    centerId,
+                    bankAccount,
+                    bankName
+                };
+                employees.push(newEmp);
+                alert('تمت إضافة الموظف بنجاح');
+            } else {
+                // تعديل
+                const empId = parseInt(editId);
+                const emp = employees.find(e => e.id === empId);
+                if (!emp) return;
+                // التأكد من الرقم الوظيفي غير مكرر (إلا إذا كان نفس الموظف)
+                if (employees.some(e => e.empNo === empNo && e.id !== empId)) {
+                    alert('الرقم الوظيفي مستخدم من قبل موظف آخر');
+                    return;
+                }
+                emp.empNo = empNo;
+                emp.name = name;
+                emp.title = title;
+                emp.centerId = centerId;
+                emp.bankAccount = bankAccount;
+                emp.bankName = bankName;
+                alert('تم تعديل بيانات الموظف بنجاح');
+            }
+
+            // إغلاق المودال وتحديث الجدول
+            const modal = bootstrap.Modal.getInstance(document.getElementById('employeeModal'));
+            modal.hide();
+            loadEmployeesTable();
+
+            // إذا كان مدير مركز مسجلاً حالياً، نعيد تحميل بياناته (إذا كان يستخدم النظام في الخلفية)
+            if (currentRole === 'center_manager') {
+                loadManagerData();
+            }
+        }
+
+        // نقل موظف
+        function showTransferModal(empId) {
+            const emp = employees.find(e => e.id === empId);
+            if (!emp) return;
+            document.getElementById('transferEmpId').value = empId;
+            document.getElementById('transferEmpName').textContent = emp.name + ' (' + emp.empNo + ')';
+            const newCenterSelect = document.getElementById('transferNewCenter');
+            newCenterSelect.innerHTML = '';
+            centers.forEach(c => {
+                newCenterSelect.innerHTML += `<option value="${c.id}" ${c.id === emp.centerId ? 'selected' : ''}>${c.name}</option>`;
+            });
+            const modal = new bootstrap.Modal(document.getElementById('transferModal'));
+            modal.show();
+        }
+
+        function transferEmployee() {
+            const empId = parseInt(document.getElementById('transferEmpId').value);
+            const newCenterId = document.getElementById('transferNewCenter').value;
+            const emp = employees.find(e => e.id === empId);
+            if (!emp) return;
+            if (emp.centerId === newCenterId) {
+                alert('الموظف موجود مسبقاً في هذا المركز');
+                return;
+            }
+            emp.centerId = newCenterId;
+            alert(`تم نقل الموظف ${emp.name} إلى المركز الجديد بنجاح`);
+            bootstrap.Modal.getInstance(document.getElementById('transferModal')).hide();
+            loadEmployeesTable();
+            if (currentRole === 'center_manager') {
+                loadManagerData();
+            }
         }
 
         // ========== التهيئة ==========
