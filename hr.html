@@ -33,7 +33,6 @@
         }
         .hr-tabs .nav-link { cursor: pointer; }
         .hr-tabs .nav-link.active { background-color: #1e6f5c; color: white; border-color: #1e6f5c; }
-        .user-role-select { display: none; }
     </style>
 </head>
 <body>
@@ -128,6 +127,10 @@
                 <li class="nav-item hidden" id="users-tab-item" role="presentation">
                     <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users-pane" type="button" role="tab">إدارة المستخدمين</button>
                 </li>
+                <!-- تبويب إدارة المراكز - يظهر فقط للمدير النظام -->
+                <li class="nav-item hidden" id="centers-tab-item" role="presentation">
+                    <button class="nav-link" id="centers-tab" data-bs-toggle="tab" data-bs-target="#centers-pane" type="button" role="tab">إدارة المراكز</button>
+                </li>
             </ul>
 
             <div class="tab-content">
@@ -212,6 +215,27 @@
                                 </tr>
                             </thead>
                             <tbody id="usersTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- لوحة إدارة المراكز (خاصة بالمدير النظام) -->
+                <div class="tab-pane fade" id="centers-pane" role="tabpanel">
+                    <div class="card p-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">قائمة المراكز الصحية والمستشفيات</h5>
+                            <button class="btn btn-add" onclick="showAddCenterModal()">+ إضافة مركز جديد</button>
+                        </div>
+                        <table class="table table-striped table-bordered" id="centersTable">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>معرف المركز</th>
+                                    <th>اسم المركز</th>
+                                    <th>عدد الموظفين</th>
+                                    <th>إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="centersTableBody"></tbody>
                         </table>
                     </div>
                 </div>
@@ -333,12 +357,39 @@
         </div>
     </div>
 
+    <!-- مودال إضافة/تعديل مركز (جديد) -->
+    <div class="modal fade" id="centerModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="centerModalTitle">إضافة مركز جديد</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editCenterId">
+                    <div class="mb-3">
+                        <label class="form-label">معرف المركز <span class="text-muted small">(مثل center3)</span></label>
+                        <input type="text" id="centerIdInput" class="form-control" placeholder="أدخل معرفاً فريداً">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">اسم المركز</label>
+                        <input type="text" id="centerNameInput" class="form-control" placeholder="مثل مستشفى الملك فهد">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" onclick="saveCenter()">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // ========== البيانات التجريبية ==========
-        const centers = [
+        // ========== البيانات التجريبية (متغيرات قابلة للتعديل) ==========
+        let centers = [
             { id: 'center1', name: 'مركز صحي النزهة' },
             { id: 'center2', name: 'مركز صحي الروضة' }
         ];
@@ -357,14 +408,14 @@
         // قاعدة بيانات التأكيدات الشهرية
         let confirmations = {};
 
-        // ========== نظام المستخدمين مع كلمات مرور وأدوار ==========
+        // ========== نظام المستخدمين ==========
         let usersList = [
             { id: 1, username: 'admin', password: 'admin', role: 'admin', name: 'مدير النظام', centerId: null },
             { id: 2, username: 'hr1', password: 'hr123', role: 'hr_officer', name: 'موظف موارد بشرية', centerId: null },
             { id: 3, username: 'manager1', password: 'manager123', role: 'center_manager', name: 'مدير مركز النزهة', centerId: 'center1' },
             { id: 4, username: 'manager2', password: 'manager123', role: 'center_manager', name: 'مدير مركز الروضة', centerId: 'center2' }
         ];
-        let nextUserId = 5; // لإنشاء معرّفات جديدة تلقائياً
+        let nextUserId = 5;
 
         // الحالة الحالية
         let currentUser = null;
@@ -391,7 +442,7 @@
             }
         }
 
-        // ========== تسجيل الدخول (معدل بالكامل) ==========
+        // ========== تسجيل الدخول ==========
         function login() {
             const username = document.getElementById('usernameInput').value.trim();
             const password = document.getElementById('passwordInput').value.trim();
@@ -407,11 +458,11 @@
                 return;
             }
 
-            currentUser = { ...user }; // نسخة من بيانات المستخدم
+            currentUser = { ...user };
 
             if (currentUser.role === 'center_manager') {
-                if (!currentUser.centerId) {
-                    alert('هذا الحساب غير مرتبط بمركز صحي، راجع مدير النظام');
+                if (!currentUser.centerId || !centers.some(c => c.id === currentUser.centerId)) {
+                    alert('هذا الحساب غير مرتبط بمركز صحي صالح، راجع مدير النظام');
                     return;
                 }
                 showPage('managerPage');
@@ -422,21 +473,22 @@
                 loadManagerData();
             } else if (currentUser.role === 'hr_officer' || currentUser.role === 'admin') {
                 showPage('hrPage');
-                // تخصيص العنوان حسب الدور
                 document.getElementById('hrRoleTitle').textContent = currentUser.role === 'admin' ? 'مدير النظام' : 'الموارد البشرية';
                 document.getElementById('hrFilterMonth').value = getDefaultMonth();
                 loadHRData();
                 loadEmployeesTable();
-                // إظهار تبويب إدارة المستخدمين للمدير النظام فقط
+                
                 const usersTabItem = document.getElementById('users-tab-item');
+                const centersTabItem = document.getElementById('centers-tab-item');
                 if (currentUser.role === 'admin') {
                     usersTabItem.classList.remove('hidden');
-                    // تفعيل التبويب الأول افتراضياً (تأكيدات الحضور)
+                    centersTabItem.classList.remove('hidden');
                     document.getElementById('confirmations-tab').click();
-                    // تحميل جدول المستخدمين عند الضغط على التبويب لاحقاً
                     loadUsersTable();
+                    loadCentersTable();
                 } else {
                     usersTabItem.classList.add('hidden');
+                    centersTabItem.classList.add('hidden');
                     document.getElementById('confirmations-tab').click();
                 }
             }
@@ -661,7 +713,14 @@
             XLSX.writeFile(wb, `تقرير_الرواتب_${filterMonth}.xlsx`);
         }
 
-        // ========== إدارة الموظفين (كما هي) ==========
+        // ========== إدارة الموظفين ==========
+        function populateCenterSelect(selectElement, selectedId = null) {
+            selectElement.innerHTML = '';
+            centers.forEach(c => {
+                selectElement.innerHTML += `<option value="${c.id}" ${c.id === selectedId ? 'selected' : ''}>${c.name}</option>`;
+            });
+        }
+
         function loadEmployeesTable() {
             const tbody = document.getElementById('employeesTableBody');
             tbody.innerHTML = '';
@@ -692,11 +751,7 @@
             document.getElementById('empTitle').value = '';
             document.getElementById('empBankAccount').value = '';
             document.getElementById('empBankName').value = '';
-            const centerSelect = document.getElementById('empCenter');
-            centerSelect.innerHTML = '';
-            centers.forEach(c => {
-                centerSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`;
-            });
+            populateCenterSelect(document.getElementById('empCenter'));
             const modal = new bootstrap.Modal(document.getElementById('employeeModal'));
             modal.show();
         }
@@ -711,11 +766,7 @@
             document.getElementById('empTitle').value = emp.title;
             document.getElementById('empBankAccount').value = emp.bankAccount;
             document.getElementById('empBankName').value = emp.bankName;
-            const centerSelect = document.getElementById('empCenter');
-            centerSelect.innerHTML = '';
-            centers.forEach(c => {
-                centerSelect.innerHTML += `<option value="${c.id}" ${c.id === emp.centerId ? 'selected' : ''}>${c.name}</option>`;
-            });
+            populateCenterSelect(document.getElementById('empCenter'), emp.centerId);
             const modal = new bootstrap.Modal(document.getElementById('employeeModal'));
             modal.show();
         }
@@ -767,8 +818,7 @@
                 alert('تم تعديل بيانات الموظف بنجاح');
             }
 
-            const modal = bootstrap.Modal.getInstance(document.getElementById('employeeModal'));
-            modal.hide();
+            bootstrap.Modal.getInstance(document.getElementById('employeeModal')).hide();
             loadEmployeesTable();
             if (currentUser && currentUser.role === 'center_manager') {
                 loadManagerData();
@@ -781,10 +831,7 @@
             document.getElementById('transferEmpId').value = empId;
             document.getElementById('transferEmpName').textContent = emp.name + ' (' + emp.empNo + ')';
             const newCenterSelect = document.getElementById('transferNewCenter');
-            newCenterSelect.innerHTML = '';
-            centers.forEach(c => {
-                newCenterSelect.innerHTML += `<option value="${c.id}" ${c.id === emp.centerId ? 'selected' : ''}>${c.name}</option>`;
-            });
+            populateCenterSelect(newCenterSelect, emp.centerId);
             const modal = new bootstrap.Modal(document.getElementById('transferModal'));
             modal.show();
         }
@@ -807,22 +854,20 @@
             }
         }
 
-        // ========== إدارة المستخدمين (جديد) ==========
+        // ========== إدارة المستخدمين ==========
         function loadUsersTable() {
             const tbody = document.getElementById('usersTableBody');
-            if (!tbody) return; // حماية إذا لم يفتح التبويب بعد
+            if (!tbody) return;
             tbody.innerHTML = '';
             usersList.forEach(user => {
                 const centerName = user.centerId ? (centers.find(c => c.id === user.centerId)?.name || '') : '—';
-                // إخفاء كلمة المرور الحقيقية في العرض
-                const passwordDisplay = '••••••';
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${user.username}</td>
                     <td>${user.name}</td>
                     <td>${getRoleArabic(user.role)}</td>
                     <td>${centerName}</td>
-                    <td>${passwordDisplay}</td>
+                    <td>••••••</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary me-1" onclick="editUser(${user.id})">✏️ تعديل</button>
                         <button class="btn btn-sm btn-outline-danger" onclick="deleteUser(${user.id})">🗑️ حذف</button>
@@ -846,11 +891,11 @@
             document.getElementById('editUserId').value = '';
             document.getElementById('userUsername').value = '';
             document.getElementById('userFullName').value = '';
-            document.getElementById('userRole').value = 'center_manager'; // افتراضي
+            document.getElementById('userRole').value = 'center_manager';
             document.getElementById('userPassword').value = '';
             document.getElementById('passwordHint').textContent = '(مطلوبة)';
-            toggleCenterForUser(); // إظهار/إخفاء المركز
-            populateUserCenters();
+            toggleCenterForUser();
+            populateCenterSelect(document.getElementById('userCenter'));
             const modal = new bootstrap.Modal(document.getElementById('userModal'));
             modal.show();
         }
@@ -863,10 +908,10 @@
             document.getElementById('userUsername').value = user.username;
             document.getElementById('userFullName').value = user.name;
             document.getElementById('userRole').value = user.role;
-            document.getElementById('userPassword').value = ''; // لا نعرض كلمة المرور القديمة
+            document.getElementById('userPassword').value = '';
             document.getElementById('passwordHint').textContent = '(اتركها فارغة لعدم التغيير)';
             toggleCenterForUser();
-            populateUserCenters(user.centerId);
+            populateCenterSelect(document.getElementById('userCenter'), user.centerId);
             const modal = new bootstrap.Modal(document.getElementById('userModal'));
             modal.show();
         }
@@ -875,14 +920,6 @@
             const role = document.getElementById('userRole').value;
             const group = document.getElementById('userCenterGroup');
             group.style.display = (role === 'center_manager') ? 'block' : 'none';
-        }
-
-        function populateUserCenters(selectedCenterId = null) {
-            const select = document.getElementById('userCenter');
-            select.innerHTML = '';
-            centers.forEach(c => {
-                select.innerHTML += `<option value="${c.id}" ${c.id === selectedCenterId ? 'selected' : ''}>${c.name}</option>`;
-            });
         }
 
         function saveUser() {
@@ -898,10 +935,8 @@
                 return;
             }
 
-            // تحقق من عدم تكرار اسم المستخدم (إلا إذا كان نفس المستخدم في وضع التعديل)
             const existingUser = usersList.find(u => u.username === username);
             if (editId) {
-                // تعديل
                 if (existingUser && existingUser.id !== parseInt(editId)) {
                     alert('اسم المستخدم موجود مسبقاً');
                     return;
@@ -918,7 +953,6 @@
                 }
                 alert('تم تعديل بيانات المستخدم بنجاح');
             } else {
-                // إضافة جديد
                 if (existingUser) {
                     alert('اسم المستخدم موجود مسبقاً');
                     return;
@@ -942,7 +976,6 @@
             bootstrap.Modal.getInstance(document.getElementById('userModal')).hide();
             loadUsersTable();
 
-            // إذا تم تعديل بيانات المستخدم الحالي، حدث الجلسة
             if (currentUser && currentUser.id === parseInt(editId)) {
                 currentUser.username = username;
                 currentUser.name = fullName;
@@ -953,7 +986,6 @@
         }
 
         function deleteUser(userId) {
-            // لا يمكن حذف المستخدم الحالي
             if (currentUser && currentUser.id === userId) {
                 alert('لا يمكنك حذف حسابك الحالي');
                 return;
@@ -961,6 +993,103 @@
             if (!confirm('هل أنت متأكد من حذف هذا المستخدم؟')) return;
             usersList = usersList.filter(u => u.id !== userId);
             loadUsersTable();
+        }
+
+        // ========== إدارة المراكز (جديد) ==========
+        function loadCentersTable() {
+            const tbody = document.getElementById('centersTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            centers.forEach(center => {
+                const empCount = employees.filter(e => e.centerId === center.id).length;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${center.id}</td>
+                    <td>${center.name}</td>
+                    <td>${empCount}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editCenter('${center.id}')">✏️ تعديل</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteCenter('${center.id}')">🗑️ حذف</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function showAddCenterModal() {
+            document.getElementById('centerModalTitle').textContent = 'إضافة مركز جديد';
+            document.getElementById('editCenterId').value = '';
+            document.getElementById('centerIdInput').value = '';
+            document.getElementById('centerNameInput').value = '';
+            document.getElementById('centerIdInput').disabled = false; // يمكن تغيير المعرف في حالة الإضافة
+            const modal = new bootstrap.Modal(document.getElementById('centerModal'));
+            modal.show();
+        }
+
+        function editCenter(centerId) {
+            const center = centers.find(c => c.id === centerId);
+            if (!center) return;
+            document.getElementById('centerModalTitle').textContent = 'تعديل بيانات المركز';
+            document.getElementById('editCenterId').value = center.id; // المركز القديم
+            document.getElementById('centerIdInput').value = center.id;
+            document.getElementById('centerIdInput').disabled = true; // لا يسمح بتغيير المعرف أثناء التعديل لتفادي تعطيل العلاقات
+            document.getElementById('centerNameInput').value = center.name;
+            const modal = new bootstrap.Modal(document.getElementById('centerModal'));
+            modal.show();
+        }
+
+        function saveCenter() {
+            const editId = document.getElementById('editCenterId').value;
+            const centerIdInput = document.getElementById('centerIdInput').value.trim();
+            const centerName = document.getElementById('centerNameInput').value.trim();
+
+            if (!centerIdInput || !centerName) {
+                alert('الرجاء إدخال معرف المركز واسمه');
+                return;
+            }
+
+            if (!editId) {
+                // إضافة جديد
+                if (centers.some(c => c.id === centerIdInput)) {
+                    alert('معرف المركز موجود مسبقاً، اختر معرفاً آخر');
+                    return;
+                }
+                centers.push({ id: centerIdInput, name: centerName });
+                alert('تمت إضافة المركز بنجاح');
+            } else {
+                // تعديل (معرف المركز لا يتغير)
+                const center = centers.find(c => c.id === editId);
+                if (!center) return;
+                center.name = centerName;
+                alert('تم تعديل المركز بنجاح');
+            }
+
+            bootstrap.Modal.getInstance(document.getElementById('centerModal')).hide();
+            loadCentersTable();
+            // تحديث أي قوائم منسدلة قد تكون مفتوحة حالياً (مثل الموظفين أو المستخدمين)
+            // كما نعيد تحميل بيانات الموظفين والمستخدمين إذا كانت مفتوحة
+            if (currentUser && currentUser.role === 'admin') {
+                loadEmployeesTable();
+                loadUsersTable();
+            }
+        }
+
+        function deleteCenter(centerId) {
+            // تحقق مما إذا كان هناك موظفون أو مستخدمون مرتبطون بهذا المركز
+            const empCount = employees.filter(e => e.centerId === centerId).length;
+            const userCount = usersList.filter(u => u.centerId === centerId).length;
+            if (empCount > 0 || userCount > 0) {
+                alert(`لا يمكن حذف المركز لأنه مرتبط بـ ${empCount} موظف و ${userCount} مستخدم. قم بنقلهم أولاً.`);
+                return;
+            }
+            if (!confirm(`هل أنت متأكد من حذف المركز "${centers.find(c=>c.id===centerId)?.name}"؟`)) return;
+            centers = centers.filter(c => c.id !== centerId);
+            loadCentersTable();
+            // إذا تم حذف مركز وحالياً مدير مسجل الدخول مركزه قد حذف، نسجل خروج
+            if (currentUser && currentUser.role === 'center_manager' && currentUser.centerId === centerId) {
+                alert('تم حذف مركزك، سيتم تسجيل الخروج.');
+                logout();
+            }
         }
 
         // ========== التهيئة ==========
