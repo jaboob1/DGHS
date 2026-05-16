@@ -155,34 +155,25 @@
             }
         }
 
-      async function apiPost(data) {
-    try {
-        const res = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...data, user: currentUser ? currentUser.name : 'مجهول' })
-        });
-        // قراءة الرد كنص أولاً لفحصه
-        const rawText = await res.text();
-        if (!res.ok) {
-            alert(`خطأ من السيرفر (${res.status}):\n${rawText}`);
-            return { success: false };
-        }
-        try {
-            const result = JSON.parse(rawText);
-            if (!result.success) {
-                alert('فشلت العملية: ' + (result.message || 'خطأ غير معروف'));
+        async function apiPost(data) {
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...data, user: currentUser ? currentUser.name : 'مجهول' })
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const result = await res.json();
+                if (!result.success) {
+                    alert('فشلت العملية: ' + (result.message || 'خطأ غير معروف'));
+                }
+                return result;
+            } catch (err) {
+                console.error('Error posting:', err);
+                alert('فشل الاتصال بقاعدة البيانات. تأكد من اتصالك بالإنترنت.');
+                return { success: false };
             }
-            return result;
-        } catch {
-            alert('الرد ليس JSON صحيح:\n' + rawText);
-            return { success: false };
         }
-    } catch (err) {
-        alert('فشل الاتصال تماماً:\n' + err.message);
-        return { success: false };
-    }
-}
 
         // ================== تحميل البيانات ==================
         async function loadAllData() {
