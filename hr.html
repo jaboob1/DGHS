@@ -594,7 +594,7 @@
             }
 
             confirmationsList.forEach(item => {
-                const status = (item.absentDays === 0 && item.leaveDays === 0) ? 'حاضر كامل' : 
+                const status = (item.absentDays === 0 && item.leaveDays === 0) ? 'على رأس العمل' : 
                                (item.absentDays > 0 ? `غياب ${item.absentDays} يوم` : `إجازة ${item.leaveDays} يوم`);
                 const approved = item.hrApproved ? '✅ معتمد' : '';
                 const row = document.createElement('tr');
