@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -8,8 +10,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <!-- مكتبة SheetJS لتصدير Excel -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, sans-serif; }
         .header { background: linear-gradient(135deg, #1e6f5c, #289672); color: white; padding: 15px 0; }
@@ -38,14 +38,14 @@
     </style>
 </head>
 <body>
-    <!-- الشريط العلوي -->
+    <!-- شريط علوي -->
     <div class="header text-center mb-4">
         <h4 class="mb-0">وزارة الصحة - نظام متابعة رواتب موظفي العقود الخاصة </h4>
     </div>
 
     <!-- محتوى الصفحة -->
     <div class="container" id="app">
-        <!-- شاشة تسجيل الدخول -->
+        <!-- شاشة تسجيل الدخول (معدلة مع كلمة مرور) -->
         <div id="loginPage" class="row justify-content-center fade-in">
             <div class="col-md-5">
                 <div class="card p-4">
@@ -70,7 +70,7 @@
             </div>
         </div>
 
-        <!-- لوحة مدير المركز -->
+        <!-- لوحة مدير المركز (لم تتغير كثيراً) -->
         <div id="managerPage" class="hidden fade-in">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5>مرحباً، <span id="managerName"></span></h5>
@@ -110,7 +110,7 @@
             </div>
         </div>
 
-        <!-- لوحة الموارد البشرية / مدير النظام -->
+        <!-- لوحة الموارد البشرية / لوحة التحكم (مع تبويبات إضافية للمدير النظام) -->
         <div id="hrPage" class="hidden fade-in">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5>لوحة <span id="hrRoleTitle">الموارد البشرية</span></h5>
@@ -125,16 +125,18 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="employees-tab" data-bs-toggle="tab" data-bs-target="#employees-pane" type="button" role="tab">إدارة الموظفين</button>
                 </li>
+                <!-- تبويب إدارة المستخدمين - يظهر فقط للمدير النظام -->
                 <li class="nav-item hidden" id="users-tab-item" role="presentation">
                     <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users-pane" type="button" role="tab">إدارة المستخدمين</button>
                 </li>
+                <!-- تبويب إدارة المراكز - يظهر فقط للمدير النظام -->
                 <li class="nav-item hidden" id="centers-tab-item" role="presentation">
                     <button class="nav-link" id="centers-tab" data-bs-toggle="tab" data-bs-target="#centers-pane" type="button" role="tab">إدارة المراكز</button>
                 </li>
             </ul>
 
             <div class="tab-content">
-                <!-- تأكيدات الحضور -->
+                <!-- لوحة تأكيدات الحضور -->
                 <div class="tab-pane fade show active" id="confirmations-pane" role="tabpanel">
                     <div class="card p-3">
                         <div class="row mb-3 align-items-end">
@@ -172,7 +174,7 @@
                     </div>
                 </div>
 
-                <!-- إدارة الموظفين -->
+                <!-- لوحة إدارة الموظفين -->
                 <div class="tab-pane fade" id="employees-pane" role="tabpanel">
                     <div class="card p-3">
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -196,7 +198,7 @@
                     </div>
                 </div>
 
-                <!-- إدارة المستخدمين -->
+                <!-- لوحة إدارة المستخدمين (خاصة بالمدير النظام) -->
                 <div class="tab-pane fade" id="users-pane" role="tabpanel">
                     <div class="card p-3">
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -219,7 +221,7 @@
                     </div>
                 </div>
 
-                <!-- إدارة المراكز -->
+                <!-- لوحة إدارة المراكز (خاصة بالمدير النظام) -->
                 <div class="tab-pane fade" id="centers-pane" role="tabpanel">
                     <div class="card p-3">
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -243,37 +245,184 @@
         </div>
     </div>
 
-    <!-- مودال الموظف -->
+    <!-- مودال إضافة/تعديل موظف (بدون تغيير) -->
     <div class="modal fade" id="employeeModal" tabindex="-1" aria-hidden="true">
-        <!-- ... محتوى المودال كما هو دون تغيير ... -->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="employeeModalTitle">إضافة موظف جديد</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editEmpId">
+                    <div class="mb-3">
+                        <label class="form-label">الرقم الوظيفي</label>
+                        <input type="text" id="empNo" class="form-control" placeholder="مثلاً 1234">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">الاسم الكامل</label>
+                        <input type="text" id="empName" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">المسمى الوظيفي</label>
+                        <input type="text" id="empTitle" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">المركز</label>
+                        <select id="empCenter" class="form-select">
+                            <!-- تملأ برمجياً -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">رقم الحساب البنكي</label>
+                        <input type="text" id="empBankAccount" class="form-control" placeholder="SA...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">اسم البنك</label>
+                        <input type="text" id="empBankName" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" id="saveEmployeeBtn" onclick="saveEmployee()">حفظ</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- مودال نقل موظف -->
+    <!-- مودال نقل موظف (بدون تغيير) -->
     <div class="modal fade" id="transferModal" tabindex="-1" aria-hidden="true">
-        <!-- ... كما هو ... -->
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title">نقل موظف</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="transferEmpId">
+                    <p>الموظف: <strong id="transferEmpName"></strong></p>
+                    <div class="mb-3">
+                        <label class="form-label">المركز الجديد</label>
+                        <select id="transferNewCenter" class="form-select"></select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-warning" onclick="transferEmployee()">تأكيد النقل</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- مودال مستخدم -->
+    <!-- مودال إضافة/تعديل مستخدم (جديد) -->
     <div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
-        <!-- ... كما هو ... -->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="userModalTitle">إضافة مستخدم جديد</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editUserId">
+                    <div class="mb-3">
+                        <label class="form-label">اسم المستخدم</label>
+                        <input type="text" id="userUsername" class="form-control" placeholder="مثلاً hr2">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">الاسم الكامل</label>
+                        <input type="text" id="userFullName" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">الدور</label>
+                        <select id="userRole" class="form-select" onchange="toggleCenterForUser()">
+                            <option value="center_manager">مدير مركز صحي</option>
+                            <option value="hr_officer">موارد بشرية</option>
+                            <option value="admin">مدير نظام</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" id="userCenterGroup">
+                        <label class="form-label">المركز</label>
+                        <select id="userCenter" class="form-select">
+                            <!-- تملأ برمجياً -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">كلمة المرور <span id="passwordHint" class="text-muted small">(اتركها فارغة لعدم التغيير)</span></label>
+                        <input type="password" id="userPassword" class="form-control" placeholder="أدخل كلمة المرور">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" onclick="saveUser()">حفظ</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- مودال مركز -->
+    <!-- مودال إضافة/تعديل مركز (جديد) -->
     <div class="modal fade" id="centerModal" tabindex="-1" aria-hidden="true">
-        <!-- ... كما هو ... -->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="centerModalTitle">إضافة مركز جديد</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editCenterId">
+                    <div class="mb-3">
+                        <label class="form-label">معرف المركز <span class="text-muted small">(مثل center3)</span></label>
+                        <input type="text" id="centerIdInput" class="form-control" placeholder="أدخل معرفاً فريداً">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">اسم المركز</label>
+                        <input type="text" id="centerNameInput" class="form-control" placeholder="مثل مستشفى طاقة/مركز حاسك">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-primary" onclick="saveCenter()">حفظ</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- الكود الرئيسي المعدل لـ Supabase -->
     <script>
-        // ===================== إعداد Supabase =====================
-        const SUPABASE_URL = 'https://dnwggooghajndogenuwt.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_qmTvTtv9-KXEdBoqcBqy3g_jhATdxGD';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // ========== البيانات التجريبية (متغيرات قابلة للتعديل) ==========
+        let centers = [
+            { id: 'center1', name: 'مركز الدهاريز الصحي' },
+            { id: 'center2', name: 'مركز السعادة الصحي' }
+        ];
 
-        // ===================== دوال مساعدة =====================
+        // الموظفون (معرف فريد لكل موظف)
+        let employees = [
+            { id: 1, empNo: '1025', name: 'سلمى محمد', title: 'ممرضة', centerId: 'center1', bankAccount: 'SA1234567890', bankName: 'بنك مسقط' },
+            { id: 2, empNo: '1088', name: 'خالد فهد', title: 'فني مختبر', centerId: 'center1', bankAccount: 'SA0987654321', bankName: 'البنك الأهلي' },
+            { id: 3, empNo: '1102', name: 'هند عبدالله', title: 'طبيب عام', centerId: 'center1', bankAccount: 'SA1122334455', bankName: 'بنك صحار' },
+            { id: 4, empNo: '2045', name: 'أحمد سالم', title: 'صيدلي', centerId: 'center2', bankAccount: 'SA5566778899', bankName: 'بنك العز' },
+            { id: 5, empNo: '2077', name: 'نورة علي', title: 'ممرضة', centerId: 'center2', bankAccount: 'SA9988776655', bankName: 'بنك ظفار' }
+        ];
+
+        let nextEmployeeId = 6;
+
+        // قاعدة بيانات التأكيدات الشهرية
+        let confirmations = {};
+
+        // ========== نظام المستخدمين ==========
+        let usersList = [
+            { id: 1, username: 'admin', password: 'admin', role: 'admin', name: 'مدير النظام', centerId: null },
+            { id: 2, username: 'hr1', password: 'hr123', role: 'hr_officer', name: 'موظف موارد بشرية', centerId: null },
+            { id: 3, username: 'manager1', password: 'manager123', role: 'center_manager', name: 'مدير مركز الدهاريز الصحي', centerId: 'center1' },
+            { id: 4, username: 'manager2', password: 'manager123', role: 'center_manager', name: 'مدير مركز السعادة الصحي', centerId: 'center2' }
+        ];
+        let nextUserId = 5;
+
+        // الحالة الحالية
+        let currentUser = null;
+
+        // ========== دوال المساعدة ==========
         function getMonthKey(date) {
             const d = new Date(date);
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2,'0')}`;
@@ -284,52 +433,7 @@
             return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2,'0')}`;
         }
 
-        // دوال جلب البيانات من Supabase
-        async function fetchCenters() {
-            const { data, error } = await supabase.from('centers').select('*');
-            if (error) throw error;
-            return data;
-        }
-
-        async function fetchEmployees() {
-            const { data, error } = await supabase.from('employees').select('*');
-            if (error) throw error;
-            return data;
-        }
-
-        async function fetchUsers() {
-            const { data, error } = await supabase.from('users').select('*');
-            if (error) throw error;
-            return data;
-        }
-
-        async function fetchConfirmations() {
-            const { data, error } = await supabase.from('confirmations').select('*');
-            if (error) throw error;
-            return data;
-        }
-
-        // الحالة الحالية
-        let currentUser = null;
-        let centersCache = [];
-        let employeesCache = [];
-        let usersCache = [];
-        let confirmationsCache = [];
-
-        // تحديث الذاكرة المؤقتة
-        async function refreshCache() {
-            try {
-                centersCache = await fetchCenters();
-                employeesCache = await fetchEmployees();
-                usersCache = await fetchUsers();
-                confirmationsCache = await fetchConfirmations();
-            } catch (err) {
-                console.error('فشل تحميل البيانات:', err);
-                alert('تعذر الاتصال بقاعدة البيانات، تحقق من الاتصال أو الإعدادات.');
-            }
-        }
-
-        // ===================== التنقل بين الصفحات =====================
+        // ========== التنقل بين الصفحات ==========
         function showPage(pageId) {
             document.getElementById('loginPage').classList.add('hidden');
             document.getElementById('managerPage').classList.add('hidden');
@@ -340,8 +444,8 @@
             }
         }
 
-        // ===================== تسجيل الدخول =====================
-        async function login() {
+        // ========== تسجيل الدخول ==========
+        function login() {
             const username = document.getElementById('usernameInput').value.trim();
             const password = document.getElementById('passwordInput').value.trim();
 
@@ -350,10 +454,7 @@
                 return;
             }
 
-            // نحدث الكاش قبل محاولة الدخول
-            await refreshCache();
-
-            const user = usersCache.find(u => u.username === username && u.password === password);
+            const user = usersList.find(u => u.username === username && u.password === password);
             if (!user) {
                 alert('اسم المستخدم أو كلمة المرور غير صحيحة');
                 return;
@@ -362,14 +463,13 @@
             currentUser = { ...user };
 
             if (currentUser.role === 'center_manager') {
-                if (!currentUser.center_id || !centersCache.some(c => c.id === currentUser.center_id)) {
+                if (!currentUser.centerId || !centers.some(c => c.id === currentUser.centerId)) {
                     alert('هذا الحساب غير مرتبط بمركز صحي صالح، راجع مدير النظام');
-                    currentUser = null;
                     return;
                 }
                 showPage('managerPage');
                 document.getElementById('managerName').textContent = currentUser.name;
-                const center = centersCache.find(c => c.id === currentUser.center_id);
+                const center = centers.find(c => c.id === currentUser.centerId);
                 document.getElementById('centerNameLabel').textContent = center ? center.name : 'غير معروف';
                 document.getElementById('confirmMonth').value = getDefaultMonth();
                 loadManagerData();
@@ -377,7 +477,7 @@
                 showPage('hrPage');
                 document.getElementById('hrRoleTitle').textContent = currentUser.role === 'admin' ? 'مدير النظام' : 'الموارد البشرية';
                 document.getElementById('hrFilterMonth').value = getDefaultMonth();
-                await loadHRData();
+                loadHRData();
                 loadEmployeesTable();
                 
                 const usersTabItem = document.getElementById('users-tab-item');
@@ -403,194 +503,222 @@
             document.getElementById('passwordInput').value = '';
         }
 
-        // ===================== مدير المركز =====================
-        async function loadManagerData() {
-            const centerId = currentUser.center_id;
+        // ========== مدير المركز ==========
+        function loadManagerData() {
+            const centerId = currentUser.centerId;
             const month = document.getElementById('confirmMonth').value;
             if (!month) return;
 
-            const centerEmps = employeesCache.filter(e => e.center_id === centerId);
+            const centerEmps = employees.filter(e => e.centerId === centerId);
             document.getElementById('empCount').textContent = centerEmps.length;
 
             const tbody = document.getElementById('managerTableBody');
             tbody.innerHTML = '';
 
-            for (const emp of centerEmps) {
-                // البحث عن تأكيد لهذا الموظف وهذا الشهر
-                let conf = confirmationsCache.find(c => c.employee_id === emp.id && c.month === month);
-                if (!conf) {
-                    // إنشاء تأكيد افتراضي غير موجود بعد
-                    conf = { absent_days: 0, leave_days: 0, remarks: '', submitted: false };
-                }
+            centerEmps.forEach(emp => {
+                const key = `${emp.id}_${month}`;
+                let conf = confirmations[key] || { absentDays: 0, leaveDays: 0, remarks: '', submitted: false };
 
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${emp.emp_no}</td>
+                    <td>${emp.empNo}</td>
                     <td>${emp.name}</td>
                     <td>${emp.title}</td>
-                    <td><input type="number" class="form-control form-control-sm absent-days" min="0" max="31" value="${conf.absent_days}" data-emp-id="${emp.id}" data-month="${month}" ${conf.submitted ? 'disabled' : ''}></td>
-                    <td><input type="number" class="form-control form-control-sm leave-days" min="0" max="31" value="${conf.leave_days}" data-emp-id="${emp.id}" data-month="${month}" ${conf.submitted ? 'disabled' : ''}></td>
+                    <td><input type="number" class="form-control form-control-sm absent-days" min="0" max="31" value="${conf.absentDays}" data-emp-id="${emp.id}" data-month="${month}" ${conf.submitted ? 'disabled' : ''}></td>
+                    <td><input type="number" class="form-control form-control-sm leave-days" min="0" max="31" value="${conf.leaveDays}" data-emp-id="${emp.id}" data-month="${month}" ${conf.submitted ? 'disabled' : ''}></td>
                     <td><input type="text" class="form-control form-control-sm remarks" value="${conf.remarks || ''}" data-emp-id="${emp.id}" data-month="${month}" ${conf.submitted ? 'disabled' : ''}></td>
                 `;
                 tbody.appendChild(row);
 
                 if (!conf.submitted) {
                     row.querySelector('.absent-days').addEventListener('change', function() {
-                        updateConfirmation(emp.id, month, 'absent_days', parseInt(this.value) || 0);
+                        updateConfirmation(emp.id, month, 'absentDays', parseInt(this.value) || 0);
                     });
                     row.querySelector('.leave-days').addEventListener('change', function() {
-                        updateConfirmation(emp.id, month, 'leave_days', parseInt(this.value) || 0);
+                        updateConfirmation(emp.id, month, 'leaveDays', parseInt(this.value) || 0);
                     });
                     row.querySelector('.remarks').addEventListener('change', function() {
                         updateConfirmation(emp.id, month, 'remarks', this.value);
                     });
                 }
-            }
+            });
         }
 
-        async function updateConfirmation(empId, month, field, value) {
-            // تحديث محلي أولاً
-            let conf = confirmationsCache.find(c => c.employee_id === empId && c.month === month);
-            if (!conf) {
-                conf = {
-                    employee_id: empId,
-                    month,
-                    absent_days: 0,
-                    leave_days: 0,
-                    remarks: '',
-                    submitted: false,
-                    submitted_by: null,
-                    submitted_at: null,
-                    hr_approved: false
-                };
-                confirmationsCache.push(conf);
+        function updateConfirmation(empId, month, field, value) {
+            const key = `${empId}_${month}`;
+            if (!confirmations[key]) {
+                confirmations[key] = { absentDays: 0, leaveDays: 0, remarks: '', submitted: false };
             }
-            conf[field] = value;
+            confirmations[key][field] = value;
         }
 
-        async function submitToHR() {
+        function submitToHR() {
             const month = document.getElementById('confirmMonth').value;
             if (!month) return alert('اختر الشهر');
-            const centerId = currentUser.center_id;
-            const centerEmps = employeesCache.filter(e => e.center_id === centerId);
+            const centerId = currentUser.centerId;
+            const centerEmps = employees.filter(e => e.centerId === centerId);
 
-            for (const emp of centerEmps) {
-                let conf = confirmationsCache.find(c => c.employee_id === emp.id && c.month === month);
-                if (conf) {
-                    conf.submitted = true;
-                    conf.submitted_by = currentUser.username;
-                    conf.submitted_at = new Date().toISOString();
+            centerEmps.forEach(emp => {
+                const key = `${emp.id}_${month}`;
+                if (confirmations[key]) {
+                    confirmations[key].submitted = true;
+                    confirmations[key].submittedBy = currentUser.username;
+                    confirmations[key].submittedAt = new Date().toISOString();
                 } else {
-                    conf = {
-                        employee_id: emp.id,
-                        month,
-                        absent_days: 0,
-                        leave_days: 0,
-                        remarks: '',
-                        submitted: true,
-                        submitted_by: currentUser.username,
-                        submitted_at: new Date().toISOString(),
-                        hr_approved: false
+                    confirmations[key] = {
+                        absentDays: 0, leaveDays: 0, remarks: '',
+                        submitted: true, submittedBy: currentUser.username, submittedAt: new Date().toISOString()
                     };
-                    confirmationsCache.push(conf);
                 }
-                // حفظ في Supabase (upsert)
-                const { error } = await supabase
-                    .from('confirmations')
-                    .upsert({
-                        employee_id: emp.id,
-                        month,
-                        absent_days: conf.absent_days,
-                        leave_days: conf.leave_days,
-                        remarks: conf.remarks,
-                        submitted: true,
-                        submitted_by: currentUser.username,
-                        submitted_at: new Date().toISOString(),
-                        hr_approved: conf.hr_approved || false
-                    }, { onConflict: 'employee_id, month' });
-                if (error) console.error('فشل حفظ التأكيد:', error);
-            }
+            });
             alert('تم تسليم التأكيد للموارد البشرية بنجاح');
-            await refreshCache(); // تحديث الكاش بعد الحفظ
             loadManagerData();
         }
 
-        // ===================== الموارد البشرية =====================
-        async function loadHRData() {
+        // ========== تأكيدات الحضور للموارد البشرية ==========
+        function loadHRData() {
             const filterMonth = document.getElementById('hrFilterMonth').value;
             if (!filterMonth) return;
 
-            // تأكد من أن الكاش محدث
             const tbody = document.getElementById('hrTableBody');
             tbody.innerHTML = '';
 
-            const submittedConfs = confirmationsCache.filter(c => c.submitted && c.month === filterMonth);
-
-            for (const conf of submittedConfs) {
-                const emp = employeesCache.find(e => e.id === conf.employee_id);
+            const confirmationsList = [];
+            for (const [key, conf] of Object.entries(confirmations)) {
+                if (!conf.submitted) continue;
+                const [empIdStr, month] = key.split('_');
+                if (month !== filterMonth) continue;
+                const empId = parseInt(empIdStr);
+                const emp = employees.find(e => e.id === empId);
                 if (!emp) continue;
-                const center = centersCache.find(c => c.id === emp.center_id);
-                const status = (conf.absent_days === 0 && conf.leave_days === 0) ? 'على رأس العمل' : 
-                               (conf.absent_days > 0 ? `غياب ${conf.absent_days} يوم` : `إجازة ${conf.leave_days} يوم`);
-                const approved = conf.hr_approved ? '✅ معتمد' : '';
+                const center = centers.find(c => c.id === emp.centerId);
+                confirmationsList.push({ emp, center, month, ...conf, key });
+            }
+
+            confirmationsList.forEach(item => {
+                const status = (item.absentDays === 0 && item.leaveDays === 0) ? 'على رأس العمل' : 
+                               (item.absentDays > 0 ? `غياب ${item.absentDays} يوم` : `إجازة ${item.leaveDays} يوم`);
+                const approved = item.hrApproved ? '✅ معتمد' : '';
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${center ? center.name : 'غير محدد'}</td>
-                    <td>${emp.name} (${emp.emp_no})</td>
-                    <td>${conf.month}</td>
-                    <td>${conf.absent_days}</td>
-                    <td>${conf.leave_days}</td>
+                    <td>${item.center ? item.center.name : 'غير محدد'}</td>
+                    <td>${item.emp.name} (${item.emp.empNo})</td>
+                    <td>${item.month}</td>
+                    <td>${item.absentDays}</td>
+                    <td>${item.leaveDays}</td>
                     <td>${status} ${approved}</td>
-                    <td>${conf.submitted_by || ''}</td>
+                    <td>${item.submittedBy || ''}</td>
                     <td>
-                        ${!conf.hr_approved ? `<button class="btn btn-sm btn-success" onclick="approveConfirmation('${conf.employee_id}', '${conf.month}')">اعتماد</button>` : 
+                        ${!item.hrApproved ? `<button class="btn btn-sm btn-success" onclick="approveConfirmation('${item.key}')">اعتماد</button>` : 
                         '<span class="badge bg-success">معتمد</span>'}
                     </td>
                 `;
                 tbody.appendChild(row);
-            }
+            });
 
-            if (submittedConfs.length === 0) {
+            if (confirmationsList.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted">لا توجد تأكيدات مقدمة لهذا الشهر</td></tr>`;
             }
         }
 
-        async function approveConfirmation(empId, month) {
-            const { error } = await supabase
-                .from('confirmations')
-                .update({ hr_approved: true })
-                .eq('employee_id', empId)
-                .eq('month', month);
-            if (error) {
-                alert('فشل الاعتماد: ' + error.message);
-                return;
+        function approveConfirmation(key) {
+            if (confirmations[key]) {
+                confirmations[key].hrApproved = true;
+                loadHRData();
             }
-            await refreshCache();
-            loadHRData();
         }
 
-        async function approveAll() {
+        function approveAll() {
             const filterMonth = document.getElementById('hrFilterMonth').value;
             if (!filterMonth) return;
-            const { error } = await supabase
-                .from('confirmations')
-                .update({ hr_approved: true })
-                .eq('month', filterMonth)
-                .eq('submitted', true);
-            if (error) {
-                alert('فشل الاعتماد الجماعي: ' + error.message);
-                return;
+            let count = 0;
+            for (const [key, conf] of Object.entries(confirmations)) {
+                const [empIdStr, month] = key.split('_');
+                if (month === filterMonth && conf.submitted && !conf.hrApproved) {
+                    conf.hrApproved = true;
+                    count++;
+                }
             }
-            await refreshCache();
+            alert(`تم اعتماد ${count} تأكيد(ات).`);
             loadHRData();
         }
 
-        // وظائف الطباعة والتصدير بقيت كما هي تقريباً (تستخدم الكاش المحلي)
+        function printReport() {
+            const filterMonth = document.getElementById('hrFilterMonth').value;
+            if (!filterMonth) {
+                alert('اختر الشهر أولاً');
+                return;
+            }
+            const originalTable = document.getElementById('hrTable');
+            const printWindow = window.open('', '_blank', 'width=900,height=600');
+            printWindow.document.write(`
+                <html dir="rtl">
+                <head>
+                    <title>تقرير تأكيد الحضور - ${filterMonth}</title>
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+                    <style>
+                        body { padding: 20px; }
+                        table { width: 100%; }
+                        @media print { .no-print { display: none; } }
+                    </style>
+                </head>
+                <body>
+                    <h3>تقرير تأكيدات الحضور لشهر ${filterMonth}</h3>
+                    <div>${originalTable.outerHTML}</div>
+                    <script>
+                        window.onload = function() { window.print(); setTimeout(function(){ window.close(); }, 200); }
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
 
-        // ===================== إدارة الموظفين =====================
+        function exportSalaryFile() {
+            const filterMonth = document.getElementById('hrFilterMonth').value;
+            if (!filterMonth) {
+                alert('اختر الشهر أولاً');
+                return;
+            }
+            const rows = [];
+            for (const [key, conf] of Object.entries(confirmations)) {
+                if (!conf.submitted) continue;
+                const [empIdStr, month] = key.split('_');
+                if (month !== filterMonth) continue;
+                const empId = parseInt(empIdStr);
+                const emp = employees.find(e => e.id === empId);
+                if (!emp) continue;
+                const center = centers.find(c => c.id === emp.centerId);
+                rows.push({
+                    'الرقم الوظيفي': emp.empNo,
+                    'اسم الموظف': emp.name,
+                    'المسمى الوظيفي': emp.title,
+                    'المركز': center ? center.name : '',
+                    'الشهر': month,
+                    'أيام الغياب': conf.absentDays,
+                    'أيام الإجازة': conf.leaveDays,
+                    'الحساب البنكي': emp.bankAccount || 'غير متوفر',
+                    'اسم البنك': emp.bankName || 'غير متوفر',
+                    'ملاحظات': conf.remarks || ''
+                });
+            }
+            if (rows.length === 0) {
+                alert('لا توجد تأكيدات مقدمة لهذا الشهر لتصديرها');
+                return;
+            }
+            const ws = XLSX.utils.json_to_sheet(rows);
+            ws['!cols'] = [
+                {wch: 15}, {wch: 25}, {wch: 20}, {wch: 20}, {wch: 10}, {wch: 12}, {wch: 12}, {wch: 20}, {wch: 15}, {wch: 20}
+            ];
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'قائمة الرواتب');
+            XLSX.writeFile(wb, `تقرير_الرواتب_${filterMonth}.xlsx`);
+        }
+
+        // ========== إدارة الموظفين ==========
         function populateCenterSelect(selectElement, selectedId = null) {
             selectElement.innerHTML = '';
-            centersCache.forEach(c => {
+            centers.forEach(c => {
                 selectElement.innerHTML += `<option value="${c.id}" ${c.id === selectedId ? 'selected' : ''}>${c.name}</option>`;
             });
         }
@@ -598,16 +726,16 @@
         function loadEmployeesTable() {
             const tbody = document.getElementById('employeesTableBody');
             tbody.innerHTML = '';
-            employeesCache.forEach(emp => {
-                const center = centersCache.find(c => c.id === emp.center_id);
+            employees.forEach(emp => {
+                const center = centers.find(c => c.id === emp.centerId);
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${emp.emp_no}</td>
+                    <td>${emp.empNo}</td>
                     <td>${emp.name}</td>
                     <td>${emp.title}</td>
                     <td>${center ? center.name : 'غير محدد'}</td>
-                    <td>${emp.bank_account || ''}</td>
-                    <td>${emp.bank_name || ''}</td>
+                    <td>${emp.bankAccount || ''}</td>
+                    <td>${emp.bankName || ''}</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary me-1" onclick="editEmployee(${emp.id})">✏️ تعديل</button>
                         <button class="btn btn-sm btn-outline-warning" onclick="showTransferModal(${emp.id})">🚚 نقل</button>
@@ -631,21 +759,21 @@
         }
 
         function editEmployee(empId) {
-            const emp = employeesCache.find(e => e.id === empId);
+            const emp = employees.find(e => e.id === empId);
             if (!emp) return;
             document.getElementById('employeeModalTitle').textContent = 'تعديل بيانات الموظف';
             document.getElementById('editEmpId').value = emp.id;
-            document.getElementById('empNo').value = emp.emp_no;
+            document.getElementById('empNo').value = emp.empNo;
             document.getElementById('empName').value = emp.name;
             document.getElementById('empTitle').value = emp.title;
-            document.getElementById('empBankAccount').value = emp.bank_account;
-            document.getElementById('empBankName').value = emp.bank_name;
-            populateCenterSelect(document.getElementById('empCenter'), emp.center_id);
+            document.getElementById('empBankAccount').value = emp.bankAccount;
+            document.getElementById('empBankName').value = emp.bankName;
+            populateCenterSelect(document.getElementById('empCenter'), emp.centerId);
             const modal = new bootstrap.Modal(document.getElementById('employeeModal'));
             modal.show();
         }
 
-        async function saveEmployee() {
+        function saveEmployee() {
             const editId = document.getElementById('editEmpId').value;
             const empNo = document.getElementById('empNo').value.trim();
             const name = document.getElementById('empName').value.trim();
@@ -660,46 +788,316 @@
             }
 
             if (!editId) {
-                // إضافة جديد
-                if (employeesCache.some(e => e.emp_no === empNo)) {
+                if (employees.some(e => e.empNo === empNo)) {
                     alert('الرقم الوظيفي موجود مسبقاً');
                     return;
                 }
-                const { error } = await supabase
-                    .from('employees')
-                    .insert([{ emp_no: empNo, name, title, center_id: centerId, bank_account: bankAccount, bank_name: bankName }]);
-                if (error) alert('فشل الإضافة: ' + error.message);
+                const newEmp = {
+                    id: nextEmployeeId++,
+                    empNo,
+                    name,
+                    title,
+                    centerId,
+                    bankAccount,
+                    bankName
+                };
+                employees.push(newEmp);
+                alert('تمت إضافة الموظف بنجاح');
             } else {
-                // تعديل
                 const empId = parseInt(editId);
-                if (employeesCache.some(e => e.emp_no === empNo && e.id !== empId)) {
+                const emp = employees.find(e => e.id === empId);
+                if (!emp) return;
+                if (employees.some(e => e.empNo === empNo && e.id !== empId)) {
                     alert('الرقم الوظيفي مستخدم من قبل موظف آخر');
                     return;
                 }
-                const { error } = await supabase
-                    .from('employees')
-                    .update({ emp_no: empNo, name, title, center_id: centerId, bank_account: bankAccount, bank_name: bankName })
-                    .eq('id', empId);
-                if (error) alert('فشل التعديل: ' + error.message);
+                emp.empNo = empNo;
+                emp.name = name;
+                emp.title = title;
+                emp.centerId = centerId;
+                emp.bankAccount = bankAccount;
+                emp.bankName = bankName;
+                alert('تم تعديل بيانات الموظف بنجاح');
             }
 
             bootstrap.Modal.getInstance(document.getElementById('employeeModal')).hide();
-            await refreshCache();
             loadEmployeesTable();
             if (currentUser && currentUser.role === 'center_manager') {
                 loadManagerData();
             }
         }
 
-        // ... دوال نقل الموظفين (showTransferModal, transferEmployee) تبقى مشابهة مع استخدام supabase ...
+        function showTransferModal(empId) {
+            const emp = employees.find(e => e.id === empId);
+            if (!emp) return;
+            document.getElementById('transferEmpId').value = empId;
+            document.getElementById('transferEmpName').textContent = emp.name + ' (' + emp.empNo + ')';
+            const newCenterSelect = document.getElementById('transferNewCenter');
+            populateCenterSelect(newCenterSelect, emp.centerId);
+            const modal = new bootstrap.Modal(document.getElementById('transferModal'));
+            modal.show();
+        }
 
-        // بالمثل لدوال المستخدمين والمراكز، يتم تعديلها لاستخدام supabase.
+        function transferEmployee() {
+            const empId = parseInt(document.getElementById('transferEmpId').value);
+            const newCenterId = document.getElementById('transferNewCenter').value;
+            const emp = employees.find(e => e.id === empId);
+            if (!emp) return;
+            if (emp.centerId === newCenterId) {
+                alert('الموظف موجود مسبقاً في هذا المركز');
+                return;
+            }
+            emp.centerId = newCenterId;
+            alert(`تم نقل الموظف ${emp.name} إلى المركز الجديد بنجاح`);
+            bootstrap.Modal.getInstance(document.getElementById('transferModal')).hide();
+            loadEmployeesTable();
+            if (currentUser && currentUser.role === 'center_manager') {
+                loadManagerData();
+            }
+        }
 
-        // ===================== التهيئة الأولية =====================
+        // ========== إدارة المستخدمين ==========
+        function loadUsersTable() {
+            const tbody = document.getElementById('usersTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            usersList.forEach(user => {
+                const centerName = user.centerId ? (centers.find(c => c.id === user.centerId)?.name || '') : '—';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.username}</td>
+                    <td>${user.name}</td>
+                    <td>${getRoleArabic(user.role)}</td>
+                    <td>${centerName}</td>
+                    <td>••••••</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editUser(${user.id})">✏️ تعديل</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteUser(${user.id})">🗑️ حذف</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function getRoleArabic(role) {
+            switch (role) {
+                case 'admin': return 'مدير نظام';
+                case 'hr_officer': return 'موارد بشرية';
+                case 'center_manager': return 'مدير مركز';
+                default: return role;
+            }
+        }
+
+        function showAddUserModal() {
+            document.getElementById('userModalTitle').textContent = 'إضافة مستخدم جديد';
+            document.getElementById('editUserId').value = '';
+            document.getElementById('userUsername').value = '';
+            document.getElementById('userFullName').value = '';
+            document.getElementById('userRole').value = 'center_manager';
+            document.getElementById('userPassword').value = '';
+            document.getElementById('passwordHint').textContent = '(مطلوبة)';
+            toggleCenterForUser();
+            populateCenterSelect(document.getElementById('userCenter'));
+            const modal = new bootstrap.Modal(document.getElementById('userModal'));
+            modal.show();
+        }
+
+        function editUser(userId) {
+            const user = usersList.find(u => u.id === userId);
+            if (!user) return;
+            document.getElementById('userModalTitle').textContent = 'تعديل بيانات المستخدم';
+            document.getElementById('editUserId').value = user.id;
+            document.getElementById('userUsername').value = user.username;
+            document.getElementById('userFullName').value = user.name;
+            document.getElementById('userRole').value = user.role;
+            document.getElementById('userPassword').value = '';
+            document.getElementById('passwordHint').textContent = '(اتركها فارغة لعدم التغيير)';
+            toggleCenterForUser();
+            populateCenterSelect(document.getElementById('userCenter'), user.centerId);
+            const modal = new bootstrap.Modal(document.getElementById('userModal'));
+            modal.show();
+        }
+
+        function toggleCenterForUser() {
+            const role = document.getElementById('userRole').value;
+            const group = document.getElementById('userCenterGroup');
+            group.style.display = (role === 'center_manager') ? 'block' : 'none';
+        }
+
+        function saveUser() {
+            const editId = document.getElementById('editUserId').value;
+            const username = document.getElementById('userUsername').value.trim();
+            const fullName = document.getElementById('userFullName').value.trim();
+            const role = document.getElementById('userRole').value;
+            const centerId = role === 'center_manager' ? document.getElementById('userCenter').value : null;
+            const password = document.getElementById('userPassword').value.trim();
+
+            if (!username || !fullName) {
+                alert('الرجاء إدخال اسم المستخدم والاسم الكامل');
+                return;
+            }
+
+            const existingUser = usersList.find(u => u.username === username);
+            if (editId) {
+                if (existingUser && existingUser.id !== parseInt(editId)) {
+                    alert('اسم المستخدم موجود مسبقاً');
+                    return;
+                }
+                const userId = parseInt(editId);
+                const user = usersList.find(u => u.id === userId);
+                if (!user) return;
+                user.username = username;
+                user.name = fullName;
+                user.role = role;
+                user.centerId = centerId;
+                if (password !== '') {
+                    user.password = password;
+                }
+                alert('تم تعديل بيانات المستخدم بنجاح');
+            } else {
+                if (existingUser) {
+                    alert('اسم المستخدم موجود مسبقاً');
+                    return;
+                }
+                if (password === '') {
+                    alert('يجب إدخال كلمة مرور للمستخدم الجديد');
+                    return;
+                }
+                const newUser = {
+                    id: nextUserId++,
+                    username,
+                    password,
+                    role,
+                    name: fullName,
+                    centerId
+                };
+                usersList.push(newUser);
+                alert('تم إضافة المستخدم بنجاح');
+            }
+
+            bootstrap.Modal.getInstance(document.getElementById('userModal')).hide();
+            loadUsersTable();
+
+            if (currentUser && currentUser.id === parseInt(editId)) {
+                currentUser.username = username;
+                currentUser.name = fullName;
+                currentUser.role = role;
+                currentUser.centerId = centerId;
+                if (password !== '') currentUser.password = password;
+            }
+        }
+
+        function deleteUser(userId) {
+            if (currentUser && currentUser.id === userId) {
+                alert('لا يمكنك حذف حسابك الحالي');
+                return;
+            }
+            if (!confirm('هل أنت متأكد من حذف هذا المستخدم؟')) return;
+            usersList = usersList.filter(u => u.id !== userId);
+            loadUsersTable();
+        }
+
+        // ========== إدارة المراكز (جديد) ==========
+        function loadCentersTable() {
+            const tbody = document.getElementById('centersTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            centers.forEach(center => {
+                const empCount = employees.filter(e => e.centerId === center.id).length;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${center.id}</td>
+                    <td>${center.name}</td>
+                    <td>${empCount}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editCenter('${center.id}')">✏️ تعديل</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteCenter('${center.id}')">🗑️ حذف</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function showAddCenterModal() {
+            document.getElementById('centerModalTitle').textContent = 'إضافة مركز جديد';
+            document.getElementById('editCenterId').value = '';
+            document.getElementById('centerIdInput').value = '';
+            document.getElementById('centerNameInput').value = '';
+            document.getElementById('centerIdInput').disabled = false; // يمكن تغيير المعرف في حالة الإضافة
+            const modal = new bootstrap.Modal(document.getElementById('centerModal'));
+            modal.show();
+        }
+
+        function editCenter(centerId) {
+            const center = centers.find(c => c.id === centerId);
+            if (!center) return;
+            document.getElementById('centerModalTitle').textContent = 'تعديل بيانات المركز';
+            document.getElementById('editCenterId').value = center.id; // المركز القديم
+            document.getElementById('centerIdInput').value = center.id;
+            document.getElementById('centerIdInput').disabled = true; // لا يسمح بتغيير المعرف أثناء التعديل لتفادي تعطيل العلاقات
+            document.getElementById('centerNameInput').value = center.name;
+            const modal = new bootstrap.Modal(document.getElementById('centerModal'));
+            modal.show();
+        }
+
+        function saveCenter() {
+            const editId = document.getElementById('editCenterId').value;
+            const centerIdInput = document.getElementById('centerIdInput').value.trim();
+            const centerName = document.getElementById('centerNameInput').value.trim();
+
+            if (!centerIdInput || !centerName) {
+                alert('الرجاء إدخال معرف المركز واسمه');
+                return;
+            }
+
+            if (!editId) {
+                // إضافة جديد
+                if (centers.some(c => c.id === centerIdInput)) {
+                    alert('معرف المركز موجود مسبقاً، اختر معرفاً آخر');
+                    return;
+                }
+                centers.push({ id: centerIdInput, name: centerName });
+                alert('تمت إضافة المركز بنجاح');
+            } else {
+                // تعديل (معرف المركز لا يتغير)
+                const center = centers.find(c => c.id === editId);
+                if (!center) return;
+                center.name = centerName;
+                alert('تم تعديل المركز بنجاح');
+            }
+
+            bootstrap.Modal.getInstance(document.getElementById('centerModal')).hide();
+            loadCentersTable();
+            // تحديث أي قوائم منسدلة قد تكون مفتوحة حالياً (مثل الموظفين أو المستخدمين)
+            // كما نعيد تحميل بيانات الموظفين والمستخدمين إذا كانت مفتوحة
+            if (currentUser && currentUser.role === 'admin') {
+                loadEmployeesTable();
+                loadUsersTable();
+            }
+        }
+
+        function deleteCenter(centerId) {
+            // تحقق مما إذا كان هناك موظفون أو مستخدمون مرتبطون بهذا المركز
+            const empCount = employees.filter(e => e.centerId === centerId).length;
+            const userCount = usersList.filter(u => u.centerId === centerId).length;
+            if (empCount > 0 || userCount > 0) {
+                alert(`لا يمكن حذف المركز لأنه مرتبط بـ ${empCount} موظف و ${userCount} مستخدم. قم بنقلهم أولاً.`);
+                return;
+            }
+            if (!confirm(`هل أنت متأكد من حذف المركز "${centers.find(c=>c.id===centerId)?.name}"؟`)) return;
+            centers = centers.filter(c => c.id !== centerId);
+            loadCentersTable();
+            // إذا تم حذف مركز وحالياً مدير مسجل الدخول مركزه قد حذف، نسجل خروج
+            if (currentUser && currentUser.role === 'center_manager' && currentUser.centerId === centerId) {
+                alert('تم حذف مركزك، سيتم تسجيل الخروج.');
+                logout();
+            }
+        }
+
+        // ========== التهيئة ==========
         showPage('loginPage');
-        // يمكنك إزالة التعبئة التلقائية لكلمة المرور بعد الاختبار
-        // document.getElementById('usernameInput').value = 'admin';
-        // document.getElementById('passwordInput').value = 'admin';
+        document.getElementById('usernameInput').value = 'admin'; // للتسهيل فقط
+        document.getElementById('passwordInput').value = 'admin'; // للتسهيل فقط
     </script>
 </body>
 </html>
