@@ -37,7 +37,7 @@
       border: 2px solid #8B0000;
       border-radius: 8px;
       width: 95%;
-      max-width: 750px;
+      max-width: 950px;
       margin: 10px auto;
       background: white;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -106,25 +106,27 @@
       align-items: center;
       margin-bottom: 6px;
       width: 100%;
+      flex-wrap: nowrap;
     }
 
     label {
       display: inline-block;
-      width: 160px;
-      margin-left: 8px;
+      width: 150px;
+      margin-left: 4px;
       font-weight: bold;
       text-align: right;
-      padding-right: 25px;
+      padding-right: 15px;
       font-size: 13px;
+      flex-shrink: 0;
     }
     
-    input {
+    input, select {
       padding: 5px;
-      margin: 3px;
       border: 1px solid #ccc;
       border-radius: 3px;
       font-size: 12px;
       height: 30px;
+      flex-shrink: 0;
     }
     
     input.employee-input {
@@ -132,7 +134,7 @@
     }
     
     input.amount-input {
-      width: 120px;
+      width: 110px;
       border: 1px solid #ddd;
     }
     
@@ -149,28 +151,51 @@
     input[readonly] {
       background-color: #f5f5f5;
       color: #333;
-      width: 120px;
+      width: 110px;
       border: 1px solid #ddd;
     }
     
     input.after-deduction {
       background-color: #f0f9f0;
       color: #2E8B57;
-      width: 120px;
+      width: 110px;
       font-weight: bold;
       border: 1px solid #ddd;
     }
     
     .column-title {
-      font-size: 12px;
+      font-size: 11px;
       color: #8B0000;
-      margin: 0 3px;
+      margin: 0 2px;
       text-align: center;
-      width: 120px;
+      width: 110px;
       font-weight: bold;
       padding: 5px;
       border: 1px solid #ddd;
       background-color: #f8f8f8;
+      flex-shrink: 0;
+    }
+
+    /* عمود رمز الحساب */
+    .account-code {
+      width: 105px;
+      margin: 0 3px;
+      text-align: center;
+      font-weight: bold;
+      color: #333;
+      background-color: #fafafa;
+      border: 1px solid #ddd;
+      padding: 5px;
+      font-size: 12px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    
+    .account-code-title {
+      background-color: #f0f0f0;
+      color: #8B0000;
+      font-weight: bold;
+      width: 105px;
     }
     
     .result {
@@ -404,33 +429,38 @@
       }
       
       label {
-        width: 140px;
-        margin-left: 8px;
-        padding-right: 20px;
-        font-size: 11px;
+        width: 130px;
+        margin-left: 4px;
+        padding-right: 10px;
+        font-size: 10px;
       }
       
       input, select {
         padding: 3px;
-        margin: 3px;
         font-size: 10px;
-        height: 26px;
+        height: 24px;
       }
       
       input.employee-input {
-        width: 180px;
+        width: 160px;
       }
       
       input.amount-input, input[readonly], input.after-deduction {
-        width: 100px;
+        width: 90px;
+      }
+      
+      .account-code {
+        width: 85px;
+        font-size: 10px;
+        padding: 3px;
+      }
+      
+      .account-code-title, .column-title {
+        width: 90px;
+        font-size: 9px;
       }
       
       select.contract-type {
-        width: 100px;
-      }
-      
-      .column-title {
-        font-size: 10px;
         width: 100px;
       }
       
@@ -455,7 +485,7 @@
       .date-input {
         width: 110px;
         font-size: 10px;
-        height: 26px;
+        height: 24px;
       }
       
       .button-container, .footer-animation, .disclaimer {
@@ -532,6 +562,7 @@
 
       <div class="input-row">
         <label></label>
+        <span class="column-title account-code-title">رمز الحساب</span>
         <span class="column-title">بدلات التعيين</span>
         <span class="column-title">اجمالي قبل الخصم</span>
         <span class="column-title after-deduction-column">اجمالي بعد الخصم</span>
@@ -539,6 +570,7 @@
 
       <div class="input-row">
         <label for="basic">البدل الأساسي:</label>
+        <span class="account-code">21011101</span>
         <input type="number" id="basic" class="amount-input" placeholder="أدخل المبلغ">
         <input type="text" id="basicResult" readonly>
         <input type="text" id="basicAfterDeduction" class="after-deduction" readonly>
@@ -547,6 +579,7 @@
       <div id="temporaryAllowances" class="temporary-allowances">
         <div class="input-row">
           <label for="otherAllowances">بدلات أخرى:</label>
+          <span class="account-code">&nbsp;</span>
           <input type="number" id="otherAllowances" class="amount-input" placeholder="أدخل المبلغ">
           <input type="text" id="otherAllowancesResult" readonly>
           <input type="text" id="otherAllowancesAfterDeduction" class="after-deduction" readonly>
@@ -556,6 +589,7 @@
       <div id="permanentAllowances" class="temporary-hide">
         <div class="input-row">
           <label for="housing">بدل السكن:</label>
+          <span class="account-code">21011201</span>
           <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
           <input type="text" id="housingResult" readonly>
           <input type="text" id="housingAfterDeduction" class="after-deduction" readonly>
@@ -563,6 +597,7 @@
 
         <div class="input-row">
           <label for="electricity">بدل الكهرباء:</label>
+          <span class="account-code">21011202</span>
           <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
           <input type="text" id="electricityResult" readonly>
           <input type="text" id="electricityAfterDeduction" class="after-deduction" readonly>
@@ -570,6 +605,7 @@
 
         <div class="input-row">
           <label for="water">بدل الماء:</label>
+          <span class="account-code">21011203</span>
           <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
           <input type="text" id="waterResult" readonly>
           <input type="text" id="waterAfterDeduction" class="after-deduction" readonly>
@@ -577,6 +613,7 @@
 
         <div class="input-row">
           <label for="phone">بدل الهاتف:</label>
+          <span class="account-code">21011204</span>
           <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
           <input type="text" id="phoneResult" readonly>
           <input type="text" id="phoneAfterDeduction" class="after-deduction" readonly>
@@ -584,6 +621,7 @@
 
         <div class="input-row">
           <label for="transport">بدل النقل:</label>
+          <span class="account-code">21011207</span>
           <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
           <input type="text" id="transportResult" readonly>
           <input type="text" id="transportAfterDeduction" class="after-deduction" readonly>
@@ -591,6 +629,7 @@
 
         <div class="input-row">
           <label for="professional">بدل مهني:</label>
+          <span class="account-code">21011205</span>
           <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
           <input type="text" id="professionalResult" readonly>
           <input type="text" id="professionalAfterDeduction" class="after-deduction" readonly>
@@ -598,6 +637,7 @@
 
         <div class="input-row">
           <label for="costLiving">بدل غلاء معيشة:</label>
+          <span class="account-code">21011209</span>
           <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
           <input type="text" id="costLivingResult" readonly>
           <input type="text" id="costLivingAfterDeduction" class="after-deduction" readonly>
@@ -605,6 +645,7 @@
 
         <div class="input-row">
           <label>الإجمالي:</label>
+          <span class="account-code">&nbsp;</span>
           <input type="text" id="monthlyTotal" class="amount-input column-total" readonly>
           <input type="text" id="periodTotal" class="column-total" readonly>
           <input type="text" id="afterDeductionTotal" class="after-deduction column-total" readonly>
@@ -644,7 +685,7 @@
 
   <div class="footer-animation">
     <div class="marquee">
-      <span> جميع الحقوق محفوظة © 2025 محمد جعبوب - قسم الايرادات والمصروفات - دائرة الشؤون المالية</span>
+      <span> جميع الحقوق محفوظة ©️ 2025 محمد جعبوب - قسم الايرادات والمصروفات - دائرة الشؤون المالية</span>
     </div>
   </div>
 
@@ -764,7 +805,6 @@
             current.setDate(current.getDate() + 1);
           }
           
-          // تقريب كل قيمة إلى ٣ خانات قبل الجمع لضمان تطابق الإجمالي
           let sumRounded = Math.round(sum * 1000) / 1000;
           resultBox.value = sumRounded.toFixed(3);
           totalCalc += sumRounded;
@@ -795,7 +835,6 @@
         
         if (contractType.value === "permanent") {
           let ded = totalCalc * 0.08;
-          // عرض الاستقطاع بثلاث خانات عشرية دائماً
           deduction.textContent = (Math.round(ded * 1000) / 1000).toFixed(3);
           let netValue = totalCalc - ded;
           net.textContent = (Math.round(netValue * 1000) / 1000).toFixed(3);
