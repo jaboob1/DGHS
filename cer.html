@@ -43,7 +43,7 @@
             color: #1e3c72;
             margin-bottom: 20px;
             font-weight: 700;
-            font-size: 16px;  /* تم تصغير العنوان إلى 16px */
+            font-size: 16px;
             letter-spacing: -0.5px;
         }
 
@@ -111,7 +111,7 @@
         .btn-group {
             display: flex;
             gap: 10px;
-            margin: 15px 0 10px;  /* هوامش مناسبة بعد النقل */
+            margin: 15px 0 10px;
         }
 
         button {
@@ -319,53 +319,98 @@
             display: none;
         }
 
+        /* ========== تنسيقات الطباعة المحسّنة ========== */
         @media print {
             body {
-                background: white;
-                padding: 0;
-                margin: 0;
-                display: block;
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                display: block !important;
+                font-size: 12pt !important; /* جعل جميع الخطوط 12pt */
             }
             .main-wrapper {
-                max-width: 100%;
-                box-shadow: none;
-                gap: 0;
+                max-width: 100% !important;
+                box-shadow: none !important;
+                gap: 0 !important;
             }
             .card {
-                box-shadow: none;
-                border: 1px solid #ccc;
-                border-radius: 0;
-                padding: 15px;
+                box-shadow: none !important;
+                border: 1px solid #000 !important;
+                border-radius: 0 !important;
+                padding: 15px !important;
+                background: white !important;
                 page-break-inside: avoid;
             }
+            .card h2 {
+                font-size: 14pt !important;
+                color: #000 !important;
+            }
+
+            /* إخفاء الأزرار والتذييل والرسائل */
             .btn-group, button, .collaboration-footer, .error {
                 display: none !important;
             }
+
+            /* رأس الطباعة */
             .print-header {
-                display: block;
-                text-align: right;
-                margin-bottom: 20px;
-                font-weight: bold;
-                font-size: 1.2em;
-                color: #000;
-                border-bottom: 2px solid #000;
-                padding-bottom: 10px;
+                display: block !important;
+                text-align: right !important;
+                margin-bottom: 20px !important;
+                font-weight: bold !important;
+                font-size: 14pt !important;
+                color: #000 !important;
+                border-bottom: 2px solid #000 !important;
+                padding-bottom: 10px !important;
             }
             .print-header .ministry {
-                font-size: 1.3em;
+                font-size: 16pt !important;
             }
-            .signature-section {
-                border: 1px solid #ccc;
-                background: white;
-                grid-template-columns: 1fr 1fr;
+
+            /* إزالة الخلفيات وجعل الحقول شفافة */
+            .compact-input,
+            .formula-input,
+            select.compact-input {
+                background: white !important;
+                border: 1px solid #000 !important;
+                box-shadow: none !important;
+                font-size: 12pt !important;
+                color: #000 !important;
             }
-            .compact-input {
-                border: 1px solid #ccc;
-                background: white;
+
+            .result-box {
+                background: white !important;
+                border: 1px solid #000 !important;
+                box-shadow: none !important;
+                font-size: 12pt !important;
             }
+
             .formula-section {
-                border: 1px solid #ccc;
-                background: white;
+                background: white !important;
+                border: 1px solid #000 !important;
+            }
+            .formula-constant {
+                background: white !important;
+            }
+
+            /* توقيعات بدون خلفية */
+            .signature-section {
+                background: white !important;
+                border: 1px solid #000 !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 25px !important; /* توسيع */
+                padding: 25px 15px !important;
+            }
+            .signature-box {
+                font-size: 12pt !important;
+                color: #000 !important;
+            }
+            .signature-line {
+                border-bottom: 1px solid #000 !important;
+            }
+
+            /* توسيط النتيجة */
+            .result-centered {
+                margin: 15px 0 !important;
             }
         }
 
@@ -469,7 +514,7 @@
 
             <div id="indemnityError" class="error"></div>
 
-            <!-- قسم التوقيعات بدون عنوان -->
+            <!-- قسم التوقيعات -->
             <div class="signature-section">
                 <div class="signature-box">
                     <span>إعداد ومراجعة</span>
@@ -489,7 +534,7 @@
                 </div>
             </div>
 
-            <!-- الأزرار منقولة إلى الأسفل بعد التوقيعات -->
+            <!-- الأزرار في الأسفل -->
             <div class="btn-group">
                 <button onclick="calculateDifference()">احسب المدة</button>
                 <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
