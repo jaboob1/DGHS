@@ -205,7 +205,7 @@
             flex-shrink: 0;
         }
         .formula-label {
-            font-weight: 120;
+            font-weight: 600;
             color: #2c3e50;
             font-size: 0.85em;
             white-space: nowrap;
@@ -309,7 +309,7 @@
             }
             .formula-input,
             .formula-input.result-field {
-                width: 10%;
+                width: 100%;
             }
             .formula-operator {
                 text-align: center;
@@ -321,7 +321,7 @@
                 flex-direction: column;
             }
             .result-box {
-                width: 100%;
+                width: 20%;
             }
             .collaboration-footer {
                 font-size: 0.8em;
@@ -335,15 +335,15 @@
 
         <!-- ========== البطاقة الأولى (الأعلى): حاسبة مدة الخدمة ========== -->
         <div class="card" id="serviceCard">
-            <h2>🗓️ حاسبة مدة الخدمة</h2>
+            <h2> حاسبة مدة الخدمة</h2>
             <p class="subtitle">للتعويض النقدي عن رصيد الإجازات</p>
 
             <div class="input-group">
-                <label for="hireDate">📅 تاريخ التعيين</label>
+                <label for="hireDate"> تاريخ التعيين</label>
                 <input type="date" id="hireDate" required>
             </div>
             <div class="input-group">
-                <label for="endDate">📅 تاريخ نهاية الخدمة</label>
+                <label for="endDate"> تاريخ نهاية الخدمة</label>
                 <input type="date" id="endDate" required>
             </div>
             <button onclick="calculateDifference()">احسب المدة</button>
@@ -379,7 +379,7 @@
         <!-- ========== البطاقة الثانية (الأسفل): حاسبة المكافأة والإجازات ========== -->
         <div class="card" id="indemnityCard">
             <h2>بيانات الاحتساب</h2>
-            <p class="subtitle">تحتسب على أساس أيام الإجازة المستحقة</p>
+            <p class="subtitle"> </p>
 
             <!-- آخر راتب أساسي -->
             <div class="input-group">
