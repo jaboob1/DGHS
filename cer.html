@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة مستحقات التعويض النقدي عن رصيدالإجازات</title>
+    <title>حاسبة مستحقات التعويض النقدي عن رصيد الإجازات</title>
     <style>
         * {
             box-sizing: border-box;
@@ -196,7 +196,7 @@
         .formula-row {
             display: flex;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             flex-wrap: wrap;
             gap: 8px;
             row-gap: 10px;
@@ -211,7 +211,7 @@
             white-space: nowrap;
         }
         .formula-input {
-            width: 100px;
+            width: 120px;
             padding: 9px 10px;
             border: 2px solid #e1e8f0;
             border-radius: 8px;
@@ -230,7 +230,6 @@
             background: #e8f0fe;
             font-weight: 700;
             color: #0f2b4b;
-            width: 120px;
             cursor: default;
             border-color: #b9cef0;
         }
@@ -337,7 +336,7 @@
         <!-- ========== البطاقة الأولى (الأعلى): حاسبة مدة الخدمة ========== -->
         <div class="card" id="serviceCard">
             <h2>🗓️ حاسبة مدة الخدمة</h2>
-            <p class="subtitle">للتعويض النقدي عن رصي الأجازات</p>
+            <p class="subtitle">للتعويض النقدي عن رصيد الإجازات</p>
 
             <div class="input-group">
                 <label for="hireDate">📅 تاريخ التعيين</label>
@@ -347,7 +346,7 @@
                 <label for="endDate">📅 تاريخ نهاية الخدمة</label>
                 <input type="date" id="endDate" required>
             </div>
-            <button onclick="calculateDifference()"> احسب المدة</button>
+            <button onclick="calculateDifference()">احسب المدة</button>
 
             <div id="errorMessage" class="error"></div>
 
@@ -379,7 +378,7 @@
 
         <!-- ========== البطاقة الثانية (الأسفل): حاسبة المكافأة والإجازات ========== -->
         <div class="card" id="indemnityCard">
-            <h2>بيانات الأحتساب</h2>
+            <h2>بيانات الاحتساب</h2>
             <p class="subtitle">تحتسب على أساس أيام الإجازة المستحقة</p>
 
             <!-- آخر راتب أساسي -->
@@ -434,9 +433,9 @@
         <!-- ========== تذييل التعاون والتطوير ========== -->
         <div class="collaboration-footer">
             <p style="margin:0;">
-                   تم ابتكار الحاسبة بالتعاون مع<br>
+                تم ابتكار الحاسبة بالتعاون مع<br>
                 <strong>قسم إدارة وتخطيط الموارد البشرية</strong> <span class="divider">|</span> <strong>فكرة: أحمد عيديد</strong><br>
-  <strong>قسم الإيرادات والمصروفات</strong> <span class="divider">|</span> <strong>برمجة وتنفيذ: محمد جعبوب </strong><br>
+                <strong>قسم الإيرادات والمصروفات</strong> <span class="divider">|</span> <strong>برمجة وتنفيذ: محمد جعبوب</strong><br>
             </p>
         </div>
 
