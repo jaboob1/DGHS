@@ -18,15 +18,17 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
+            font-size: 12px; /* تصغير عام للخط */
         }
 
         .main-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 25px;
+            gap: 20px;
             max-width: 850px;
             width: 100%;
+            font-size: 12px;
         }
 
         .page-border {
@@ -35,25 +37,26 @@
 
         .card {
             background: #ffffff;
-            border-radius: 20px;
+            border-radius: 16px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 30px 25px;
+            padding: 25px 20px;
             border: 2px dashed #cbd5e1;
             width: 100%;
+            font-size: 12px;
         }
 
         .card h2 {
             text-align: center;
             color: #1e3c72;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             font-weight: 700;
-            font-size: 16px;
-            letter-spacing: -0.5px;
+            font-size: 14px;
+            letter-spacing: -0.3px;
         }
 
         .columns-row {
             display: flex;
-            gap: 30px;
+            gap: 25px;
             margin-bottom: 10px;
         }
 
@@ -61,60 +64,66 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 14px;
         }
 
         .column-left {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 14px;
         }
 
         .input-group {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .input-group label {
             font-weight: 600;
             color: #2c3e50;
-            font-size: 0.9em;
+            font-size: 11px;
             white-space: nowrap;
-            min-width: 100px;
+            min-width: 90px;
             text-align: right;
         }
 
+        /* أسلوب السطر: حد سفلي فقط */
         .compact-input {
-            padding: 8px 10px;
-            border: 2px solid #e1e8f0;
-            border-radius: 8px;
-            font-size: 0.9em;
-            background: #f9fbfd;
+            padding: 6px 4px;
+            border: none;
+            border-bottom: 1.5px solid #cbd5e1;
+            border-radius: 0;
+            font-size: 12px;
+            background: transparent;
             transition: all 0.3s ease;
             font-family: inherit;
             text-align: right;
+            width: 150px;
+            outline: none;
         }
 
         .compact-input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+            border-bottom-color: #3b82f6;
+            border-bottom-width: 2px;
         }
 
         select.compact-input {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: left 8px center;
-            background-size: 10px;
-            padding-left: 25px;
+            background-position: left 4px center;
+            background-size: 8px;
+            padding-left: 20px;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
         }
 
         .btn-group {
             display: flex;
-            gap: 10px;
-            margin: 15px 0 10px;
+            gap: 8px;
+            margin: 12px 0 8px;
         }
 
         button {
@@ -122,9 +131,9 @@
             background: #1e3c72;
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-size: 1.05em;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s ease, transform 0.1s ease;
@@ -144,73 +153,69 @@
             background: #0e5e58;
         }
 
-        /* صف النتيجة بمحاذاة صف نوع اللائحة */
+        /* نتيجة المدة */
         .result-centered {
             display: flex;
             justify-content: flex-start;
-            margin-right: 110px; /* محاذاة بداية حقل نوع اللائحة (100px label + 10px gap) */
             margin-top: 5px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .result-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
         }
         .result-label {
             font-weight: 600;
             color: #1e3c72;
-            font-size: 0.9em;
+            font-size: 11px;
             white-space: nowrap;
-            margin-left: 5px;
         }
         .result-values {
             display: flex;
-            gap: 6px;
-            flex-direction: row; /* التأكيد على الاتجاه الأفقي */
+            gap: 4px;
         }
         .result-box {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
         .result-number-box {
-            width: 50px;
-            padding: 8px 4px;
+            width: 45px;
+            padding: 5px 3px;
             background: white;
-            border: 2px solid #e1e8f0;
-            border-radius: 8px;
+            border: none;
+            border-bottom: 1.5px solid #cbd5e1;
             text-align: center;
-            font-size: 0.9em;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            font-size: 12px;
             font-weight: 700;
             color: #0f2b4b;
         }
         .result-unit {
-            font-size: 0.75em;
+            font-size: 10px;
             color: #64748b;
             white-space: nowrap;
         }
 
         .divider-line {
             border: none;
-            border-top: 1px solid #ccc;
-            margin: 20px 0;
+            border-top: 1px solid #ddd;
+            margin: 16px 0;
         }
 
         .formula-section {
-            margin-top: 15px;
+            margin-top: 12px;
             background: #fdfcff;
-            border-radius: 16px;
-            padding: 18px 15px;
+            border-radius: 14px;
+            padding: 14px 12px;
             border: 1px dashed #cbd5e1;
         }
         .formula-title {
             font-weight: 700;
             color: #1e3c72;
-            margin-bottom: 12px;
-            font-size: 1em;
+            margin-bottom: 10px;
+            font-size: 12px;
             text-align: center;
         }
         .formula-row {
@@ -218,8 +223,8 @@
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 8px;
-            row-gap: 10px;
+            gap: 6px;
+            row-gap: 8px;
         }
         .formula-row > * {
             flex-shrink: 0;
@@ -227,96 +232,94 @@
         .formula-label {
             font-weight: 600;
             color: #2c3e50;
-            font-size: 0.85em;
+            font-size: 11px;
             white-space: nowrap;
         }
         .formula-input {
-            width: 100px;
-            padding: 9px 10px;
-            border: 2px solid #e1e8f0;
-            border-radius: 8px;
-            font-size: 0.9em;
+            width: 85px;
+            padding: 6px 6px;
+            border: none;
+            border-bottom: 1.5px solid #cbd5e1;
+            font-size: 12px;
             background: #fff;
             text-align: center;
             font-family: inherit;
             transition: all 0.2s;
+            outline: none;
         }
         .formula-input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+            border-bottom-color: #3b82f6;
         }
         .formula-input.result-field {
             background: #e8f0fe;
             font-weight: 700;
             color: #0f2b4b;
             cursor: default;
-            border-color: #b9cef0;
         }
         .formula-operator {
-            font-size: 1.2em;
+            font-size: 13px;
             font-weight: 700;
             color: #000;
-            margin: 0 2px;
+            margin: 0 1px;
         }
         .formula-constant {
             font-weight: 700;
             color: #0f2b4b;
-            font-size: 0.95em;
+            font-size: 12px;
             background: #f1f5f9;
-            padding: 6px 10px;
-            border-radius: 6px;
+            padding: 4px 8px;
+            border-radius: 4px;
             white-space: nowrap;
         }
 
         .signature-section {
-            margin-top: 25px;
+            margin-top: 20px;
             border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 25px 20px;
+            border-radius: 14px;
+            padding: 20px 16px;
             background: #fafafa;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 35px 25px;
+            gap: 30px 20px;
         }
         .signature-box {
             text-align: center;
             font-weight: 600;
             color: #2c3e50;
-            font-size: 0.85em;
+            font-size: 11px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         .signature-line {
-            width: 80%;
+            width: 75%;
             border-bottom: 1px solid #64748b;
-            margin-top: 5px;
+            margin-top: 4px;
         }
 
         .error {
             color: #b91c1c;
             background: #fee2e2;
-            padding: 10px 15px;
-            border-radius: 10px;
-            margin-top: 12px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 10px;
             font-weight: 500;
             display: none;
-            font-size: 0.85em;
+            font-size: 11px;
         }
 
         .collaboration-footer {
             width: 100%;
             background: #ffffff;
-            border-radius: 16px;
-            padding: 15px 20px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            border-radius: 14px;
+            padding: 12px 16px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
             border: 1px solid #e9eef3;
             text-align: center;
-            font-size: 0.85em;
+            font-size: 10px;
             color: #2c3e50;
-            line-height: 1.8;
+            line-height: 1.7;
             background: #f9fcff;
         }
         .collaboration-footer strong {
@@ -324,7 +327,7 @@
         }
         .collaboration-footer .divider {
             color: #94a3b8;
-            margin: 0 5px;
+            margin: 0 4px;
         }
 
         .print-header {
@@ -346,6 +349,7 @@
                 max-width: 100% !important;
                 box-shadow: none !important;
                 gap: 0 !important;
+                font-size: 12pt !important;
             }
             .page-border {
                 border: 2px solid #000 !important;
@@ -360,16 +364,15 @@
                 padding: 0 !important;
                 background: white !important;
                 page-break-inside: avoid;
+                font-size: 12pt !important;
             }
             .card h2 {
                 font-size: 14pt !important;
                 color: #000 !important;
             }
-
             .btn-group, button, .collaboration-footer, .error {
                 display: none !important;
             }
-
             .print-header {
                 display: block !important;
                 text-align: right !important;
@@ -383,34 +386,31 @@
             .print-header .ministry {
                 font-size: 16pt !important;
             }
-
             .compact-input,
             .formula-input,
             select.compact-input,
             .result-number-box,
             .formula-constant {
                 background: transparent !important;
-                border: 1px solid transparent !important;
+                border: none !important;
+                border-bottom: 1px solid #000 !important;
                 box-shadow: none !important;
                 font-size: 12pt !important;
                 color: #000 !important;
-                padding: 6px 8px !important;
+                padding: 4px 6px !important;
                 -webkit-appearance: none;
                 -moz-appearance: none;
                 appearance: none;
             }
-
             select.compact-input {
                 background-image: none !important;
-                padding-left: 8px !important;
+                padding-left: 6px !important;
             }
-
             .formula-section,
             .signature-section {
                 background: transparent !important;
                 border: 1px solid transparent !important;
             }
-
             .signature-box {
                 font-size: 12pt !important;
                 color: #000 !important;
@@ -418,10 +418,9 @@
             .signature-line {
                 border-bottom: 1px solid #000 !important;
             }
-
             .divider-line {
                 border-top: 1px solid #000 !important;
-                margin: 15px 0 !important;
+                margin: 12px 0 !important;
             }
         }
 
@@ -431,10 +430,6 @@
             }
             .signature-section {
                 grid-template-columns: 1fr;
-            }
-            .result-centered {
-                margin-right: 0;
-                justify-content: center;
             }
         }
     </style>
@@ -454,19 +449,23 @@
                     <div class="column-right">
                         <div class="input-group">
                             <label for="employeeName">اسم الموظف</label>
-                            <input type="text" id="employeeName" class="compact-input" style="width: 120px;" placeholder="الاسم" lang="ar">
+                            <input type="text" id="employeeName" class="compact-input" style="width: 150px;" placeholder="الاسم">
+                        </div>
+                        <div class="input-group">
+                            <label for="jobTitle">الوظيفة</label>
+                            <input type="text" id="jobTitle" class="compact-input" style="width: 150px;" placeholder="الوظيفة">
                         </div>
                         <div class="input-group">
                             <label for="hireDate">تاريخ التعيين</label>
-                            <input type="date" id="hireDate" class="compact-input" style="width: 120px;" required lang="ar">
+                            <input type="date" id="hireDate" class="compact-input" style="width: 150px;" required>
                         </div>
                         <div class="input-group">
                             <label for="basicSalary">آخر راتب أساسي</label>
-                            <input type="number" id="basicSalary" class="compact-input" style="width: 120px;" placeholder="٠.٠٠٠" min="0" step="0.001" oninput="calculateIndemnity()" lang="ar">
+                            <input type="text" id="basicSalary" class="compact-input" style="width: 150px;" placeholder="٠.٠٠٠" oninput="handleArabicInput(this); calculateIndemnity();">
                         </div>
                         <div class="input-group">
                             <label for="regulationType">نوع اللائحة</label>
-                            <select id="regulationType" class="compact-input" style="width: 120px;" onchange="updateLeaveDays()" lang="ar">
+                            <select id="regulationType" class="compact-input" style="width: 170px;" onchange="updateLeaveDays()">
                                 <option value="civil">الخدمة المدنية</option>
                                 <option value="medical">اللائحة الطبية</option>
                             </select>
@@ -475,35 +474,32 @@
                     <div class="column-left">
                         <div class="input-group">
                             <label for="employeeNumber">رقم الموظف</label>
-                            <input type="text" id="employeeNumber" class="compact-input" style="width: 120px;" placeholder="الرقم" lang="ar">
+                            <input type="text" id="employeeNumber" class="compact-input" style="width: 150px;" placeholder="الرقم">
                         </div>
                         <div class="input-group">
                             <label for="endDate">تاريخ نهاية الخدمة</label>
-                            <input type="date" id="endDate" class="compact-input" style="width: 120px;" required lang="ar">
+                            <input type="date" id="endDate" class="compact-input" style="width: 150px;" required>
                         </div>
                         <div class="input-group">
                             <label for="annualLeave">الاستحقاق السنوي (يوم)</label>
-                            <input type="number" id="annualLeave" class="compact-input" style="width: 120px;" placeholder="٣٠" min="0" step="1" oninput="updateLeaveDays()" lang="ar">
+                            <input type="text" id="annualLeave" class="compact-input" style="width: 150px;" placeholder="٣٠" oninput="handleArabicInput(this); updateLeaveDays();">
                         </div>
                     </div>
                 </div>
 
-                <!-- نتيجة المدة بمحاذاة صف نوع اللائحة -->
+                <!-- نتيجة المدة -->
                 <div class="result-centered" id="resultCentered" style="display: none;">
                     <div class="result-container">
                         <span class="result-label">مدة الخدمة :</span>
                         <div class="result-values">
-                            <!-- اليوم أولاً من اليمين -->
                             <div class="result-box">
                                 <div class="result-number-box" id="daysResult">٠</div>
                                 <span class="result-unit">يوم</span>
                             </div>
-                            <!-- الشهر في الوسط -->
                             <div class="result-box">
                                 <div class="result-number-box" id="monthsResult">٠</div>
                                 <span class="result-unit">شهر</span>
                             </div>
-                            <!-- السنة أخيراً -->
                             <div class="result-box">
                                 <div class="result-number-box" id="yearsResult">٠</div>
                                 <span class="result-unit">سنة</span>
@@ -525,7 +521,7 @@
                         <span class="formula-constant">١٢</span>
                         <span class="formula-operator">×</span>
                         <span class="formula-label">عدد الأيام</span>
-                        <input type="number" id="totalDays" class="formula-input" value="" placeholder="٠" oninput="calculateIndemnity()" lang="ar">
+                        <input type="text" id="totalDays" class="formula-input" value="" placeholder="٠" oninput="handleArabicInput(this); calculateIndemnity();">
                         <span class="formula-operator">÷</span>
                         <span class="formula-constant">٣٦٥</span>
                         <span class="formula-operator">=</span>
@@ -573,9 +569,27 @@
     </div>
 
     <script>
+        // تحويل الأرقام العربية إلى إنجليزية
+        function arabicToEnglish(str) {
+            return str.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+        }
+
         function toArabicNumber(num) {
             if (num === undefined || num === null) return '';
             return String(num).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+        }
+
+        // معالجة الإدخال بالأرقام العربية
+        function handleArabicInput(input) {
+            const englishValue = arabicToEnglish(input.value);
+            if (englishValue !== input.value) {
+                input.value = englishValue;
+            }
+        }
+
+        function parseArabicNumber(value) {
+            const cleaned = arabicToEnglish(String(value));
+            return parseFloat(cleaned) || 0;
         }
 
         let totalServiceYears = 0;
@@ -630,7 +644,6 @@
             const months = m2 - m1;
             const years = y2 - y1;
 
-            // عرض النتائج بالعربية مع الترتيب: يوم، شهر، سنة
             document.getElementById('daysResult').textContent = toArabicNumber(days);
             document.getElementById('monthsResult').textContent = toArabicNumber(months);
             document.getElementById('yearsResult').textContent = toArabicNumber(years);
@@ -643,7 +656,8 @@
         }
 
         function updateLeaveDays() {
-            const annualLeave = parseFloat(document.getElementById('annualLeave').value) || 0;
+            const annualLeaveInput = document.getElementById('annualLeave');
+            const annualLeave = parseArabicNumber(annualLeaveInput.value);
             const regulation = document.getElementById('regulationType').value;
             const totalDaysInput = document.getElementById('totalDays');
 
@@ -673,8 +687,8 @@
 
             indemnityError.style.display = 'none';
 
-            const salary = parseFloat(salaryInput.value) || 0;
-            const totalDays = parseFloat(totalDaysInput.value) || 0;
+            const salary = parseArabicNumber(salaryInput.value);
+            const totalDays = parseArabicNumber(totalDaysInput.value);
 
             displaySalary.textContent = toArabicNumber(salary.toFixed(3));
 
