@@ -17,7 +17,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 12px;
+            padding: 20px;
         }
 
         .main-wrapper {
@@ -43,7 +43,7 @@
             color: #1e3c72;
             margin-bottom: 20px;
             font-weight: 700;
-            font-size: 1.6em;
+            font-size: 16px;  /* تم تصغير العنوان إلى 16px */
             letter-spacing: -0.5px;
         }
 
@@ -111,7 +111,7 @@
         .btn-group {
             display: flex;
             gap: 10px;
-            margin: 10px 0 15px;
+            margin: 15px 0 10px;  /* هوامش مناسبة بعد النقل */
         }
 
         button {
@@ -256,7 +256,6 @@
             white-space: nowrap;
         }
 
-        /* قسم الاعتمادات بدون كلمة الاعتمادات */
         .signature-section {
             margin-top: 25px;
             border: 1px solid #e2e8f0;
@@ -294,7 +293,6 @@
             font-size: 0.85em;
         }
 
-        /* تذييل التعاون */
         .collaboration-footer {
             width: 100%;
             background: #ffffff;
@@ -390,7 +388,7 @@
                 <div>المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
             </div>
 
-            <h2>أستمارة أحتساب مستحقات التعويض النقدي عن رصيد الإجازات</h2>
+            <h2>حاسبة مستحقات التعويض النقدي عن رصيد الإجازات</h2>
 
             <div class="columns-row">
                 <div class="column-right">
@@ -430,10 +428,6 @@
                 </div>
             </div>
 
-            <div class="btn-group">
-                <button onclick="calculateDifference()">احسب المدة</button>
-                <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
-            </div>
             <div id="errorMessage" class="error"></div>
 
             <div class="result-centered" id="resultCentered" style="display: none;">
@@ -442,11 +436,11 @@
                     <div class="result-values">
                         <div class="result-box">
                             <div class="result-number" id="yearsResult">0</div>
-                            <div class="result-unit">سنوات</div>
+                            <div class="result-unit">سنة</div>
                         </div>
                         <div class="result-box">
                             <div class="result-number" id="monthsResult">0</div>
-                            <div class="result-unit">أشهر</div>
+                            <div class="result-unit">شهر</div>
                         </div>
                         <div class="result-box">
                             <div class="result-number" id="daysResult">0</div>
@@ -475,7 +469,7 @@
 
             <div id="indemnityError" class="error"></div>
 
-            <!-- قسم التوقيعات بدون عنوان وبدون تحديد منقط -->
+            <!-- قسم التوقيعات بدون عنوان -->
             <div class="signature-section">
                 <div class="signature-box">
                     <span>إعداد ومراجعة</span>
@@ -493,6 +487,12 @@
                     <span>اعتماد المدير العام</span>
                     <div class="signature-line"></div>
                 </div>
+            </div>
+
+            <!-- الأزرار منقولة إلى الأسفل بعد التوقيعات -->
+            <div class="btn-group">
+                <button onclick="calculateDifference()">احسب المدة</button>
+                <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
             </div>
         </div>
 
