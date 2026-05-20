@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة التعويض النقدي عن رصيد الأجازة</title>
+    <title>حاسبة مدة الخدمة ومكافأة نهاية الخدمة مع الإجازات</title>
     <style>
         * {
             box-sizing: border-box;
@@ -278,6 +278,30 @@
             font-size: 0.85em;
         }
 
+        /* تذييل التعاون */
+        .collaboration-footer {
+            width: 100%;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 15px 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e9eef3;
+            text-align: center;
+            font-size: 0.85em;
+            color: #2c3e50;
+            line-height: 1.8;
+            background: #f9fcff;
+            margin-top: 5px;
+        }
+        .collaboration-footer strong {
+            color: #1e3c72;
+            font-weight: 700;
+        }
+        .collaboration-footer .divider {
+            color: #94a3b8;
+            margin: 0 5px;
+        }
+
         @media (max-width: 500px) {
             .formula-row {
                 flex-direction: column;
@@ -300,6 +324,10 @@
             .result-box {
                 width: 100%;
             }
+            .collaboration-footer {
+                font-size: 0.8em;
+                padding: 12px 15px;
+            }
         }
     </style>
 </head>
@@ -319,7 +347,7 @@
                 <label for="endDate">📅 تاريخ نهاية الخدمة</label>
                 <input type="date" id="endDate" required>
             </div>
-            <button onclick="calculateDifference()">✨ احسب المدة</button>
+            <button onclick="calculateDifference()">✨ احسب الفرق</button>
 
             <div id="errorMessage" class="error"></div>
 
@@ -342,7 +370,7 @@
             </div>
 
             <div class="note">
-                 <strong>آلية حساب الفرق:</strong><br>
+                ⚙️ <strong>آلية حساب الفرق:</strong><br>
                 • إذا كان يوم النهاية أصغر من يوم التعيين → يُستلَف شهر (30 يوم).<br>
                 • إذا أصبح شهر النهاية أصغر من شهر التعيين → يُستلَف سنة (12 شهر).<br>
                 • الناتج = (تاريخ نهاية الخدمة - تاريخ التعيين).
@@ -351,13 +379,13 @@
 
         <!-- ========== البطاقة الثانية (الأسفل): حاسبة المكافأة والإجازات ========== -->
         <div class="card" id="indemnityCard">
-            <h2>أحتساب التعويض النقدي  </h2>
+            <h2>💰 حاسبة مكافأة نهاية الخدمة</h2>
             <p class="subtitle">تحتسب على أساس أيام الإجازة المستحقة</p>
 
             <!-- آخر راتب أساسي -->
             <div class="input-group">
-                <label for="basicSalary"> آخر راتب أساسي</label>
-                <input type="number" id="basicSalary" placeholder="أدخل الراتب الأساسي" min="0" step="0.01" oninput="calculateIndemnity()">
+                <label for="basicSalary">📌 آخر راتب أساسي</label>
+                <input type="number" id="basicSalary" placeholder="أدخل الراتب الأساسي" min="0" step="0.001" oninput="calculateIndemnity()">
             </div>
 
             <!-- قسم الإجازة واللائحة -->
@@ -381,10 +409,10 @@
 
             <!-- صف معادلة المكافأة -->
             <div class="formula-section">
-                <div class="formula-title"> معادلة الاحتساب</div>
+                <div class="formula-title">🧮 معادلة الاحتساب</div>
                 <div class="formula-row">
                     <span class="formula-label">الراتب</span>
-                    <span class="formula-constant" id="displaySalary">0.00</span>
+                    <span class="formula-constant" id="displaySalary">0.000</span>
                     <span class="formula-operator">×</span>
                     <span class="formula-constant">12</span>
                     <span class="formula-operator">×</span>
@@ -393,7 +421,7 @@
                     <span class="formula-operator">÷</span>
                     <span class="formula-constant">365</span>
                     <span class="formula-operator">=</span>
-                    <input type="text" id="indemnityResult" class="formula-input result-field" value="0.00" readonly>
+                    <input type="text" id="indemnityResult" class="formula-input result-field" value="0.000" readonly>
                 </div>
             </div>
 
@@ -401,6 +429,15 @@
                 💡 عدد الأيام (خانة الإجازة) تُحسب تلقائياً عند حساب المدة أو تغيير بيانات الإجازة. يمكنك تعديله يدوياً.
             </div>
             <div id="indemnityError" class="error"></div>
+        </div>
+
+        <!-- ========== تذييل التعاون والتطوير ========== -->
+        <div class="collaboration-footer">
+            <p style="margin:0;">
+                لتذليل العقبات وتسهيل الإجراءات المحاسبية تم ابتكار الحاسبة بالتعاون مع<br>
+                <strong>قسم إدارة وتخطيط الموارد البشرية</strong> <span class="divider">|</span> <strong>أحمد عيديد</strong><br>
+                والتنفيذ والبرمجة <strong>محمد جعبوب</strong> من <strong>دائرة الشئون المالية</strong>
+            </p>
         </div>
 
     </div>
@@ -518,28 +555,28 @@
             const salary = parseFloat(salaryInput.value) || 0;
             const totalDays = parseFloat(totalDaysInput.value) || 0;
 
-            // تحديث عرض الراتب في صف المعادلة
+            // تحديث عرض الراتب في صف المعادلة بثلاث منازل عشرية
             displaySalary.textContent = salary.toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
+                minimumFractionDigits: 3,
+                maximumFractionDigits: 3
             });
 
             if (salary < 0 || totalDays < 0) {
                 indemnityError.textContent = '⚠️ الرجاء إدخال قيم موجبة للراتب وعدد الأيام.';
                 indemnityError.style.display = 'block';
-                resultField.value = '0.00';
+                resultField.value = '0.000';
                 return;
             }
 
             // المعادلة: (الراتب × 12 × عدد الأيام) ÷ 365
             const indemnity = (salary * 12 * totalDays) / 365;
-            resultField.value = indemnity.toFixed(2);
+            resultField.value = indemnity.toFixed(3);
         }
 
         // ========== إعدادات أولية ==========
         window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('displaySalary').textContent = '0.00';
-            document.getElementById('indemnityResult').value = '0.00';
+            document.getElementById('displaySalary').textContent = '0.000';
+            document.getElementById('indemnityResult').value = '0.000';
             document.getElementById('totalDays').value = '';
             totalServiceYears = 0;
         });
