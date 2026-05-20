@@ -25,7 +25,6 @@
             width: 100%;
             max-width: 480px;
             border: 1px solid rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px);
         }
 
         h2 {
@@ -34,7 +33,6 @@
             margin-bottom: 25px;
             font-weight: 700;
             font-size: 1.8em;
-            letter-spacing: -0.5px;
         }
 
         .input-group {
@@ -79,7 +77,6 @@
             cursor: pointer;
             transition: background 0.2s ease, transform 0.1s ease;
             margin-top: 10px;
-            letter-spacing: 0.3px;
         }
 
         button:hover {
@@ -102,7 +99,7 @@
         .result-label {
             font-weight: 600;
             color: #1e3c72;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             font-size: 1.1em;
         }
 
@@ -118,7 +115,7 @@
             background: white;
             border-radius: 12px;
             padding: 12px 15px;
-            min-width: 70px;
+            min-width: 75px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
             border: 1px solid #e2e8f0;
         }
@@ -188,7 +185,7 @@
         <div id="errorMessage" class="error"></div>
 
         <div class="result-container" id="resultContainer" style="display: none;">
-            <div class="result-label">📌 المدة المستحقة (طريقة الاستلاف)</div>
+            <div class="result-label">📌 المدة المستحقة</div>
             <div class="result-values">
                 <div class="result-box">
                     <div class="result-number" id="yearsResult">0</div>
@@ -206,10 +203,10 @@
         </div>
 
         <div class="note">
-            ⚙️ <strong>آلية الحساب:</strong><br>
-            • إذا كان يوم نهاية الخدمة أصغر من يوم التعيين → يُستلَف شهر (30 يوم).<br>
-            • إذا كان شهر نهاية الخدمة أصغر من شهر التعيين → يُستلَف سنة (12 شهر).<br>
-            • الناتج = (نهاية الخدمة - التعيين) وفق هذه القواعد.
+            ⚙️ <strong>آلية الحساب المطبقة:</strong><br>
+            • إذا كان يوم النهاية أصغر من يوم التعيين → يُستلَف شهر (30 يوم) من شهور النهاية.<br>
+            • إذا أصبح شهر النهاية أصغر من شهر التعيين → يُستلَف سنة (12 شهر) من سنوات النهاية.<br>
+            • الناتج = (تاريخ نهاية الخدمة - تاريخ التعيين) وفق هذه القواعد.
         </div>
     </div>
 
@@ -220,11 +217,11 @@
             const errorDiv = document.getElementById('errorMessage');
             const resultContainer = document.getElementById('resultContainer');
 
-            // إخفاء النتائج والخطأ السابق
+            // إخفاء النتائج والأخطاء السابقة
             resultContainer.style.display = 'none';
             errorDiv.style.display = 'none';
 
-            // التحقق من إدخال التاريخين
+            // التحقق من وجود القيم
             if (!hireDateInput || !endDateInput) {
                 errorDiv.textContent = '⚠️ الرجاء إدخال تاريخ التعيين وتاريخ نهاية الخدمة.';
                 errorDiv.style.display = 'block';
@@ -240,71 +237,47 @@
                 return;
             }
 
-            // استخراج اليوم، الشهر، السنة من التاريخين
+            // استخراج مكونات التاريخين
             let y1 = hireDate.getFullYear();
-            let m1 = hireDate.getMonth() + 1; // الأشهر من 1 إلى 12
+            let m1 = hireDate.getMonth() + 1; // 1-12
             let d1 = hireDate.getDate();
 
             let y2 = endDate.getFullYear();
             let m2 = endDate.getMonth() + 1;
             let d2 = endDate.getDate();
 
-            // ---- تطبيق خوارزمية الاستلاف كما ورد في الوصف ----
-            // ننشئ نسخاً للتعديل عليها
-            let y_hire = y1;
-            let m_hire = m1;
-            let d_hire = d1;
-
-            let y_end = y2;
-            let m_end = m2;
-            let d_end = d2;
-
-            // أعلام لتتبع عمليات الاستلاف (لأغراض التوضيح فقط)
-            let borrowedMonth = false;
-            let borrowedYear = false;
-
-            // 1. معالجة الأيام: إذا كان يوم النهاية < يوم التعيين
-            if (d_end < d_hire) {
-                // استلاف شهر (30 يوم) من أشهر النهاية
-                m_end -= 1;
-                d_end += 30;
-                borrowedMonth = true;
-            }
-            const daysResult = d_end - d_hire;
-
-            // 2. معالجة الأشهر: طرح أشهر النهاية من أشهر التعيين (كما في الوصف: "طرح عدد الشهور من تاريخ الاستقالة من عدد الاشهر لتاريخ التعيين")
-            // لكن الصياغة تقول نطرح شهر النهاية من شهر التعيين، وإذا كان شهر التعيين أقل نستلف.
-            // سنطبق المنطق الموصوف: إذا كان شهر التعيين < شهر النهاية، نستلف 12 شهراً من سنوات التعيين.
-            if (m_hire < m_end) {
-                // استلاف سنة (12 شهر) من سنوات التعيين
-                y_hire -= 1;
-                m_hire += 12;
-                borrowedYear = true;
-            }
-            const monthsResult = m_hire - m_end;
-
-            // 3. معالجة السنوات: "طرح عدد سنوات الاستقالة من عدد سنوات التعيين مع مراعاة اذا تم استلاف سنة من سنوات التعيين يتم خصم سنة من عدد سنوات الاستقال ويطرح بعد ذلك من سنوات التعيين"
-            // التفسير: إذا تم استلاف سنة من التعيين (أي أنقصنا y_hire بمقدار 1)،
-            // نخصم أيضاً سنة من سنوات الاستقالة (y_end) قبل الطرح، ثم نطرح y_end الجديد من y_hire (بعد الاستلاف).
-            // هذا يعيد التوازن ويجعل الناتج النهائي = (y1 - y2) الأصلي.
-            let y_end_adjusted = y_end;
-            if (borrowedYear) {
-                y_end_adjusted = y_end - 1;
-            }
-            const yearsResult = y_hire - y_end_adjusted;
-
-            // عرض النتائج في الواجهة
-            document.getElementById('yearsResult').textContent = yearsResult;
-            document.getElementById('monthsResult').textContent = monthsResult;
-            document.getElementById('daysResult').textContent = daysResult;
-
-            resultContainer.style.display = 'block';
-
-            // إذا كان الناتج سالباً (أي تاريخ النهاية أقدم من التعيين)، ننبه المستخدم
-            if (yearsResult < 0 || (yearsResult === 0 && monthsResult < 0) || (yearsResult === 0 && monthsResult === 0 && daysResult < 0)) {
-                errorDiv.textContent = '⚠️ تنبيه: تاريخ نهاية الخدمة أقدم من تاريخ التعيين. الناتج المعروض يتبع الخوارزمية المطلوبة (قد يكون سالباً).';
+            // التحقق من أن تاريخ النهاية بعد تاريخ التعيين (اختياري)
+            if (endDate < hireDate) {
+                errorDiv.textContent = '⚠️ تنبيه: تاريخ نهاية الخدمة أقدم من تاريخ التعيين. سيتم عرض الفرق بالسالب إن وُجد.';
                 errorDiv.style.display = 'block';
             }
+
+            // ---- خوارزمية الطرح الصحيحة: (نهاية - تعيين) مع الاستلاف ----
+            // 1. معالجة الأيام
+            if (d2 < d1) {
+                // استلاف شهر (30 يوم) من أشهر النهاية
+                m2 -= 1;
+                d2 += 30;
+            }
+            const days = d2 - d1;
+
+            // 2. معالجة الأشهر
+            if (m2 < m1) {
+                // استلاف سنة (12 شهر) من سنوات النهاية
+                y2 -= 1;
+                m2 += 12;
+            }
+            const months = m2 - m1;
+
+            // 3. السنوات
+            const years = y2 - y1;
+
+            // عرض النتائج
+            document.getElementById('yearsResult').textContent = years;
+            document.getElementById('monthsResult').textContent = months;
+            document.getElementById('daysResult').textContent = days;
+
+            resultContainer.style.display = 'block';
         }
     </script>
 </body>
