@@ -3,814 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة رصيد الإجازة المتقدمة</title>
+    <title>حاسبة مدة الخدمة - طريقة الاستلاف</title>
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
         body {
-            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             margin: 0;
             padding: 20px;
-            color: #333;
+            box-sizing: border-box;
         }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+
+        .calculator {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 30px 25px;
+            width: 100%;
+            max-width: 480px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
         }
-        h1 {
-            color: #2c3e50;
+
+        h2 {
             text-align: center;
-            margin-bottom: 30px;
+            color: #1e3c72;
+            margin-bottom: 25px;
+            font-weight: 700;
+            font-size: 1.8em;
+            letter-spacing: -0.5px;
         }
-        .form-group {
+
+        .input-group {
             margin-bottom: 20px;
         }
+
         label {
             display: block;
+            font-weight: 600;
+            color: #2c3e50;
             margin-bottom: 8px;
-            font-weight: bold;
-            color: #2c3e50;
+            font-size: 0.95em;
         }
-        input[type="date"], input[type="text"] {
+
+        input[type="date"] {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
+            padding: 12px 15px;
+            border: 2px solid #e1e8f0;
+            border-radius: 12px;
+            font-size: 1em;
+            background: #f9fbfd;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            font-family: inherit;
         }
-        .date-range {
-            display: flex;
-            gap: 15px;
+
+        input[type="date"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
-        .date-range > div {
-            flex: 1;
-        }
+
         button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
             width: 100%;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        .results {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            display: none;
-        }
-        .results h2 {
-            margin-top: 0;
-            color: #2c3e50;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-        }
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 8px 0;
-        }
-        .result-item.total {
-            border-top: 1px solid #ddd;
-            margin-top: 10px;
-            padding-top: 15px;
-            font-weight: bold;
-            font-size: 18px;
-            color: #2c3e50;
-        }
-        .vacation-list {
-            margin-top: 20px;
-        }
-        .vacation-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            background-color: #e8f4fc;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-        .remove-btn {
-            background-color: #e74c3c;
+            background: #1e3c72;
             color: white;
             border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 12px;
-            width: auto;
+            transition: background 0.2s ease, transform 0.1s ease;
+            margin-top: 10px;
+            letter-spacing: 0.3px;
         }
-        .remove-btn:hover {
-            background-color: #c0392b;
+
+        button:hover {
+            background: #2b4f8c;
         }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .result-container {
+            margin-top: 25px;
+            background: #f0f6ff;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #d0e0f5;
+            text-align: center;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .result-values {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .result-box {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 15px;
+            min-width: 70px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e2e8f0;
+        }
+
+        .result-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: #0f2b4b;
+            line-height: 1.2;
+        }
+
+        .result-unit {
+            font-size: 0.8em;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .note {
+            background: #fff8e1;
+            border-right: 4px solid #f59e0b;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            color: #92400e;
+            margin-top: 20px;
+            text-align: right;
+            line-height: 1.6;
+        }
+
         .error {
-            color: #e74c3c;
-            font-size: 14px;
-            margin-top: 5px;
+            color: #b91c1c;
+            background: #fee2e2;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: 500;
             display: none;
         }
-        .official-holidays {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f0f7ff;
-            border-radius: 5px;
-            border: 1px solid #d1e7ff;
-        }
-        .holiday-item {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-            align-items: flex-end;
-        }
-        .holiday-item > div {
-            flex: 1;
-        }
-        .section-title {
-            color: #2c3e50;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-        .add-holiday-btn {
-            background-color: #2ecc71;
-            margin-top: 10px;
-        }
-        .add-holiday-btn:hover {
-            background-color: #27ae60;
-        }
-        .holiday-list {
-            margin-top: 20px;
-        }
-        .holiday-list-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            background-color: #e8f6ef;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-        .compensation-info {
-            margin-top: 15px;
-            padding: 10px;
-            background-color: #e8f6ef;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        .compensation-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-        .exceeded-days {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #ffebee;
-            border-radius: 5px;
-            border: 1px solid #ffcdd2;
-        }
-        .exceeded-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            background-color: #ffcdd2;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-        .warning {
-            color: #c62828;
-            font-weight: bold;
-        }
-        .info-box {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #e3f2fd;
-            border-radius: 5px;
-            border: 1px solid #bbdefb;
-            font-size: 14px;
-        }
-        .exceeded-dates {
-            font-size: 12px;
-            color: #c62828;
-            margin-top: 5px;
+
+        @media (max-width: 400px) {
+            .result-values {
+                flex-direction: column;
+            }
+            .result-box {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>حاسبة رصيد إجازة الموظف المتقدمة</h1>
-        
-        <div class="form-group">
-            <label for="hiringDate">تاريخ التعيين:</label>
-            <input type="date" id="hiringDate">
+    <div class="calculator">
+        <h2>🗓️ حاسبة مدة الخدمة</h2>
+        <p style="text-align: center; color: #475569; margin-top: -15px; font-size: 0.9em;">طريقة الاستلاف (الشهر = 30 يوم)</p>
+
+        <div class="input-group">
+            <label for="hireDate">📅 تاريخ التعيين</label>
+            <input type="date" id="hireDate" required>
         </div>
-        
-        <h3 class="section-title">الإجازات العادية</h3>
-        <div class="form-group">
-            <label>فترة الإجازة:</label>
-            <div class="date-range">
-                <div>
-                    <label for="vacationStart">من:</label>
-                    <input type="date" id="vacationStart">
-                </div>
-                <div>
-                    <label for="vacationEnd">إلى:</label>
-                    <input type="date" id="vacationEnd">
-                </div>
-            </div>
-            <div id="dateError" class="error">يجب أن يكون تاريخ البداية قبل تاريخ النهاية</div>
+
+        <div class="input-group">
+            <label for="endDate">📅 تاريخ نهاية الخدمة</label>
+            <input type="date" id="endDate" required>
         </div>
-        
-        <button id="addVacationBtn" style="background-color: #2ecc71;">إضافة إجازة عادية</button>
-        
-        <h3 class="section-title">الإجازات الرسمية</h3>
-        <div class="official-holidays">
-            <div class="info-box">
-                ملاحظة: سيتم إضافة الإجازات الرسمية إلى الرصيد المتبقي فقط إذا كانت متقاطعة مع إجازات عادية
+
+        <button onclick="calculateDifference()">✨ احسب الفرق</button>
+
+        <div id="errorMessage" class="error"></div>
+
+        <div class="result-container" id="resultContainer" style="display: none;">
+            <div class="result-label">📌 المدة المستحقة (طريقة الاستلاف)</div>
+            <div class="result-values">
+                <div class="result-box">
+                    <div class="result-number" id="yearsResult">0</div>
+                    <div class="result-unit">سنوات</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-number" id="monthsResult">0</div>
+                    <div class="result-unit">أشهر</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-number" id="daysResult">0</div>
+                    <div class="result-unit">أيام</div>
+                </div>
             </div>
-            <div class="holiday-item">
-                <div>
-                    <label for="holidayName">اسم الإجازة الرسمية:</label>
-                    <input type="text" id="holidayName" placeholder="مثال: عيد الفطر">
-                </div>
-                <div>
-                    <label for="holidayStart">من:</label>
-                    <input type="date" id="holidayStart">
-                </div>
-                <div>
-                    <label for="holidayEnd">إلى:</label>
-                    <input type="date" id="holidayEnd">
-                </div>
-            </div>
-            <button id="addHolidayBtn" class="add-holiday-btn">إضافة إجازة رسمية</button>
         </div>
-        
-        <button id="calculateBtn">حساب الرصيد الكلي</button>
-        
-        <div class="results" id="results">
-            <h2>نتائج الحساب</h2>
-            <div class="result-item">
-                <span>تاريخ التعيين:</span>
-                <span id="hiringDateResult"></span>
-            </div>
-            <div class="result-item">
-                <span>عدد أشهر العمل:</span>
-                <span id="monthsWorked"></span>
-            </div>
-            <div class="result-item">
-                <span>عدد أيام العمل:</span>
-                <span id="daysWorked"></span>
-            </div>
-            <div class="result-item">
-                <span>رصيد الإجازة المستحق:</span>
-                <span id="vacationBalance"></span>
-            </div>
-            <div class="result-item">
-                <span>الإجازات الرسمية المتقاطعة المضافة:</span>
-                <span id="officialHolidaysTotal"></span>
-            </div>
-            
-            <div class="compensation-info" id="compensationInfo">
-                <h4>تعويض الإجازات الرسمية المتقاطعة مع الإجازات العادية</h4>
-                <!-- سيتم إضافة تفاصيل التعويض هنا -->
-            </div>
-            
-            <div class="vacation-list" id="vacationList">
-                <h3>الإجازات العادية المضافة</h3>
-                <!-- سيتم إضافة فترات الإجازة العادية هنا -->
-            </div>
-            
-            <div class="holiday-list" id="holidayList">
-                <h3>الإجازات الرسمية المضافة</h3>
-                <!-- سيتم إضافة فترات الإجازة الرسمية هنا -->
-            </div>
-            
-            <div class="exceeded-days" id="exceededDays">
-                <h3 class="warning">الأيام الزائدة عن الرصيد (خصم من الراتب)</h3>
-                <!-- سيتم إضافة الأيام الزائدة هنا -->
-            </div>
-            
-            <div class="result-item total">
-                <span>الرصيد المتبقي:</span>
-                <span id="remainingBalance"></span>
-            </div>
+
+        <div class="note">
+            ⚙️ <strong>آلية الحساب:</strong><br>
+            • إذا كان يوم نهاية الخدمة أصغر من يوم التعيين → يُستلَف شهر (30 يوم).<br>
+            • إذا كان شهر نهاية الخدمة أصغر من شهر التعيين → يُستلَف سنة (12 شهر).<br>
+            • الناتج = (نهاية الخدمة - التعيين) وفق هذه القواعد.
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const hiringDateInput = document.getElementById('hiringDate');
-            const vacationStartInput = document.getElementById('vacationStart');
-            const vacationEndInput = document.getElementById('vacationEnd');
-            const holidayNameInput = document.getElementById('holidayName');
-            const holidayStartInput = document.getElementById('holidayStart');
-            const holidayEndInput = document.getElementById('holidayEnd');
-            const calculateBtn = document.getElementById('calculateBtn');
-            const addVacationBtn = document.getElementById('addVacationBtn');
-            const addHolidayBtn = document.getElementById('addHolidayBtn');
-            const resultsDiv = document.getElementById('results');
-            const dateError = document.getElementById('dateError');
-            const compensationInfo = document.getElementById('compensationInfo');
-            const exceededDaysDiv = document.getElementById('exceededDays');
-            
-            let vacations = [];
-            let officialHolidays = [];
-            
-            // تعيين التواريخ الافتراضية
-            const today = new Date();
-            hiringDateInput.valueAsDate = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate());
-            vacationStartInput.valueAsDate = new Date();
-            vacationEndInput.valueAsDate = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000); // بعد أسبوع
-            
-            // تعيين تاريخ الإجازة الرسمية الافتراضي
-            holidayStartInput.valueAsDate = new Date();
-            holidayEndInput.valueAsDate = new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000); // 3 أيام
-            
-            calculateBtn.addEventListener('click', calculateVacationBalance);
-            addVacationBtn.addEventListener('click', addVacation);
-            addHolidayBtn.addEventListener('click', addOfficialHoliday);
-            
-            // دالة للحصول على عدد أيام الشهر
-            function getDaysInMonth(year, month) {
-                return new Date(year, month + 1, 0).getDate();
+        function calculateDifference() {
+            const hireDateInput = document.getElementById('hireDate').value;
+            const endDateInput = document.getElementById('endDate').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const resultContainer = document.getElementById('resultContainer');
+
+            // إخفاء النتائج والخطأ السابق
+            resultContainer.style.display = 'none';
+            errorDiv.style.display = 'none';
+
+            // التحقق من إدخال التاريخين
+            if (!hireDateInput || !endDateInput) {
+                errorDiv.textContent = '⚠️ الرجاء إدخال تاريخ التعيين وتاريخ نهاية الخدمة.';
+                errorDiv.style.display = 'block';
+                return;
             }
-            
-            // دالة لتنسيق التاريخ
-            function formatDate(date) {
-                return date.toLocaleDateString('ar-EG');
+
+            const hireDate = new Date(hireDateInput);
+            const endDate = new Date(endDateInput);
+
+            if (isNaN(hireDate.getTime()) || isNaN(endDate.getTime())) {
+                errorDiv.textContent = '⚠️ أحد التواريخ غير صالح.';
+                errorDiv.style.display = 'block';
+                return;
             }
-            
-            // دالة لتنسيق اسم الشهر
-            function getMonthName(monthIndex) {
-                const months = [
-                    "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
-                    "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
-                ];
-                return months[monthIndex];
+
+            // استخراج اليوم، الشهر، السنة من التاريخين
+            let y1 = hireDate.getFullYear();
+            let m1 = hireDate.getMonth() + 1; // الأشهر من 1 إلى 12
+            let d1 = hireDate.getDate();
+
+            let y2 = endDate.getFullYear();
+            let m2 = endDate.getMonth() + 1;
+            let d2 = endDate.getDate();
+
+            // ---- تطبيق خوارزمية الاستلاف كما ورد في الوصف ----
+            // ننشئ نسخاً للتعديل عليها
+            let y_hire = y1;
+            let m_hire = m1;
+            let d_hire = d1;
+
+            let y_end = y2;
+            let m_end = m2;
+            let d_end = d2;
+
+            // أعلام لتتبع عمليات الاستلاف (لأغراض التوضيح فقط)
+            let borrowedMonth = false;
+            let borrowedYear = false;
+
+            // 1. معالجة الأيام: إذا كان يوم النهاية < يوم التعيين
+            if (d_end < d_hire) {
+                // استلاف شهر (30 يوم) من أشهر النهاية
+                m_end -= 1;
+                d_end += 30;
+                borrowedMonth = true;
             }
-            
-            // دالة للتحقق من التقاطع بين فترتين
-            function dateRangesOverlap(start1, end1, start2, end2) {
-                return start1 <= end2 && end1 >= start2;
+            const daysResult = d_end - d_hire;
+
+            // 2. معالجة الأشهر: طرح أشهر النهاية من أشهر التعيين (كما في الوصف: "طرح عدد الشهور من تاريخ الاستقالة من عدد الاشهر لتاريخ التعيين")
+            // لكن الصياغة تقول نطرح شهر النهاية من شهر التعيين، وإذا كان شهر التعيين أقل نستلف.
+            // سنطبق المنطق الموصوف: إذا كان شهر التعيين < شهر النهاية، نستلف 12 شهراً من سنوات التعيين.
+            if (m_hire < m_end) {
+                // استلاف سنة (12 شهر) من سنوات التعيين
+                y_hire -= 1;
+                m_hire += 12;
+                borrowedYear = true;
             }
-            
-            // دالة لحساب عدد أيام التقاطع بين فترتين
-            function calculateOverlapDays(start1, end1, start2, end2) {
-                if (!dateRangesOverlap(start1, end1, start2, end2)) {
-                    return 0;
-                }
-                
-                const overlapStart = new Date(Math.max(start1.getTime(), start2.getTime()));
-                const overlapEnd = new Date(Math.min(end1.getTime(), end2.getTime()));
-                
-                const timeDiff = overlapEnd.getTime() - overlapStart.getTime();
-                return Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // +1 لتضمين اليوم الأول
+            const monthsResult = m_hire - m_end;
+
+            // 3. معالجة السنوات: "طرح عدد سنوات الاستقالة من عدد سنوات التعيين مع مراعاة اذا تم استلاف سنة من سنوات التعيين يتم خصم سنة من عدد سنوات الاستقال ويطرح بعد ذلك من سنوات التعيين"
+            // التفسير: إذا تم استلاف سنة من التعيين (أي أنقصنا y_hire بمقدار 1)،
+            // نخصم أيضاً سنة من سنوات الاستقالة (y_end) قبل الطرح، ثم نطرح y_end الجديد من y_hire (بعد الاستلاف).
+            // هذا يعيد التوازن ويجعل الناتج النهائي = (y1 - y2) الأصلي.
+            let y_end_adjusted = y_end;
+            if (borrowedYear) {
+                y_end_adjusted = y_end - 1;
             }
-            
-            // دالة لحساب الأيام الزائدة في إجازة معينة
-            function calculateExceededDates(vacation, availableBalance) {
-                let exceededDates = [];
-                let tempBalance = availableBalance;
-                let currentDate = new Date(vacation.start);
-                
-                while (currentDate <= vacation.end) {
-                    // تخطي الإجازات الرسمية
-                    let isHoliday = false;
-                    for (const holiday of officialHolidays) {
-                        if (currentDate >= holiday.start && currentDate <= holiday.end) {
-                            isHoliday = true;
-                            break;
-                        }
-                    }
-                    
-                    if (!isHoliday) {
-                        if (tempBalance > 0) {
-                            tempBalance--;
-                        } else {
-                            exceededDates.push(new Date(currentDate));
-                        }
-                    }
-                    
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
-                
-                return exceededDates;
+            const yearsResult = y_hire - y_end_adjusted;
+
+            // عرض النتائج في الواجهة
+            document.getElementById('yearsResult').textContent = yearsResult;
+            document.getElementById('monthsResult').textContent = monthsResult;
+            document.getElementById('daysResult').textContent = daysResult;
+
+            resultContainer.style.display = 'block';
+
+            // إذا كان الناتج سالباً (أي تاريخ النهاية أقدم من التعيين)، ننبه المستخدم
+            if (yearsResult < 0 || (yearsResult === 0 && monthsResult < 0) || (yearsResult === 0 && monthsResult === 0 && daysResult < 0)) {
+                errorDiv.textContent = '⚠️ تنبيه: تاريخ نهاية الخدمة أقدم من تاريخ التعيين. الناتج المعروض يتبع الخوارزمية المطلوبة (قد يكون سالباً).';
+                errorDiv.style.display = 'block';
             }
-            
-            function calculateVacationBalance() {
-                const hiringDate = new Date(hiringDateInput.value);
-                const today = new Date();
-                
-                if (!hiringDateInput.value) {
-                    alert('يرجى إدخال تاريخ التعيين');
-                    return;
-                }
-                
-                if (hiringDate > today) {
-                    alert('تاريخ التعيين لا يمكن أن يكون في المستقبل');
-                    return;
-                }
-                
-                // حساب عدد أشهر العمل
-                let monthsWorked = (today.getFullYear() - hiringDate.getFullYear()) * 12;
-                monthsWorked -= hiringDate.getMonth();
-                monthsWorked += today.getMonth();
-                
-                // إذا كان يوم الشهر الحالي أقل من يوم التعيين، نخصم شهر
-                if (today.getDate() < hiringDate.getDate()) {
-                    monthsWorked--;
-                }
-                
-                // حساب عدد أيام العمل
-                const timeDiff = today.getTime() - hiringDate.getTime();
-                const daysWorked = Math.ceil(timeDiff / (1000 * 3600 * 24));
-                
-                // حساب رصيد الإجازة بناءً على الاستحقاق اليومي الدقيق لكل شهر
-                let totalVacationBalance = 0;
-                let currentDate = new Date(hiringDate);
-                
-                // إضافة تفاصيل الحساب لكل شهر
-                while (currentDate <= today) {
-                    const year = currentDate.getFullYear();
-                    const month = currentDate.getMonth();
-                    const daysInMonth = getDaysInMonth(year, month);
-                    
-                    // حساب عدد أيام العمل في هذا الشهر
-                    let daysWorkedInMonth;
-                    
-                    if (currentDate.getFullYear() === hiringDate.getFullYear() && 
-                        currentDate.getMonth() === hiringDate.getMonth()) {
-                        // الشهر الأول (من تاريخ التعيين إلى نهاية الشهر)
-                        daysWorkedInMonth = daysInMonth - currentDate.getDate() + 1;
-                    } else if (currentDate.getFullYear() === today.getFullYear() && 
-                              currentDate.getMonth() === today.getMonth()) {
-                        // الشهر الحالي (من بداية الشهر إلى تاريخ اليوم)
-                        daysWorkedInMonth = today.getDate();
-                    } else {
-                        // شهر كامل
-                        daysWorkedInMonth = daysInMonth;
-                    }
-                    
-                    // حساب الاستحقاق لهذا الشهر (4 أيام مقسمة على أيام الشهر)
-                    const monthlyRate = 4 / daysInMonth;
-                    const monthVacation = daysWorkedInMonth * monthlyRate;
-                    totalVacationBalance += monthVacation;
-                    
-                    // الانتقال إلى الشهر التالي
-                    currentDate.setMonth(currentDate.getMonth() + 1);
-                    currentDate.setDate(1);
-                }
-                
-                // حساب إجمالي أيام الإجازة العادية المأخوذة
-                let totalVacationDays = 0;
-                let compensationDetailsHTML = '<h4>تعويض الإجازات الرسمية المتقاطعة مع الإجازات العادية</h4>';
-                let totalCompensationDays = 0;
-                
-                // حساب الإجازات العادية مع استبعاد الأيام التي تتقاطع مع الإجازات الرسمية
-                vacations.forEach((vacation, index) => {
-                    let vacationDays = vacation.days;
-                    
-                    // التحقق من التقاطع مع الإجازات الرسمية
-                    officialHolidays.forEach(holiday => {
-                        const overlapDays = calculateOverlapDays(
-                            vacation.start, vacation.end, 
-                            holiday.start, holiday.end
-                        );
-                        
-                        if (overlapDays > 0) {
-                            vacationDays -= overlapDays;
-                            totalCompensationDays += overlapDays;
-                            
-                            compensationDetailsHTML += `
-                                <div class="compensation-item">
-                                    <span>${holiday.name} (${formatDate(holiday.start)} - ${formatDate(holiday.end)})</span>
-                                    <span>+${overlapDays} يوم تعويض</span>
-                                </div>
-                            `;
-                        }
-                    });
-                    
-                    totalVacationDays += vacationDays;
-                });
-                
-                if (totalCompensationDays === 0) {
-                    compensationDetailsHTML += '<p>لا توجد إجازات رسمية متقاطعة مع إجازات عادية</p>';
-                }
-                
-                compensationInfo.innerHTML = compensationDetailsHTML;
-                
-                // حساب إجمالي أيام الإجازات الرسمية المتقاطعة فقط
-                // (لا نضيف الإجازات الرسمية غير المتقاطعة)
-                const totalHolidayDays = totalCompensationDays;
-                
-                // حساب الرصيد المتبقي (يشمل فقط الإجازات الرسمية المتقاطعة)
-                const remainingBalance = (totalVacationBalance + totalHolidayDays) - totalVacationDays;
-                
-                // حساب الأيام الزائدة عن الرصيد (التي سيتم خصمها من الراتب)
-                let exceededDaysHTML = '<h3 class="warning">الأيام الزائدة عن الرصيد (خصم من الراتب)</h3>';
-                let totalExceededDays = 0;
-                let exceededDetails = [];
-                
-                if (remainingBalance < 0) {
-                    totalExceededDays = Math.abs(remainingBalance);
-                    exceededDaysHTML += `
-                        <div class="exceeded-item">
-                            <div>
-                                <span>إجمالي الأيام الزائدة:</span>
-                            </div>
-                            <div>
-                                <span class="warning">${totalExceededDays} يوم</span>
-                            </div>
-                        </div>
-                        <p class="warning">سيتم خصم ${totalExceededDays} يوم من الراتب لعدم توفر رصيد إجازة كافي</p>
-                    `;
-                    
-                    // حساب الأيام الزائدة لكل إجازة مع تواريخها
-                    let tempBalance = totalVacationBalance + totalHolidayDays;
-                    
-                    vacations.forEach((vacation, index) => {
-                        let vacationDays = vacation.days;
-                        
-                        // استبعاد الأيام المتقاطعة مع الإجازات الرسمية
-                        officialHolidays.forEach(holiday => {
-                            const overlapDays = calculateOverlapDays(
-                                vacation.start, vacation.end, 
-                                holiday.start, holiday.end
-                            );
-                            
-                            if (overlapDays > 0) {
-                                vacationDays -= overlapDays;
-                            }
-                        });
-                        
-                        if (tempBalance >= vacationDays) {
-                            // لا توجد أيام زائدة في هذه الإجازة
-                            tempBalance -= vacationDays;
-                        } else {
-                            // هناك أيام زائدة في هذه الإجازة
-                            const exceededInThisVacation = vacationDays - tempBalance;
-                            totalExceededDays += exceededInThisVacation;
-                            
-                            // حساب التواريخ الزائدة الفعلية
-                            const exceededDates = calculateExceededDates(vacation, tempBalance);
-                            let dateRanges = [];
-                            
-                            if (exceededDates.length > 0) {
-                                // تجميع التواريخ المتتالية في نطاقات
-                                let startDate = exceededDates[0];
-                                let endDate = exceededDates[0];
-                                
-                                for (let i = 1; i < exceededDates.length; i++) {
-                                    const currentDate = exceededDates[i];
-                                    const prevDate = new Date(exceededDates[i-1]);
-                                    prevDate.setDate(prevDate.getDate() + 1);
-                                    
-                                    if (currentDate.getTime() === prevDate.getTime()) {
-                                        endDate = currentDate;
-                                    } else {
-                                        dateRanges.push({start: new Date(startDate), end: new Date(endDate)});
-                                        startDate = currentDate;
-                                        endDate = currentDate;
-                                    }
-                                }
-                                
-                                dateRanges.push({start: startDate, end: endDate});
-                            }
-                            
-                            exceededDetails.push({
-                                vacation: vacation,
-                                exceededDays: exceededInThisVacation,
-                                dateRanges: dateRanges
-                            });
-                            
-                            tempBalance = 0;
-                        }
-                    });
-                    
-                    // عرض التفاصيل الزائدة مع التواريخ
-                    exceededDetails.forEach(detail => {
-                        exceededDaysHTML += `
-                            <div class="exceeded-item">
-                                <div>
-                                    <span>${formatDate(detail.vacation.start)} - ${formatDate(detail.vacation.end)}</span>
-                                    <div class="exceeded-dates">
-                                        ${detail.dateRanges.map(range => 
-                                            `من ${formatDate(range.start)} إلى ${formatDate(range.end)}`
-                                        ).join('، ')}
-                                    </div>
-                                </div>
-                                <div>
-                                    <span class="warning">${detail.exceededDays} يوم</span>
-                                </div>
-                            </div>
-                        `;
-                    });
-                } else {
-                    exceededDaysHTML += '<p>لا توجد أيام زائدة عن الرصيد</p>';
-                }
-                
-                exceededDaysDiv.innerHTML = exceededDaysHTML;
-                
-                // عرض النتائج
-                document.getElementById('hiringDateResult').textContent = formatDate(hiringDate);
-                document.getElementById('monthsWorked').textContent = monthsWorked;
-                document.getElementById('daysWorked').textContent = daysWorked;
-                document.getElementById('vacationBalance').textContent = totalVacationBalance.toFixed(2) + ' يوم';
-                document.getElementById('officialHolidaysTotal').textContent = totalHolidayDays + ' يوم';
-                document.getElementById('remainingBalance').textContent = Math.max(remainingBalance, 0).toFixed(2) + ' يوم';
-                
-                // تحديث قائمة الإجازات
-                updateVacationList();
-                updateHolidayList();
-                
-                // إظهار النتائج
-                resultsDiv.style.display = 'block';
-            }
-            
-            function addVacation() {
-                const startDate = new Date(vacationStartInput.value);
-                const endDate = new Date(vacationEndInput.value);
-                
-                if (!vacationStartInput.value || !vacationEndInput.value) {
-                    alert('يرجى إدخال تاريخي بداية ونهاية الإجازة');
-                    return;
-                }
-                
-                if (startDate > endDate) {
-                    dateError.style.display = 'block';
-                    return;
-                } else {
-                    dateError.style.display = 'none';
-                }
-                
-                // حساب عدد أيام الإجازة
-                const timeDiff = endDate.getTime() - startDate.getTime();
-                const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // +1 لتضمين اليوم الأول
-                
-                // إضافة الإجازة إلى القائمة
-                vacations.push({
-                    start: startDate,
-                    end: endDate,
-                    days: daysDiff
-                });
-                
-                // إعادة حساب الرصيد
-                calculateVacationBalance();
-                
-                // مسح حقول الإدخال
-                vacationStartInput.value = '';
-                vacationEndInput.value = '';
-            }
-            
-            function addOfficialHoliday() {
-                const name = holidayNameInput.value;
-                const startDate = new Date(holidayStartInput.value);
-                const endDate = new Date(holidayEndInput.value);
-                
-                if (!name || !holidayStartInput.value || !holidayEndInput.value) {
-                    alert('يرجى إدخال جميع بيانات الإجازة الرسمية');
-                    return;
-                }
-                
-                if (startDate > endDate) {
-                    alert('يجب أن يكون تاريخ البداية قبل تاريخ النهاية');
-                    return;
-                }
-                
-                // حساب عدد أيام الإجازة الرسمية
-                const timeDiff = endDate.getTime() - startDate.getTime();
-                const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // +1 لتضمين اليوم الأول
-                
-                // إضافة الإجازة الرسمية إلى القائمة
-                officialHolidays.push({
-                    name: name,
-                    start: startDate,
-                    end: endDate,
-                    days: daysDiff
-                });
-                
-                // إعادة حساب الرصيد
-                calculateVacationBalance();
-                
-                // مسح حقول الإدخال
-                holidayNameInput.value = '';
-                holidayStartInput.value = '';
-                holidayEndInput.value = '';
-            }
-            
-            function removeVacation(index) {
-                vacations.splice(index, 1);
-                calculateVacationBalance();
-            }
-            
-            function removeHoliday(index) {
-                officialHolidays.splice(index, 1);
-                calculateVacationBalance();
-            }
-            
-            function updateVacationList() {
-                const vacationList = document.getElementById('vacationList');
-                vacationList.innerHTML = '<h3>الإجازات العادية المضافة</h3>';
-                
-                if (vacations.length === 0) {
-                    vacationList.innerHTML += '<p>لا توجد إجازات عادية مضافة</p>';
-                    return;
-                }
-                
-                vacations.forEach((vacation, index) => {
-                    const vacationItem = document.createElement('div');
-                    vacationItem.className = 'vacation-item';
-                    
-                    // حساب الأيام الفعلية المخصومة بعد استبعاد الأيام المتقاطعة مع الإجازات الرسمية
-                    let actualDays = vacation.days;
-                    officialHolidays.forEach(holiday => {
-                        const overlapDays = calculateOverlapDays(
-                            vacation.start, vacation.end, 
-                            holiday.start, holiday.end
-                        );
-                        if (overlapDays > 0) {
-                            actualDays -= overlapDays;
-                        }
-                    });
-                    
-                    vacationItem.innerHTML = `
-                        <div>
-                            <span>${formatDate(vacation.start)} - ${formatDate(vacation.end)}</span>
-                            <br>
-                            <small>${actualDays} يوم فعلي (${vacation.days} يوم - ${vacation.days - actualDays} يوم إجازة رسمية)</small>
-                        </div>
-                        <div>
-                            <span>${vacation.days} يوم</span>
-                            <button class="remove-btn" onclick="removeVacation(${index})">حذف</button>
-                        </div>
-                    `;
-                    vacationList.appendChild(vacationItem);
-                });
-            }
-            
-            function updateHolidayList() {
-                const holidayList = document.getElementById('holidayList');
-                holidayList.innerHTML = '<h3>الإجازات الرسمية المضافة</h3>';
-                
-                if (officialHolidays.length === 0) {
-                    holidayList.innerHTML += '<p>لا توجد إجازات رسمية مضافة</p>';
-                    return;
-                }
-                
-                officialHolidays.forEach((holiday, index) => {
-                    const holidayItem = document.createElement('div');
-                    holidayItem.className = 'holiday-list-item';
-                    
-                    // التحقق مما إذا كانت الإجازة الرسمية متقاطعة مع أي إجازة عادية
-                    let isOverlapping = false;
-                    vacations.forEach(vacation => {
-                        if (dateRangesOverlap(
-                            vacation.start, vacation.end, 
-                            holiday.start, holiday.end
-                        )) {
-                            isOverlapping = true;
-                        }
-                    });
-                    
-                    const statusText = isOverlapping ? 
-                        '<small style="color: green;">(متقاطعة مع إجازة عادية - سيتم إضافتها للرصيد)</small>' : 
-                        '<small style="color: orange;">(غير متقاطعة - لن تضاف للرصيد)</small>';
-                    
-                    holidayItem.innerHTML = `
-                        <div>
-                            <span>${holiday.name}: ${formatDate(holiday.start)} - ${formatDate(holiday.end)}</span>
-                            <br>
-                            ${statusText}
-                        </div>
-                        <div>
-                            <span>${holiday.days} يوم</span>
-                            <button class="remove-btn" onclick="removeHoliday(${index})">حذف</button>
-                        </div>
-                    `;
-                    holidayList.appendChild(holidayItem);
-                });
-            }
-            
-            // جعل الدوال متاحة بشكل عام
-            window.removeVacation = removeVacation;
-            window.removeHoliday = removeHoliday;
-            
-            // حساب الرصيد عند تحميل الصفحة
-            calculateVacationBalance();
-        });
+        }
     </script>
 </body>
 </html>
