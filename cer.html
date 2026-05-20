@@ -319,14 +319,14 @@
             display: none;
         }
 
-        /* ========== تنسيقات الطباعة المحسّنة ========== */
+        /* ========== تنسيقات الطباعة - إخفاء حدود الحقول ========== */
         @media print {
             body {
                 background: white !important;
                 padding: 0 !important;
                 margin: 0 !important;
                 display: block !important;
-                font-size: 12pt !important; /* جعل جميع الخطوط 12pt */
+                font-size: 12pt !important;
             }
             .main-wrapper {
                 max-width: 100% !important;
@@ -335,7 +335,7 @@
             }
             .card {
                 box-shadow: none !important;
-                border: 1px solid #000 !important;
+                border: none !important;      /* إزالة الحدود المنقطة عن البطاقة */
                 border-radius: 0 !important;
                 padding: 15px !important;
                 background: white !important;
@@ -366,40 +366,37 @@
                 font-size: 16pt !important;
             }
 
-            /* إزالة الخلفيات وجعل الحقول شفافة */
+            /* --- إخفاء الحدود والخلفيات عن كافة حقول الإدخال والنتائج --- */
             .compact-input,
             .formula-input,
-            select.compact-input {
-                background: white !important;
-                border: 1px solid #000 !important;
+            select.compact-input,
+            .result-box,
+            .formula-constant {
+                background: transparent !important;
+                border: 1px solid transparent !important; /* حدود شفافة لا تظهر */
                 box-shadow: none !important;
                 font-size: 12pt !important;
                 color: #000 !important;
+                padding: 6px 8px !important;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
             }
 
-            .result-box {
-                background: white !important;
-                border: 1px solid #000 !important;
-                box-shadow: none !important;
-                font-size: 12pt !important;
+            /* إزالة السهم من القائمة المنسدلة في الطباعة */
+            select.compact-input {
+                background-image: none !important;
+                padding-left: 8px !important;
             }
 
-            .formula-section {
-                background: white !important;
-                border: 1px solid #000 !important;
-            }
-            .formula-constant {
-                background: white !important;
-            }
-
-            /* توقيعات بدون خلفية */
+            /* إخفاء حدود الأقسام */
+            .formula-section,
             .signature-section {
-                background: white !important;
-                border: 1px solid #000 !important;
-                grid-template-columns: 1fr 1fr !important;
-                gap: 25px !important; /* توسيع */
-                padding: 25px 15px !important;
+                background: transparent !important;
+                border: 1px solid transparent !important;
             }
+
+            /* إظهار خطوط التوقيع فقط */
             .signature-box {
                 font-size: 12pt !important;
                 color: #000 !important;
