@@ -41,7 +41,7 @@
         .card h2 {
             text-align: center;
             color: #1e3c72;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-weight: 700;
             font-size: 1.6em;
             letter-spacing: -0.5px;
@@ -50,13 +50,12 @@
         .card .subtitle {
             text-align: center;
             color: #475569;
-            margin-top: -10px;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
             font-size: 0.85em;
         }
 
         .input-group {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         label {
@@ -67,34 +66,37 @@
             font-size: 0.9em;
         }
 
-        input[type="date"],
-        input[type="number"],
-        select {
-            width: 100%;
-            padding: 11px 14px;
+        /* حقول الإدخال المدمجة بعرض 100px */
+        .compact-input {
+            width: 100px !important;
+            padding: 8px 10px;
             border: 2px solid #e1e8f0;
-            border-radius: 10px;
-            font-size: 0.95em;
+            border-radius: 8px;
+            font-size: 0.9em;
             background: #f9fbfd;
             transition: all 0.3s ease;
             font-family: inherit;
             text-align: right;
         }
 
-        input[type="date"]:focus,
-        input[type="number"]:focus,
-        select:focus {
+        input[type="date"].compact-input,
+        input[type="number"].compact-input,
+        select.compact-input {
+            width: 100px !important;
+        }
+
+        select.compact-input {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 8px center;
+            background-size: 10px;
+            padding-left: 25px;
+        }
+
+        .compact-input:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-        }
-
-        input[readonly] {
-            background: #eef2f7;
-            color: #0f2b4b;
-            font-weight: 700;
-            cursor: default;
-            border-color: #d0dbe8;
         }
 
         button {
@@ -102,13 +104,13 @@
             background: #1e3c72;
             color: white;
             border: none;
-            padding: 13px 20px;
+            padding: 12px 20px;
             border-radius: 12px;
             font-size: 1.05em;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s ease, transform 0.1s ease;
-            margin-top: 8px;
+            margin: 8px 0 15px;
         }
 
         button:hover {
@@ -119,7 +121,7 @@
         }
 
         .result-container {
-            margin-top: 20px;
+            margin-top: 15px;
             background: #f0f6ff;
             border-radius: 16px;
             padding: 18px;
@@ -164,18 +166,11 @@
             background: #f8fafc;
             border-radius: 14px;
             padding: 15px 14px;
-            margin: 18px 0 15px;
+            margin: 15px 0 15px;
             border: 1px solid #e2e8f0;
         }
         .leave-section .input-group {
-            margin-bottom: 12px;
-        }
-        select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: left 12px center;
-            background-size: 10px;
-            padding-left: 30px;
+            margin-bottom: 10px;
         }
 
         /* صيغة المكافأة */
@@ -211,7 +206,7 @@
             white-space: nowrap;
         }
         .formula-input {
-            width: 120px;
+            width: 100px;
             padding: 9px 10px;
             border: 2px solid #e1e8f0;
             border-radius: 8px;
@@ -248,24 +243,7 @@
             border-radius: 6px;
             white-space: nowrap;
         }
-        .formula-text {
-            font-weight: 500;
-            color: #334155;
-            font-size: 0.85em;
-            white-space: nowrap;
-        }
 
-        .note {
-            background: #fff8e1;
-            border-right: 4px solid #f59e0b;
-            padding: 12px 15px;
-            border-radius: 10px;
-            font-size: 0.78em;
-            color: #92400e;
-            margin-top: 15px;
-            text-align: right;
-            line-height: 1.6;
-        }
         .error {
             color: #b91c1c;
             background: #fee2e2;
@@ -314,18 +292,14 @@
             .formula-operator {
                 text-align: center;
             }
-            .leave-section .input-group {
-                margin-bottom: 10px;
-            }
             .result-values {
                 flex-direction: column;
             }
             .result-box {
-                width: 20%;
+                width: 100%;
             }
-            .collaboration-footer {
-                font-size: 0.8em;
-                padding: 12px 15px;
+            .compact-input {
+                width: 100% !important;
             }
         }
     </style>
@@ -333,23 +307,26 @@
 <body>
     <div class="main-wrapper">
 
-        <!-- ========== البطاقة الأولى (الأعلى): حاسبة مدة الخدمة ========== -->
-        <div class="card" id="serviceCard">
-            <h2> حاسبة مدة الخدمة</h2>
-            <p class="subtitle">للتعويض النقدي عن رصيد الإجازات</p>
+        <!-- ========== البطاقة الموحدة ========== -->
+        <div class="card">
+            <h2>🗓️ حاسبة مستحقات التعويض النقدي عن رصيد الإجازات</h2>
+            <p class="subtitle">دمج حاسبة المدة وبيانات الاحتساب</p>
 
+            <!-- حقول التاريخ -->
             <div class="input-group">
-                <label for="hireDate"> تاريخ التعيين</label>
-                <input type="date" id="hireDate" required>
+                <label for="hireDate">📅 تاريخ التعيين</label>
+                <input type="date" id="hireDate" class="compact-input" required>
             </div>
             <div class="input-group">
-                <label for="endDate"> تاريخ نهاية الخدمة</label>
-                <input type="date" id="endDate" required>
+                <label for="endDate">📅 تاريخ نهاية الخدمة</label>
+                <input type="date" id="endDate" class="compact-input" required>
             </div>
             <button onclick="calculateDifference()">احسب المدة</button>
 
+            <!-- رسائل الخطأ -->
             <div id="errorMessage" class="error"></div>
 
+            <!-- نتيجة المدة -->
             <div class="result-container" id="resultContainer" style="display: none;">
                 <div class="result-label">📌 المدة المستحقة</div>
                 <div class="result-values">
@@ -368,41 +345,27 @@
                 </div>
             </div>
 
-            <div class="note">
-                ⚙️ <strong>آلية حساب الفرق:</strong><br>
-                • إذا كان يوم النهاية أصغر من يوم التعيين → يُستلَف شهر (30 يوم).<br>
-                • إذا أصبح شهر النهاية أصغر من شهر التعيين → يُستلَف سنة (12 شهر).<br>
-                • الناتج = (تاريخ نهاية الخدمة - تاريخ التعيين).
-            </div>
-        </div>
-
-        <!-- ========== البطاقة الثانية (الأسفل): حاسبة المكافأة والإجازات ========== -->
-        <div class="card" id="indemnityCard">
-            <h2>بيانات الاحتساب</h2>
-            <p class="subtitle"> </p>
-
             <!-- آخر راتب أساسي -->
-            <div class="input-group">
+            <div class="input-group" style="margin-top: 20px;">
                 <label for="basicSalary">📌 آخر راتب أساسي</label>
-                <input type="number" id="basicSalary" placeholder="أدخل الراتب الأساسي" min="0" step="0.001" oninput="calculateIndemnity()">
+                <input type="number" id="basicSalary" class="compact-input" placeholder="0.000" min="0" step="0.001" oninput="calculateIndemnity()">
             </div>
 
             <!-- قسم الإجازة واللائحة -->
             <div class="leave-section">
                 <div class="input-group">
-                    <label for="annualLeave">📆 عدد الاستحقاق السنوي للإجازة (يوم)</label>
-                    <input type="number" id="annualLeave" placeholder="مثال: 30" min="0" step="1" oninput="updateLeaveDays()">
+                    <label for="annualLeave">📆 الاستحقاق السنوي (يوم)</label>
+                    <input type="number" id="annualLeave" class="compact-input" placeholder="30" min="0" step="1" oninput="updateLeaveDays()">
                 </div>
                 <div class="input-group">
                     <label for="regulationType">📋 نوع اللائحة</label>
-                    <select id="regulationType" onchange="updateLeaveDays()">
+                    <select id="regulationType" class="compact-input" onchange="updateLeaveDays()">
                         <option value="civil">لائحة الخدمة المدنية</option>
                         <option value="medical">اللائحة الطبية</option>
                     </select>
                 </div>
                 <div style="font-size:0.8em; color:#475569; margin-top:5px;">
-                    ⚡ الخدمة المدنية: الأيام = الاستحقاق × (سنوات الخدمة بحد أقصى سنتين)<br>
-                    ⚡ الطبية: الأيام = الاستحقاق × (سنوات الخدمة بحد أقصى 3 سنوات)
+                    ⚡ مدني: أقصى سنتين | طبي: أقصى 3 سنوات
                 </div>
             </div>
 
@@ -424,9 +387,6 @@
                 </div>
             </div>
 
-            <div class="note">
-                💡 عدد الأيام (خانة الإجازة) تُحسب تلقائياً عند حساب المدة أو تغيير بيانات الإجازة. يمكنك تعديله يدوياً.
-            </div>
             <div id="indemnityError" class="error"></div>
         </div>
 
@@ -505,11 +465,11 @@
             document.getElementById('daysResult').textContent = days;
             resultContainer.style.display = 'block';
 
-            // حساب إجمالي سنوات الخدمة (كسرية) لاستخدامها في الإجازات
+            // حساب إجمالي سنوات الخدمة (كسرية)
             totalServiceYears = years + months / 12 + days / 365;
             if (totalServiceYears < 0) totalServiceYears = 0;
 
-            // تحديث حقل الأيام في المكافأة بناءً على الإجازة واللائحة
+            // تحديث حقل الأيام تلقائياً
             updateLeaveDays();
         }
 
@@ -523,11 +483,9 @@
 
             if (annualLeave > 0 && totalServiceYears > 0) {
                 if (regulation === 'civil') {
-                    // لائحة الخدمة المدنية: بحد أقصى سنتين
                     const cappedYears = Math.min(totalServiceYears, 2);
                     leaveDays = annualLeave * cappedYears;
                 } else if (regulation === 'medical') {
-                    // اللائحة الطبية: بحد أقصى 3 سنوات
                     const cappedYears = Math.min(totalServiceYears, 3);
                     leaveDays = annualLeave * cappedYears;
                 }
@@ -535,9 +493,7 @@
                 leaveDays = 0;
             }
 
-            // وضع القيمة في حقل عدد الأيام (قابل للتعديل)
             totalDaysInput.value = leaveDays > 0 ? leaveDays : '';
-            // إعادة حساب المكافأة
             calculateIndemnity();
         }
 
@@ -554,7 +510,6 @@
             const salary = parseFloat(salaryInput.value) || 0;
             const totalDays = parseFloat(totalDaysInput.value) || 0;
 
-            // تحديث عرض الراتب في صف المعادلة بثلاث منازل عشرية
             displaySalary.textContent = salary.toLocaleString('en-US', {
                 minimumFractionDigits: 3,
                 maximumFractionDigits: 3
@@ -567,7 +522,6 @@
                 return;
             }
 
-            // المعادلة: (الراتب × 12 × عدد الأيام) ÷ 365
             const indemnity = (salary * 12 * totalDays) / 365;
             resultField.value = indemnity.toFixed(3);
         }
