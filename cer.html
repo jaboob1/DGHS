@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> أحتساب التعويض النقدي عن رصيد الأجازة</title>
+    <title>حاسبة التعويض النقدي عن رصيد الأجازة</title>
     <style>
         * {
             box-sizing: border-box;
@@ -22,12 +22,11 @@
 
         .main-wrapper {
             display: flex;
+            flex-direction: column;
+            align-items: center;
             gap: 25px;
-            max-width: 1100px;
+            max-width: 700px;
             width: 100%;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: flex-start;
         }
 
         .card {
@@ -36,9 +35,7 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             padding: 30px 25px;
             border: 1px solid rgba(255, 255, 255, 0.5);
-            flex: 1 1 480px;
-            max-width: 520px;
-            min-width: 340px;
+            width: 100%;
         }
 
         .card h2 {
@@ -281,22 +278,7 @@
             font-size: 0.85em;
         }
 
-        @media (max-width: 860px) {
-            .main-wrapper {
-                flex-direction: column;
-                align-items: center;
-            }
-            .card {
-                max-width: 100%;
-                flex: 1 1 auto;
-                width: 100%;
-            }
-            .formula-row {
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 450px) {
+        @media (max-width: 500px) {
             .formula-row {
                 flex-direction: column;
                 align-items: stretch;
@@ -312,67 +294,19 @@
             .leave-section .input-group {
                 margin-bottom: 10px;
             }
+            .result-values {
+                flex-direction: column;
+            }
+            .result-box {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="main-wrapper">
 
-        <!-- ========== البطاقة اليمنى: حاسبة المكافأة والإجازات ========== -->
-        <div class="card" id="indemnityCard">
-            <h2>أحتساب التعويض النقدي عن رصيد الأجازة</h2>
-            <p class="subtitle">تحتسب على أساس أيام الإجازة المستحقة</p>
-
-            <!-- آخر راتب أساسي -->
-            <div class="input-group">
-                <label for="basicSalary">📌 آخر راتب أساسي</label>
-                <input type="number" id="basicSalary" placeholder="أدخل الراتب الأساسي" min="0" step="0.01" oninput="calculateIndemnity()">
-            </div>
-
-            <!-- قسم الإجازة واللائحة -->
-            <div class="leave-section">
-                <div class="input-group">
-                    <label for="annualLeave">📆 عدد الاستحقاق السنوي للإجازة (يوم)</label>
-                    <input type="number" id="annualLeave" placeholder="مثال: 30" min="0" step="1" oninput="updateLeaveDays()">
-                </div>
-                <div class="input-group">
-                    <label for="regulationType">📋 نوع اللائحة</label>
-                    <select id="regulationType" onchange="updateLeaveDays()">
-                        <option value="civil">لائحة الخدمة المدنية</option>
-                        <option value="medical">اللائحة الطبية</option>
-                    </select>
-                </div>
-                <div style="font-size:0.8em; color:#475569; margin-top:5px;">
-                    ⚡ الخدمة المدنية: الأيام = الاستحقاق × (سنوات الخدمة بحد أقصى سنتين)<br>
-                    ⚡ الطبية: الأيام = الاستحقاق × (سنوات الخدمة بحد أقصى 3 سنوات)
-                </div>
-            </div>
-
-            <!-- صف معادلة المكافأة -->
-            <div class="formula-section">
-                <div class="formula-title">🧮 معادلة الاحتساب</div>
-                <div class="formula-row">
-                    <span class="formula-label">الراتب</span>
-                    <span class="formula-constant" id="displaySalary">0.00</span>
-                    <span class="formula-operator">×</span>
-                    <span class="formula-constant">12</span>
-                    <span class="formula-operator">×</span>
-                    <span class="formula-label">عدد الأيام</span>
-                    <input type="number" id="totalDays" class="formula-input" value="" readonly placeholder="0" oninput="calculateIndemnity()">
-                    <span class="formula-operator">÷</span>
-                    <span class="formula-constant">365</span>
-                    <span class="formula-operator">=</span>
-                    <input type="text" id="indemnityResult" class="formula-input result-field" value="0.00" readonly>
-                </div>
-            </div>
-
-            <div class="note">
-                💡 عدد الأيام (خانة الإجازة) تُحسب تلقائياً عند حساب المدة أو تغيير بيانات الإجازة. يمكنك تعديله يدوياً بالضغط عليه.
-            </div>
-            <div id="indemnityError" class="error"></div>
-        </div>
-
-        <!-- ========== البطاقة اليسرى: حاسبة مدة الخدمة ========== -->
+        <!-- ========== البطاقة الأولى (الأعلى): حاسبة مدة الخدمة ========== -->
         <div class="card" id="serviceCard">
             <h2>🗓️ حاسبة مدة الخدمة</h2>
             <p class="subtitle">طريقة الاستلاف (الشهر = 30 يوم)</p>
@@ -408,11 +342,65 @@
             </div>
 
             <div class="note">
-                ⚙️ <strong>آلية حساب الفرق:</strong><br>
+                 <strong>آلية حساب الفرق:</strong><br>
                 • إذا كان يوم النهاية أصغر من يوم التعيين → يُستلَف شهر (30 يوم).<br>
                 • إذا أصبح شهر النهاية أصغر من شهر التعيين → يُستلَف سنة (12 شهر).<br>
                 • الناتج = (تاريخ نهاية الخدمة - تاريخ التعيين).
             </div>
+        </div>
+
+        <!-- ========== البطاقة الثانية (الأسفل): حاسبة المكافأة والإجازات ========== -->
+        <div class="card" id="indemnityCard">
+            <h2>💰 حاسبة مكافأة نهاية الخدمة</h2>
+            <p class="subtitle">تحتسب على أساس أيام الإجازة المستحقة</p>
+
+            <!-- آخر راتب أساسي -->
+            <div class="input-group">
+                <label for="basicSalary"> آخر راتب أساسي</label>
+                <input type="number" id="basicSalary" placeholder="أدخل الراتب الأساسي" min="0" step="0.01" oninput="calculateIndemnity()">
+            </div>
+
+            <!-- قسم الإجازة واللائحة -->
+            <div class="leave-section">
+                <div class="input-group">
+                    <label for="annualLeave">📆 عدد الاستحقاق السنوي للإجازة (يوم)</label>
+                    <input type="number" id="annualLeave" placeholder="مثال: 30" min="0" step="1" oninput="updateLeaveDays()">
+                </div>
+                <div class="input-group">
+                    <label for="regulationType">📋 نوع اللائحة</label>
+                    <select id="regulationType" onchange="updateLeaveDays()">
+                        <option value="civil">لائحة الخدمة المدنية</option>
+                        <option value="medical">اللائحة الطبية</option>
+                    </select>
+                </div>
+                <div style="font-size:0.8em; color:#475569; margin-top:5px;">
+                    ⚡ الخدمة المدنية: الأيام = الاستحقاق × (سنوات الخدمة بحد أقصى سنتين)<br>
+                    ⚡ الطبية: الأيام = الاستحقاق × (سنوات الخدمة بحد أقصى 3 سنوات)
+                </div>
+            </div>
+
+            <!-- صف معادلة المكافأة -->
+            <div class="formula-section">
+                <div class="formula-title"> معادلة الاحتساب</div>
+                <div class="formula-row">
+                    <span class="formula-label">الراتب</span>
+                    <span class="formula-constant" id="displaySalary">0.00</span>
+                    <span class="formula-operator">×</span>
+                    <span class="formula-constant">12</span>
+                    <span class="formula-operator">×</span>
+                    <span class="formula-label">عدد الأيام</span>
+                    <input type="number" id="totalDays" class="formula-input" value="" placeholder="0" oninput="calculateIndemnity()">
+                    <span class="formula-operator">÷</span>
+                    <span class="formula-constant">365</span>
+                    <span class="formula-operator">=</span>
+                    <input type="text" id="indemnityResult" class="formula-input result-field" value="0.00" readonly>
+                </div>
+            </div>
+
+            <div class="note">
+                💡 عدد الأيام (خانة الإجازة) تُحسب تلقائياً عند حساب المدة أو تغيير بيانات الإجازة. يمكنك تعديله يدوياً.
+            </div>
+            <div id="indemnityError" class="error"></div>
         </div>
 
     </div>
@@ -508,11 +496,10 @@
                     leaveDays = annualLeave * cappedYears;
                 }
             } else if (annualLeave > 0 && totalServiceYears === 0) {
-                // إذا لم تحسب المدة بعد، يتم ترك الحقل فارغاً أو صفر
                 leaveDays = 0;
             }
 
-            // وضع القيمة في حقل عدد الأيام (مع الاحتفاظ بإمكانية التعديل اليدوي)
+            // وضع القيمة في حقل عدد الأيام (قابل للتعديل)
             totalDaysInput.value = leaveDays > 0 ? leaveDays : '';
             // إعادة حساب المكافأة
             calculateIndemnity();
@@ -556,15 +543,6 @@
             document.getElementById('totalDays').value = '';
             totalServiceYears = 0;
         });
-
-        // للسماح بالتعديل اليدوي على حقل الأيام (يبقى readonly لكن يمكن تغييره مؤقتاً عبر الكود إذا أردنا،
-        // لكن المستخدم قد يرغب في تعديله يدوياً حسب الملاحظة، لذا نتركه readonly ولكن نعطيه إمكانية التغيير عبر الحذف والكتابة؟)
-        // حسب التصميم جعلناه readonly، ولكن الملاحظة تقول "يمكنك تعديله يدوياً بالضغط عليه".
-        // لتمكين التعديل اليدوي نزيل readonly عندما يضغط المستخدم. لكن الأبسط: نجعله غير readonly ونراقب الإدخال.
-        // لكن المستخدم قد يفسد القيم. سأحوله إلى قابل للتعديل مع تنبيه.
-        // سأقوم بتغيير الخاصية readonly إلى false في الكود النهائي حسب الطلب "يمكنك تعديله يدوياً".
-        // لذا سنعدل الـ HTML ليكون input عادي.
-        // لكن في الكود أعلاه هو readonly. سأصحح في النسخة النهائية لجعله قابلاً للتعديل.
     </script>
 </body>
 </html>
