@@ -29,7 +29,6 @@
             width: 100%;
         }
 
-        /* غلاف الصفحة للطباعة بحدود */
         .page-border {
             width: 100%;
         }
@@ -55,7 +54,7 @@
         .columns-row {
             display: flex;
             gap: 30px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .column-right {
@@ -96,7 +95,6 @@
             transition: all 0.3s ease;
             font-family: inherit;
             text-align: right;
-            flex: 1;
         }
 
         .compact-input:focus {
@@ -146,18 +144,19 @@
             background: #0e5e58;
         }
 
+        /* صف النتيجة بمحاذاة صف نوع اللائحة */
         .result-centered {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin: 10px 0 15px;
+            justify-content: flex-start;
+            margin-right: 110px; /* محاذاة بداية حقل نوع اللائحة (100px label + 10px gap) */
+            margin-top: 5px;
+            margin-bottom: 15px;
         }
 
         .result-container {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 10px;
         }
         .result-label {
             font-weight: 600;
@@ -169,8 +168,14 @@
         .result-values {
             display: flex;
             gap: 6px;
+            flex-direction: row; /* التأكيد على الاتجاه الأفقي */
         }
         .result-box {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .result-number-box {
             width: 50px;
             padding: 8px 4px;
             background: white;
@@ -179,19 +184,15 @@
             text-align: center;
             font-size: 0.9em;
             box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-        }
-        .result-number {
             font-weight: 700;
             color: #0f2b4b;
-            line-height: 1.2;
         }
         .result-unit {
-            font-size: 0.6em;
+            font-size: 0.75em;
             color: #64748b;
-            display: block;
+            white-space: nowrap;
         }
 
-        /* خطوط فاصلة */
         .divider-line {
             border: none;
             border-top: 1px solid #ccc;
@@ -255,7 +256,7 @@
         .formula-operator {
             font-size: 1.2em;
             font-weight: 700;
-            color: #000; /* أسود */
+            color: #000;
             margin: 0 2px;
         }
         .formula-constant {
@@ -268,7 +269,6 @@
             white-space: nowrap;
         }
 
-        /* قسم التوقيعات - تباعد أكبر */
         .signature-section {
             margin-top: 25px;
             border: 1px solid #e2e8f0;
@@ -277,7 +277,7 @@
             background: #fafafa;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 35px 25px; /* زيادة التباعد الطولي */
+            gap: 35px 25px;
         }
         .signature-box {
             text-align: center;
@@ -333,7 +333,7 @@
 
         @media print {
             @page {
-                margin: 2cm; /* هوامش */
+                margin: 2cm;
             }
             body {
                 background: white !important;
@@ -347,7 +347,6 @@
                 box-shadow: none !important;
                 gap: 0 !important;
             }
-            /* إطار خارجي للصفحة */
             .page-border {
                 border: 2px solid #000 !important;
                 padding: 15px !important;
@@ -388,7 +387,7 @@
             .compact-input,
             .formula-input,
             select.compact-input,
-            .result-box,
+            .result-number-box,
             .formula-constant {
                 background: transparent !important;
                 border: 1px solid transparent !important;
@@ -420,10 +419,6 @@
                 border-bottom: 1px solid #000 !important;
             }
 
-            .result-centered {
-                margin: 15px 0 !important;
-            }
-
             .divider-line {
                 border-top: 1px solid #000 !important;
                 margin: 15px 0 !important;
@@ -436,6 +431,10 @@
             }
             .signature-section {
                 grid-template-columns: 1fr;
+            }
+            .result-centered {
+                margin-right: 0;
+                justify-content: center;
             }
         }
     </style>
@@ -455,19 +454,19 @@
                     <div class="column-right">
                         <div class="input-group">
                             <label for="employeeName">اسم الموظف</label>
-                            <input type="text" id="employeeName" class="compact-input" placeholder="الاسم" lang="ar">
+                            <input type="text" id="employeeName" class="compact-input" style="width: 120px;" placeholder="الاسم" lang="ar">
                         </div>
                         <div class="input-group">
                             <label for="hireDate">تاريخ التعيين</label>
-                            <input type="date" id="hireDate" class="compact-input" required lang="ar">
+                            <input type="date" id="hireDate" class="compact-input" style="width: 120px;" required lang="ar">
                         </div>
                         <div class="input-group">
                             <label for="basicSalary">آخر راتب أساسي</label>
-                            <input type="number" id="basicSalary" class="compact-input" placeholder="٠.٠٠٠" min="0" step="0.001" oninput="calculateIndemnity()" lang="ar">
+                            <input type="number" id="basicSalary" class="compact-input" style="width: 120px;" placeholder="٠.٠٠٠" min="0" step="0.001" oninput="calculateIndemnity()" lang="ar">
                         </div>
                         <div class="input-group">
                             <label for="regulationType">نوع اللائحة</label>
-                            <select id="regulationType" class="compact-input" onchange="updateLeaveDays()" lang="ar">
+                            <select id="regulationType" class="compact-input" style="width: 120px;" onchange="updateLeaveDays()" lang="ar">
                                 <option value="civil">لائحة الخدمة المدنية</option>
                                 <option value="medical">اللائحة الطبية</option>
                             </select>
@@ -476,40 +475,44 @@
                     <div class="column-left">
                         <div class="input-group">
                             <label for="employeeNumber">رقم الموظف</label>
-                            <input type="text" id="employeeNumber" class="compact-input" placeholder="الرقم" lang="ar">
+                            <input type="text" id="employeeNumber" class="compact-input" style="width: 120px;" placeholder="الرقم" lang="ar">
                         </div>
                         <div class="input-group">
                             <label for="endDate">تاريخ نهاية الخدمة</label>
-                            <input type="date" id="endDate" class="compact-input" required lang="ar">
+                            <input type="date" id="endDate" class="compact-input" style="width: 120px;" required lang="ar">
                         </div>
                         <div class="input-group">
                             <label for="annualLeave">الاستحقاق السنوي (يوم)</label>
-                            <input type="number" id="annualLeave" class="compact-input" placeholder="٣٠" min="0" step="1" oninput="updateLeaveDays()" lang="ar">
+                            <input type="number" id="annualLeave" class="compact-input" style="width: 120px;" placeholder="٣٠" min="0" step="1" oninput="updateLeaveDays()" lang="ar">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- نتيجة المدة بمحاذاة صف نوع اللائحة -->
+                <div class="result-centered" id="resultCentered" style="display: none;">
+                    <div class="result-container">
+                        <span class="result-label">المدة :</span>
+                        <div class="result-values">
+                            <!-- اليوم أولاً من اليمين -->
+                            <div class="result-box">
+                                <div class="result-number-box" id="daysResult">٠</div>
+                                <span class="result-unit">يوم</span>
+                            </div>
+                            <!-- الشهر في الوسط -->
+                            <div class="result-box">
+                                <div class="result-number-box" id="monthsResult">٠</div>
+                                <span class="result-unit">شهر</span>
+                            </div>
+                            <!-- السنة أخيراً -->
+                            <div class="result-box">
+                                <div class="result-number-box" id="yearsResult">٠</div>
+                                <span class="result-unit">سنة</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div id="errorMessage" class="error"></div>
-
-                <div class="result-centered" id="resultCentered" style="display: none;">
-                    <div class="result-container">
-                        <span class="result-label">المدة</span>
-                        <div class="result-values">
-                            <div class="result-box">
-                                <div class="result-number" id="yearsResult">٠</div>
-                                <div class="result-unit">سنة</div>
-                            </div>
-                            <div class="result-box">
-                                <div class="result-number" id="monthsResult">٠</div>
-                                <div class="result-unit">شهر</div>
-                            </div>
-                            <div class="result-box">
-                                <div class="result-number" id="daysResult">٠</div>
-                                <div class="result-unit">يوم</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <hr class="divider-line">
 
@@ -570,7 +573,6 @@
     </div>
 
     <script>
-        // تحويل الأرقام الإنجليزية إلى عربية
         function toArabicNumber(num) {
             if (num === undefined || num === null) return '';
             return String(num).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
@@ -628,9 +630,10 @@
             const months = m2 - m1;
             const years = y2 - y1;
 
-            document.getElementById('yearsResult').textContent = toArabicNumber(years);
-            document.getElementById('monthsResult').textContent = toArabicNumber(months);
+            // عرض النتائج بالعربية مع الترتيب: يوم، شهر، سنة
             document.getElementById('daysResult').textContent = toArabicNumber(days);
+            document.getElementById('monthsResult').textContent = toArabicNumber(months);
+            document.getElementById('yearsResult').textContent = toArabicNumber(years);
             resultCentered.style.display = 'flex';
 
             totalServiceYears = years + months / 12 + days / 365;
