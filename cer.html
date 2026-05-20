@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة مدة الخدمة - طريقة الاستلاف</title>
+    <title>حاسبة مدة الخدمة ومكافأة نهاية الخدمة</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
@@ -14,55 +18,84 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
-            box-sizing: border-box;
         }
 
-        .calculator {
+        .main-wrapper {
+            display: flex;
+            gap: 25px;
+            max-width: 1050px;
+            width: 100%;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .card {
             background: #ffffff;
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             padding: 30px 25px;
-            width: 100%;
-            max-width: 480px;
             border: 1px solid rgba(255, 255, 255, 0.5);
+            flex: 1 1 460px;
+            max-width: 500px;
+            min-width: 320px;
         }
 
-        h2 {
+        .card h2 {
             text-align: center;
             color: #1e3c72;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             font-weight: 700;
-            font-size: 1.8em;
+            font-size: 1.6em;
+            letter-spacing: -0.5px;
+        }
+
+        .card .subtitle {
+            text-align: center;
+            color: #475569;
+            margin-top: -12px;
+            margin-bottom: 18px;
+            font-size: 0.85em;
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         label {
             display: block;
             font-weight: 600;
             color: #2c3e50;
-            margin-bottom: 8px;
-            font-size: 0.95em;
+            margin-bottom: 6px;
+            font-size: 0.9em;
         }
 
-        input[type="date"] {
+        input[type="date"],
+        input[type="number"] {
             width: 100%;
-            padding: 12px 15px;
+            padding: 11px 14px;
             border: 2px solid #e1e8f0;
-            border-radius: 12px;
-            font-size: 1em;
+            border-radius: 10px;
+            font-size: 0.95em;
             background: #f9fbfd;
             transition: all 0.3s ease;
-            box-sizing: border-box;
             font-family: inherit;
+            text-align: right;
         }
 
-        input[type="date"]:focus {
+        input[type="date"]:focus,
+        input[type="number"]:focus {
             outline: none;
             border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        input[readonly] {
+            background: #eef2f7;
+            color: #0f2b4b;
+            font-weight: 700;
+            cursor: default;
+            border-color: #d0dbe8;
         }
 
         button {
@@ -70,67 +103,140 @@
             background: #1e3c72;
             color: white;
             border: none;
-            padding: 14px 20px;
+            padding: 13px 20px;
             border-radius: 12px;
-            font-size: 1.1em;
+            font-size: 1.05em;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s ease, transform 0.1s ease;
-            margin-top: 10px;
+            margin-top: 8px;
+            letter-spacing: 0.3px;
         }
 
         button:hover {
             background: #2b4f8c;
         }
-
         button:active {
-            transform: scale(0.98);
+            transform: scale(0.97);
         }
 
         .result-container {
-            margin-top: 25px;
+            margin-top: 20px;
             background: #f0f6ff;
             border-radius: 16px;
-            padding: 20px;
+            padding: 18px;
             border: 1px solid #d0e0f5;
             text-align: center;
         }
-
         .result-label {
             font-weight: 600;
             color: #1e3c72;
-            margin-bottom: 15px;
-            font-size: 1.1em;
+            margin-bottom: 12px;
+            font-size: 1em;
         }
-
         .result-values {
             display: flex;
             justify-content: space-around;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
-
         .result-box {
             background: white;
             border-radius: 12px;
-            padding: 12px 15px;
-            min-width: 75px;
+            padding: 10px 14px;
+            min-width: 65px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
             border: 1px solid #e2e8f0;
         }
-
         .result-number {
-            font-size: 2em;
+            font-size: 1.9em;
             font-weight: 700;
             color: #0f2b4b;
             line-height: 1.2;
         }
-
         .result-unit {
-            font-size: 0.8em;
+            font-size: 0.75em;
             color: #64748b;
             font-weight: 500;
+        }
+
+        /* قسم صيغة المكافأة */
+        .formula-section {
+            margin-top: 20px;
+            background: #fdfcff;
+            border-radius: 16px;
+            padding: 18px 15px;
+            border: 1px dashed #cbd5e1;
+        }
+        .formula-title {
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 14px;
+            font-size: 1em;
+            text-align: center;
+        }
+        .formula-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            gap: 8px;
+            row-gap: 10px;
+        }
+        .formula-row > * {
+            flex-shrink: 0;
+        }
+        .formula-label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.85em;
+            white-space: nowrap;
+        }
+        .formula-input {
+            width: 100px;
+            padding: 9px 10px;
+            border: 2px solid #e1e8f0;
+            border-radius: 8px;
+            font-size: 0.9em;
+            background: #fff;
+            text-align: center;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .formula-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+        }
+        .formula-input.result-field {
+            background: #e8f0fe;
+            font-weight: 700;
+            color: #0f2b4b;
+            width: 120px;
+            cursor: default;
+            border-color: #b9cef0;
+        }
+        .formula-operator {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #3b82f6;
+            margin: 0 2px;
+        }
+        .formula-constant {
+            font-weight: 700;
+            color: #0f2b4b;
+            font-size: 0.95em;
+            background: #f1f5f9;
+            padding: 6px 10px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+        .formula-text {
+            font-weight: 500;
+            color: #334155;
+            font-size: 0.85em;
+            white-space: nowrap;
         }
 
         .note {
@@ -138,13 +244,12 @@
             border-right: 4px solid #f59e0b;
             padding: 12px 15px;
             border-radius: 10px;
-            font-size: 0.8em;
+            font-size: 0.78em;
             color: #92400e;
-            margin-top: 20px;
+            margin-top: 18px;
             text-align: right;
             line-height: 1.6;
         }
-
         .error {
             color: #b91c1c;
             background: #fee2e2;
@@ -153,6 +258,28 @@
             margin-top: 15px;
             font-weight: 500;
             display: none;
+            font-size: 0.85em;
+        }
+
+        @media (max-width: 860px) {
+            .main-wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+            .card {
+                max-width: 100%;
+                flex: 1 1 auto;
+                width: 100%;
+            }
+            .formula-row {
+                justify-content: center;
+            }
+            .formula-input {
+                width: 85px;
+            }
+            .formula-input.result-field {
+                width: 105px;
+            }
         }
 
         @media (max-width: 400px) {
@@ -162,66 +289,136 @@
             .result-box {
                 width: 100%;
             }
+            .formula-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 6px;
+            }
+            .formula-input,
+            .formula-input.result-field {
+                width: 100%;
+            }
+            .formula-operator {
+                text-align: center;
+                font-size: 1.1em;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="calculator">
-        <h2>🗓️ حاسبة مدة الخدمة</h2>
-        <p style="text-align: center; color: #475569; margin-top: -15px; font-size: 0.9em;">طريقة الاستلاف (الشهر = 30 يوم)</p>
+    <div class="main-wrapper">
 
-        <div class="input-group">
-            <label for="hireDate">📅 تاريخ التعيين</label>
-            <input type="date" id="hireDate" required>
+        <!-- ========== البطاقة اليمنى: حاسبة مكافأة نهاية الخدمة ========== -->
+        <div class="card" id="indemnityCard">
+            <h2>💰 حاسبة مكافأة نهاية الخدمة</h2>
+            <p class="subtitle">وفق معادلة: (الراتب × 12 × عدد الأيام) ÷ 365</p>
+
+            <div class="input-group">
+                <label for="basicSalary">📌 آخر راتب أساسي</label>
+                <input type="number" id="basicSalary" placeholder="أدخل الراتب الأساسي" min="0" step="0.01" oninput="calculateIndemnity()">
+            </div>
+
+            <!-- صف المعادلة -->
+            <div class="formula-section">
+                <div class="formula-title">🧮 معادلة الاحتساب</div>
+                <div class="formula-row">
+                    <!-- الراتب الأساسي (معروض كملخص) -->
+                    <span class="formula-label">الراتب</span>
+                    <span class="formula-constant" id="displaySalary">0</span>
+
+                    <!-- علامة الضرب -->
+                    <span class="formula-operator">×</span>
+
+                    <!-- الرقم 12 -->
+                    <span class="formula-constant">12</span>
+
+                    <!-- علامة الضرب -->
+                    <span class="formula-operator">×</span>
+
+                    <!-- عدد الأيام -->
+                    <span class="formula-label">عدد الأيام</span>
+                    <input type="number" id="totalDays" class="formula-input" placeholder="الأيام" min="0" step="1" oninput="calculateIndemnity()" value="">
+
+                    <!-- علامة القسمة -->
+                    <span class="formula-operator">÷</span>
+
+                    <!-- 365 يوم -->
+                    <span class="formula-constant">365</span>
+
+                    <!-- يساوي -->
+                    <span class="formula-operator">=</span>
+
+                    <!-- الناتج -->
+                    <input type="text" id="indemnityResult" class="formula-input result-field" value="0.00" readonly>
+                </div>
+            </div>
+
+            <div class="note" style="margin-top:15px;">
+                💡 <strong>ملاحظة:</strong> عدد الأيام يُملأ تلقائياً من إجمالي أيام الخدمة (سنوات×365 + أشهر×30 + أيام) بعد حساب الفرق بين التاريخين في البطاقة اليسرى. يمكنك تعديله يدوياً.
+            </div>
+            <div id="indemnityError" class="error"></div>
         </div>
 
-        <div class="input-group">
-            <label for="endDate">📅 تاريخ نهاية الخدمة</label>
-            <input type="date" id="endDate" required>
-        </div>
+        <!-- ========== البطاقة اليسرى: حاسبة مدة الخدمة ========== -->
+        <div class="card" id="serviceCard">
+            <h2>🗓️ حاسبة مدة الخدمة</h2>
+            <p class="subtitle">طريقة الاستلاف (الشهر = 30 يوم)</p>
 
-        <button onclick="calculateDifference()">✨ احسب الفرق</button>
+            <div class="input-group">
+                <label for="hireDate">📅 تاريخ التعيين</label>
+                <input type="date" id="hireDate" required>
+            </div>
 
-        <div id="errorMessage" class="error"></div>
+            <div class="input-group">
+                <label for="endDate">📅 تاريخ نهاية الخدمة</label>
+                <input type="date" id="endDate" required>
+            </div>
 
-        <div class="result-container" id="resultContainer" style="display: none;">
-            <div class="result-label">📌 المدة المستحقة</div>
-            <div class="result-values">
-                <div class="result-box">
-                    <div class="result-number" id="yearsResult">0</div>
-                    <div class="result-unit">سنوات</div>
+            <button onclick="calculateDifference()">✨ احسب الفرق</button>
+
+            <div id="errorMessage" class="error"></div>
+
+            <div class="result-container" id="resultContainer" style="display: none;">
+                <div class="result-label">📌 المدة المستحقة</div>
+                <div class="result-values">
+                    <div class="result-box">
+                        <div class="result-number" id="yearsResult">0</div>
+                        <div class="result-unit">سنوات</div>
+                    </div>
+                    <div class="result-box">
+                        <div class="result-number" id="monthsResult">0</div>
+                        <div class="result-unit">أشهر</div>
+                    </div>
+                    <div class="result-box">
+                        <div class="result-number" id="daysResult">0</div>
+                        <div class="result-unit">أيام</div>
+                    </div>
                 </div>
-                <div class="result-box">
-                    <div class="result-number" id="monthsResult">0</div>
-                    <div class="result-unit">أشهر</div>
-                </div>
-                <div class="result-box">
-                    <div class="result-number" id="daysResult">0</div>
-                    <div class="result-unit">أيام</div>
-                </div>
+            </div>
+
+            <div class="note">
+                ⚙️ <strong>آلية حساب الفرق:</strong><br>
+                • إذا كان يوم النهاية أصغر من يوم التعيين → يُستلَف شهر (30 يوم) من شهور النهاية.<br>
+                • إذا أصبح شهر النهاية أصغر من شهر التعيين → يُستلَف سنة (12 شهر) من سنوات النهاية.<br>
+                • الناتج = (تاريخ نهاية الخدمة - تاريخ التعيين).
             </div>
         </div>
 
-        <div class="note">
-            ⚙️ <strong>آلية الحساب المطبقة:</strong><br>
-            • إذا كان يوم النهاية أصغر من يوم التعيين → يُستلَف شهر (30 يوم) من شهور النهاية.<br>
-            • إذا أصبح شهر النهاية أصغر من شهر التعيين → يُستلَف سنة (12 شهر) من سنوات النهاية.<br>
-            • الناتج = (تاريخ نهاية الخدمة - تاريخ التعيين) وفق هذه القواعد.
-        </div>
     </div>
 
     <script>
+        // ========== دالة حساب فرق التاريخين ==========
         function calculateDifference() {
             const hireDateInput = document.getElementById('hireDate').value;
             const endDateInput = document.getElementById('endDate').value;
             const errorDiv = document.getElementById('errorMessage');
             const resultContainer = document.getElementById('resultContainer');
+            const indemnityError = document.getElementById('indemnityError');
 
-            // إخفاء النتائج والأخطاء السابقة
             resultContainer.style.display = 'none';
             errorDiv.style.display = 'none';
+            indemnityError.style.display = 'none';
 
-            // التحقق من وجود القيم
             if (!hireDateInput || !endDateInput) {
                 errorDiv.textContent = '⚠️ الرجاء إدخال تاريخ التعيين وتاريخ نهاية الخدمة.';
                 errorDiv.style.display = 'block';
@@ -237,48 +434,82 @@
                 return;
             }
 
-            // استخراج مكونات التاريخين
             let y1 = hireDate.getFullYear();
-            let m1 = hireDate.getMonth() + 1; // 1-12
+            let m1 = hireDate.getMonth() + 1;
             let d1 = hireDate.getDate();
 
             let y2 = endDate.getFullYear();
             let m2 = endDate.getMonth() + 1;
             let d2 = endDate.getDate();
 
-            // التحقق من أن تاريخ النهاية بعد تاريخ التعيين (اختياري)
             if (endDate < hireDate) {
-                errorDiv.textContent = '⚠️ تنبيه: تاريخ نهاية الخدمة أقدم من تاريخ التعيين. سيتم عرض الفرق بالسالب إن وُجد.';
+                errorDiv.textContent = '⚠️ تنبيه: تاريخ نهاية الخدمة أقدم من تاريخ التعيين. الناتج المعروض يتبع الخوارزمية (قد يكون سالباً).';
                 errorDiv.style.display = 'block';
             }
 
-            // ---- خوارزمية الطرح الصحيحة: (نهاية - تعيين) مع الاستلاف ----
-            // 1. معالجة الأيام
+            // ---- خوارزمية الاستلاف: (نهاية - تعيين) ----
             if (d2 < d1) {
-                // استلاف شهر (30 يوم) من أشهر النهاية
                 m2 -= 1;
                 d2 += 30;
             }
             const days = d2 - d1;
 
-            // 2. معالجة الأشهر
             if (m2 < m1) {
-                // استلاف سنة (12 شهر) من سنوات النهاية
                 y2 -= 1;
                 m2 += 12;
             }
             const months = m2 - m1;
-
-            // 3. السنوات
             const years = y2 - y1;
 
-            // عرض النتائج
+            // عرض نتائج المدة
             document.getElementById('yearsResult').textContent = years;
             document.getElementById('monthsResult').textContent = months;
             document.getElementById('daysResult').textContent = days;
-
             resultContainer.style.display = 'block';
+
+            // ---- تحديث حقل "عدد الأيام" في حاسبة المكافأة تلقائياً ----
+            // إجمالي الأيام = (سنوات × 365) + (أشهر × 30) + الأيام المتبقية
+            const totalServiceDays = (years * 365) + (months * 30) + days;
+            const totalDaysInput = document.getElementById('totalDays');
+            totalDaysInput.value = totalServiceDays >= 0 ? totalServiceDays : 0;
+
+            // إعادة حساب المكافأة تلقائياً
+            calculateIndemnity();
         }
+
+        // ========== دالة حساب مكافأة نهاية الخدمة ==========
+        function calculateIndemnity() {
+            const salaryInput = document.getElementById('basicSalary');
+            const totalDaysInput = document.getElementById('totalDays');
+            const resultField = document.getElementById('indemnityResult');
+            const displaySalary = document.getElementById('displaySalary');
+            const indemnityError = document.getElementById('indemnityError');
+
+            indemnityError.style.display = 'none';
+
+            const salary = parseFloat(salaryInput.value) || 0;
+            const totalDays = parseFloat(totalDaysInput.value) || 0;
+
+            // تحديث عرض الراتب في صف المعادلة
+            displaySalary.textContent = salary.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            if (salary < 0 || totalDays < 0) {
+                indemnityError.textContent = '⚠️ الرجاء إدخال قيم موجبة للراتب وعدد الأيام.';
+                indemnityError.style.display = 'block';
+                resultField.value = '0.00';
+                return;
+            }
+
+            // المعادلة: (الراتب × 12 × عدد الأيام) ÷ 365
+            const indemnity = (salary * 12 * totalDays) / 365;
+            resultField.value = indemnity.toFixed(2);
+        }
+
+        // ========== عند تحميل الصفحة: إعداد القيم الأولية ==========
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('displaySalary').textContent = '0.00';
+            document.getElementById('indemnityResult').value = '0.00';
+        });
     </script>
 </body>
 </html>
