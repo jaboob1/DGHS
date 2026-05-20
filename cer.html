@@ -29,6 +29,11 @@
             width: 100%;
         }
 
+        /* غلاف الصفحة للطباعة بحدود */
+        .page-border {
+            width: 100%;
+        }
+
         .card {
             background: #ffffff;
             border-radius: 20px;
@@ -250,7 +255,7 @@
         .formula-operator {
             font-size: 1.2em;
             font-weight: 700;
-            color: #000; /* تغيير اللون من الأزرق إلى الأسود */
+            color: #000; /* أسود */
             margin: 0 2px;
         }
         .formula-constant {
@@ -263,15 +268,16 @@
             white-space: nowrap;
         }
 
+        /* قسم التوقيعات - تباعد أكبر */
         .signature-section {
             margin-top: 25px;
             border: 1px solid #e2e8f0;
             border-radius: 16px;
-            padding: 20px 15px;
+            padding: 25px 20px;
             background: #fafafa;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 35px 25px; /* زيادة التباعد الطولي */
         }
         .signature-box {
             text-align: center;
@@ -281,7 +287,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         .signature-line {
             width: 80%;
@@ -327,7 +333,7 @@
 
         @media print {
             @page {
-                margin: 2cm; /* هوامش الصفحة */
+                margin: 2cm; /* هوامش */
             }
             body {
                 background: white !important;
@@ -341,11 +347,18 @@
                 box-shadow: none !important;
                 gap: 0 !important;
             }
+            /* إطار خارجي للصفحة */
+            .page-border {
+                border: 2px solid #000 !important;
+                padding: 15px !important;
+                margin: 0 !important;
+                width: 100% !important;
+            }
             .card {
                 box-shadow: none !important;
                 border: none !important;
                 border-radius: 0 !important;
-                padding: 15px !important;
+                padding: 0 !important;
                 background: white !important;
                 page-break-inside: avoid;
             }
@@ -411,7 +424,6 @@
                 margin: 15px 0 !important;
             }
 
-            /* إظهار الفواصل عند الطباعة */
             .divider-line {
                 border-top: 1px solid #000 !important;
                 margin: 15px 0 !important;
@@ -430,123 +442,121 @@
 </head>
 <body>
     <div class="main-wrapper">
-        <div class="card">
-            <div class="print-header">
-                <div class="ministry">وزارة الصحة</div>
-                <div>المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
-            </div>
-
-            <h2>حاسبة مستحقات التعويض النقدي عن رصيد الإجازات</h2>
-
-            <div class="columns-row">
-                <div class="column-right">
-                    <div class="input-group">
-                        <label for="employeeName">اسم الموظف</label>
-                        <input type="text" id="employeeName" class="compact-input" placeholder="الاسم">
-                    </div>
-                    <div class="input-group">
-                        <label for="hireDate">تاريخ التعيين</label>
-                        <input type="date" id="hireDate" class="compact-input" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="basicSalary">آخر راتب أساسي</label>
-                        <input type="number" id="basicSalary" class="compact-input" placeholder="0.000" min="0" step="0.001" oninput="calculateIndemnity()">
-                    </div>
-                    <div class="input-group">
-                        <label for="regulationType">نوع اللائحة</label>
-                        <select id="regulationType" class="compact-input" onchange="updateLeaveDays()">
-                            <option value="civil">لائحة الخدمة المدنية</option>
-                            <option value="medical">اللائحة الطبية</option>
-                        </select>
-                    </div>
+        <div class="page-border">
+            <div class="card">
+                <div class="print-header">
+                    <div class="ministry">وزارة الصحة</div>
+                    <div>المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
                 </div>
-                <div class="column-left">
-                    <div class="input-group">
-                        <label for="employeeNumber">رقم الموظف</label>
-                        <input type="text" id="employeeNumber" class="compact-input" placeholder="الرقم">
-                    </div>
-                    <div class="input-group">
-                        <label for="endDate">تاريخ نهاية الخدمة</label>
-                        <input type="date" id="endDate" class="compact-input" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="annualLeave">الاستحقاق السنوي (يوم)</label>
-                        <input type="number" id="annualLeave" class="compact-input" placeholder="30" min="0" step="1" oninput="updateLeaveDays()">
-                    </div>
-                </div>
-            </div>
 
-            <div id="errorMessage" class="error"></div>
+                <h2>حاسبة مستحقات التعويض النقدي عن رصيد الإجازات</h2>
 
-            <div class="result-centered" id="resultCentered" style="display: none;">
-                <div class="result-container">
-                    <span class="result-label">المدة</span>
-                    <div class="result-values">
-                        <div class="result-box">
-                            <div class="result-number" id="yearsResult">٠</div>
-                            <div class="result-unit">سنة</div>
+                <div class="columns-row">
+                    <div class="column-right">
+                        <div class="input-group">
+                            <label for="employeeName">اسم الموظف</label>
+                            <input type="text" id="employeeName" class="compact-input" placeholder="الاسم" lang="ar">
                         </div>
-                        <div class="result-box">
-                            <div class="result-number" id="monthsResult">٠</div>
-                            <div class="result-unit">شهر</div>
+                        <div class="input-group">
+                            <label for="hireDate">تاريخ التعيين</label>
+                            <input type="date" id="hireDate" class="compact-input" required lang="ar">
                         </div>
-                        <div class="result-box">
-                            <div class="result-number" id="daysResult">٠</div>
-                            <div class="result-unit">يوم</div>
+                        <div class="input-group">
+                            <label for="basicSalary">آخر راتب أساسي</label>
+                            <input type="number" id="basicSalary" class="compact-input" placeholder="٠.٠٠٠" min="0" step="0.001" oninput="calculateIndemnity()" lang="ar">
+                        </div>
+                        <div class="input-group">
+                            <label for="regulationType">نوع اللائحة</label>
+                            <select id="regulationType" class="compact-input" onchange="updateLeaveDays()" lang="ar">
+                                <option value="civil">لائحة الخدمة المدنية</option>
+                                <option value="medical">اللائحة الطبية</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="column-left">
+                        <div class="input-group">
+                            <label for="employeeNumber">رقم الموظف</label>
+                            <input type="text" id="employeeNumber" class="compact-input" placeholder="الرقم" lang="ar">
+                        </div>
+                        <div class="input-group">
+                            <label for="endDate">تاريخ نهاية الخدمة</label>
+                            <input type="date" id="endDate" class="compact-input" required lang="ar">
+                        </div>
+                        <div class="input-group">
+                            <label for="annualLeave">الاستحقاق السنوي (يوم)</label>
+                            <input type="number" id="annualLeave" class="compact-input" placeholder="٣٠" min="0" step="1" oninput="updateLeaveDays()" lang="ar">
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- فاصل -->
-            <hr class="divider-line">
+                <div id="errorMessage" class="error"></div>
 
-            <div class="formula-section">
-                <div class="formula-title">معادلة الاحتساب</div>
-                <div class="formula-row">
-                    <span class="formula-label">الراتب</span>
-                    <span class="formula-constant" id="displaySalary">٠.٠٠٠</span>
-                    <span class="formula-operator">×</span>
-                    <span class="formula-constant">١٢</span>
-                    <span class="formula-operator">×</span>
-                    <span class="formula-label">عدد الأيام</span>
-                    <input type="number" id="totalDays" class="formula-input" value="" placeholder="٠" oninput="calculateIndemnity()">
-                    <span class="formula-operator">÷</span>
-                    <span class="formula-constant">٣٦٥</span>
-                    <span class="formula-operator">=</span>
-                    <input type="text" id="indemnityResult" class="formula-input result-field" value="٠.٠٠٠" readonly>
+                <div class="result-centered" id="resultCentered" style="display: none;">
+                    <div class="result-container">
+                        <span class="result-label">المدة</span>
+                        <div class="result-values">
+                            <div class="result-box">
+                                <div class="result-number" id="yearsResult">٠</div>
+                                <div class="result-unit">سنة</div>
+                            </div>
+                            <div class="result-box">
+                                <div class="result-number" id="monthsResult">٠</div>
+                                <div class="result-unit">شهر</div>
+                            </div>
+                            <div class="result-box">
+                                <div class="result-number" id="daysResult">٠</div>
+                                <div class="result-unit">يوم</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div id="indemnityError" class="error"></div>
+                <hr class="divider-line">
 
-            <!-- فاصل -->
-            <hr class="divider-line">
+                <div class="formula-section">
+                    <div class="formula-title">معادلة الاحتساب</div>
+                    <div class="formula-row">
+                        <span class="formula-label">الراتب</span>
+                        <span class="formula-constant" id="displaySalary">٠.٠٠٠</span>
+                        <span class="formula-operator">×</span>
+                        <span class="formula-constant">١٢</span>
+                        <span class="formula-operator">×</span>
+                        <span class="formula-label">عدد الأيام</span>
+                        <input type="number" id="totalDays" class="formula-input" value="" placeholder="٠" oninput="calculateIndemnity()" lang="ar">
+                        <span class="formula-operator">÷</span>
+                        <span class="formula-constant">٣٦٥</span>
+                        <span class="formula-operator">=</span>
+                        <input type="text" id="indemnityResult" class="formula-input result-field" value="٠.٠٠٠" readonly>
+                    </div>
+                </div>
 
-            <!-- قسم التوقيعات في الأسفل -->
-            <div class="signature-section">
-                <div class="signature-box">
-                    <span>إعداد ومراجعة</span>
-                    <div class="signature-line"></div>
-                </div>
-                <div class="signature-box">
-                    <span>اعتماد مدير الموارد البشرية</span>
-                    <div class="signature-line"></div>
-                </div>
-                <div class="signature-box">
-                    <span>اعتماد مدير الشئون المالية</span>
-                    <div class="signature-line"></div>
-                </div>
-                <div class="signature-box">
-                    <span>اعتماد المدير العام</span>
-                    <div class="signature-line"></div>
-                </div>
-            </div>
+                <div id="indemnityError" class="error"></div>
 
-            <!-- الأزرار بعد التوقيعات -->
-            <div class="btn-group">
-                <button onclick="calculateDifference()">احسب المدة</button>
-                <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
+                <hr class="divider-line">
+
+                <div class="signature-section">
+                    <div class="signature-box">
+                        <span>إعداد ومراجعة</span>
+                        <div class="signature-line"></div>
+                    </div>
+                    <div class="signature-box">
+                        <span>اعتماد مدير الموارد البشرية</span>
+                        <div class="signature-line"></div>
+                    </div>
+                    <div class="signature-box">
+                        <span>اعتماد مدير الشئون المالية</span>
+                        <div class="signature-line"></div>
+                    </div>
+                    <div class="signature-box">
+                        <span>اعتماد المدير العام</span>
+                        <div class="signature-line"></div>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button onclick="calculateDifference()">احسب المدة</button>
+                    <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
+                </div>
             </div>
         </div>
 
@@ -560,7 +570,7 @@
     </div>
 
     <script>
-        // دالة تحويل الأرقام الإنجليزية إلى عربية
+        // تحويل الأرقام الإنجليزية إلى عربية
         function toArabicNumber(num) {
             if (num === undefined || num === null) return '';
             return String(num).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
@@ -647,7 +657,6 @@
                 leaveDays = 0;
             }
 
-            // وضع القيمة الرقمية العادية في الحقل ليتمكن المستخدم من التعديل
             totalDaysInput.value = leaveDays > 0 ? leaveDays : '';
             calculateIndemnity();
         }
@@ -664,7 +673,6 @@
             const salary = parseFloat(salaryInput.value) || 0;
             const totalDays = parseFloat(totalDaysInput.value) || 0;
 
-            // عرض الراتب بالأرقام العربية
             displaySalary.textContent = toArabicNumber(salary.toFixed(3));
 
             if (salary < 0 || totalDays < 0) {
