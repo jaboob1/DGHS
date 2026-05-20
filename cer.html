@@ -25,7 +25,7 @@
             flex-direction: column;
             align-items: center;
             gap: 25px;
-            max-width: 800px;
+            max-width: 850px;
             width: 100%;
         }
 
@@ -34,7 +34,7 @@
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             padding: 30px 25px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            border: 2px dashed #cbd5e1; /* تحديد منقط على البطاقة بالكامل */
             width: 100%;
         }
 
@@ -47,20 +47,31 @@
             letter-spacing: -0.5px;
         }
 
-        .input-row {
+        /* تخطيط عمودين للحقول المطلوبة */
+        .columns-row {
             display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 18px;
+            gap: 30px;
+            margin-bottom: 20px;
         }
 
-        .input-row .input-group {
+        .column-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .column-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .input-group {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 0;
+            gap: 10px;
         }
 
         .input-group label {
@@ -68,9 +79,11 @@
             color: #2c3e50;
             font-size: 0.9em;
             white-space: nowrap;
+            min-width: 100px;
+            text-align: right;
         }
 
-        /* حقول الإدخال العامة */
+        /* حقول الإدخال */
         .compact-input {
             padding: 8px 10px;
             border: 2px solid #e1e8f0;
@@ -80,6 +93,7 @@
             transition: all 0.3s ease;
             font-family: inherit;
             text-align: right;
+            flex: 1;
         }
 
         .compact-input:focus {
@@ -107,7 +121,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s ease, transform 0.1s ease;
-            margin: 8px 0 15px;
+            margin: 10px 0 15px;
         }
 
         button:hover {
@@ -117,7 +131,15 @@
             transform: scale(0.97);
         }
 
-        /* نتيجة المدة - الآن كحقول مضمنة بنفس ارتفاع الإدخالات */
+        /* نتيجة المدة تتوسط الصفحة */
+        .result-centered {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0 15px;
+        }
+
         .result-container {
             display: flex;
             align-items: center;
@@ -158,15 +180,7 @@
             display: block;
         }
 
-        /* صف التواريخ مع النتيجة */
-        .dates-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 18px;
-        }
-
+        /* المعادلة */
         .formula-section {
             margin-top: 15px;
             background: #fdfcff;
@@ -237,6 +251,46 @@
             white-space: nowrap;
         }
 
+        /* قسم الاعتمادات */
+        .approval-section {
+            margin-top: 25px;
+            border: 1px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 20px 15px;
+            background: #fafafa;
+        }
+        .approval-title {
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 1em;
+            text-align: center;
+        }
+        .approval-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .approval-box {
+            border: 1px dashed #94a3b8;
+            border-radius: 8px;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: 600;
+            color: #2c3e50;
+            background: white;
+            font-size: 0.85em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .approval-line {
+            width: 80%;
+            border-bottom: 1px solid #64748b;
+            margin-top: 5px;
+        }
+
         .error {
             color: #b91c1c;
             background: #fee2e2;
@@ -248,6 +302,7 @@
             font-size: 0.85em;
         }
 
+        /* تذييل */
         .collaboration-footer {
             width: 100%;
             background: #ffffff;
@@ -260,60 +315,78 @@
             color: #2c3e50;
             line-height: 1.8;
             background: #f9fcff;
-            margin-top: 5px;
         }
         .collaboration-footer strong {
             color: #1e3c72;
-            font-weight: 700;
         }
         .collaboration-footer .divider {
             color: #94a3b8;
             margin: 0 5px;
         }
 
-        @media (max-width: 750px) {
-            .input-row, .dates-row {
+        @media (max-width: 700px) {
+            .columns-row {
                 flex-direction: column;
-                align-items: stretch;
             }
-            .result-container {
-                width: 100%;
-                justify-content: center;
+            .approval-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
     <div class="main-wrapper">
-
-        <!-- البطاقة الموحدة -->
         <div class="card">
             <h2>حاسبة مستحقات التعويض النقدي عن رصيد الإجازات</h2>
 
-            <!-- صف اسم الموظف ورقمه -->
-            <div class="input-row">
-                <div class="input-group">
-                    <label for="employeeName">اسم الموظف</label>
-                    <input type="text" id="employeeName" class="compact-input" style="width: 200px;" placeholder="الاسم">
+            <!-- صف العمودين للمحاذاة الطولية للحقول المحددة -->
+            <div class="columns-row">
+                <!-- العمود الأيمن: اسم الموظف، تاريخ التعيين، آخر راتب أساسي، نوع اللائحة -->
+                <div class="column-right">
+                    <div class="input-group">
+                        <label for="employeeName">اسم الموظف</label>
+                        <input type="text" id="employeeName" class="compact-input" placeholder="الاسم">
+                    </div>
+                    <div class="input-group">
+                        <label for="hireDate">تاريخ التعيين</label>
+                        <input type="date" id="hireDate" class="compact-input" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="basicSalary">آخر راتب أساسي</label>
+                        <input type="number" id="basicSalary" class="compact-input" placeholder="0.000" min="0" step="0.001" oninput="calculateIndemnity()">
+                    </div>
+                    <div class="input-group">
+                        <label for="regulationType">نوع اللائحة</label>
+                        <select id="regulationType" class="compact-input" onchange="updateLeaveDays()">
+                            <option value="civil">لائحة الخدمة المدنية</option>
+                            <option value="medical">اللائحة الطبية</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="employeeNumber">رقم الموظف</label>
-                    <input type="text" id="employeeNumber" class="compact-input" style="width: 150px;" placeholder="الرقم">
+
+                <!-- العمود الأيسر: رقم الموظف، تاريخ نهاية الخدمة، الاستحقاق السنوي -->
+                <div class="column-left">
+                    <div class="input-group">
+                        <label for="employeeNumber">رقم الموظف</label>
+                        <input type="text" id="employeeNumber" class="compact-input" placeholder="الرقم">
+                    </div>
+                    <div class="input-group">
+                        <label for="endDate">تاريخ نهاية الخدمة</label>
+                        <input type="date" id="endDate" class="compact-input" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="annualLeave">الاستحقاق السنوي (يوم)</label>
+                        <input type="number" id="annualLeave" class="compact-input" placeholder="30" min="0" step="1" oninput="updateLeaveDays()">
+                    </div>
                 </div>
             </div>
 
-            <!-- صف التواريخ مع نتيجة المدة -->
-            <div class="dates-row">
-                <div class="input-group">
-                    <label for="hireDate">تاريخ التعيين</label>
-                    <input type="date" id="hireDate" class="compact-input" style="width: 150px;" required>
-                </div>
-                <div class="input-group">
-                    <label for="endDate">تاريخ نهاية الخدمة</label>
-                    <input type="date" id="endDate" class="compact-input" style="width: 150px;" required>
-                </div>
-                <!-- نتيجة المدة بجانب التواريخ -->
-                <div class="result-container" id="resultContainer" style="display: none;">
+            <button onclick="calculateDifference()">احسب المدة</button>
+            <div id="errorMessage" class="error"></div>
+
+            <!-- نتيجة المدة تتوسط الصفحة أسفل التواريخ -->
+            <div class="result-centered" id="resultCentered" style="display: none;">
+                <div class="result-container">
                     <span class="result-label">المدة</span>
                     <div class="result-values">
                         <div class="result-box">
@@ -332,29 +405,7 @@
                 </div>
             </div>
 
-            <button onclick="calculateDifference()">احسب المدة</button>
-            <div id="errorMessage" class="error"></div>
-
-            <!-- صف الراتب والاستحقاق واللائحة -->
-            <div class="input-row">
-                <div class="input-group">
-                    <label for="basicSalary">آخر راتب أساسي</label>
-                    <input type="number" id="basicSalary" class="compact-input" style="width: 140px;" placeholder="0.000" min="0" step="0.001" oninput="calculateIndemnity()">
-                </div>
-                <div class="input-group">
-                    <label for="annualLeave">الاستحقاق السنوي (يوم)</label>
-                    <input type="number" id="annualLeave" class="compact-input" style="width: 120px;" placeholder="30" min="0" step="1" oninput="updateLeaveDays()">
-                </div>
-                <div class="input-group">
-                    <label for="regulationType">نوع اللائحة</label>
-                    <select id="regulationType" class="compact-input" style="width: 170px;" onchange="updateLeaveDays()">
-                        <option value="civil">لائحة الخدمة المدنية</option>
-                        <option value="medical">اللائحة الطبية</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- صف معادلة المكافأة -->
+            <!-- معادلة الاحتساب -->
             <div class="formula-section">
                 <div class="formula-title">معادلة الاحتساب</div>
                 <div class="formula-row">
@@ -373,9 +424,32 @@
             </div>
 
             <div id="indemnityError" class="error"></div>
+
+            <!-- قسم الاعتمادات -->
+            <div class="approval-section">
+                <div class="approval-title">الاعتمادات</div>
+                <div class="approval-grid">
+                    <div class="approval-box">
+                        <span>إعداد ومراجعة</span>
+                        <div class="approval-line"></div>
+                    </div>
+                    <div class="approval-box">
+                        <span>اعتماد مدير الموارد البشرية</span>
+                        <div class="approval-line"></div>
+                    </div>
+                    <div class="approval-box">
+                        <span>اعتماد مدير الشئون المالية</span>
+                        <div class="approval-line"></div>
+                    </div>
+                    <div class="approval-box">
+                        <span>اعتماد المدير العام</span>
+                        <div class="approval-line"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- تذييل التعاون والتطوير -->
+        <!-- تذييل التعاون -->
         <div class="collaboration-footer">
             <p style="margin:0;">
                 تم ابتكار الحاسبة بالتعاون مع<br>
@@ -383,7 +457,6 @@
                 <strong>قسم الإيرادات والمصروفات</strong> <span class="divider">|</span> <strong>برمجة وتنفيذ: محمد جعبوب</strong><br>
             </p>
         </div>
-
     </div>
 
     <script>
@@ -393,10 +466,10 @@
             const hireDateInput = document.getElementById('hireDate').value;
             const endDateInput = document.getElementById('endDate').value;
             const errorDiv = document.getElementById('errorMessage');
-            const resultContainer = document.getElementById('resultContainer');
+            const resultCentered = document.getElementById('resultCentered');
             const indemnityError = document.getElementById('indemnityError');
 
-            resultContainer.style.display = 'none';
+            resultCentered.style.display = 'none';
             errorDiv.style.display = 'none';
             indemnityError.style.display = 'none';
 
@@ -442,7 +515,7 @@
             document.getElementById('yearsResult').textContent = years;
             document.getElementById('monthsResult').textContent = months;
             document.getElementById('daysResult').textContent = days;
-            resultContainer.style.display = 'flex';
+            resultCentered.style.display = 'flex';
 
             totalServiceYears = years + months / 12 + days / 365;
             if (totalServiceYears < 0) totalServiceYears = 0;
