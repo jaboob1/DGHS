@@ -34,7 +34,7 @@
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             padding: 30px 25px;
-            border: 2px dashed #cbd5e1; /* تحديد منقط على البطاقة بالكامل */
+            border: 2px dashed #cbd5e1;
             width: 100%;
         }
 
@@ -47,7 +47,6 @@
             letter-spacing: -0.5px;
         }
 
-        /* تخطيط عمودين للحقول المطلوبة */
         .columns-row {
             display: flex;
             gap: 30px;
@@ -83,7 +82,6 @@
             text-align: right;
         }
 
-        /* حقول الإدخال */
         .compact-input {
             padding: 8px 10px;
             border: 2px solid #e1e8f0;
@@ -110,8 +108,14 @@
             padding-left: 25px;
         }
 
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0 15px;
+        }
+
         button {
-            width: 100%;
+            flex: 1;
             background: #1e3c72;
             color: white;
             border: none;
@@ -121,7 +125,6 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s ease, transform 0.1s ease;
-            margin: 10px 0 15px;
         }
 
         button:hover {
@@ -131,7 +134,13 @@
             transform: scale(0.97);
         }
 
-        /* نتيجة المدة تتوسط الصفحة */
+        .print-btn {
+            background: #0f766e;
+        }
+        .print-btn:hover {
+            background: #0e5e58;
+        }
+
         .result-centered {
             display: flex;
             justify-content: center;
@@ -144,9 +153,6 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            background: transparent;
-            padding: 0;
-            border: none;
         }
         .result-label {
             font-weight: 600;
@@ -180,7 +186,6 @@
             display: block;
         }
 
-        /* المعادلة */
         .formula-section {
             margin-top: 15px;
             background: #fdfcff;
@@ -251,41 +256,28 @@
             white-space: nowrap;
         }
 
-        /* قسم الاعتمادات */
-        .approval-section {
+        /* قسم الاعتمادات بدون كلمة الاعتمادات */
+        .signature-section {
             margin-top: 25px;
-            border: 1px dashed #cbd5e1;
+            border: 1px solid #e2e8f0;
             border-radius: 16px;
             padding: 20px 15px;
             background: #fafafa;
-        }
-        .approval-title {
-            font-weight: 700;
-            color: #1e3c72;
-            margin-bottom: 15px;
-            font-size: 1em;
-            text-align: center;
-        }
-        .approval-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
-        .approval-box {
-            border: 1px dashed #94a3b8;
-            border-radius: 8px;
-            padding: 15px 10px;
+        .signature-box {
             text-align: center;
             font-weight: 600;
             color: #2c3e50;
-            background: white;
             font-size: 0.85em;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 10px;
         }
-        .approval-line {
+        .signature-line {
             width: 80%;
             border-bottom: 1px solid #64748b;
             margin-top: 5px;
@@ -302,7 +294,7 @@
             font-size: 0.85em;
         }
 
-        /* تذييل */
+        /* تذييل التعاون */
         .collaboration-footer {
             width: 100%;
             background: #ffffff;
@@ -324,11 +316,66 @@
             margin: 0 5px;
         }
 
+        /* رأس الصفحة الرسمي للطباعة */
+        .print-header {
+            display: none;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+                display: block;
+            }
+            .main-wrapper {
+                max-width: 100%;
+                box-shadow: none;
+                gap: 0;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                border-radius: 0;
+                padding: 15px;
+                page-break-inside: avoid;
+            }
+            .btn-group, button, .collaboration-footer, .error {
+                display: none !important;
+            }
+            .print-header {
+                display: block;
+                text-align: right;
+                margin-bottom: 20px;
+                font-weight: bold;
+                font-size: 1.2em;
+                color: #000;
+                border-bottom: 2px solid #000;
+                padding-bottom: 10px;
+            }
+            .print-header .ministry {
+                font-size: 1.3em;
+            }
+            .signature-section {
+                border: 1px solid #ccc;
+                background: white;
+                grid-template-columns: 1fr 1fr;
+            }
+            .compact-input {
+                border: 1px solid #ccc;
+                background: white;
+            }
+            .formula-section {
+                border: 1px solid #ccc;
+                background: white;
+            }
+        }
+
         @media (max-width: 700px) {
             .columns-row {
                 flex-direction: column;
             }
-            .approval-grid {
+            .signature-section {
                 grid-template-columns: 1fr;
             }
         }
@@ -337,11 +384,15 @@
 <body>
     <div class="main-wrapper">
         <div class="card">
-            <h2>حاسبة مستحقات التعويض النقدي عن رصيد الإجازات</h2>
+            <!-- رأس الطباعة الرسمي -->
+            <div class="print-header">
+                <div class="ministry">وزارة الصحة</div>
+                <div>المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
+            </div>
 
-            <!-- صف العمودين للمحاذاة الطولية للحقول المحددة -->
+            <h2>أستمارة أحتساب مستحقات التعويض النقدي عن رصيد الإجازات</h2>
+
             <div class="columns-row">
-                <!-- العمود الأيمن: اسم الموظف، تاريخ التعيين، آخر راتب أساسي، نوع اللائحة -->
                 <div class="column-right">
                     <div class="input-group">
                         <label for="employeeName">اسم الموظف</label>
@@ -363,8 +414,6 @@
                         </select>
                     </div>
                 </div>
-
-                <!-- العمود الأيسر: رقم الموظف، تاريخ نهاية الخدمة، الاستحقاق السنوي -->
                 <div class="column-left">
                     <div class="input-group">
                         <label for="employeeNumber">رقم الموظف</label>
@@ -381,10 +430,12 @@
                 </div>
             </div>
 
-            <button onclick="calculateDifference()">احسب المدة</button>
+            <div class="btn-group">
+                <button onclick="calculateDifference()">احسب المدة</button>
+                <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
+            </div>
             <div id="errorMessage" class="error"></div>
 
-            <!-- نتيجة المدة تتوسط الصفحة أسفل التواريخ -->
             <div class="result-centered" id="resultCentered" style="display: none;">
                 <div class="result-container">
                     <span class="result-label">المدة</span>
@@ -405,7 +456,6 @@
                 </div>
             </div>
 
-            <!-- معادلة الاحتساب -->
             <div class="formula-section">
                 <div class="formula-title">معادلة الاحتساب</div>
                 <div class="formula-row">
@@ -425,31 +475,27 @@
 
             <div id="indemnityError" class="error"></div>
 
-            <!-- قسم الاعتمادات -->
-            <div class="approval-section">
-                <div class="approval-title">الاعتمادات</div>
-                <div class="approval-grid">
-                    <div class="approval-box">
-                        <span>إعداد ومراجعة</span>
-                        <div class="approval-line"></div>
-                    </div>
-                    <div class="approval-box">
-                        <span>اعتماد مدير الموارد البشرية</span>
-                        <div class="approval-line"></div>
-                    </div>
-                    <div class="approval-box">
-                        <span>اعتماد مدير الشئون المالية</span>
-                        <div class="approval-line"></div>
-                    </div>
-                    <div class="approval-box">
-                        <span>اعتماد المدير العام</span>
-                        <div class="approval-line"></div>
-                    </div>
+            <!-- قسم التوقيعات بدون عنوان وبدون تحديد منقط -->
+            <div class="signature-section">
+                <div class="signature-box">
+                    <span>إعداد ومراجعة</span>
+                    <div class="signature-line"></div>
+                </div>
+                <div class="signature-box">
+                    <span>اعتماد مدير الموارد البشرية</span>
+                    <div class="signature-line"></div>
+                </div>
+                <div class="signature-box">
+                    <span>اعتماد مدير الشئون المالية</span>
+                    <div class="signature-line"></div>
+                </div>
+                <div class="signature-box">
+                    <span>اعتماد المدير العام</span>
+                    <div class="signature-line"></div>
                 </div>
             </div>
         </div>
 
-        <!-- تذييل التعاون -->
         <div class="collaboration-footer">
             <p style="margin:0;">
                 تم ابتكار الحاسبة بالتعاون مع<br>
