@@ -117,43 +117,45 @@
             transform: scale(0.97);
         }
 
+        /* نتيجة المدة - الآن كحقول مضمنة بنفس ارتفاع الإدخالات */
         .result-container {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: #f0f6ff;
-            border-radius: 12px;
-            padding: 8px 12px;
-            border: 1px solid #d0e0f5;
+            gap: 6px;
+            background: transparent;
+            padding: 0;
+            border: none;
         }
         .result-label {
             font-weight: 600;
             color: #1e3c72;
             font-size: 0.9em;
             white-space: nowrap;
+            margin-left: 5px;
         }
         .result-values {
             display: flex;
             gap: 6px;
         }
         .result-box {
+            width: 50px;
+            padding: 8px 4px;
             background: white;
+            border: 2px solid #e1e8f0;
             border-radius: 8px;
-            padding: 5px 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
-            border: 1px solid #e2e8f0;
             text-align: center;
-            min-width: 50px;
+            font-size: 0.9em;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
         }
         .result-number {
-            font-size: 1.1em;
             font-weight: 700;
             color: #0f2b4b;
             line-height: 1.2;
         }
         .result-unit {
-            font-size: 0.65em;
+            font-size: 0.6em;
             color: #64748b;
+            display: block;
         }
 
         /* صف التواريخ مع النتيجة */
@@ -276,7 +278,7 @@
             }
             .result-container {
                 width: 100%;
-                justify-content: space-between;
+                justify-content: center;
             }
         }
     </style>
@@ -310,7 +312,7 @@
                     <label for="endDate">تاريخ نهاية الخدمة</label>
                     <input type="date" id="endDate" class="compact-input" style="width: 150px;" required>
                 </div>
-                <!-- نتيجة المدة تظهر بجانب التواريخ -->
+                <!-- نتيجة المدة بجانب التواريخ -->
                 <div class="result-container" id="resultContainer" style="display: none;">
                     <span class="result-label">المدة</span>
                     <div class="result-values">
