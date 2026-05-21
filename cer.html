@@ -41,7 +41,6 @@
             position: relative;
         }
 
-        /* خط داخلي جمالي للمظهر الرسمي */
         .form-container::before {
             content: "";
             position: absolute;
@@ -54,7 +53,6 @@
             pointer-events: none;
         }
 
-        /* ترويسة الاستمارة */
         .form-header {
             text-align: center;
             margin-bottom: 30px;
@@ -73,6 +71,11 @@
             font-size: 13px;
             color: #64748b;
             margin: 0;
+        }
+
+        /* ========================== فئة الإزاحة المطلوبة لليسار بمقدار 2 سم ========================== */
+        .shifted-content {
+            margin-right: 2cm;
         }
 
         /* ========================== تنظيم الحقول والجداول ========================== */
@@ -174,60 +177,80 @@
             color: #1e3c72;
         }
 
-        /* ========================== قسم احتساب المعادلة المالية ========================== */
-        .calculation-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-            font-size: 13px;
-        }
-
-        .calculation-table th, .calculation-table td {
-            border: 1px solid #cbd5e1;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .calculation-table th {
+        /* ========================== قسم احتساب المعادلة المالية المتسلسلة ========================== */
+        .formula-container {
             background-color: #f1f5f9;
-            color: #1e3c72;
-            font-weight: 700;
-        }
-
-        .formula-inline {
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            direction: ltr; /* لتظهر المعادلة الحسابية بشكل صحيح رياضيّاً */
-            font-weight: 600;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
-        .formula-inline span {
-            direction: rtl;
+        .formula-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            width: 100%;
         }
 
-        .calc-output {
-            font-size: 16px;
+        .formula-label {
+            font-size: 13px;
             font-weight: 700;
-            color: #16a34a;
-            background-color: #f0fdf4;
-            padding: 4px 10px;
-            border-radius: 4px;
-            border: 1px solid #bbf7d0;
-            display: inline-block;
-            min-width: 120px;
+            color: #1e3c72;
         }
 
-        .formula-input-field {
-            width: 80px;
+        .formula-val {
+            font-weight: 700;
+            color: #1e293b;
+            background: #ffffff;
+            padding: 4px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            min-width: 60px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .math-sign {
+            font-size: 16px;
+            font-weight: bold;
+            color: #475569;
+        }
+
+        .math-const {
+            font-size: 15px;
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        .formula-input-inline {
+            width: 70px;
             text-align: center;
             border: 1px solid #cbd5e1;
             border-radius: 4px;
             padding: 4px;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             color: #1e3c72;
+            outline: none;
+        }
+
+        .calc-output-inline {
+            font-size: 16px;
+            font-weight: 700;
+            color: #16a34a;
+            background-color: #f0fdf4;
+            padding: 4px 12px;
+            border-radius: 4px;
+            border: 1px solid #bbf7d0;
+            width: 110px;
+            text-align: center;
+            outline: none;
         }
 
         /* ========================== قسم التوقيعات والاعتمادات ========================== */
@@ -367,6 +390,10 @@
                 color: #000000 !important;
             }
 
+            .shifted-content {
+                margin-right: 2cm !important;
+            }
+
             .form-section-title {
                 font-size: 11pt !important;
                 color: #000000 !important;
@@ -414,36 +441,17 @@
                 height: 30px !important;
             }
 
-            .calculation-table {
-                font-size: 11pt !important;
-                margin: 15px 0 !important;
-            }
-
-            .calculation-table th, .calculation-table td {
+            .formula-container {
+                background: transparent !important;
                 border: 1px solid #000000 !important;
-                padding: 6px !important;
-                color: #000000 !important;
-            }
-
-            .calculation-table th {
-                background: #f5f5f5 !important;
-            }
-
-            .formula-input-field {
-                border: none !important;
                 font-size: 11pt !important;
-                color: #000000 !important;
-                width: auto !important;
-                background: transparent !important;
             }
 
-            .calc-output {
-                font-size: 12pt !important;
-                color: #000000 !important;
+            .formula-val, .formula-input-inline, .calc-output-inline {
+                border: 1px solid #000000 !important;
                 background: transparent !important;
-                border: none !important;
-                padding: 0 !important;
-                min-width: auto !important;
+                color: #000000 !important;
+                font-size: 11pt !important;
             }
 
             .signatures-grid {
@@ -462,7 +470,7 @@
                 border-bottom: 1px solid #000000 !important;
             }
 
-            /* إخفاء العناصر غير المطلوبة في الطباعة */
+            /* إخفاء العناصر غير المطلوبة في الطباعة كلياً */
             .action-panel, 
             .footer-credits, 
             .error-message,
@@ -471,13 +479,16 @@
             }
 
             /* منع انكسار العناصر عبر الصفحات */
-            .results-block, .calculation-table, .signatures-grid {
+            .results-block, .formula-container, .signatures-grid {
                 page-break-inside: avoid;
             }
         }
 
         /* تجاوب الشاشات الصغيرة للهواتف */
         @media (max-width: 768px) {
+            .shifted-content {
+                margin-right: 0; /* إلغاء الإزاحة في شاشات الجوال لتوفير المساحة */
+            }
             .form-grid {
                 grid-template-columns: 1fr;
                 gap: 12px;
@@ -506,149 +517,152 @@
     <div class="main-wrapper">
         <div class="form-container">
             
+            <!-- عنوان وثيقة الاستمارة -->
             <div class="form-header">
                 <h1>استمارة احتساب مستحقات التعويض النقدي عن رصيد الإجازات</h1>
-                <p>مستند رسمي مخصص لإدارة وتخطيط الموارد البشرية والشؤون المالية</p>
+                
             </div>
 
-            <div class="form-section-title">بيانات الموظف الأساسية وتواريخ الخدمة</div>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="employeeName">اسم الموظف</label>
-                    <input type="text" id="employeeName" class="form-input" placeholder="أدخل اسم الموظف الثلاثي">
-                </div>
-                <div class="input-group">
-                    <label for="employeeNumber">رقم الموظف</label>
-                    <input type="text" id="employeeNumber" class="form-input" placeholder="أدخل الرقم الوظيفي">
-                </div>
-                <div class="input-group">
-                    <label for="jobTitle">الوظيفة</label>
-                    <input type="text" id="jobTitle" class="form-input" placeholder="المسمى الوظيفي الحالي">
-                </div>
-                <div class="input-group">
-                    <label for="hireDate">تاريخ التعيين</label>
-                    <input type="date" id="hireDate" class="form-input" required>
-                </div>
-                <div class="input-group">
-                    <label for="endDate">تاريخ نهاية الخدمة</label>
-                    <input type="date" id="endDate" class="form-input" required>
-                </div>
-                <div class="input-group">
-                    <label for="basicSalary">آخر راتب أساسي</label>
-                    <input type="text" id="basicSalary" class="form-input" placeholder="0.000" oninput="handleArabicInput(this); calculateIndemnity();">
-                </div>
-                <div class="input-group">
-                    <label for="regulationType">نوع اللائحة</label>
-                    <select id="regulationType" class="form-input" onchange="updateLeaveDays()">
-                        <option value="civil">الخدمة المدنية</option>
-                        <option value="medical">اللائحة الطبية</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="annualLeave">الاستحقاق السنوي (يوم)</label>
-                    <input type="text" id="annualLeave" class="form-input" placeholder="30" oninput="handleArabicInput(this); updateLeaveDays();">
-                </div>
-            </div>
-
-            <div id="errorMessage" class="error-message"></div>
-
-            <div id="resultCentered" class="results-block" style="display: none;">
-                <div class="result-label" style="margin-bottom: 10px; font-weight: 700; color: #1e3c72;">المدة الإجمالية للخدمة الفعلية:</div>
-                <div class="results-flex">
-                    <div class="result-item">
-                        <span class="result-label">السنوات:</span>
-                        <div class="result-box" id="yearsResult">٠</div>
+            <!-- حاوية الإزاحة المطلوبة (2 سم لليسار) تشمل جميع البيانات أسفل العنوان -->
+            <div class="shifted-content">
+                
+                <!-- القسم الأول: بيانات الموظف والخدمة -->
+                <div class="form-section-title">بيانات الموظف الأساسية وتواريخ الخدمة</div>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="employeeName">اسم الموظف</label>
+                        <input type="text" id="employeeName" class="form-input" placeholder="أدخل اسم الموظف الثلاثي">
                     </div>
-                    <div class="result-item">
-                        <span class="result-label">الشهور:</span>
-                        <div class="result-box" id="monthsResult">٠</div>
+                    <div class="input-group">
+                        <label for="employeeNumber">رقم الموظف</label>
+                        <input type="text" id="employeeNumber" class="form-input" placeholder="أدخل الرقم الوظيفي">
                     </div>
-                    <div class="result-item">
-                        <span class="result-label">الأيام:</span>
-                        <div class="result-box" id="daysResult">٠</div>
+                    <div class="input-group">
+                        <label for="jobTitle">الوظيفة</label>
+                        <input type="text" id="jobTitle" class="form-input" placeholder="المسمى الوظيفي الحالي">
+                    </div>
+                    <div class="input-group">
+                        <label for="hireDate">تاريخ التعيين</label>
+                        <input type="date" id="hireDate" class="form-input" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="endDate">تاريخ نهاية الخدمة</label>
+                        <input type="date" id="endDate" class="form-input" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="basicSalary">آخر راتب أساسي</label>
+                        <input type="text" id="basicSalary" class="form-input" placeholder="0.000" oninput="handleArabicInput(this); calculateIndemnity();">
+                    </div>
+                    <div class="input-group">
+                        <label for="regulationType">نوع اللائحة</label>
+                        <select id="regulationType" class="form-input" onchange="updateLeaveDays()">
+                            <option value="civil">الخدمة المدنية</option>
+                            <option value="medical">اللائحة الطبية</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="annualLeave">الاستحقاق السنوي (يوم)</label>
+                        <input type="text" id="annualLeave" class="form-input" placeholder="30" oninput="handleArabicInput(this); updateLeaveDays();">
                     </div>
                 </div>
-            </div>
 
-            <div class="form-section-title">الاحتساب المالي والتصفية النقديّة</div>
-            
-            <table class="calculation-table">
-                <thead>
-                    <tr>
-                        <th>الراتب الأساسي المعتمد</th>
-                        <th>معادلة الاحتساب القانونية المطبقة</th>
-                        <th>رصيد الأيام المستحقة</th>
-                        <th>إجمالي مبلغ التعويض المستحق</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <span id="displaySalary" style="font-weight: 700; color: #1e293b;">٠.٠٠٠</span> ر.ع.
-                        </td>
-                        <td>
-                            <div class="formula-inline">
-                                <span>(الراتب × ١٢ × الأيام) ÷ ٣٦٥</span>
-                            </div>
-                        </td>
-                        <td>
-                            <input type="text" id="totalDays" class="formula-input-field" placeholder="٠" oninput="handleArabicInput(this); calculateIndemnity();"> يوم
-                        </td>
-                        <td>
-                            <input type="text" id="indemnityResult" class="calc-output" value="٠.٠٠٠" readonly style="border:none; text-align:center; width:100%;">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                <!-- رسائل الخطأ الخاصة بالتواريخ -->
+                <div id="errorMessage" class="error-message"></div>
 
-            <div id="indemnityError" class="error-message"></div>
-
-            <div class="form-section-title">الاعتمادات والموافقات الرسمية</div>
-            <div class="signatures-grid">
-                <div class="signature-item">
-                    <span class="signature-title">إعداد ومراجعة (مختص الموارد البشرية):</span>
-                    <div class="signature-line"></div>
+                <!-- القسم الثاني: نتائج احتساب مدة الخدمة -->
+                <div id="resultCentered" class="results-block" style="display: none;">
+                    <div class="result-label" style="margin-bottom: 10px; font-weight: 700; color: #1e3c72;">المدة الإجمالية للخدمة الفعلية:</div>
+                    <div class="results-flex">
+                        <!-- الترتيب الجديد: من اليمين أيام، شهور، سنوات -->
+                        <div class="result-item">
+                            <span class="result-label">الأيام:</span>
+                            <div class="result-box" id="daysResult">٠</div>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">الشهور:</span>
+                            <div class="result-box" id="monthsResult">٠</div>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">السنوات:</span>
+                            <div class="result-box" id="yearsResult">٠</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="signature-item">
-                    <span class="signature-title">اعتماد مدير الموارد البشرية:</span>
-                    <div class="signature-line"></div>
-                </div>
-                <div class="signature-item">
-                    <span class="signature-title">تدقيق واعتماد مدير الشؤون المالية:</span>
-                    <div class="signature-line"></div>
-                </div>
-                <div class="signature-item">
-                    <span class="signature-title">اعتماد المدير العام للجهة:</span>
-                    <div class="signature-line"></div>
-                </div>
-            </div>
 
-            <div class="action-panel">
-                <button class="btn btn-primary" onclick="calculateDifference()">📊 احسب مدة الخدمة والرصيد</button>
-                <button class="btn btn-secondary" onclick="window.print()">🖨️ طباعة الاستمارة الرسمية</button>
-            </div>
+                <!-- القسم الثالث: الاحتساب المالي والتصفية (التصميم المتسلسل) -->
+                <div class="form-section-title">الاحتساب المالي والتصفية النقديّة</div>
+                
+                <div class="formula-container">
+                    <div class="formula-row">
+                        <span class="formula-label">الراتب الأساسي</span>
+                        <span id="displaySalary" class="formula-val">٠.٠٠٠</span>
+                        
+                        <span class="math-sign">×</span>
+                        <span class="math-const">١٢</span>
+                        <span class="math-sign">×</span>
+                        
+                        <span class="formula-label">الأيام المستحقة</span>
+                        <input type="text" id="totalDays" class="formula-input-inline" placeholder="٠" oninput="handleArabicInput(this); calculateIndemnity();">
+                        
+                        <span class="math-sign">÷</span>
+                        <span class="math-const">٣٦٥</span>
+                        <span class="math-sign">=</span>
+                        
+                        <input type="text" id="indemnityResult" class="calc-output-inline" value="٠.٠٠٠" readonly>
+                    </div>
+                </div>
 
+                <!-- رسائل الخطأ الخاصة بالمعادلة الماليّة -->
+                <div id="indemnityError" class="error-message"></div>
+
+                <!-- القسم الرابع: التوقيعات والاعتمادات الرسمية -->
+                <div class="form-section-title">الاعتمادات والموافقات الرسمية</div>
+                <div class="signatures-grid">
+                    <div class="signature-item">
+                                                                        <span class="signature-title">إعداد ومراجعة قسم إدارة وتخطيط الموارد البشرية:</span>
+                        <div class="signature-line"></div>
+                    </div>
+                    <div class="signature-item">
+                        <span class="signature-title">اعتماد مدير الموارد البشرية:</span>
+                        <div class="signature-line"></div>
+                    </div>
+                    <div class="signature-item">
+                        <span class="signature-title">اعتماد مدير الشؤون المالية:</span>
+                        <div class="signature-line"></div>
+                    </div>
+                    <div class="signature-item">
+                        <span class="signature-title">اعتماد المدير العام :</span>
+                        <div class="signature-line"></div>
+                    </div>
+                </div>
+
+                <!-- لوحة تحكم المستخدم بالأزرار (تختفي تلقائياً عند الطباعة) -->
+                <div class="action-panel">
+                    <button class="btn btn-primary" onclick="calculateDifference()">📊 احسب مدة الخدمة والرصيد</button>
+                    <button class="btn btn-secondary" onclick="window.print()">🖨️ طباعة الاستمارة الرسمية</button>
+                </div>
+
+            </div> <!-- نهاية حاوية الإزاحة shifted-content -->
         </div>
 
+        <!-- تذييل الاستمارة التوضيحي (يختفي عند الطباعة) -->
         <div class="footer-credits">
             تم ابتكار وتطوير الحاسبة بالتعاون مع المشرفين والمطورين المعنيين<br>
             <strong>قسم إدارة وتخطيط الموارد البشرية</strong> (فكرة: أحمد عيديد) <span style="color: #cbd5e1; margin: 0 6px;">|</span> <strong>قسم الإيرادات والمصروفات</strong> (برمجة وتنفيذ: محمد جعبوب)
         </div>
     </div>
 
+    <!-- ========================== المنطق البرمجي (JavaScript) ========================== -->
     <script>
-        // دالة تحويل الأرقام العربية الشرقية (هندية) إلى أرقام عربية غربية (إنجليزية)
         function arabicToEnglish(str) {
             return str.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
         }
 
-        // دالة تحويل الأرقام إلى أرقام عربية شرقية للمظهر الرسمي في الاستمارة
         function toArabicNumber(num) {
             if (num === undefined || num === null) return '';
             return String(num).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
         }
 
-        // معالجة المدخلات النصية للتأكد من توافق الأرقام
         function handleArabicInput(input) {
             const englishValue = arabicToEnglish(input.value);
             if (englishValue !== input.value) {
@@ -656,7 +670,6 @@
             }
         }
 
-        // تحويل النصوص الرقمية إلى قيم عائمة صالحة للحسابات الرياضية
         function parseArabicNumber(value) {
             const cleaned = arabicToEnglish(String(value));
             return parseFloat(cleaned) || 0;
@@ -664,7 +677,6 @@
 
         let totalServiceYears = 0;
 
-        // دالة حساب الفروقات بين التواريخ (السنوات، الشهور، الأيام)
         function calculateDifference() {
             const hireDateInput = document.getElementById('hireDate').value;
             const endDateInput = document.getElementById('endDate').value;
@@ -719,7 +731,7 @@
             document.getElementById('daysResult').textContent = toArabicNumber(days);
             document.getElementById('monthsResult').textContent = toArabicNumber(months);
             document.getElementById('yearsResult').textContent = toArabicNumber(years);
-            resultCentered.style.display = 'flex';
+            resultCentered.style.display = 'block';
 
             totalServiceYears = years + months / 12 + days / 365;
             if (totalServiceYears < 0) totalServiceYears = 0;
@@ -727,7 +739,6 @@
             updateLeaveDays();
         }
 
-        // تحديث سقف رصيد الأيام بناء على اللائحة وسنوات الخدمة المحسوبة
         function updateLeaveDays() {
             const annualLeaveInput = document.getElementById('annualLeave');
             const annualLeave = parseArabicNumber(annualLeaveInput.value);
@@ -751,7 +762,6 @@
             calculateIndemnity();
         }
 
-        // دالة احتساب قيمة التعويض المالي وصيغة الإخراج الثلاثية الفواصل ر.ع.
         function calculateIndemnity() {
             const salaryInput = document.getElementById('basicSalary');
             const totalDaysInput = document.getElementById('totalDays');
@@ -777,7 +787,6 @@
             resultField.value = toArabicNumber(indemnity.toFixed(3));
         }
 
-        // تصفير القيم المبدئية عند تحميل الصفحة بالكامل للحفاظ على النزاهة الإجرائية للمستند
         window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('displaySalary').textContent = '٠.٠٠٠';
             document.getElementById('indemnityResult').value = '٠.٠٠٠';
