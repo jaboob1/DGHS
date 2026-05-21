@@ -13,23 +13,28 @@
     باستخدام معادلة محددة. التصميم مستوحى من الاستمارات الرسمية
     مع إمكانية الطباعة بشكل مناسب.
 
-    التعديلات الأخيرة بناءً على طلب المستخدم:
-    - توحيد عرض حقول (رقم الموظف، تاريخ نهاية الخدمة، الاستحقاق السنوي) ليكون 150px مثل باقي الحقول.
+    التعديلات الأخيرة بناءً على طلب المستخدم (شاملة الشاشة والطباعة):
+    - توحيد عرض حقول (رقم الموظف، تاريخ نهاية الخدمة، الاستحقاق السنوي) 150px.
     - زيادة التباعد في قسم التوقيعات من الأعلى والأسفل والمسافات بين الموقعين.
-    - (طلب جديد) تعديلات عند الطباعة:
-        * إخفاء الأزرار (موجودة).
-        * جعل الخطوط السفلية لصناديق الإدخال بيضاء (غير مرئية).
-        * إضافة نقطتين رأسيتين ":" بجانب عناوين الحقول (يسار التسمية).
-        * تقريب حقول الإدخال إلى العناوين (تقليل المسافة).
-        * محاذاة محتوى الاحتساب وجميع الأقسام (باستثناء قسم الاعتمادات) إلى اليمين.
+    - إخفاء الأزرار عند الطباعة.
+    - جعل الخطوط السفلية لصناديق الإدخال بيضاء (غير مرئية) عند الطباعة.
+    - إضافة نقطتين ":" بعد كل عنوان حقل على الشاشة وعند الطباعة.
+    - تقريب المسافة بين الحقل والعنوان.
+    - محاذاة كافة المحتوى (باستثناء قسم الاعتمادات) إلى اليمين على الشاشة والطباعة.
+    - تكبير حجم الخط الأساسي ليكون 12pt على الشاشة والطباعة (12pt ≈ 16px).
+    - ضبط الطباعة لصفحة A4 مع ملاءمة المحتوى في صفحة واحدة.
     ================================================================================
     -->
     <style>
         /* ========================== الإعدادات الأساسية ========================== */
         * {
-            box-sizing: border-box; /* تضمين الحواف والهوامش الداخلية ضمن أبعاد العنصر */
+            box-sizing: border-box;
         }
 
+        /* 
+            حجم الخط الأساسي: 12pt = 16px (1pt ≈ 1.333px)
+            استخدمنا 16px ليكون مطابقًا لـ 12pt على الشاشة والطباعة.
+        */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
@@ -39,17 +44,18 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
-            font-size: 12px;
+            font-size: 16px; /* 12pt */
+            direction: rtl;
         }
 
         .main-wrapper {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-end; /* محاذاة المحتوى لليمين */
             gap: 20px;
-            max-width: 850px;
+            max-width: 900px;
             width: 100%;
-            font-size: 12px;
+            font-size: 16px;
         }
 
         .page-border {
@@ -63,60 +69,74 @@
             padding: 25px 20px;
             border: 2px dashed #cbd5e1;
             width: 100%;
-            font-size: 12px;
+            font-size: 16px;
+            text-align: right; /* محاذاة النص لليمين */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end; /* محاذاة العناصر الداخلية لليمين */
         }
 
         .card h2 {
-            text-align: center;
+            text-align: right;
             color: #1e3c72;
             margin-bottom: 18px;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 1.2em;
             letter-spacing: -0.3px;
+            width: 100%;
         }
 
         /* ========================== تخطيط الأعمدة ========================== */
         .columns-row {
             display: flex;
+            justify-content: flex-end; /* الأعمدة تنحاز لليمين */
             gap: 25px;
             margin-bottom: 10px;
+            width: 100%;
         }
 
         .column-right, .column-left {
-            flex: 1;
+            flex: 0 0 auto; /* عدم تمدد الأعمدة أكثر من اللازم */
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 18px;
         }
 
         /* ========================== مجموعات الإدخال ========================== */
         .input-group {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px; /* تقليل المسافة بين التسمية والحقل ليقتربا */
         }
 
         .input-group label {
             font-weight: 600;
             color: #2c3e50;
-            font-size: 11px;
+            font-size: 1em;
             white-space: nowrap;
-            min-width: 90px;
+            min-width: 100px;
             text-align: right;
+        }
+
+        /* إضافة نقطتين ":" بعد التسمية */
+        .input-group label::after {
+            content: " :";
+            font-weight: bold;
+            margin-left: 2px;
         }
 
         /* أسلوب الحقول المدمجة (خط سفلي فقط) - العرض الموحد */
         .compact-input {
-            padding: 6px 4px;
+            padding: 8px 4px;
             border: none;
             border-bottom: 1.5px solid #cbd5e1;
             border-radius: 0;
-            font-size: 12px;
+            font-size: 1em;
             background: transparent;
             transition: all 0.3s ease;
             font-family: inherit;
             text-align: right;
-            width: 150px;
+            width: 160px; /* موحد لجميع الحقول */
             outline: none;
         }
 
@@ -126,7 +146,7 @@
         }
 
         select.compact-input {
-            width: 170px; /* عرض أوسع للقائمة */
+            width: 180px;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: left 4px center;
@@ -142,6 +162,8 @@
             display: flex;
             gap: 8px;
             margin: 12px 0 8px;
+            width: 100%;
+            justify-content: flex-end;
         }
 
         button {
@@ -149,9 +171,9 @@
             background: #1e3c72;
             color: white;
             border: none;
-            padding: 10px 16px;
+            padding: 12px 16px;
             border-radius: 10px;
-            font-size: 12px;
+            font-size: 1em;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s ease, transform 0.1s ease;
@@ -169,6 +191,7 @@
             justify-content: flex-start;
             margin-top: 5px;
             margin-bottom: 10px;
+            width: 100%;
         }
 
         .result-container {
@@ -179,24 +202,27 @@
         .result-label {
             font-weight: 600;
             color: #1e3c72;
-            font-size: 11px;
+            font-size: 1em;
             white-space: nowrap;
+        }
+        .result-label::after {
+            content: " :";
         }
         .result-values { display: flex; gap: 4px; }
         .result-box { display: flex; align-items: center; gap: 3px; }
         .result-number-box {
-            width: 45px;
-            padding: 5px 3px;
+            width: 55px;
+            padding: 6px 4px;
             background: white;
             border: none;
             border-bottom: 1.5px solid #cbd5e1;
             text-align: center;
-            font-size: 12px;
+            font-size: 1em;
             font-weight: 700;
             color: #0f2b4b;
         }
         .result-unit {
-            font-size: 10px;
+            font-size: 0.9em;
             color: #64748b;
             white-space: nowrap;
         }
@@ -206,27 +232,30 @@
             border: none;
             border-top: 1px solid #ddd;
             margin: 16px 0;
+            width: 100%;
         }
 
-        /* ========================== قسم المعادلة ========================== */
+        /* ========================== قسم المعادلة (الاحتساب) - يحاذي لليمين ========================== */
         .formula-section {
             margin-top: 12px;
             background: #fdfcff;
             border-radius: 14px;
             padding: 14px 12px;
             border: 1px dashed #cbd5e1;
+            width: 100%;
+            text-align: right;
         }
         .formula-title {
             font-weight: 700;
             color: #1e3c72;
             margin-bottom: 10px;
-            font-size: 12px;
-            text-align: center;
+            font-size: 1em;
+            text-align: right;
         }
         .formula-row {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-end; /* محاذاة لليمين */
             flex-wrap: wrap;
             gap: 6px;
             row-gap: 8px;
@@ -235,15 +264,18 @@
         .formula-label {
             font-weight: 600;
             color: #2c3e50;
-            font-size: 11px;
+            font-size: 1em;
             white-space: nowrap;
         }
+        .formula-label::after {
+            content: " :";
+        }
         .formula-input {
-            width: 85px;
+            width: 90px;
             padding: 6px 6px;
             border: none;
             border-bottom: 1.5px solid #cbd5e1;
-            font-size: 12px;
+            font-size: 1em;
             background: #fff;
             text-align: center;
             font-family: inherit;
@@ -258,7 +290,7 @@
             cursor: default;
         }
         .formula-operator {
-            font-size: 13px;
+            font-size: 1.1em;
             font-weight: 700;
             color: #000;
             margin: 0 1px;
@@ -266,29 +298,31 @@
         .formula-constant {
             font-weight: 700;
             color: #0f2b4b;
-            font-size: 12px;
+            font-size: 1em;
             background: #f1f5f9;
             padding: 4px 8px;
             border-radius: 4px;
             white-space: nowrap;
         }
 
-        /* ========================== قسم التوقيعات (الاعتمادات) ========================== */
+        /* ========================== قسم التوقيعات (الاعتمادات) - يبقى في المنتصف ========================== */
         .signature-section {
             margin-top: 20px;
             border: 1px solid #e2e8f0;
             border-radius: 14px;
-            padding: 30px 16px; /* تباعد أكبر من الأعلى والأسفل */
+            padding: 30px 16px;
             background: #fafafa;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 40px 20px; /* مسافات عمودية وأفقية أوسع */
+            gap: 40px 20px;
+            width: 100%;
+            /* لم نغير المحاذاة هنا لتبقى في المنتصف */
         }
         .signature-box {
             text-align: center;
             font-weight: 600;
             color: #2c3e50;
-            font-size: 11px;
+            font-size: 1em;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -309,7 +343,8 @@
             margin-top: 10px;
             font-weight: 500;
             display: none;
-            font-size: 11px;
+            font-size: 0.9em;
+            width: 100%;
         }
 
         /* ========================== تذييل التعاون ========================== */
@@ -321,7 +356,7 @@
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
             border: 1px solid #e9eef3;
             text-align: center;
-            font-size: 10px;
+            font-size: 0.9em;
             color: #2c3e50;
             line-height: 1.7;
             background: #f9fcff;
@@ -331,16 +366,19 @@
 
         .print-header { display: none; }
 
-        /* ========================== تنسيقات خاصة بالطباعة ========================== */
+        /* ========================== تنسيقات خاصة بالطباعة (A4، صفحة واحدة) ========================== */
         @media print {
-            @page { margin: 2cm; }
+            @page {
+                size: A4;
+                margin: 1.5cm; /* هوامش مناسبة لتقليل الانقطاع */
+            }
 
             body {
                 background: white !important;
                 padding: 0 !important;
                 margin: 0 !important;
                 display: block !important;
-                font-size: 12pt !important;
+                font-size: 12pt !important; /* تأكيد 12pt */
             }
 
             .main-wrapper {
@@ -348,13 +386,13 @@
                 box-shadow: none !important;
                 gap: 0 !important;
                 font-size: 12pt !important;
-                /* محاذاة المحتوى بأكمله لليمين */
-                align-items: flex-end !important; 
+                align-items: flex-end !important; /* محاذاة لليمين */
+                margin: 0 !important;
             }
 
             .page-border {
                 border: 2px solid #000 !important;
-                padding: 15px !important;
+                padding: 10px !important;
                 margin: 0 !important;
                 width: 100% !important;
             }
@@ -365,23 +403,21 @@
                 border-radius: 0 !important;
                 padding: 0 !important;
                 background: white !important;
-                page-break-inside: avoid;
+                page-break-inside: avoid; /* منع الانقسام */
                 font-size: 12pt !important;
-                /* محاذاة البطاقة بأكملها لليمين */
                 text-align: right !important;
                 display: flex;
                 flex-direction: column;
-                align-items: flex-end; /* يجعل العناصر الداخلية تنحاز لليمين */
+                align-items: flex-end; /* المحتوى لليمين */
             }
 
             .card h2 {
                 font-size: 14pt !important;
                 color: #000 !important;
-                text-align: right !important; /* العنوان يمين */
+                text-align: right !important;
                 width: 100%;
             }
 
-            /* إخفاء الأزرار والتذييل والأخطاء */
             .btn-group, button, .collaboration-footer, .error {
                 display: none !important;
             }
@@ -398,15 +434,15 @@
             }
             .print-header .ministry { font-size: 16pt !important; }
 
-            /* === حقول الإدخال: إخفاء الخط السفلي (جعله أبيض/شفاف) === */
+            /* إخفاء الخط السفلي للحقول (جعله أبيض/غير مرئي) */
             .compact-input,
             .formula-input,
             select.compact-input,
             .result-number-box,
             .formula-constant {
                 background: transparent !important;
-                border: none !important;               /* إزالة الإطار بالكامل */
-                border-bottom: 1px solid white !important; /* خط سفلي أبيض (غير مرئي على الأبيض) */
+                border: none !important;
+                border-bottom: 1px solid transparent !important; /* بدلاً من أبيض ليكون متوافق مع أي خلفية */
                 box-shadow: none !important;
                 font-size: 12pt !important;
                 color: #000 !important;
@@ -421,45 +457,43 @@
                 padding-left: 6px !important;
             }
 
-            /* === إضافة نقطتين رأسيتين بعد التسميات === */
-            .input-group label::after {
-                content: " :";                /* نقطتين بالعربية */
+            /* النقطتين بعد التسمية (موجودة في الأساس) */
+            .input-group label::after,
+            .result-label::after {
+                content: " :";
                 font-weight: bold;
-                margin-left: 2px;            /* مسافة صغيرة بين النص والنقطتين */
             }
 
-            /* تقريب حقول الإدخال إلى العناوين بتقليل المسافة */
             .input-group {
-                gap: 2px !important;         /* كانت 8px، أصبحت قريبة جداً */
+                gap: 2px !important; /* تقريب شديد */
             }
 
-            /* === محاذاة الأعمدة والنتيجة والمعادلة إلى اليمين === */
+            /* محاذاة الحقول والأعمدة لليمين */
             .columns-row {
                 justify-content: flex-end !important;
                 width: 100%;
             }
 
             .result-centered {
-                justify-content: flex-end !important; /* النتيجة لليمين */
+                justify-content: flex-end !important;
                 width: 100%;
             }
 
             .formula-section {
                 background: transparent !important;
                 border: 1px solid transparent !important;
-                text-align: right !important;        /* محتوى المعادلة لليمين */
+                text-align: right !important;
                 width: 100%;
             }
 
             .formula-row {
-                justify-content: flex-end !important; /* صف المعادلة لليمين */
+                justify-content: flex-end !important;
             }
 
-            /* قسم الاعتمادات يبقى في المنتصف كما هو (لم نغيره) */
+            /* الاعتمادات تبقى في المنتصف */
             .signature-section {
                 background: transparent !important;
                 border: 1px solid transparent !important;
-                /* لا نضبط محاذاة خاصة، يبقى grid في المنتصف */
             }
 
             .signature-box {
@@ -476,16 +510,18 @@
                 width: 100%;
             }
 
-            /* ضمان أن جميع النصوص تتجه لليمين */
-            .card, .card * {
-                direction: rtl;
+            /* ضمان عدم انقطاع الصفحة */
+            .page-border, .card {
+                page-break-after: avoid;
+                page-break-inside: avoid;
             }
         }
 
-        /* ========================== تجاوب مع الشاشات الصغيرة ========================== */
+        /* تجاوب الشاشات الصغيرة */
         @media (max-width: 700px) {
-            .columns-row { flex-direction: column; }
+            .columns-row { flex-direction: column; align-items: flex-end; }
             .signature-section { grid-template-columns: 1fr; }
+            .compact-input { width: 140px; }
         }
     </style>
 </head>
@@ -493,7 +529,7 @@
     <div class="main-wrapper">
         <div class="page-border">
             <div class="card">
-                <!-- رأس الطباعة -->
+                <!-- رأس الطباعة (يظهر فقط عند الطباعة) -->
                 <div class="print-header">
                     <div class="ministry">وزارة الصحة</div>
                     <div>المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
@@ -545,10 +581,10 @@
                     </div>
                 </div>
 
-                <!-- نتيجة المدة -->
+                <!-- نتيجة مدة الخدمة -->
                 <div class="result-centered" id="resultCentered" style="display: none;">
                     <div class="result-container">
-                        <span class="result-label">مدة الخدمة :</span>
+                        <span class="result-label">مدة الخدمة</span>
                         <div class="result-values">
                             <div class="result-box">
                                 <div class="result-number-box" id="daysResult">٠</div>
@@ -570,7 +606,7 @@
 
                 <hr class="divider-line">
 
-                <!-- قسم المعادلة -->
+                <!-- قسم المعادلة (الاحتساب) -->
                 <div class="formula-section">
                     <div class="formula-title">الاحتساب</div>
                     <div class="formula-row">
@@ -592,7 +628,7 @@
 
                 <hr class="divider-line">
 
-                <!-- قسم التوقيعات -->
+                <!-- قسم التوقيعات (الاعتمادات) - يبقى في المنتصف -->
                 <div class="signature-section">
                     <div class="signature-box">
                         <span>إعداد ومراجعة</span>
