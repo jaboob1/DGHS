@@ -3,751 +3,652 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة مستحقات التعويض النقدي عن رصيد الإجازات</title>
-    <!-- 
-    ================================================================================
-    شرح عام للمشروع:
-    هذه الصفحة عبارة عن حاسبة لمستحقات التعويض النقدي عن رصيد الإجازات.
-    تتكون من نموذج إدخال بيانات الموظف وتواريخ الخدمة والراتب،
-    ثم تقوم بحساب مدة الخدمة (سنوات، شهور، أيام) وتحويلها إلى تعويض
-    باستخدام معادلة محددة. التصميم مستوحى من الاستمارات الرسمية
-    مع إمكانية الطباعة بشكل مناسب.
-
-    أحدث التعديلات (حل مشكلة الطباعة):
-    - تم تبسيط تنسيقات @media print بشكل كبير للمحافظة على تنسيق الشاشة الأصلي.
-    - إخفاء الأزرار والتذييل ورسائل الخطأ فقط عند الطباعة.
-    - إزالة ترويسة وزارة الصحة والمديرية نهائياً (لن تظهر على الشاشة ولا في الطباعة).
-    - الحفاظ على جميع الهوامش والأبعاد والألوان كما هي على الشاشة.
-    - تم ضبط @page ليلائم مقاس A4 مع هوامش معتدلة.
-    ================================================================================
-    -->
+    <title>استمارة احتساب مستحقات التعويض النقدي عن رصيد الإجازات</title>
     <style>
-        /* ========================== الإعدادات الأساسية ========================== */
+        /* ========================== الإعدادات الأساسية والتصميم العام ========================== */
         * {
             box-sizing: border-box;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+            background-color: #f5f7fa;
+            color: #334155;
+            margin: 0;
+            padding: 40px 20px;
+            direction: rtl;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            font-size: 16px;
-            direction: rtl;
         }
 
         .main-wrapper {
+            max-width: 900px;
+            width: 100%;
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
-            gap: 20px;
-            max-width: 950px;
-            width: 100%;
-            font-size: 16px;
+            gap: 24px;
         }
 
-        .page-border {
-            width: 100%;
-        }
-
-        .card {
+        /* ========================== تصميم الاستمارة الرسمية ========================== */
+        .form-container {
             background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 25px 20px;
-            border: 2px dashed #cbd5e1;
-            width: 100%;
-            font-size: 16px;
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
+            border: 2px solid #1e3c72;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 35px 30px;
+            position: relative;
         }
 
-        .card h2 {
-            text-align: right;
+        /* خط داخلي جمالي للمظهر الرسمي */
+        .form-container::before {
+            content: "";
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            pointer-events: none;
+        }
+
+        /* ترويسة الاستمارة */
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px double #1e3c72;
+        }
+
+        .form-header h1 {
+            font-size: 20px;
             color: #1e3c72;
-            margin-bottom: 18px;
+            margin: 0 0 5px 0;
             font-weight: 700;
-            font-size: 1.2em;
-            letter-spacing: -0.3px;
-            width: 100%;
         }
 
-        /* ========================== تخطيط الأعمدة ========================== */
-        .columns-row {
-            display: flex;
-            justify-content: flex-end;
-            gap: 25px;
-            margin-bottom: 10px;
-            width: 100%;
+        .form-header p {
+            font-size: 13px;
+            color: #64748b;
+            margin: 0;
         }
 
-        .column-right,
-        .column-left {
-            flex: 0 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
+        /* ========================== تنظيم الحقول والجداول ========================== */
+        .form-section-title {
+            font-size: 15px;
+            color: #1e3c72;
+            font-weight: 700;
+            margin: 20px 0 12px 0;
+            border-right: 4px solid #1e3c72;
+            padding-right: 8px;
         }
 
-        /* ========================== مجموعات الإدخال ========================== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px 30px;
+            margin-bottom: 20px;
+        }
+
         .input-group {
             display: flex;
             align-items: center;
-            gap: 4px;
+            border-bottom: 1px dashed #cbd5e1;
+            padding-bottom: 6px;
         }
 
         .input-group label {
+            font-size: 13px;
             font-weight: 600;
-            color: #2c3e50;
-            font-size: 1em;
-            white-space: nowrap;
-            min-width: 100px;
-            text-align: right;
+            color: #1e293b;
+            min-width: 140px;
+            flex-shrink: 0;
         }
 
         .input-group label::after {
-            content: " :";
-            font-weight: bold;
-            margin-left: 2px;
+            content: ":";
+            margin-right: 4px;
         }
 
-        .compact-input {
-            padding: 8px 4px;
+        .form-input {
+            width: 100%;
             border: none;
-            border-bottom: 1.5px solid #cbd5e1;
-            border-radius: 0;
-            font-size: 1em;
             background: transparent;
-            transition: all 0.3s ease;
             font-family: inherit;
-            text-align: right;
-            width: 160px;
+            font-size: 14px;
+            color: #0f172a;
+            padding: 2px 5px;
             outline: none;
         }
 
-        .compact-input:focus {
-            border-bottom-color: #3b82f6;
-            border-bottom-width: 2px;
+        .form-input::placeholder {
+            color: #94a3b8;
         }
 
-        select.compact-input {
-            width: 180px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: left 4px center;
-            background-size: 8px;
-            padding-left: 20px;
-            appearance: none;
-            -webkit-appearance: none;
+        select.form-input {
             cursor: pointer;
+            color: #0f172a;
         }
 
-        /* ========================== مجموعة الأزرار ========================== */
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            margin: 12px 0 8px;
-            width: 100%;
-            justify-content: flex-end;
-        }
-
-        button {
-            flex: 1;
-            background: #1e3c72;
-            color: white;
-            border: none;
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s ease, transform 0.1s ease;
-        }
-
-        button:hover {
-            background: #2b4f8c;
-        }
-        button:active {
-            transform: scale(0.97);
-        }
-
-        .print-btn {
-            background: #0f766e;
-        }
-        .print-btn:hover {
-            background: #0e5e58;
-        }
-
-        /* ========================== عرض نتيجة المدة ========================== */
-        .result-centered {
-            display: flex;
-            justify-content: flex-start;
-            margin-top: 5px;
-            margin-bottom: 10px;
-            width: 100%;
-        }
-
-        .result-container {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .result-label {
-            font-weight: 600;
-            color: #1e3c72;
-            font-size: 1em;
-            white-space: nowrap;
-        }
-        .result-label::after {
-            content: " :";
-        }
-        .result-values {
-            display: flex;
-            gap: 4px;
-        }
-        .result-box {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-        .result-number-box {
-            width: 55px;
-            padding: 6px 4px;
-            background: white;
-            border: none;
-            border-bottom: 1.5px solid #cbd5e1;
-            text-align: center;
-            font-size: 1em;
-            font-weight: 700;
-            color: #0f2b4b;
-        }
-        .result-unit {
-            font-size: 0.9em;
-            color: #64748b;
-            white-space: nowrap;
-        }
-
-        /* ========================== خط فاصل ========================== */
-        .divider-line {
-            border: none;
-            border-top: 1px solid #ddd;
-            margin: 16px 0;
-            width: 100%;
-        }
-
-        /* ========================== قسم المعادلة ========================== */
-        .formula-section {
-            margin-top: 12px;
-            background: #fdfcff;
-            border-radius: 14px;
-            padding: 14px 12px;
-            border: 1px dashed #cbd5e1;
-            width: 100%;
-            text-align: right;
-        }
-        .formula-title {
-            font-weight: 700;
-            color: #1e3c72;
-            margin-bottom: 10px;
-            font-size: 1em;
-            text-align: right;
-        }
-        .formula-row {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            flex-wrap: wrap;
-            gap: 6px;
-            row-gap: 8px;
-        }
-        .formula-row > * {
-            flex-shrink: 0;
-        }
-        .formula-label {
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 1em;
-            white-space: nowrap;
-        }
-        .formula-label::after {
-            content: " :";
-        }
-        .formula-input {
-            width: 90px;
-            padding: 6px 6px;
-            border: none;
-            border-bottom: 1.5px solid #cbd5e1;
-            font-size: 1em;
-            background: #fff;
-            text-align: center;
-            font-family: inherit;
-            transition: all 0.2s;
-            outline: none;
-        }
-        .formula-input:focus {
-            border-bottom-color: #3b82f6;
-        }
-        .formula-input.result-field {
-            background: #e8f0fe;
-            font-weight: 700;
-            color: #0f2b4b;
-            cursor: default;
-        }
-        .formula-operator {
-            font-size: 1.1em;
-            font-weight: 700;
-            color: #000;
-            margin: 0 1px;
-        }
-        .formula-constant {
-            font-weight: 700;
-            color: #0f2b4b;
-            font-size: 1em;
-            background: #f1f5f9;
-            padding: 4px 8px;
-            border-radius: 4px;
-            white-space: nowrap;
-        }
-
-        /* ========================== قسم التوقيعات ========================== */
-        .signature-section {
-            margin-top: 20px;
+        /* ========================== عرض نتائج مدة الخدمة ========================== */
+        .results-block {
+            background-color: #f8fafc;
             border: 1px solid #e2e8f0;
-            border-radius: 14px;
-            padding: 30px 16px;
-            background: #fafafa;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px 20px;
-            width: 100%;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
         }
-        .signature-box {
-            text-align: center;
+
+        .results-flex {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-label {
+            font-size: 13px;
             font-weight: 600;
-            color: #2c3e50;
-            font-size: 1em;
+            color: #475569;
+        }
+
+        .result-box {
+            min-width: 70px;
+            height: 35px;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e3c72;
+        }
+
+        /* ========================== قسم احتساب المعادلة المالية ========================== */
+        .calculation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 13px;
+        }
+
+        .calculation-table th, .calculation-table td {
+            border: 1px solid #cbd5e1;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .calculation-table th {
+            background-color: #f1f5f9;
+            color: #1e3c72;
+            font-weight: 700;
+        }
+
+        .formula-inline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            direction: ltr; /* لتظهر المعادلة الحسابية بشكل صحيح رياضيّاً */
+            font-weight: 600;
+        }
+
+        .formula-inline span {
+            direction: rtl;
+        }
+
+        .calc-output {
+            font-size: 16px;
+            font-weight: 700;
+            color: #16a34a;
+            background-color: #f0fdf4;
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid #bbf7d0;
+            display: inline-block;
+            min-width: 120px;
+        }
+
+        .formula-input-field {
+            width: 80px;
+            text-align: center;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            padding: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e3c72;
+        }
+
+        /* ========================== قسم التوقيعات والاعتمادات ========================== */
+        .signatures-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px 40px;
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px dashed #cbd5e1;
+        }
+
+        .signature-item {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 10px;
+            gap: 40px;
         }
+
+        .signature-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+        }
+
         .signature-line {
-            width: 75%;
-            border-bottom: 1px solid #64748b;
-            margin-top: 4px;
+            border-bottom: 1px solid #94a3b8;
+            width: 80%;
         }
 
-        /* ========================== رسالة الخطأ ========================== */
-        .error {
+        /* ========================== التنبيهات والأخطاء ========================== */
+        .error-message {
+            background-color: #fef2f2;
+            border: 1px solid #fee2e2;
             color: #b91c1c;
-            background: #fee2e2;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-weight: 500;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin: 10px 0;
             display: none;
-            font-size: 0.9em;
-            width: 100%;
+            font-weight: 500;
         }
 
-        /* ========================== تذييل التعاون ========================== */
-        .collaboration-footer {
-            width: 100%;
-            background: #ffffff;
-            border-radius: 14px;
-            padding: 12px 16px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
-            border: 1px solid #e9eef3;
-            text-align: center;
-            font-size: 0.9em;
-            color: #2c3e50;
-            line-height: 1.7;
-            background: #f9fcff;
+        /* ========================== لوحة التحكم والأزرار ========================== */
+        .action-panel {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 20px;
         }
-        .collaboration-footer strong {
+
+        .btn {
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: #1e3c72;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: #152c52;
+        }
+
+        .btn-secondary {
+            background-color: #0f766e;
+            color: #ffffff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #0d5f58;
+        }
+
+        /* ========================== تذييل الصفحة للمظهر العام ========================== */
+        .footer-credits {
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px;
+            line-height: 1.6;
+        }
+
+        .footer-credits strong {
             color: #1e3c72;
         }
-        .collaboration-footer .divider {
-            color: #94a3b8;
-            margin: 0 4px;
-        }
 
-        /* 
-            ========================== رأس الطباعة ========================== 
-            تم حذف عنصر print-header من HTML نهائياً بناءً على طلب المستخدم.
-            لا يوجد أي كود CSS خاص به لأنه لم يعد موجوداً.
-        */
-
-        /* ========================== تنسيقات الطباعة (خفيفة جداً) ========================== */
+        /* ========================== تنسيقات الطباعة الصارمة (A4 وقياس 11) ========================== */
         @media print {
-            /* إعداد الصفحة للطباعة على A4 */
             @page {
                 size: A4;
-                margin: 1.5cm;
+                margin: 15mm 12mm;
             }
 
-            /* 
-                الحفاظ على تنسيق body كما هو على الشاشة،
-                فقط نلغي الخلفية المتدرجة ونجعلها بيضاء للتوفير.
-            */
             body {
-                background: white !important;
-                padding: 20px !important;
-                /* نفس padding الشاشة */
-                margin: 0 !important;
-                display: flex !important;
-                /* الإبقاء على flex لتوسيط المحتوى */
-                justify-content: center !important;
-                align-items: center !important;
-                min-height: auto !important;
-                /* لا داعي لملء الصفحة */
-                font-size: 16px !important;
-                /* نفس حجم خط الشاشة */
-            }
-
-            /* 
-                main-wrapper : نحافظ على نفس العرض والتوسيط.
-                لا نغير شيئاً جوهرياً.
-            */
-            .main-wrapper {
-                max-width: 950px !important;
-                width: 100% !important;
-                align-items: flex-end !important;
-                gap: 20px !important;
-                font-size: 16px !important;
-                box-shadow: none !important;
-            }
-
-            /* page-border بدون أي إطار إضافي */
-            .page-border {
-                border: none !important;
+                background: #ffffff !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                width: 100% !important;
+                font-size: 11pt !important;
+                color: #000000 !important;
             }
 
-            /* 
-                card: نحافظ على نفس التنسيق تماماً (الظل، الحدود، التدوير، الخلفية).
-                هذا يعطي نفس مظهر الشاشة عند الطباعة.
-            */
-            .card {
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
-                border: 2px dashed #cbd5e1 !important;
-                border-radius: 16px !important;
-                padding: 25px 20px !important;
-                background: #ffffff !important;
-                font-size: 16px !important;
-                text-align: right !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: flex-end !important;
+            .main-wrapper {
+                max-width: 100% !important;
+                gap: 0 !important;
+            }
+
+            .form-container {
+                border: 1px solid #000000 !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                border-radius: 0 !important;
+            }
+
+            .form-container::before {
+                display: none !important;
+            }
+
+            .form-header {
+                margin-bottom: 20px !important;
+                border-bottom: 1px solid #000000 !important;
+            }
+
+            .form-header h1 {
+                font-size: 15pt !important;
+                color: #000000 !important;
+            }
+
+            .form-section-title {
+                font-size: 11pt !important;
+                color: #000000 !important;
+                border-right: 3px solid #000000 !important;
+                margin: 15px 0 8px 0 !important;
+            }
+
+            .form-grid {
+                gap: 12px 20px !important;
+                margin-bottom: 15px !important;
+            }
+
+            .input-group {
+                border-bottom: 1px solid #000000 !important;
+                padding-bottom: 3px !important;
+            }
+
+            .input-group label {
+                font-size: 11pt !important;
+                color: #000000 !important;
+                min-width: 120px !important;
+            }
+
+            .form-input {
+                font-size: 11pt !important;
+                color: #000000 !important;
+            }
+
+            .results-block {
+                background: transparent !important;
+                border: 1px solid #000000 !important;
+                padding: 10px !important;
+            }
+
+            .result-label {
+                font-size: 11pt !important;
+                color: #000000 !important;
+            }
+
+            .result-box {
+                border: 1px solid #000000 !important;
+                font-size: 11pt !important;
+                color: #000000 !important;
+                background: transparent !important;
+                height: 30px !important;
+            }
+
+            .calculation-table {
+                font-size: 11pt !important;
+                margin: 15px 0 !important;
+            }
+
+            .calculation-table th, .calculation-table td {
+                border: 1px solid #000000 !important;
+                padding: 6px !important;
+                color: #000000 !important;
+            }
+
+            .calculation-table th {
+                background: #f5f5f5 !important;
+            }
+
+            .formula-input-field {
+                border: none !important;
+                font-size: 11pt !important;
+                color: #000000 !important;
+                width: auto !important;
+                background: transparent !important;
+            }
+
+            .calc-output {
+                font-size: 12pt !important;
+                color: #000000 !important;
+                background: transparent !important;
+                border: none !important;
+                padding: 0 !important;
+                min-width: auto !important;
+            }
+
+            .signatures-grid {
+                margin-top: 30px !important;
+                gap: 30px 40px !important;
+                border-top: 1px solid #000000 !important;
                 page-break-inside: avoid;
-                /* منع انقسام البطاقة بين صفحتين */;
             }
 
-            /* العنوان */
-            .card h2 {
-                font-size: 1.2em !important;
-                color: #1e3c72 !important;
-                text-align: right !important;
-                width: 100% !important;
-                margin-bottom: 18px !important;
-            }
-
-            /* إخفاء الأزرار فقط */
-            .btn-group,
-            button {
-                display: none !important;
-            }
-
-            /* إخفاء التذييل */
-            .collaboration-footer {
-                display: none !important;
-            }
-
-            /* إخفاء رسائل الخطأ */
-            .error {
-                display: none !important;
-            }
-
-            /* 
-                جميع الحقول والمدخلات تبقى كما هي على الشاشة.
-                لا نلمس الحدود السفلية أو الألوان.
-            */
-            .compact-input,
-            .formula-input,
-            select.compact-input,
-            .result-number-box,
-            .formula-constant {
-                /* لا نغير شيئاً، نحافظ على الشكل الأصلي */;
-            }
-
-            /* الأعمدة كما هي */
-            .columns-row {
-                display: flex !important;
-                justify-content: flex-end !important;
-                gap: 25px !important;
-                margin-bottom: 10px !important;
-                width: 100% !important;
-            }
-
-            .column-right,
-            .column-left {
-                flex: 0 0 auto !important;
-                display: flex !important;
-                flex-direction: column !important;
-                gap: 18px !important;
-            }
-
-            /* النتيجة */
-            .result-centered {
-                display: flex !important;
-                justify-content: flex-start !important;
-                margin-top: 5px !important;
-                margin-bottom: 10px !important;
-                width: 100% !important;
-            }
-
-            /* قسم المعادلة */
-            .formula-section {
-                margin-top: 12px !important;
-                background: #fdfcff !important;
-                border-radius: 14px !important;
-                padding: 14px 12px !important;
-                border: 1px dashed #cbd5e1 !important;
-                width: 100% !important;
-                text-align: right !important;
-            }
-
-            .formula-row {
-                display: flex !important;
-                align-items: center !important;
-                justify-content: flex-end !important;
-                flex-wrap: wrap !important;
-                gap: 6px !important;
-                row-gap: 8px !important;
-            }
-
-            /* التوقيعات */
-            .signature-section {
-                margin-top: 20px !important;
-                border: 1px solid #e2e8f0 !important;
-                border-radius: 14px !important;
-                padding: 30px 16px !important;
-                background: #fafafa !important;
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-                gap: 40px 20px !important;
-                width: 100% !important;
-            }
-
-            .signature-box {
-                text-align: center !important;
-                font-weight: 600 !important;
-                color: #2c3e50 !important;
-                font-size: 1em !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                gap: 10px !important;
+            .signature-title {
+                font-size: 11pt !important;
+                color: #000000 !important;
             }
 
             .signature-line {
-                width: 75% !important;
-                border-bottom: 1px solid #64748b !important;
-                margin-top: 4px !important;
+                border-bottom: 1px solid #000000 !important;
             }
 
-            /* الخط الفاصل */
-            .divider-line {
-                border: none !important;
-                border-top: 1px solid #ddd !important;
-                margin: 16px 0 !important;
-                width: 100% !important;
+            /* إخفاء العناصر غير المطلوبة في الطباعة */
+            .action-panel, 
+            .footer-credits, 
+            .error-message,
+            select.form-input::-ms-expand {
+                display: none !important;
             }
 
-            /* منع انقسام العناصر المهمة */
-            .formula-section,
-            .signature-section,
-            .result-centered {
+            /* منع انكسار العناصر عبر الصفحات */
+            .results-block, .calculation-table, .signatures-grid {
                 page-break-inside: avoid;
             }
         }
 
-        /* ========================== تجاوب الشاشات الصغيرة ========================== */
-        @media (max-width: 700px) {
-            .columns-row {
-                flex-direction: column;
-                align-items: flex-end;
-            }
-            .signature-section {
+        /* تجاوب الشاشات الصغيرة للهواتف */
+        @media (max-width: 768px) {
+            .form-grid {
                 grid-template-columns: 1fr;
+                gap: 12px;
             }
-            .compact-input {
-                width: 140px;
+            .signatures-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            .results-flex {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .input-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            .input-group label {
+                min-width: 100%;
             }
         }
     </style>
 </head>
 <body>
+
     <div class="main-wrapper">
-        <div class="page-border">
-            <div class="card">
-                <!-- 
-                    تم حذف عنصر print-header بالكامل من HTML.
-                    لا يوجد أي رأس يحمل "وزارة الصحة" أو "المديرية".
-                -->
+        <div class="form-container">
+            
+            <div class="form-header">
+                <h1>استمارة احتساب مستحقات التعويض النقدي عن رصيد الإجازات</h1>
+                <p>مستند رسمي مخصص لإدارة وتخطيط الموارد البشرية والشؤون المالية</p>
+            </div>
 
-                <h2>أستمارة أحتساب مستحقات التعويض النقدي عن رصيد الإجازات</h2>
-
-                <!-- صف الأعمدة -->
-                <div class="columns-row">
-                    <div class="column-right">
-                        <div class="input-group">
-                            <label for="employeeName">اسم الموظف</label>
-                            <input type="text" id="employeeName" class="compact-input" placeholder="الاسم">
-                        </div>
-                        <div class="input-group">
-                            <label for="jobTitle">الوظيفة</label>
-                            <input type="text" id="jobTitle" class="compact-input" placeholder="الوظيفة">
-                        </div>
-                        <div class="input-group">
-                            <label for="hireDate">تاريخ التعيين</label>
-                            <input type="date" id="hireDate" class="compact-input" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="basicSalary">آخر راتب أساسي</label>
-                            <input type="text" id="basicSalary" class="compact-input" placeholder="٠.٠٠٠" oninput="handleArabicInput(this); calculateIndemnity();">
-                        </div>
-                        <div class="input-group">
-                            <label for="regulationType">نوع اللائحة</label>
-                            <select id="regulationType" class="compact-input" onchange="updateLeaveDays()">
-                                <option value="civil">الخدمة المدنية</option>
-                                <option value="medical">اللائحة الطبية</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="column-left">
-                        <div class="input-group">
-                            <label for="employeeNumber">رقم الموظف</label>
-                            <input type="text" id="employeeNumber" class="compact-input" placeholder="الرقم">
-                        </div>
-                        <div class="input-group">
-                            <label for="endDate">تاريخ نهاية الخدمة</label>
-                            <input type="date" id="endDate" class="compact-input" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="annualLeave">الاستحقاق السنوي (يوم)</label>
-                            <input type="text" id="annualLeave" class="compact-input" placeholder="٣٠" oninput="handleArabicInput(this); updateLeaveDays();">
-                        </div>
-                    </div>
+            <div class="form-section-title">بيانات الموظف الأساسية وتواريخ الخدمة</div>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label for="employeeName">اسم الموظف</label>
+                    <input type="text" id="employeeName" class="form-input" placeholder="أدخل اسم الموظف الثلاثي">
                 </div>
-
-                <!-- نتيجة مدة الخدمة -->
-                <div class="result-centered" id="resultCentered" style="display: none;">
-                    <div class="result-container">
-                        <span class="result-label">مدة الخدمة</span>
-                        <div class="result-values">
-                            <div class="result-box">
-                                <div class="result-number-box" id="daysResult">٠</div>
-                                <span class="result-unit">يوم</span>
-                            </div>
-                            <div class="result-box">
-                                <div class="result-number-box" id="monthsResult">٠</div>
-                                <span class="result-unit">شهر</span>
-                            </div>
-                            <div class="result-box">
-                                <div class="result-number-box" id="yearsResult">٠</div>
-                                <span class="result-unit">سنوات</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="input-group">
+                    <label for="employeeNumber">رقم الموظف</label>
+                    <input type="text" id="employeeNumber" class="form-input" placeholder="أدخل الرقم الوظيفي">
                 </div>
-
-                <div id="errorMessage" class="error"></div>
-
-                <hr class="divider-line">
-
-                <!-- قسم المعادلة -->
-                <div class="formula-section">
-                    <div class="formula-title">الاحتساب</div>
-                    <div class="formula-row">
-                        <span class="formula-label">الراتب الأساسي</span>
-                        <span class="formula-constant" id="displaySalary">٠.٠٠٠</span>
-                        <span class="formula-operator">×</span>
-                        <span class="formula-constant">١٢</span>
-                        <span class="formula-operator">×</span>
-                        <span class="formula-label">عدد الأيام</span>
-                        <input type="text" id="totalDays" class="formula-input" value="" placeholder="٠" oninput="handleArabicInput(this); calculateIndemnity();">
-                        <span class="formula-operator">÷</span>
-                        <span class="formula-constant">٣٦٥</span>
-                        <span class="formula-operator">=</span>
-                        <input type="text" id="indemnityResult" class="formula-input result-field" value="٠.٠٠٠" readonly>
-                    </div>
+                <div class="input-group">
+                    <label for="jobTitle">الوظيفة</label>
+                    <input type="text" id="jobTitle" class="form-input" placeholder="المسمى الوظيفي الحالي">
                 </div>
-
-                <div id="indemnityError" class="error"></div>
-
-                <hr class="divider-line">
-
-                <!-- قسم التوقيعات -->
-                <div class="signature-section">
-                    <div class="signature-box">
-                        <span>إعداد ومراجعة</span>
-                        <div class="signature-line"></div>
-                    </div>
-                    <div class="signature-box">
-                        <span>اعتماد مدير الموارد البشرية</span>
-                        <div class="signature-line"></div>
-                    </div>
-                    <div class="signature-box">
-                        <span>اعتماد مدير الشئون المالية</span>
-                        <div class="signature-line"></div>
-                    </div>
-                    <div class="signature-box">
-                        <span>اعتماد المدير العام</span>
-                        <div class="signature-line"></div>
-                    </div>
+                <div class="input-group">
+                    <label for="hireDate">تاريخ التعيين</label>
+                    <input type="date" id="hireDate" class="form-input" required>
                 </div>
-
-                <!-- الأزرار: تظهر على الشاشة فقط وتُخفى عند الطباعة -->
-                <div class="btn-group">
-                    <button onclick="calculateDifference()">احسب المدة</button>
-                    <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
+                <div class="input-group">
+                    <label for="endDate">تاريخ نهاية الخدمة</label>
+                    <input type="date" id="endDate" class="form-input" required>
+                </div>
+                <div class="input-group">
+                    <label for="basicSalary">آخر راتب أساسي</label>
+                    <input type="text" id="basicSalary" class="form-input" placeholder="0.000" oninput="handleArabicInput(this); calculateIndemnity();">
+                </div>
+                <div class="input-group">
+                    <label for="regulationType">نوع اللائحة</label>
+                    <select id="regulationType" class="form-input" onchange="updateLeaveDays()">
+                        <option value="civil">الخدمة المدنية</option>
+                        <option value="medical">اللائحة الطبية</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="annualLeave">الاستحقاق السنوي (يوم)</label>
+                    <input type="text" id="annualLeave" class="form-input" placeholder="30" oninput="handleArabicInput(this); updateLeaveDays();">
                 </div>
             </div>
+
+            <div id="errorMessage" class="error-message"></div>
+
+            <div id="resultCentered" class="results-block" style="display: none;">
+                <div class="result-label" style="margin-bottom: 10px; font-weight: 700; color: #1e3c72;">المدة الإجمالية للخدمة الفعلية:</div>
+                <div class="results-flex">
+                    <div class="result-item">
+                        <span class="result-label">السنوات:</span>
+                        <div class="result-box" id="yearsResult">٠</div>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">الشهور:</span>
+                        <div class="result-box" id="monthsResult">٠</div>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">الأيام:</span>
+                        <div class="result-box" id="daysResult">٠</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section-title">الاحتساب المالي والتصفية النقديّة</div>
+            
+            <table class="calculation-table">
+                <thead>
+                    <tr>
+                        <th>الراتب الأساسي المعتمد</th>
+                        <th>معادلة الاحتساب القانونية المطبقة</th>
+                        <th>رصيد الأيام المستحقة</th>
+                        <th>إجمالي مبلغ التعويض المستحق</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span id="displaySalary" style="font-weight: 700; color: #1e293b;">٠.٠٠٠</span> ر.ع.
+                        </td>
+                        <td>
+                            <div class="formula-inline">
+                                <span>(الراتب × ١٢ × الأيام) ÷ ٣٦٥</span>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="text" id="totalDays" class="formula-input-field" placeholder="٠" oninput="handleArabicInput(this); calculateIndemnity();"> يوم
+                        </td>
+                        <td>
+                            <input type="text" id="indemnityResult" class="calc-output" value="٠.٠٠٠" readonly style="border:none; text-align:center; width:100%;">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div id="indemnityError" class="error-message"></div>
+
+            <div class="form-section-title">الاعتمادات والموافقات الرسمية</div>
+            <div class="signatures-grid">
+                <div class="signature-item">
+                    <span class="signature-title">إعداد ومراجعة (مختص الموارد البشرية):</span>
+                    <div class="signature-line"></div>
+                </div>
+                <div class="signature-item">
+                    <span class="signature-title">اعتماد مدير الموارد البشرية:</span>
+                    <div class="signature-line"></div>
+                </div>
+                <div class="signature-item">
+                    <span class="signature-title">تدقيق واعتماد مدير الشؤون المالية:</span>
+                    <div class="signature-line"></div>
+                </div>
+                <div class="signature-item">
+                    <span class="signature-title">اعتماد المدير العام للجهة:</span>
+                    <div class="signature-line"></div>
+                </div>
+            </div>
+
+            <div class="action-panel">
+                <button class="btn btn-primary" onclick="calculateDifference()">📊 احسب مدة الخدمة والرصيد</button>
+                <button class="btn btn-secondary" onclick="window.print()">🖨️ طباعة الاستمارة الرسمية</button>
+            </div>
+
         </div>
 
-        <!-- التذييل: يظهر على الشاشة فقط ويُخفى عند الطباعة -->
-        <div class="collaboration-footer">
-            <p style="margin:0;">
-                تم ابتكار الحاسبة بالتعاون مع<br>
-                <strong>قسم إدارة وتخطيط الموارد البشرية</strong> <span class="divider">|</span> <strong>فكرة: أحمد عيديد</strong><br>
-                <strong>قسم الإيرادات والمصروفات</strong> <span class="divider">|</span> <strong>برمجة وتنفيذ: محمد جعبوب</strong><br>
-            </p>
+        <div class="footer-credits">
+            تم ابتكار وتطوير الحاسبة بالتعاون مع المشرفين والمطورين المعنيين<br>
+            <strong>قسم إدارة وتخطيط الموارد البشرية</strong> (فكرة: أحمد عيديد) <span style="color: #cbd5e1; margin: 0 6px;">|</span> <strong>قسم الإيرادات والمصروفات</strong> (برمجة وتنفيذ: محمد جعبوب)
         </div>
     </div>
 
     <script>
-        // =============================================================================
-        // الدوال المساعدة لتحويل الأرقام العربية إلى إنجليزية والعكس
-        // =============================================================================
+        // دالة تحويل الأرقام العربية الشرقية (هندية) إلى أرقام عربية غربية (إنجليزية)
         function arabicToEnglish(str) {
             return str.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
         }
 
+        // دالة تحويل الأرقام إلى أرقام عربية شرقية للمظهر الرسمي في الاستمارة
         function toArabicNumber(num) {
             if (num === undefined || num === null) return '';
             return String(num).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
         }
 
+        // معالجة المدخلات النصية للتأكد من توافق الأرقام
         function handleArabicInput(input) {
             const englishValue = arabicToEnglish(input.value);
             if (englishValue !== input.value) {
@@ -755,6 +656,7 @@
             }
         }
 
+        // تحويل النصوص الرقمية إلى قيم عائمة صالحة للحسابات الرياضية
         function parseArabicNumber(value) {
             const cleaned = arabicToEnglish(String(value));
             return parseFloat(cleaned) || 0;
@@ -762,6 +664,7 @@
 
         let totalServiceYears = 0;
 
+        // دالة حساب الفروقات بين التواريخ (السنوات، الشهور، الأيام)
         function calculateDifference() {
             const hireDateInput = document.getElementById('hireDate').value;
             const endDateInput = document.getElementById('endDate').value;
@@ -774,7 +677,7 @@
             indemnityError.style.display = 'none';
 
             if (!hireDateInput || !endDateInput) {
-                errorDiv.textContent = '⚠️ الرجاء إدخال تاريخ التعيين وتاريخ نهاية الخدمة.';
+                errorDiv.textContent = '⚠️ تنبيه رسمي: الرجاء إدخال تاريخ التعيين وتاريخ نهاية الخدمة لإكمال الاستمارة.';
                 errorDiv.style.display = 'block';
                 return;
             }
@@ -783,7 +686,7 @@
             const endDate = new Date(endDateInput);
 
             if (isNaN(hireDate.getTime()) || isNaN(endDate.getTime())) {
-                errorDiv.textContent = '⚠️ أحد التواريخ غير صالح.';
+                errorDiv.textContent = '⚠️ خطأ في البيانات: التواريخ المدخلة غير صالحة، يرجى مراجعتها.';
                 errorDiv.style.display = 'block';
                 return;
             }
@@ -796,8 +699,9 @@
             let d2 = endDate.getDate();
 
             if (endDate < hireDate) {
-                errorDiv.textContent = '⚠️ تنبيه: تاريخ نهاية الخدمة أقدم من تاريخ التعيين. قد تظهر قيم سالبة.';
+                errorDiv.textContent = '⚠️ تعارض رسمي: تاريخ نهاية الخدمة لا يمكن أن يكون أسبق من تاريخ التعيين.';
                 errorDiv.style.display = 'block';
+                return;
             }
 
             if (d2 < d1) {
@@ -823,6 +727,7 @@
             updateLeaveDays();
         }
 
+        // تحديث سقف رصيد الأيام بناء على اللائحة وسنوات الخدمة المحسوبة
         function updateLeaveDays() {
             const annualLeaveInput = document.getElementById('annualLeave');
             const annualLeave = parseArabicNumber(annualLeaveInput.value);
@@ -846,6 +751,7 @@
             calculateIndemnity();
         }
 
+        // دالة احتساب قيمة التعويض المالي وصيغة الإخراج الثلاثية الفواصل ر.ع.
         function calculateIndemnity() {
             const salaryInput = document.getElementById('basicSalary');
             const totalDaysInput = document.getElementById('totalDays');
@@ -861,7 +767,7 @@
             displaySalary.textContent = toArabicNumber(salary.toFixed(3));
 
             if (salary < 0 || totalDays < 0) {
-                indemnityError.textContent = '⚠️ الرجاء إدخال قيم موجبة للراتب وعدد الأيام.';
+                indemnityError.textContent = '⚠️ خطأ مالي: لا يمكن احتساب مبالغ أو أيام بقيم سالبة.';
                 indemnityError.style.display = 'block';
                 resultField.value = '٠.٠٠٠';
                 return;
@@ -871,6 +777,7 @@
             resultField.value = toArabicNumber(indemnity.toFixed(3));
         }
 
+        // تصفير القيم المبدئية عند تحميل الصفحة بالكامل للحفاظ على النزاهة الإجرائية للمستند
         window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('displaySalary').textContent = '٠.٠٠٠';
             document.getElementById('indemnityResult').value = '٠.٠٠٠';
