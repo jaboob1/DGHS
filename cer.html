@@ -13,16 +13,12 @@
     باستخدام معادلة محددة. التصميم مستوحى من الاستمارات الرسمية
     مع إمكانية الطباعة بشكل مناسب.
 
-    التعديلات الأخيرة بناءً على طلب المستخدم (شاملة الشاشة والطباعة):
-    - توحيد عرض حقول (رقم الموظف، تاريخ نهاية الخدمة، الاستحقاق السنوي) 150px.
-    - زيادة التباعد في قسم التوقيعات من الأعلى والأسفل والمسافات بين الموقعين.
-    - إخفاء الأزرار عند الطباعة.
-    - جعل الخطوط السفلية لصناديق الإدخال بيضاء (غير مرئية) عند الطباعة.
-    - إضافة نقطتين ":" بعد كل عنوان حقل على الشاشة وعند الطباعة.
-    - تقريب المسافة بين الحقل والعنوان.
-    - محاذاة كافة المحتوى (باستثناء قسم الاعتمادات) إلى اليمين على الشاشة والطباعة.
-    - تكبير حجم الخط الأساسي ليكون 12pt على الشاشة والطباعة (12pt ≈ 16px).
-    - ضبط الطباعة لصفحة A4 مع ملاءمة المحتوى في صفحة واحدة.
+    أحدث التعديلات (حل مشكلة الطباعة):
+    - تم تبسيط تنسيقات @media print بشكل كبير للمحافظة على تنسيق الشاشة الأصلي.
+    - إخفاء الأزرار والتذييل ورسائل الخطأ فقط عند الطباعة.
+    - إزالة ترويسة وزارة الصحة والمديرية نهائياً (لن تظهر على الشاشة ولا في الطباعة).
+    - الحفاظ على جميع الهوامش والأبعاد والألوان كما هي على الشاشة.
+    - تم ضبط @page ليلائم مقاس A4 مع هوامش معتدلة.
     ================================================================================
     -->
     <style>
@@ -31,10 +27,6 @@
             box-sizing: border-box;
         }
 
-        /* 
-            حجم الخط الأساسي: 12pt = 16px (1pt ≈ 1.333px)
-            استخدمنا 16px ليكون مطابقًا لـ 12pt على الشاشة والطباعة.
-        */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
@@ -44,16 +36,16 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
-            font-size: 16px; /* 12pt */
+            font-size: 16px;
             direction: rtl;
         }
 
         .main-wrapper {
             display: flex;
             flex-direction: column;
-            align-items: flex-end; /* محاذاة المحتوى لليمين */
+            align-items: flex-end;
             gap: 20px;
-            max-width: 900px;
+            max-width: 950px;
             width: 100%;
             font-size: 16px;
         }
@@ -70,10 +62,10 @@
             border: 2px dashed #cbd5e1;
             width: 100%;
             font-size: 16px;
-            text-align: right; /* محاذاة النص لليمين */
+            text-align: right;
             display: flex;
             flex-direction: column;
-            align-items: flex-end; /* محاذاة العناصر الداخلية لليمين */
+            align-items: flex-end;
         }
 
         .card h2 {
@@ -89,14 +81,15 @@
         /* ========================== تخطيط الأعمدة ========================== */
         .columns-row {
             display: flex;
-            justify-content: flex-end; /* الأعمدة تنحاز لليمين */
+            justify-content: flex-end;
             gap: 25px;
             margin-bottom: 10px;
             width: 100%;
         }
 
-        .column-right, .column-left {
-            flex: 0 0 auto; /* عدم تمدد الأعمدة أكثر من اللازم */
+        .column-right,
+        .column-left {
+            flex: 0 0 auto;
             display: flex;
             flex-direction: column;
             gap: 18px;
@@ -106,7 +99,7 @@
         .input-group {
             display: flex;
             align-items: center;
-            gap: 4px; /* تقليل المسافة بين التسمية والحقل ليقتربا */
+            gap: 4px;
         }
 
         .input-group label {
@@ -118,14 +111,12 @@
             text-align: right;
         }
 
-        /* إضافة نقطتين ":" بعد التسمية */
         .input-group label::after {
             content: " :";
             font-weight: bold;
             margin-left: 2px;
         }
 
-        /* أسلوب الحقول المدمجة (خط سفلي فقط) - العرض الموحد */
         .compact-input {
             padding: 8px 4px;
             border: none;
@@ -136,7 +127,7 @@
             transition: all 0.3s ease;
             font-family: inherit;
             text-align: right;
-            width: 160px; /* موحد لجميع الحقول */
+            width: 160px;
             outline: none;
         }
 
@@ -179,11 +170,19 @@
             transition: background 0.2s ease, transform 0.1s ease;
         }
 
-        button:hover { background: #2b4f8c; }
-        button:active { transform: scale(0.97); }
+        button:hover {
+            background: #2b4f8c;
+        }
+        button:active {
+            transform: scale(0.97);
+        }
 
-        .print-btn { background: #0f766e; }
-        .print-btn:hover { background: #0e5e58; }
+        .print-btn {
+            background: #0f766e;
+        }
+        .print-btn:hover {
+            background: #0e5e58;
+        }
 
         /* ========================== عرض نتيجة المدة ========================== */
         .result-centered {
@@ -208,8 +207,15 @@
         .result-label::after {
             content: " :";
         }
-        .result-values { display: flex; gap: 4px; }
-        .result-box { display: flex; align-items: center; gap: 3px; }
+        .result-values {
+            display: flex;
+            gap: 4px;
+        }
+        .result-box {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
         .result-number-box {
             width: 55px;
             padding: 6px 4px;
@@ -235,7 +241,7 @@
             width: 100%;
         }
 
-        /* ========================== قسم المعادلة (الاحتساب) - يحاذي لليمين ========================== */
+        /* ========================== قسم المعادلة ========================== */
         .formula-section {
             margin-top: 12px;
             background: #fdfcff;
@@ -255,12 +261,14 @@
         .formula-row {
             display: flex;
             align-items: center;
-            justify-content: flex-end; /* محاذاة لليمين */
+            justify-content: flex-end;
             flex-wrap: wrap;
             gap: 6px;
             row-gap: 8px;
         }
-        .formula-row > * { flex-shrink: 0; }
+        .formula-row > * {
+            flex-shrink: 0;
+        }
         .formula-label {
             font-weight: 600;
             color: #2c3e50;
@@ -282,7 +290,9 @@
             transition: all 0.2s;
             outline: none;
         }
-        .formula-input:focus { border-bottom-color: #3b82f6; }
+        .formula-input:focus {
+            border-bottom-color: #3b82f6;
+        }
         .formula-input.result-field {
             background: #e8f0fe;
             font-weight: 700;
@@ -305,7 +315,7 @@
             white-space: nowrap;
         }
 
-        /* ========================== قسم التوقيعات (الاعتمادات) - يبقى في المنتصف ========================== */
+        /* ========================== قسم التوقيعات ========================== */
         .signature-section {
             margin-top: 20px;
             border: 1px solid #e2e8f0;
@@ -316,7 +326,6 @@
             grid-template-columns: 1fr 1fr;
             gap: 40px 20px;
             width: 100%;
-            /* لم نغير المحاذاة هنا لتبقى في المنتصف */
         }
         .signature-box {
             text-align: center;
@@ -361,167 +370,228 @@
             line-height: 1.7;
             background: #f9fcff;
         }
-        .collaboration-footer strong { color: #1e3c72; }
-        .collaboration-footer .divider { color: #94a3b8; margin: 0 4px; }
+        .collaboration-footer strong {
+            color: #1e3c72;
+        }
+        .collaboration-footer .divider {
+            color: #94a3b8;
+            margin: 0 4px;
+        }
 
-        .print-header { display: none; }
+        /* 
+            ========================== رأس الطباعة ========================== 
+            تم حذف عنصر print-header من HTML نهائياً بناءً على طلب المستخدم.
+            لا يوجد أي كود CSS خاص به لأنه لم يعد موجوداً.
+        */
 
-        /* ========================== تنسيقات خاصة بالطباعة (A4، صفحة واحدة) ========================== */
+        /* ========================== تنسيقات الطباعة (خفيفة جداً) ========================== */
         @media print {
+            /* إعداد الصفحة للطباعة على A4 */
             @page {
                 size: A4;
-                margin: 1.5cm; /* هوامش مناسبة لتقليل الانقطاع */
+                margin: 1.5cm;
             }
 
+            /* 
+                الحفاظ على تنسيق body كما هو على الشاشة،
+                فقط نلغي الخلفية المتدرجة ونجعلها بيضاء للتوفير.
+            */
             body {
                 background: white !important;
-                padding: 0 !important;
+                padding: 20px !important;
+                /* نفس padding الشاشة */
                 margin: 0 !important;
-                display: block !important;
-                font-size: 12pt !important; /* تأكيد 12pt */
+                display: flex !important;
+                /* الإبقاء على flex لتوسيط المحتوى */
+                justify-content: center !important;
+                align-items: center !important;
+                min-height: auto !important;
+                /* لا داعي لملء الصفحة */
+                font-size: 16px !important;
+                /* نفس حجم خط الشاشة */
             }
 
+            /* 
+                main-wrapper : نحافظ على نفس العرض والتوسيط.
+                لا نغير شيئاً جوهرياً.
+            */
             .main-wrapper {
-                max-width: 100% !important;
+                max-width: 950px !important;
+                width: 100% !important;
+                align-items: flex-end !important;
+                gap: 20px !important;
+                font-size: 16px !important;
                 box-shadow: none !important;
-                gap: 0 !important;
-                font-size: 12pt !important;
-                align-items: flex-end !important; /* محاذاة لليمين */
-                margin: 0 !important;
             }
 
+            /* page-border بدون أي إطار إضافي */
             .page-border {
-                border: 2px solid #000 !important;
-                padding: 10px !important;
+                border: none !important;
+                padding: 0 !important;
                 margin: 0 !important;
                 width: 100% !important;
             }
 
+            /* 
+                card: نحافظ على نفس التنسيق تماماً (الظل، الحدود، التدوير، الخلفية).
+                هذا يعطي نفس مظهر الشاشة عند الطباعة.
+            */
             .card {
-                box-shadow: none !important;
-                border: none !important;
-                border-radius: 0 !important;
-                padding: 0 !important;
-                background: white !important;
-                page-break-inside: avoid; /* منع الانقسام */
-                font-size: 12pt !important;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+                border: 2px dashed #cbd5e1 !important;
+                border-radius: 16px !important;
+                padding: 25px 20px !important;
+                background: #ffffff !important;
+                font-size: 16px !important;
                 text-align: right !important;
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end; /* المحتوى لليمين */
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-end !important;
+                page-break-inside: avoid;
+                /* منع انقسام البطاقة بين صفحتين */;
             }
 
+            /* العنوان */
             .card h2 {
-                font-size: 14pt !important;
-                color: #000 !important;
+                font-size: 1.2em !important;
+                color: #1e3c72 !important;
                 text-align: right !important;
-                width: 100%;
+                width: 100% !important;
+                margin-bottom: 18px !important;
             }
 
-            .btn-group, button, .collaboration-footer, .error {
+            /* إخفاء الأزرار فقط */
+            .btn-group,
+            button {
                 display: none !important;
             }
 
-            .print-header {
-                display: block !important;
-                text-align: right !important;
-                margin-bottom: 20px !important;
-                font-weight: bold !important;
-                font-size: 14pt !important;
-                color: #000 !important;
-                border-bottom: 2px solid #000 !important;
-                padding-bottom: 10px !important;
+            /* إخفاء التذييل */
+            .collaboration-footer {
+                display: none !important;
             }
-            .print-header .ministry { font-size: 16pt !important; }
 
-            /* إخفاء الخط السفلي للحقول (جعله أبيض/غير مرئي) */
+            /* إخفاء رسائل الخطأ */
+            .error {
+                display: none !important;
+            }
+
+            /* 
+                جميع الحقول والمدخلات تبقى كما هي على الشاشة.
+                لا نلمس الحدود السفلية أو الألوان.
+            */
             .compact-input,
             .formula-input,
             select.compact-input,
             .result-number-box,
             .formula-constant {
-                background: transparent !important;
-                border: none !important;
-                border-bottom: 1px solid transparent !important; /* بدلاً من أبيض ليكون متوافق مع أي خلفية */
-                box-shadow: none !important;
-                font-size: 12pt !important;
-                color: #000 !important;
-                padding: 4px 6px !important;
-                -webkit-appearance: none;
-                -moz-appearance: none;
-                appearance: none;
+                /* لا نغير شيئاً، نحافظ على الشكل الأصلي */;
             }
 
-            select.compact-input {
-                background-image: none !important;
-                padding-left: 6px !important;
-            }
-
-            /* النقطتين بعد التسمية (موجودة في الأساس) */
-            .input-group label::after,
-            .result-label::after {
-                content: " :";
-                font-weight: bold;
-            }
-
-            .input-group {
-                gap: 2px !important; /* تقريب شديد */
-            }
-
-            /* محاذاة الحقول والأعمدة لليمين */
+            /* الأعمدة كما هي */
             .columns-row {
+                display: flex !important;
                 justify-content: flex-end !important;
-                width: 100%;
+                gap: 25px !important;
+                margin-bottom: 10px !important;
+                width: 100% !important;
             }
 
+            .column-right,
+            .column-left {
+                flex: 0 0 auto !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 18px !important;
+            }
+
+            /* النتيجة */
             .result-centered {
-                justify-content: flex-end !important;
-                width: 100%;
+                display: flex !important;
+                justify-content: flex-start !important;
+                margin-top: 5px !important;
+                margin-bottom: 10px !important;
+                width: 100% !important;
             }
 
+            /* قسم المعادلة */
             .formula-section {
-                background: transparent !important;
-                border: 1px solid transparent !important;
+                margin-top: 12px !important;
+                background: #fdfcff !important;
+                border-radius: 14px !important;
+                padding: 14px 12px !important;
+                border: 1px dashed #cbd5e1 !important;
+                width: 100% !important;
                 text-align: right !important;
-                width: 100%;
             }
 
             .formula-row {
+                display: flex !important;
+                align-items: center !important;
                 justify-content: flex-end !important;
+                flex-wrap: wrap !important;
+                gap: 6px !important;
+                row-gap: 8px !important;
             }
 
-            /* الاعتمادات تبقى في المنتصف */
+            /* التوقيعات */
             .signature-section {
-                background: transparent !important;
-                border: 1px solid transparent !important;
+                margin-top: 20px !important;
+                border: 1px solid #e2e8f0 !important;
+                border-radius: 14px !important;
+                padding: 30px 16px !important;
+                background: #fafafa !important;
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 40px 20px !important;
+                width: 100% !important;
             }
 
             .signature-box {
-                font-size: 12pt !important;
-                color: #000 !important;
+                text-align: center !important;
+                font-weight: 600 !important;
+                color: #2c3e50 !important;
+                font-size: 1em !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 10px !important;
             }
+
             .signature-line {
-                border-bottom: 1px solid #000 !important;
+                width: 75% !important;
+                border-bottom: 1px solid #64748b !important;
+                margin-top: 4px !important;
             }
 
+            /* الخط الفاصل */
             .divider-line {
-                border-top: 1px solid #000 !important;
-                margin: 12px 0 !important;
-                width: 100%;
+                border: none !important;
+                border-top: 1px solid #ddd !important;
+                margin: 16px 0 !important;
+                width: 100% !important;
             }
 
-            /* ضمان عدم انقطاع الصفحة */
-            .page-border, .card {
-                page-break-after: avoid;
+            /* منع انقسام العناصر المهمة */
+            .formula-section,
+            .signature-section,
+            .result-centered {
                 page-break-inside: avoid;
             }
         }
 
-        /* تجاوب الشاشات الصغيرة */
+        /* ========================== تجاوب الشاشات الصغيرة ========================== */
         @media (max-width: 700px) {
-            .columns-row { flex-direction: column; align-items: flex-end; }
-            .signature-section { grid-template-columns: 1fr; }
-            .compact-input { width: 140px; }
+            .columns-row {
+                flex-direction: column;
+                align-items: flex-end;
+            }
+            .signature-section {
+                grid-template-columns: 1fr;
+            }
+            .compact-input {
+                width: 140px;
+            }
         }
     </style>
 </head>
@@ -529,11 +599,10 @@
     <div class="main-wrapper">
         <div class="page-border">
             <div class="card">
-                <!-- رأس الطباعة (يظهر فقط عند الطباعة) -->
-                <div class="print-header">
-                    <div class="ministry">وزارة الصحة</div>
-                    <div>المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
-                </div>
+                <!-- 
+                    تم حذف عنصر print-header بالكامل من HTML.
+                    لا يوجد أي رأس يحمل "وزارة الصحة" أو "المديرية".
+                -->
 
                 <h2>أستمارة أحتساب مستحقات التعويض النقدي عن رصيد الإجازات</h2>
 
@@ -606,7 +675,7 @@
 
                 <hr class="divider-line">
 
-                <!-- قسم المعادلة (الاحتساب) -->
+                <!-- قسم المعادلة -->
                 <div class="formula-section">
                     <div class="formula-title">الاحتساب</div>
                     <div class="formula-row">
@@ -628,7 +697,7 @@
 
                 <hr class="divider-line">
 
-                <!-- قسم التوقيعات (الاعتمادات) - يبقى في المنتصف -->
+                <!-- قسم التوقيعات -->
                 <div class="signature-section">
                     <div class="signature-box">
                         <span>إعداد ومراجعة</span>
@@ -648,6 +717,7 @@
                     </div>
                 </div>
 
+                <!-- الأزرار: تظهر على الشاشة فقط وتُخفى عند الطباعة -->
                 <div class="btn-group">
                     <button onclick="calculateDifference()">احسب المدة</button>
                     <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
@@ -655,6 +725,7 @@
             </div>
         </div>
 
+        <!-- التذييل: يظهر على الشاشة فقط ويُخفى عند الطباعة -->
         <div class="collaboration-footer">
             <p style="margin:0;">
                 تم ابتكار الحاسبة بالتعاون مع<br>
