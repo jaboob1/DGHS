@@ -177,7 +177,7 @@
             color: #1e3c72;
         }
 
-        /* ========================== قسم احتساب المعادلة المالية (أفقي، بدون إطار، شفاف) ========================== */
+        /* ========================== قسم احتساب المعادلة المالية ========================== */
         .formula-container {
             background-color: transparent;
             border: none;
@@ -192,7 +192,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            flex-wrap: nowrap; /* إجبار العناصر على البقاء في خط أفقي واحد */
+            flex-wrap: nowrap;
             gap: 8px;
             width: 100%;
             overflow-x: auto;
@@ -353,18 +353,20 @@
             color: #1e3c72;
         }
 
-        /* ========================== تنسيقات الطباعة الصارمة ========================== */
+        /* ========================== تنسيقات الطباعة (صفحة واحدة وخط أصغر) ========================== */
         @media print {
             @page {
                 size: A4;
-                margin: 15mm 12mm;
+                /* تقليل الهوامش لاحتواء كافة البيانات في صفحة واحدة */
+                margin: 10mm;
             }
 
             body {
                 background: #ffffff !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                font-size: 11pt !important;
+                /* تصغير حجم الخط قليلاً للطباعة */
+                font-size: 10pt !important;
                 color: #000000 !important;
             }
 
@@ -376,7 +378,7 @@
             .form-container {
                 border: 1px solid #000000 !important;
                 box-shadow: none !important;
-                padding: 0 !important;
+                padding: 10px !important;
                 border-radius: 0 !important;
             }
 
@@ -385,83 +387,109 @@
             }
 
             .form-header {
-                margin-bottom: 20px !important;
+                margin-bottom: 15px !important;
+                padding-bottom: 10px !important;
                 border-bottom: 1px solid #000000 !important;
             }
 
             .form-header h1 {
-                font-size: 15pt !important;
+                font-size: 14pt !important; /* تصغير عنوان الاستمارة */
                 color: #000000 !important;
+                margin-bottom: 2px !important;
+            }
+
+            .form-header p {
+                font-size: 10pt !important;
             }
 
             .form-section-title {
                 font-size: 11pt !important;
                 color: #000000 !important;
                 border-right: 3px solid #000000 !important;
-                margin: 15px 0 8px 0 !important;
+                /* تقليل المسافات حول العناوين الفرعية */
+                margin: 12px 0 6px 0 !important;
             }
 
             .form-grid {
-                gap: 12px 20px !important;
-                margin-bottom: 15px !important;
+                /* تقليل المسافات بين الحقول */
+                gap: 8px 20px !important;
+                margin-bottom: 10px !important;
             }
 
             .input-group {
                 border-bottom: 1px solid #000000 !important;
-                padding-bottom: 3px !important;
+                padding-bottom: 2px !important;
             }
 
             .input-group label {
-                font-size: 11pt !important;
+                font-size: 10pt !important;
                 color: #000000 !important;
-                min-width: 120px !important;
+                min-width: 110px !important;
             }
 
             .form-input {
-                font-size: 11pt !important;
+                font-size: 10pt !important;
                 color: #000000 !important;
             }
 
             .results-block {
                 border: 1px solid #000000 !important;
-                padding: 10px !important;
+                /* تقليل الحشوة للمربع */
+                padding: 8px !important;
+                margin: 10px 0 !important;
             }
 
             .result-label {
-                font-size: 11pt !important;
+                font-size: 10pt !important;
                 color: #000000 !important;
             }
 
             .result-box {
                 border: 1px solid #000000 !important;
-                font-size: 11pt !important;
+                font-size: 10pt !important;
                 color: #000000 !important;
                 background: transparent !important;
-                height: 30px !important;
+                /* تصغير ارتفاع المربع */
+                height: 25px !important;
+                min-width: 60px !important;
             }
 
             .formula-container {
                 background: transparent !important;
                 border: none !important;
-                font-size: 11pt !important;
+                font-size: 10pt !important;
+                margin: 5px 0 !important;
+                padding: 0 !important;
+            }
+
+            .formula-label, .math-sign, .math-const {
+                font-size: 10pt !important;
+                color: #000000 !important;
             }
 
             .formula-val, .formula-input-inline, .calc-output-inline {
                 border-bottom: 1px solid #000000 !important;
                 background: transparent !important;
                 color: #000000 !important;
-                font-size: 11pt !important;
+                font-size: 10pt !important;
+                padding: 2px !important;
             }
 
             .signatures-grid {
-                margin-top: 30px !important;
-                gap: 30px 40px !important;
+                /* تقليل المساحة العلوية والفراغات بين التوقيعات */
+                margin-top: 20px !important;
+                gap: 20px 30px !important;
                 border-top: 1px solid #000000 !important;
+                padding-top: 10px !important;
                 page-break-inside: avoid;
             }
 
+            .signature-item {
+                gap: 25px !important; /* تقليل مساحة خط التوقيع */
+            }
+
             .signature-title {
-                font-size: 11pt !important;
+                font-size: 10pt !important;
                 color: #000000 !important;
             }
 
@@ -506,7 +534,7 @@
                 min-width: 100%;
             }
             .formula-row {
-                flex-wrap: wrap; /* السماح بالتفاف المعادلة في الشاشات الصغيرة جداً لتجنب خروجها عن الشاشة */
+                flex-wrap: wrap;
             }
         }
     </style>
