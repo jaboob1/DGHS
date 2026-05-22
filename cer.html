@@ -74,7 +74,7 @@
             margin: 0;
         }
 
-        /* ========================== تنظيم الحقول والجداول (محاذاة لليمين) ========================== */
+        /* ========================== تنظيم الحقول والجداول ========================== */
         .form-section-title {
             font-size: 15px;
             color: #1e3c72;
@@ -353,11 +353,10 @@
             color: #1e3c72;
         }
 
-        /* ========================== تنسيقات الطباعة (صفحة واحدة وخط أصغر) ========================== */
+        /* ========================== تنسيقات الطباعة (إخفاء الأزرار والتذييل تماماً) ========================== */
         @media print {
             @page {
                 size: A4;
-                /* تقليل الهوامش لاحتواء كافة البيانات في صفحة واحدة */
                 margin: 10mm;
             }
 
@@ -365,7 +364,6 @@
                 background: #ffffff !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                /* تصغير حجم الخط قليلاً للطباعة */
                 font-size: 10pt !important;
                 color: #000000 !important;
             }
@@ -393,25 +391,19 @@
             }
 
             .form-header h1 {
-                font-size: 14pt !important; /* تصغير عنوان الاستمارة */
+                font-size: 14pt !important;
                 color: #000000 !important;
                 margin-bottom: 2px !important;
-            }
-
-            .form-header p {
-                font-size: 10pt !important;
             }
 
             .form-section-title {
                 font-size: 11pt !important;
                 color: #000000 !important;
                 border-right: 3px solid #000000 !important;
-                /* تقليل المسافات حول العناوين الفرعية */
                 margin: 12px 0 6px 0 !important;
             }
 
             .form-grid {
-                /* تقليل المسافات بين الحقول */
                 gap: 8px 20px !important;
                 margin-bottom: 10px !important;
             }
@@ -434,7 +426,6 @@
 
             .results-block {
                 border: 1px solid #000000 !important;
-                /* تقليل الحشوة للمربع */
                 padding: 8px !important;
                 margin: 10px 0 !important;
             }
@@ -449,7 +440,6 @@
                 font-size: 10pt !important;
                 color: #000000 !important;
                 background: transparent !important;
-                /* تصغير ارتفاع المربع */
                 height: 25px !important;
                 min-width: 60px !important;
             }
@@ -476,7 +466,6 @@
             }
 
             .signatures-grid {
-                /* تقليل المساحة العلوية والفراغات بين التوقيعات */
                 margin-top: 20px !important;
                 gap: 20px 30px !important;
                 border-top: 1px solid #000000 !important;
@@ -485,7 +474,7 @@
             }
 
             .signature-item {
-                gap: 25px !important; /* تقليل مساحة خط التوقيع */
+                gap: 25px !important;
             }
 
             .signature-title {
@@ -497,7 +486,7 @@
                 border-bottom: 1px solid #000000 !important;
             }
 
-            /* إخفاء الأزرار والتذييل ورسائل الخطأ عند الطباعة */
+            /* القاعدة الأساسية: إخفاء الأزرار والتذييل والرسائل أثناء الطباعة */
             .action-panel, 
             .footer-credits, 
             .error-message,
@@ -612,7 +601,7 @@
                 </div>
             </div>
 
-            <!-- القسم الثالث: الاحتساب المالي والتصفية (أفقي وبدون إطار) -->
+            <!-- القسم الثالث: الاحتساب المالي والتصفية -->
             <div class="form-section-title">الاحتساب المالي والتصفية النقديّة</div>
             
             <div class="formula-container">
@@ -697,7 +686,10 @@
             return parseFloat(cleaned) || 0;
         }
 
-        let totalServiceYears = 0;
+        // متغيرات عامة لحفظ المدة التفصيلية
+        let serviceYears = 0;
+        let serviceMonths = 0;
+        let serviceDays = 0;
 
         function calculateDifference() {
             const hireDateInput = document.getElementById('hireDate').value;
@@ -750,13 +742,15 @@
             const months = m2 - m1;
             const years = y2 - y1;
 
+            // تحديث المتغيرات العامة لاستخدامها في حساب الرصيد بدقة
+            serviceYears = years;
+            serviceMonths = months;
+            serviceDays = days;
+
             document.getElementById('daysResult').textContent = toArabicNumber(days);
             document.getElementById('monthsResult').textContent = toArabicNumber(months);
             document.getElementById('yearsResult').textContent = toArabicNumber(years);
             resultCentered.style.display = 'block';
-
-            totalServiceYears = years + months / 12 + days / 365;
-            if (totalServiceYears < 0) totalServiceYears = 0;
 
             updateLeaveDays();
         }
@@ -768,19 +762,31 @@
             const totalDaysInput = document.getElementById('totalDays');
 
             let leaveDays = 0;
-            if (annualLeave > 0 && totalServiceYears > 0) {
+            
+            if (annualLeave > 0 && (serviceYears > 0 || serviceMonths > 0 || serviceDays > 0)) {
+                // حساب الأيام الفعلية المتراكمة بدقة (استحقاق السنوات + الأشهر + الأيام)
+                let actualAccumulatedLeave = (serviceYears * annualLeave) + 
+                                             (serviceMonths * (annualLeave / 12)) + 
+                                             (serviceDays * (annualLeave / 365));
+                
+                let maxAllowedLeave = 0;
+                
                 if (regulation === 'civil') {
-                    const cappedYears = Math.min(totalServiceYears, 2);
-                    leaveDays = annualLeave * cappedYears;
+                    // الخدمة المدنية: الحد الأقصى هو استحقاق سنتين
+                    maxAllowedLeave = annualLeave * 2;
                 } else if (regulation === 'medical') {
-                    const cappedYears = Math.min(totalServiceYears, 3);
-                    leaveDays = annualLeave * cappedYears;
+                    // اللائحة الطبية: الحد الأقصى هو استحقاق 3 سنوات
+                    maxAllowedLeave = annualLeave * 3;
                 }
-            } else if (annualLeave > 0 && totalServiceYears === 0) {
-                leaveDays = 0;
+                
+                // يأخذ الأيام الفعلية المتراكمة، وإذا تجاوزت السقف يأخذ السقف الأعلى
+                leaveDays = Math.min(actualAccumulatedLeave, maxAllowedLeave);
+                
+                // تقريب الناتج لأقرب منزلتين عشريتين لعدم إظهار كسور طويلة جداً
+                leaveDays = Math.round(leaveDays * 100) / 100;
             }
 
-            totalDaysInput.value = leaveDays > 0 ? leaveDays : '';
+            totalDaysInput.value = leaveDays > 0 ? toArabicNumber(leaveDays) : '';
             calculateIndemnity();
         }
 
@@ -813,7 +819,9 @@
             document.getElementById('displaySalary').textContent = '٠.٠٠٠';
             document.getElementById('indemnityResult').value = '٠.٠٠٠';
             document.getElementById('totalDays').value = '';
-            totalServiceYears = 0;
+            serviceYears = 0;
+            serviceMonths = 0;
+            serviceDays = 0;
         });
     </script>
 </body>
