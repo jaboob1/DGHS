@@ -353,7 +353,7 @@
             color: #1e3c72;
         }
 
-        /* ========================== تنسيقات الطباعة (إخفاء قطعي للأزرار والتذييل) ========================== */
+        /* ========================== تنسيقات الطباعة (إخفاء الأزرار والتذييل تماماً) ========================== */
         @media print {
             @page {
                 size: A4;
@@ -486,8 +486,7 @@
                 border-bottom: 1px solid #000000 !important;
             }
 
-            /* القاعدة الأساسية: إخفاء الأزرار والتذييل والرسائل أثناء الطباعة بشكل قطعي */
-            button,
+            /* القاعدة الأساسية: إخفاء الأزرار والتذييل والرسائل أثناء الطباعة */
             .action-panel, 
             .footer-credits, 
             .error-message,
@@ -537,7 +536,7 @@
             <!-- عنوان وثيقة الاستمارة -->
             <div class="form-header">
                 <h1>استمارة احتساب مستحقات التعويض النقدي عن رصيد الإجازات</h1>
-                <p>مستند رسمي مخصص لإدارة وتخطيط الموارد البشرية والشؤون المالية</p>
+               
             </div>
 
             <!-- القسم الأول: بيانات الموظف والخدمة -->
@@ -585,7 +584,7 @@
 
             <!-- القسم الثاني: نتائج احتساب مدة الخدمة -->
             <div id="resultCentered" class="results-block" style="display: none;">
-                <div class="result-label" style="margin-bottom: 10px; font-weight: 700; color: #1e3c72;">المدة الإجمالية للخدمة الفعلية:</div>
+                <div class="result-label" style="margin-bottom: 10px; font-weight: 700; color: #1e3c72;">مدة الخدمة  :</div>
                 <div class="results-flex">
                     <div class="result-item">
                         <span class="result-label">الأيام:</span>
@@ -629,10 +628,10 @@
             <div id="indemnityError" class="error-message"></div>
 
             <!-- القسم الرابع: التوقيعات والاعتمادات الرسمية -->
-            <div class="form-section-title">الاعتماد</div>
+            <div class="form-section-title">الاعتمادات والموافقات الرسمية</div>
             <div class="signatures-grid">
                 <div class="signature-item">
-                    <span class="signature-title">إعداد ومراجعة قسم إدارة وتخطيط الموارد البشرية :</span>
+                    <span class="signature-title">إعداد ومراجعة (قسم إدارة وتخطيط الموارد البشرية):</span>
                     <div class="signature-line"></div>
                 </div>
                 <div class="signature-item">
@@ -640,7 +639,7 @@
                     <div class="signature-line"></div>
                 </div>
                 <div class="signature-item">
-                    <span class="signature-title">تدقيق واعتماد مدير الشؤون المالية:</span>
+                    <span class="signature-title">اعتماد مدير الشؤون المالية:</span>
                     <div class="signature-line"></div>
                 </div>
                 <div class="signature-item">
@@ -659,8 +658,8 @@
 
         <!-- تذييل الاستمارة التوضيحي (يختفي عند الطباعة) -->
         <div class="footer-credits">
-            
-            <strong></strong>  <span style="color: #cbd5e1; margin: 0 6px;">|</span> <strong>قسم الإيرادات والمصروفات</strong> (برمجة وتنفيذ الحاسبة : محمد جعبوب)
+      
+            <strong>  </strong> <span style="color: #cbd5e1; margin: 0 6px;"></span> <strong></strong> (برمجة وتنفيذ: محمد جعبوب)
         </div>
     </div>
 
