@@ -31,7 +31,6 @@
             gap: 24px;
         }
 
-        /* ========================== تصميم الاستمارة الرسمية ========================== */
         .form-container {
             background: #ffffff;
             border: 2px solid #1e3c72;
@@ -74,7 +73,6 @@
             margin: 0;
         }
 
-        /* ========================== تنظيم الحقول والجداول ========================== */
         .form-section-title {
             font-size: 15px;
             color: #1e3c72;
@@ -134,7 +132,6 @@
             color: #0f172a;
         }
 
-        /* ========================== عرض نتائج مدة الخدمة ========================== */
         .results-block {
             background-color: transparent;
             border: 1px dashed #cbd5e1;
@@ -177,7 +174,6 @@
             color: #1e3c72;
         }
 
-        /* ========================== قسم احتساب المعادلة المالية ========================== */
         .formula-container {
             background-color: transparent;
             border: none;
@@ -255,7 +251,6 @@
             outline: none;
         }
 
-        /* ========================== قسم التوقيعات والاعتمادات ========================== */
         .signatures-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -283,7 +278,6 @@
             width: 80%;
         }
 
-        /* ========================== التنبيهات والأخطاء ========================== */
         .error-message {
             background-color: #fef2f2;
             border: 1px solid #fee2e2;
@@ -297,7 +291,6 @@
             text-align: right;
         }
 
-        /* ========================== لوحة التحكم والأزرار ========================== */
         .action-panel {
             display: flex;
             justify-content: flex-end;
@@ -337,7 +330,6 @@
             background-color: #0d5f58;
         }
 
-        /* ========================== تذييل الصفحة للمظهر العام ========================== */
         .footer-credits {
             text-align: center;
             font-size: 12px;
@@ -353,24 +345,26 @@
             color: #1e3c72;
         }
 
-        /* ========================== تنسيقات الطباعة (إخفاء الأزرار والتذييل تماماً) ========================== */
+        /* ========================== تنسيقات الطباعة ========================== */
         @media print {
             @page {
                 size: A4;
-                margin: 10mm;
+                margin: 10mm 10mm 20mm 10mm; /* هامش سفلي 2 سم */
             }
 
             body {
                 background: #ffffff !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                font-size: 10pt !important;
+                font-size: 11pt !important;
                 color: #000000 !important;
             }
 
             .main-wrapper {
                 max-width: 100% !important;
                 gap: 0 !important;
+                margin-bottom: 0 !important; /* لا مسافات إضافية */
+                padding-bottom: 0 !important;
             }
 
             .form-container {
@@ -378,6 +372,7 @@
                 box-shadow: none !important;
                 padding: 10px !important;
                 border-radius: 0 !important;
+                margin-bottom: 0 !important; /* إزالة أي هامش سفلي إضافي */
             }
 
             .form-container::before {
@@ -414,13 +409,13 @@
             }
 
             .input-group label {
-                font-size: 10pt !important;
+                font-size: 11pt !important;
                 color: #000000 !important;
                 min-width: 110px !important;
             }
 
             .form-input {
-                font-size: 10pt !important;
+                font-size: 11pt !important;
                 color: #000000 !important;
             }
 
@@ -431,13 +426,13 @@
             }
 
             .result-label {
-                font-size: 10pt !important;
+                font-size: 11pt !important;
                 color: #000000 !important;
             }
 
             .result-box {
                 border: 1px solid #000000 !important;
-                font-size: 10pt !important;
+                font-size: 11pt !important;
                 color: #000000 !important;
                 background: transparent !important;
                 height: 25px !important;
@@ -447,13 +442,13 @@
             .formula-container {
                 background: transparent !important;
                 border: none !important;
-                font-size: 10pt !important;
+                font-size: 11pt !important;
                 margin: 5px 0 !important;
                 padding: 0 !important;
             }
 
             .formula-label, .math-sign, .math-const {
-                font-size: 10pt !important;
+                font-size: 11pt !important;
                 color: #000000 !important;
             }
 
@@ -461,24 +456,26 @@
                 border-bottom: 1px solid #000000 !important;
                 background: transparent !important;
                 color: #000000 !important;
-                font-size: 10pt !important;
+                font-size: 11pt !important;
                 padding: 2px !important;
             }
 
+            /* ========== توسيع قسم الاعتمادات من أعلى وأسفل مع تباعد متناسق ========== */
             .signatures-grid {
-                margin-top: 20px !important;
-                gap: 20px 30px !important;
+                margin-top: 30px !important;
+                padding-top: 20px !important;
+                padding-bottom: 0 !important;   /* لا داعي لإضافة padding سفلي لأن الهامش السفلي للصفحة يفي بالغرض */
+                gap: 30px 30px !important;
                 border-top: 1px solid #000000 !important;
-                padding-top: 10px !important;
                 page-break-inside: avoid;
             }
 
             .signature-item {
-                gap: 25px !important;
+                gap: 35px !important;
             }
 
             .signature-title {
-                font-size: 10pt !important;
+                font-size: 11pt !important;
                 color: #000000 !important;
             }
 
@@ -486,7 +483,7 @@
                 border-bottom: 1px solid #000000 !important;
             }
 
-            /* ========== إخفاء الأزرار ومحتوياتها بالكامل أثناء الطباعة ========== */
+            /* إخفاء الأزرار والتذييل والرسائل */
             .action-panel, 
             .action-panel *,
             .btn,
@@ -509,7 +506,6 @@
                 left: -9999px !important;
             }
 
-            /* إخفاء التذييل والرسائل */
             .footer-credits, 
             .footer-credits *,
             .error-message,
@@ -532,7 +528,6 @@
                 left: -9999px !important;
             }
 
-            /* إخفاء أسهم القوائم المنسدلة */
             select.form-input {
                 -webkit-appearance: none !important;
                 -moz-appearance: none !important;
@@ -544,12 +539,10 @@
                 display: none !important;
             }
 
-            /* منع انكسار العناصر عبر الصفحات */
             .results-block, .formula-container, .signatures-grid {
                 page-break-inside: avoid;
             }
 
-            /* ضمان عدم وجود أي بقايا للخلفيات الملونة */
             *, *::before, *::after {
                 box-shadow: none !important;
                 text-shadow: none !important;
@@ -557,7 +550,7 @@
             }
         }
 
-        /* تجاوب الشاشات الصغيرة للهواتف */
+        /* تجاوب الشاشات الصغيرة */
         @media (max-width: 768px) {
             .form-grid {
                 grid-template-columns: 1fr;
@@ -590,13 +583,10 @@
     <div class="main-wrapper">
         <div class="form-container">
             
-            <!-- عنوان وثيقة الاستمارة -->
             <div class="form-header">
                 <h1>استمارة احتساب مستحقات التعويض النقدي عن رصيد الإجازات</h1>
-               
             </div>
 
-            <!-- القسم الأول: بيانات الموظف والخدمة -->
             <div class="form-section-title">بيانات الموظف الأساسية وتواريخ الخدمة</div>
             <div class="form-grid">
                 <div class="input-group">
@@ -636,10 +626,8 @@
                 </div>
             </div>
 
-            <!-- رسائل الخطأ الخاصة بالتواريخ -->
             <div id="errorMessage" class="error-message"></div>
 
-            <!-- القسم الثاني: نتائج احتساب مدة الخدمة -->
             <div id="resultCentered" class="results-block" style="display: none;">
                 <div class="result-label" style="margin-bottom: 10px; font-weight: 700; color: #1e3c72;">مدة الخدمة  :</div>
                 <div class="results-flex">
@@ -658,7 +646,6 @@
                 </div>
             </div>
 
-            <!-- القسم الثالث: الاحتساب المالي والتصفية -->
             <div class="form-section-title">الاحتساب المالي والتصفية النقديّة</div>
             
             <div class="formula-container">
@@ -681,10 +668,8 @@
                 </div>
             </div>
 
-            <!-- رسائل الخطأ الخاصة بالمعادلة الماليّة -->
             <div id="indemnityError" class="error-message"></div>
 
-            <!-- القسم الرابع: التوقيعات والاعتمادات الرسمية -->
             <div class="form-section-title">الاعتمادات والموافقات الرسمية</div>
             <div class="signatures-grid">
                 <div class="signature-item">
@@ -705,7 +690,6 @@
                 </div>
             </div>
 
-            <!-- لوحة تحكم المستخدم بالأزرار (تختفي تلقائياً عند الطباعة) -->
             <div class="action-panel">
                 <button class="btn btn-primary" onclick="calculateDifference()">📊 احسب مدة الخدمة والرصيد</button>
                 <button class="btn btn-secondary" onclick="window.print()">🖨️ طباعة الاستمارة الرسمية</button>
@@ -713,14 +697,11 @@
 
         </div>
 
-        <!-- تذييل الاستمارة التوضيحي (يختفي عند الطباعة) -->
         <div class="footer-credits">
-      
             <strong>  </strong> <span style="color: #cbd5e1; margin: 0 6px;"></span> <strong></strong> (برمجة وتنفيذ: محمد جعبوب)
         </div>
     </div>
 
-    <!-- ========================== المنطق البرمجي (JavaScript) ========================== -->
     <script>
         function arabicToEnglish(str) {
             return str.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
@@ -743,7 +724,6 @@
             return parseFloat(cleaned) || 0;
         }
 
-        // متغيرات عامة لحفظ المدة التفصيلية
         let serviceYears = 0;
         let serviceMonths = 0;
         let serviceDays = 0;
@@ -799,7 +779,6 @@
             const months = m2 - m1;
             const years = y2 - y1;
 
-            // تحديث المتغيرات العامة لاستخدامها في حساب الرصيد بدقة
             serviceYears = years;
             serviceMonths = months;
             serviceDays = days;
@@ -821,7 +800,6 @@
             let leaveDays = 0;
             
             if (annualLeave > 0 && (serviceYears > 0 || serviceMonths > 0 || serviceDays > 0)) {
-                // حساب الأيام الفعلية المتراكمة بدقة (استحقاق السنوات + الأشهر + الأيام)
                 let actualAccumulatedLeave = (serviceYears * annualLeave) + 
                                              (serviceMonths * (annualLeave / 12)) + 
                                              (serviceDays * (annualLeave / 365));
@@ -829,17 +807,12 @@
                 let maxAllowedLeave = 0;
                 
                 if (regulation === 'civil') {
-                    // الخدمة المدنية: الحد الأقصى هو استحقاق سنتين
                     maxAllowedLeave = annualLeave * 2;
                 } else if (regulation === 'medical') {
-                    // اللائحة الطبية: الحد الأقصى هو استحقاق 3 سنوات
                     maxAllowedLeave = annualLeave * 3;
                 }
                 
-                // يأخذ الأيام الفعلية المتراكمة، وإذا تجاوزت السقف يأخذ السقف الأعلى
                 leaveDays = Math.min(actualAccumulatedLeave, maxAllowedLeave);
-                
-                // تقريب الناتج لأقرب منزلتين عشريتين لعدم إظهار كسور طويلة جداً
                 leaveDays = Math.round(leaveDays * 100) / 100;
             }
 
