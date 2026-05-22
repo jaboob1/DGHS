@@ -1099,5 +1099,23 @@
         document.getElementById('usernameInput').value = 'admin'; // للتسهيل فقط
         document.getElementById('passwordInput').value = 'admin'; // للتسهيل فقط
     </script>
+    // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAoIEdwl5utsTFtxFFpI72fbIAGDe7k3ck",
+  authDomain: "dghs-aeaa8.firebaseapp.com",
+  databaseURL: "https://dghs-aeaa8-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "dghs-aeaa8",
+  storageBucket: "dghs-aeaa8.firebasestorage.app",
+  messagingSenderId: "711039559761",
+  appId: "1:711039559761:web:1822267525382c3393f070"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 </body>
 </html>
