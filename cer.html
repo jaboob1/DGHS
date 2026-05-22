@@ -486,10 +486,60 @@
                 border-bottom: 1px solid #000000 !important;
             }
 
-            /* القاعدة الأساسية: إخفاء الأزرار والتذييل والرسائل أثناء الطباعة */
+            /* ========== إخفاء الأزرار ومحتوياتها بالكامل أثناء الطباعة ========== */
             .action-panel, 
+            .action-panel *,
+            .btn,
+            .btn * {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                width: 0 !important;
+                height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                color: transparent !important;
+                background: transparent !important;
+                border: none !important;
+                font-size: 0 !important;
+                line-height: 0 !important;
+                position: absolute !important;
+                top: -9999px !important;
+                left: -9999px !important;
+            }
+
+            /* إخفاء التذييل والرسائل */
             .footer-credits, 
+            .footer-credits *,
             .error-message,
+            .error-message * {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                width: 0 !important;
+                height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                color: transparent !important;
+                background: transparent !important;
+                border: none !important;
+                font-size: 0 !important;
+                line-height: 0 !important;
+                position: absolute !important;
+                top: -9999px !important;
+                left: -9999px !important;
+            }
+
+            /* إخفاء أسهم القوائم المنسدلة */
+            select.form-input {
+                -webkit-appearance: none !important;
+                -moz-appearance: none !important;
+                appearance: none !important;
+                background-image: none !important;
+            }
+
             select.form-input::-ms-expand {
                 display: none !important;
             }
@@ -497,6 +547,13 @@
             /* منع انكسار العناصر عبر الصفحات */
             .results-block, .formula-container, .signatures-grid {
                 page-break-inside: avoid;
+            }
+
+            /* ضمان عدم وجود أي بقايا للخلفيات الملونة */
+            *, *::before, *::after {
+                box-shadow: none !important;
+                text-shadow: none !important;
+                background-image: none !important;
             }
         }
 
