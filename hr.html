@@ -82,14 +82,14 @@
             <div class="card p-3"><table class="table table-striped table-bordered"><thead class="table-dark"><tr><th>الرقم الوظيفي</th><th>الاسم</th><th>المسمى</th><th>أيام الغياب</th><th>أيام الإجازة</th><th>ملاحظات</th></tr></thead><tbody id="managerTableBody"></tbody></table></div>
         </div>
 
-        <!-- لوحة HR/Admin -->
+        <!-- لوحة الموارد البشرية / مدير النظام -->
         <div id="hrPage" class="hidden fade-in">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5>لوحة <span id="hrRoleTitle">الموارد البشرية</span></h5>
                 <button class="btn btn-outline-danger btn-sm" onclick="logout()">تسجيل الخروج</button>
             </div>
             <ul class="nav nav-tabs hr-tabs mb-3" id="hrTabs" role="tablist">
-                <li class="nav-item"><button class="nav-link active" id="confirmations-tab" data-bs-toggle="tab" data-bs-target="#confirmations-pane">الرواتب المعتمدة</button></li>
+                <li class="nav-item"><button class="nav-link active" id="confirmations-tab" data-bs-toggle="tab" data-bs-target="#confirmations-pane">تأكيدات الحضور</button></li>
                 <li class="nav-item"><button class="nav-link" id="employees-tab" data-bs-toggle="tab" data-bs-target="#employees-pane">إدارة الموظفين</button></li>
                 <li class="nav-item hidden" id="users-tab-item"><button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users-pane">المستخدمين</button></li>
                 <li class="nav-item hidden" id="centers-tab-item"><button class="nav-link" id="centers-tab" data-bs-toggle="tab" data-bs-target="#centers-pane">المراكز</button></li>
@@ -103,22 +103,22 @@
                             <div class="col-md-3"><label>تصفية حسب الشهر</label><input type="month" id="hrFilterMonth" class="form-control" onchange="loadHRData()"></div>
                             <div class="col-md-3 mt-2 mt-md-0"><button class="btn btn-print w-100" onclick="printReport()">🖨️ طباعة التقرير</button></div>
                             <div class="col-md-3 mt-2 mt-md-0"><button class="btn btn-export w-100" onclick="exportSalaryFile()">📥 تصدير ملف الرواتب (Excel)</button></div>
-                            <div class="col-md-3 mt-2 mt-md-0"><button class="btn btn-primary w-100" onclick="approveAll()">اعتماد جميع الرواتب</button></div>
+                            <div class="col-md-3 mt-2 mt-md-0"><button class="btn btn-primary w-100" onclick="approveAll()">اعتماد جميع التأكيدات الظاهرة</button></div>
                         </div>
                         <div id="printArea"><table class="table table-striped table-bordered" id="hrTable"><thead class="table-dark"><tr><th>المركز</th><th>الموظف</th><th>الشهر</th><th>الغياب</th><th>الإجازات</th><th>الحالة</th><th>موثق من</th><th>اعتماد</th></tr></thead><tbody id="hrTableBody"></tbody></table></div>
                     </div>
                 </div>
                 <!-- موظفين -->
                 <div class="tab-pane fade" id="employees-pane">
-                    <div class="card p-3"><div class="d-flex justify-content-between align-items-center mb-3"><h5 class="mb-0">قائمة الموظفين</h5><button class="btn btn-add" onclick="showAddEmployeeModal()">+ إضافة موظف جديد</button></div><table class="table table-striped table-bordered" id="employeesTable"><thead class="table-dark"><tr><th>الرقم الوظيفي</th><th>الاسم</th><th>المسمى</th><th>المركز</th><th>الحساب البنكي</th><th>البنك</th><th>إجراءات</th></tr></thead><tbody id="employeesTableBody"></tbody></table></div>
+                    <div class="card p-3"><div class="d-flex justify-content-between align-items-center mb-3"><h5 class="mb-0">قائمة الموظفين</h5><button class="btn btn-add" onclick="requireAdminPassword(showAddEmployeeModal)">+ إضافة موظف جديد</button></div><table class="table table-striped table-bordered" id="employeesTable"><thead class="table-dark"><tr><th>الرقم الوظيفي</th><th>الاسم</th><th>المسمى</th><th>المركز</th><th>الحساب البنكي</th><th>البنك</th><th>إجراءات</th></tr></thead><tbody id="employeesTableBody"></tbody></table></div>
                 </div>
                 <!-- مستخدمين -->
                 <div class="tab-pane fade" id="users-pane">
-                    <div class="card p-3"><div class="d-flex justify-content-between align-items-center mb-3"><h5 class="mb-0">قائمة المستخدمين</h5><button class="btn btn-add" onclick="requireAdminVerification(showAddUserModal)">+ إضافة مستخدم جديد</button></div><table class="table table-striped table-bordered" id="usersTable"><thead class="table-dark"><tr><th>اسم المستخدم</th><th>الاسم الكامل</th><th>الدور</th><th>المركز</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="usersTableBody"></tbody></table></div>
+                    <div class="card p-3"><div class="d-flex justify-content-between align-items-center mb-3"><h5 class="mb-0">قائمة المستخدمين</h5><button class="btn btn-add" onclick="requireAdminPassword(showAddUserModal)">+ إضافة مستخدم جديد</button></div><table class="table table-striped table-bordered" id="usersTable"><thead class="table-dark"><tr><th>اسم المستخدم</th><th>الاسم الكامل</th><th>الدور</th><th>المركز</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="usersTableBody"></tbody></table></div>
                 </div>
                 <!-- مراكز -->
                 <div class="tab-pane fade" id="centers-pane">
-                    <div class="card p-3"><div class="d-flex justify-content-between align-items-center mb-3"><h5 class="mb-0">قائمة المراكز الصحية والمستشفيات</h5><button class="btn btn-add" onclick="showAddCenterModal()">+ إضافة مركز جديد</button></div><table class="table table-striped table-bordered" id="centersTable"><thead class="table-dark"><tr><th>معرف المركز</th><th>اسم المركز</th><th>عدد الموظفين</th><th>إجراءات</th></tr></thead><tbody id="centersTableBody"></tbody></table></div>
+                    <div class="card p-3"><div class="d-flex justify-content-between align-items-center mb-3"><h5 class="mb-0">قائمة المراكز الصحية والمستشفيات</h5><button class="btn btn-add" onclick="requireAdminPassword(showAddCenterModal)">+ إضافة مركز جديد</button></div><table class="table table-striped table-bordered" id="centersTable"><thead class="table-dark"><tr><th>معرف المركز</th><th>اسم المركز</th><th>عدد الموظفين</th><th>إجراءات</th></tr></thead><tbody id="centersTableBody"></tbody></table></div>
                 </div>
                 <!-- إعدادات -->
                 <div class="tab-pane fade" id="settings-pane">
@@ -138,39 +138,37 @@
         </div>
     </div>
 
-    <!-- مودال إضافة/تعديل موظف -->
-    <div class="modal fade" id="employeeModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5 class="modal-title" id="employeeModalTitle">إضافة موظف جديد</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><input type="hidden" id="editEmpId"><div class="mb-3"><label class="form-label">الرقم الوظيفي</label><input type="text" id="empNo" class="form-control" placeholder="مثلاً 1234"></div><div class="mb-3"><label class="form-label">الاسم الكامل</label><input type="text" id="empName" class="form-control"></div><div class="mb-3"><label class="form-label">المسمى الوظيفي</label><input type="text" id="empTitle" class="form-control"></div><div class="mb-3"><label class="form-label">المركز</label><select id="empCenter" class="form-select"></select></div><div class="mb-3"><label class="form-label">رقم الحساب البنكي</label><input type="text" id="empBankAccount" class="form-control" placeholder="SA..."></div><div class="mb-3"><label class="form-label">اسم البنك</label><input type="text" id="empBankName" class="form-control"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button type="button" class="btn btn-primary" onclick="saveEmployee()">حفظ</button></div></div></div>
-    </div>
-    <!-- مودال نقل موظف -->
-    <div class="modal fade" id="transferModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header bg-warning"><h5 class="modal-title">نقل موظف</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><input type="hidden" id="transferEmpId"><p>الموظف: <strong id="transferEmpName"></strong></p><div class="mb-3"><label class="form-label">المركز الجديد</label><select id="transferNewCenter" class="form-select"></select></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button type="button" class="btn btn-warning" onclick="transferEmployee()">تأكيد النقل</button></div></div></div>
-    </div>
-    <!-- مودال إضافة/تعديل مستخدم -->
-    <div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5 class="modal-title" id="userModalTitle">إضافة مستخدم جديد</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><input type="hidden" id="editUserId"><div class="mb-3"><label class="form-label">اسم المستخدم</label><input type="text" id="userUsername" class="form-control" placeholder="مثلاً hr2"></div><div class="mb-3"><label class="form-label">الاسم الكامل</label><input type="text" id="userFullName" class="form-control"></div><div class="mb-3"><label class="form-label">الدور</label><select id="userRole" class="form-select" onchange="toggleCenterForUser()"><option value="center_manager">مدير مركز صحي</option><option value="hr_officer">موارد بشرية</option><option value="admin">مدير نظام</option></select></div><div class="mb-3" id="userCenterGroup"><label class="form-label">المركز</label><select id="userCenter" class="form-select"></select></div><div class="mb-3"><label class="form-label">كلمة المرور <span id="passwordHint" class="text-muted small">(اتركها فارغة لعدم التغيير)</span></label><input type="password" id="userPassword" class="form-control" placeholder="أدخل كلمة المرور"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button type="button" class="btn btn-primary" onclick="saveUser()">حفظ</button></div></div></div>
-    </div>
-    <!-- مودال إضافة/تعديل مركز -->
-    <div class="modal fade" id="centerModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5 class="modal-title" id="centerModalTitle">إضافة مركز جديد</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><input type="hidden" id="editCenterId"><div class="mb-3"><label class="form-label">معرف المركز <span class="text-muted small">(مثل center3)</span></label><input type="text" id="centerIdInput" class="form-control" placeholder="أدخل معرفاً فريداً"></div><div class="mb-3"><label class="form-label">اسم المركز</label><input type="text" id="centerNameInput" class="form-control" placeholder="مثل مستشفى طاقة/مركز حاسك"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button type="button" class="btn btn-primary" onclick="saveCenter()">حفظ</button></div></div></div>
-    </div>
-    <!-- مودال نسيت كلمة المرور -->
-    <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5 class="modal-title">استعادة كلمة المرور</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body">
-            <div id="forgotStep1"><div class="mb-3"><label class="form-label">اسم المستخدم</label><input type="text" id="forgotUsername" class="form-control" placeholder="أدخل اسم المستخدم"></div><button class="btn btn-primary w-100" onclick="checkUsernameForReset()">التالي</button></div>
-            <div id="forgotStep2" class="hidden"><p id="securityQuestionText" class="fw-bold"></p><div class="mb-3"><label class="form-label">الإجابة</label><input type="text" id="securityAnswerInput" class="form-control"></div><button class="btn btn-primary w-100" onclick="verifyAnswerAndShowReset()">تحقق</button></div>
-            <div id="forgotStep3" class="hidden"><div class="mb-3"><label class="form-label">كلمة المرور الجديدة</label><input type="password" id="newPassword1" class="form-control"></div><div class="mb-3"><label class="form-label">تأكيد كلمة المرور الجديدة</label><input type="password" id="newPassword2" class="form-control"></div><button class="btn btn-success w-100" onclick="resetPassword()">حفظ كلمة المرور الجديدة</button></div>
-            <div id="forgotNoRecovery" class="hidden text-center text-danger">لا توجد وسيلة استعادة متاحة لهذا الحساب. راجع مدير النظام.</div>
-        </div></div></div>
-    </div>
-    <!-- مودال تحقق الأمان للمسؤول -->
-    <div class="modal fade" id="adminVerifyModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5 class="modal-title">تأكيد هوية مدير النظام</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-body"><p id="adminVerifyQuestion" class="fw-bold"></p><input type="text" id="adminVerifyAnswer" class="form-control" placeholder="أدخل الإجابة"><p id="adminVerifyError" class="text-danger small mt-1 hidden">الإجابة غير صحيحة</p></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button type="button" class="btn btn-primary" onclick="verifyAdminAnswer()">تأكيد</button></div></div></div>
-    </div>
+    <!-- مودالات -->
+    <div class="modal fade" id="employeeModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5 class="modal-title" id="employeeModalTitle"></h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="editEmpId"><div class="mb-3"><label>الرقم الوظيفي</label><input type="text" id="empNo" class="form-control"></div><div class="mb-3"><label>الاسم الكامل</label><input type="text" id="empName" class="form-control"></div><div class="mb-3"><label>المسمى الوظيفي</label><input type="text" id="empTitle" class="form-control"></div><div class="mb-3"><label>المركز</label><select id="empCenter" class="form-select"></select></div><div class="mb-3"><label>رقم الحساب البنكي</label><input type="text" id="empBankAccount" class="form-control"></div><div class="mb-3"><label>اسم البنك</label><input type="text" id="empBankName" class="form-control"></div></div><div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button class="btn btn-primary" onclick="saveEmployee()">حفظ</button></div></div></div></div>
+    <div class="modal fade" id="transferModal" tabindex="-1"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header bg-warning"><h5 class="modal-title">نقل موظف</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="transferEmpId"><p>الموظف: <strong id="transferEmpName"></strong></p><div class="mb-3"><label>المركز الجديد</label><select id="transferNewCenter" class="form-select"></select></div></div><div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button class="btn btn-warning" onclick="transferEmployee()">نقل</button></div></div></div></div>
+    <div class="modal fade" id="userModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5 class="modal-title" id="userModalTitle"></h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="editUserId"><div class="mb-3"><label>اسم المستخدم</label><input type="text" id="userUsername" class="form-control"></div><div class="mb-3"><label>الاسم الكامل</label><input type="text" id="userFullName" class="form-control"></div><div class="mb-3"><label>الدور</label><select id="userRole" class="form-select" onchange="toggleCenterForUser()"><option value="center_manager">مدير مركز</option><option value="hr_officer">موارد بشرية</option><option value="admin">مدير نظام</option></select></div><div class="mb-3" id="userCenterGroup"><label>المركز</label><select id="userCenter" class="form-select"></select></div>
+                <div class="mb-3"><label>كلمة المرور <span class="text-muted">(فارغ = لا تغيير)</span></label>
+                    <div id="passwordFieldWrapper" class="obscured">
+                        <input type="password" id="userPassword" class="form-control" disabled>
+                    </div>
+                    <div class="mt-2" id="passwordUnlockArea" style="display:none;">
+                        <label>أدخل إجابة سؤال الأمان لتعديل كلمة المرور:</label>
+                        <input type="text" id="passwordSecurityAnswer" class="form-control" placeholder="الإجابة">
+                        <button class="btn btn-sm btn-outline-primary mt-1" onclick="unlockPasswordField()">تحقق</button>
+                    </div>
+                </div>
+            </div><div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button class="btn btn-primary" onclick="saveUser()">حفظ</button></div></div></div></div>
+    <div class="modal fade" id="centerModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5 class="modal-title" id="centerModalTitle"></h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="editCenterId"><div class="mb-3"><label>معرف المركز</label><input type="text" id="centerIdInput" class="form-control"></div><div class="mb-3"><label>اسم المركز</label><input type="text" id="centerNameInput" class="form-control"></div></div><div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button class="btn btn-primary" onclick="saveCenter()">حفظ</button></div></div></div></div>
+    <!-- نسيت كلمة المرور -->
+    <div class="modal fade" id="forgotPasswordModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5 class="modal-title">استعادة كلمة المرور</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body">
+        <div id="forgotStep1"><div class="mb-3"><label>اسم المستخدم</label><input type="text" id="forgotUsername" class="form-control"></div><button class="btn btn-primary w-100" onclick="checkUsernameForReset()">التالي</button></div>
+        <div id="forgotStep2" class="hidden"><p id="securityQuestionText" class="fw-bold"></p><div class="mb-3"><label>الإجابة</label><input type="text" id="securityAnswerInput" class="form-control"></div><button class="btn btn-primary w-100" onclick="verifyAnswerAndShowReset()">تحقق</button></div>
+        <div id="forgotStep3" class="hidden"><div class="mb-3"><label>كلمة مرور جديدة</label><input type="password" id="newPassword1" class="form-control"></div><div class="mb-3"><label>تأكيد كلمة المرور</label><input type="password" id="newPassword2" class="form-control"></div><button class="btn btn-success w-100" onclick="resetPassword()">حفظ</button></div>
+        <div id="forgotNoRecovery" class="hidden text-center text-danger">لا توجد وسيلة استعادة. راجع مدير النظام.</div>
+    </div></div></div></div>
+    <!-- تحقق سؤال الأمان (للإجراءات الحساسة) -->
+    <div class="modal fade" id="adminVerifyModal" tabindex="-1"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5>تأكيد هوية مدير النظام</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><p id="adminVerifyQuestion" class="fw-bold"></p><input type="text" id="adminVerifyAnswer" class="form-control" placeholder="الإجابة"><p id="adminVerifyError" class="text-danger small mt-1 hidden">الإجابة غير صحيحة</p></div><div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button class="btn btn-primary" onclick="verifyAdminAnswer()">تأكيد</button></div></div></div></div>
+    <!-- تحقق كلمة مرور المسؤول (للإضافة) -->
+    <div class="modal fade" id="adminPasswordModal" tabindex="-1"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5>تأكيد كلمة مرور المسؤول</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><p>أدخل كلمة مرور مدير النظام للمتابعة:</p><input type="password" id="adminPasswordInput" class="form-control" placeholder="كلمة المرور"><p id="adminPasswordError" class="text-danger small mt-1 hidden">كلمة المرور غير صحيحة</p></div><div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button class="btn btn-primary" onclick="verifyAdminPassword()">تأكيد</button></div></div></div></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // ========== Firebase ==========
+        // Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyAoIEdwl5utsTFtxFFpI72fbIAGDe7k3ck",
             authDomain: "dghs-aeaa8.firebaseapp.com",
@@ -183,7 +181,6 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // ========== بيانات افتراضية ==========
         const defaultData = {
             centers: {
                 center1: { name: 'مركز الدهاريز الصحي' },
@@ -197,8 +194,7 @@
                 5: { empNo: '2077', name: 'نورة علي', title: 'ممرضة', centerId: 'center2', bankAccount: 'SA9988776655', bankName: 'بنك ظفار' }
             },
             users: {
-                1: { username: 'admin', password: 'admin', role: 'admin', name: 'مدير النظام', centerId: null,
-                     email: 'jaboob9333@gmail.com', resetQuestion: 'أدخل كلمة السر لاعادة ضبط كلمة المرور', resetAnswer: 'Huda@1987@', active: true },
+                1: { username: 'admin', password: 'admin', role: 'admin', name: 'مدير النظام', centerId: null, email: 'jaboob9333@gmail.com', resetQuestion: 'أدخل كلمة السر لاعادة ضبط كلمة المرور', resetAnswer: 'Huda@1987@', active: true },
                 2: { username: 'hr1', password: 'hr123', role: 'hr_officer', name: 'موظف موارد بشرية', centerId: null, active: true },
                 3: { username: 'manager1', password: 'manager123', role: 'center_manager', name: 'مدير مركز الدهاريز الصحي', centerId: 'center1', active: true },
                 4: { username: 'manager2', password: 'manager123', role: 'center_manager', name: 'مدير مركز السعادة الصحي', centerId: 'center2', active: true }
@@ -206,10 +202,10 @@
             metadata: { nextEmployeeId: 6, nextUserId: 5 }
         };
 
-        // ========== متغيرات عامة ==========
         let centers = [], employees = [], confirmations = {}, usersList = [], nextEmployeeId = 1, nextUserId = 1, currentUser = null;
         let forgotTargetUser = null;
-        let pendingAdminAction = null, pendingActionArgs = null;
+        let pendingAction = null, pendingArgs = null;
+        let isEditingAdminPassword = false; // for user modal
 
         function firebaseObjectToArray(fbObj) {
             if (!fbObj) return [];
@@ -291,18 +287,36 @@
         function getMonthKey(date) { const d = new Date(date); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; }
         function getDefaultMonth() { const now = new Date(); return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`; }
 
-        // ========== التحقق من المسؤول ==========
+        // ========== تحقق كلمة مرور المسؤول ==========
+        function requireAdminPassword(actionCallback, ...args) {
+            if (!currentUser || currentUser.role !== 'admin') { actionCallback(...args); return; }
+            document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('adminPasswordError').classList.add('hidden');
+            pendingAction = actionCallback;
+            pendingArgs = args;
+            new bootstrap.Modal(document.getElementById('adminPasswordModal')).show();
+        }
+        function verifyAdminPassword() {
+            const pass = document.getElementById('adminPasswordInput').value;
+            if (pass !== currentUser.password) {
+                document.getElementById('adminPasswordError').classList.remove('hidden');
+                return;
+            }
+            bootstrap.Modal.getInstance(document.getElementById('adminPasswordModal')).hide();
+            if (pendingAction) { pendingAction(...pendingArgs); pendingAction = null; pendingArgs = null; }
+        }
+
+        // ========== تحقق سؤال الأمان ==========
         function requireAdminVerification(actionCallback, ...args) {
             if (!currentUser || currentUser.role !== 'admin') { actionCallback(...args); return; }
             if (!currentUser.resetQuestion) { alert('لم يتم تعيين سؤال أمان للمسؤول. يرجى تعيينه في الإعدادات.'); return; }
             document.getElementById('adminVerifyQuestion').textContent = currentUser.resetQuestion;
             document.getElementById('adminVerifyAnswer').value = '';
             document.getElementById('adminVerifyError').classList.add('hidden');
-            pendingAdminAction = actionCallback;
-            pendingActionArgs = args;
+            pendingAction = actionCallback;
+            pendingArgs = args;
             new bootstrap.Modal(document.getElementById('adminVerifyModal')).show();
         }
-
         function verifyAdminAnswer() {
             const answer = document.getElementById('adminVerifyAnswer').value.trim();
             if (!answer) return;
@@ -311,11 +325,7 @@
                 return;
             }
             bootstrap.Modal.getInstance(document.getElementById('adminVerifyModal')).hide();
-            if (pendingAdminAction) {
-                pendingAdminAction(...pendingActionArgs);
-                pendingAdminAction = null;
-                pendingActionArgs = null;
-            }
+            if (pendingAction) { pendingAction(...pendingArgs); pendingAction = null; pendingArgs = null; }
         }
 
         // ========== تسجيل الدخول ==========
@@ -332,7 +342,7 @@
                 if (!currentUser.centerId || !centers.some(c => c.id === currentUser.centerId)) { alert('هذا الحساب غير مرتبط بمركز صحي صالح'); return; }
                 showPage('managerPage');
                 document.getElementById('managerName').textContent = currentUser.name;
-                document.getElementById('centerNameLabel').textContent = (centers.find(c=>c.id===currentUser.centerId)?.name)||'';
+                document.getElementById('centerNameLabel').textContent = (centers.find(c => c.id === currentUser.centerId)?.name) || '';
                 document.getElementById('confirmMonth').value = getDefaultMonth();
                 loadManagerData();
             } else if (currentUser.role === 'hr_officer' || currentUser.role === 'admin') {
@@ -348,7 +358,6 @@
                 if (isAdmin) { loadUsersTable(); loadCentersTable(); loadAdminSettings(); }
             }
         }
-
         function logout() { currentUser = null; showPage('loginPage'); document.getElementById('usernameInput').value = ''; document.getElementById('passwordInput').value = ''; }
 
         // ========== مدير المركز ==========
@@ -428,7 +437,7 @@
             const filterMonth = document.getElementById('hrFilterMonth').value;
             if (!filterMonth) return alert('اختر الشهر');
             const printWindow = window.open('', '_blank', 'width=900,height=600');
-            printWindow.document.write(`<html dir="rtl"><head><title>تقرير ${filterMonth}</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet"><style>body{padding:20px}table{width:100%}@media print{.no-print{display:none}}</style></head><body><h3>تقرير الروااب المعتمدة - ${filterMonth}</h3>${document.getElementById('hrTable').outerHTML}<script>window.onload=function(){window.print();setTimeout(function(){window.close()},200)}<\/script></body></html>`);
+            printWindow.document.write(`<html dir="rtl"><head><title>تقرير ${filterMonth}</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet"><style>body{padding:20px}table{width:100%}@media print{.no-print{display:none}}</style></head><body><h3>تقرير تأكيدات الحضور - ${filterMonth}</h3>${document.getElementById('hrTable').outerHTML}<script>window.onload=function(){window.print();setTimeout(function(){window.close()},200)}<\/script></body></html>`);
             printWindow.document.close();
         }
         function exportSalaryFile() {
@@ -451,21 +460,84 @@
         }
 
         // ========== إدارة الموظفين ==========
-        function populateCenterSelect(sel, selected=null) { sel.innerHTML=''; centers.forEach(c=> sel.innerHTML += `<option value="${c.id}" ${c.id===selected?'selected':''}>${c.name}</option>`); }
-        function loadEmployeesTable() { /* ... */ }
-        function showAddEmployeeModal() { /* ... */ }
-        function editEmployee(empId) { /* ... */ }
-        function saveEmployee() { /* ... */ }
-        function showTransferModal(empId) { /* ... */ }
-        function transferEmployee() { /* ... */ }
+        function populateCenterSelect(sel, selected=null) { sel.innerHTML=''; centers.forEach(c => sel.innerHTML += `<option value="${c.id}" ${c.id===selected?'selected':''}>${c.name}</option>`); }
+        function loadEmployeesTable() {
+            const tbody = document.getElementById('employeesTableBody'); tbody.innerHTML = '';
+            employees.forEach(emp => {
+                const center = centers.find(c => c.id === emp.centerId);
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${emp.empNo}</td><td>${emp.name}</td><td>${emp.title}</td><td>${center?.name||''}</td><td>${emp.bankAccount||''}</td><td>${emp.bankName||''}</td>
+                <td><button class="btn btn-sm btn-outline-primary me-1" onclick="editEmployee(${emp.id})">✏️ تعديل</button><button class="btn btn-sm btn-outline-warning" onclick="showTransferModal(${emp.id})">🚚 نقل</button></td>`;
+                tbody.appendChild(row);
+            });
+        }
+        function showAddEmployeeModal() {
+            document.getElementById('employeeModalTitle').textContent = 'إضافة موظف جديد';
+            document.getElementById('editEmpId').value = '';
+            document.getElementById('empNo').value = ''; document.getElementById('empName').value = ''; document.getElementById('empTitle').value = '';
+            document.getElementById('empBankAccount').value = ''; document.getElementById('empBankName').value = '';
+            populateCenterSelect(document.getElementById('empCenter'));
+            new bootstrap.Modal(document.getElementById('employeeModal')).show();
+        }
+        function editEmployee(empId) {
+            const emp = employees.find(e => e.id === empId); if (!emp) return;
+            document.getElementById('employeeModalTitle').textContent = 'تعديل بيانات الموظف';
+            document.getElementById('editEmpId').value = emp.id;
+            document.getElementById('empNo').value = emp.empNo; document.getElementById('empName').value = emp.name;
+            document.getElementById('empTitle').value = emp.title;
+            document.getElementById('empBankAccount').value = emp.bankAccount; document.getElementById('empBankName').value = emp.bankName;
+            populateCenterSelect(document.getElementById('empCenter'), emp.centerId);
+            new bootstrap.Modal(document.getElementById('employeeModal')).show();
+        }
+        function saveEmployee() {
+            const editId = document.getElementById('editEmpId').value;
+            const empNo = document.getElementById('empNo').value.trim();
+            const name = document.getElementById('empName').value.trim();
+            const title = document.getElementById('empTitle').value.trim();
+            const centerId = document.getElementById('empCenter').value;
+            const bankAccount = document.getElementById('empBankAccount').value.trim();
+            const bankName = document.getElementById('empBankName').value.trim();
+            if (!empNo || !name || !title || !centerId) { alert('الرجاء ملء جميع الحقول المطلوبة'); return; }
+            if (!editId) {
+                if (employees.some(e => e.empNo === empNo)) { alert('الرقم الوظيفي موجود مسبقاً'); return; }
+                const newId = nextEmployeeId++;
+                employees.push({ id: newId, empNo, name, title, centerId, bankAccount, bankName });
+                saveEmployees(); saveMetadata();
+            } else {
+                const emp = employees.find(e => e.id === parseInt(editId));
+                if (!emp) return;
+                if (employees.some(e => e.empNo === empNo && e.id !== emp.id)) { alert('الرقم الوظيفي مستخدم لموظف آخر'); return; }
+                emp.empNo = empNo; emp.name = name; emp.title = title; emp.centerId = centerId; emp.bankAccount = bankAccount; emp.bankName = bankName;
+                saveEmployees();
+            }
+            bootstrap.Modal.getInstance(document.getElementById('employeeModal')).hide();
+            loadEmployeesTable();
+        }
+        function showTransferModal(empId) {
+            const emp = employees.find(e => e.id === empId); if (!emp) return;
+            document.getElementById('transferEmpId').value = empId;
+            document.getElementById('transferEmpName').textContent = emp.name + ' (' + emp.empNo + ')';
+            populateCenterSelect(document.getElementById('transferNewCenter'), emp.centerId);
+            new bootstrap.Modal(document.getElementById('transferModal')).show();
+        }
+        function transferEmployee() {
+            const empId = parseInt(document.getElementById('transferEmpId').value);
+            const newCenterId = document.getElementById('transferNewCenter').value;
+            const emp = employees.find(e => e.id === empId); if (!emp) return;
+            if (emp.centerId === newCenterId) { alert('الموظف موجود مسبقاً في هذا المركز'); return; }
+            emp.centerId = newCenterId;
+            saveEmployees();
+            alert('تم النقل');
+            bootstrap.Modal.getInstance(document.getElementById('transferModal')).hide();
+        }
 
         // ========== إدارة المستخدمين ==========
         function loadUsersTable() {
-            const tbody = document.getElementById('usersTableBody'); if (!tbody) return; tbody.innerHTML='';
+            const tbody = document.getElementById('usersTableBody'); if (!tbody) return; tbody.innerHTML = '';
             usersList.forEach(user => {
-                const centerName = user.centerId ? (centers.find(c=>c.id===user.centerId)?.name||'') : '—';
-                const statusBadge = user.active!==false ? '<span class="badge bg-success">نشط</span>' : '<span class="badge bg-danger">معلق</span>';
-                const toggleBtn = user.active!==false
+                const centerName = user.centerId ? (centers.find(c => c.id === user.centerId)?.name || '') : '—';
+                const statusBadge = user.active !== false ? '<span class="badge bg-success">نشط</span>' : '<span class="badge bg-danger">معلق</span>';
+                const toggleBtn = user.active !== false
                     ? `<button class="btn btn-sm btn-outline-warning" onclick="requireAdminVerification(toggleSuspendUser, ${user.id})">تعليق</button>`
                     : `<button class="btn btn-sm btn-outline-success" onclick="requireAdminVerification(toggleSuspendUser, ${user.id})">تفعيل</button>`;
                 const row = document.createElement('tr');
@@ -478,37 +550,157 @@
                 tbody.appendChild(row);
             });
         }
-        function getRoleArabic(r) { return {admin:'مدير نظام', hr_officer:'موارد بشرية', center_manager:'مدير مركز'}[r]||r; }
+        function getRoleArabic(r) { return {admin:'مدير نظام', hr_officer:'موارد بشرية', center_manager:'مدير مركز'}[r] || r; }
         function toggleSuspendUser(userId) {
             const user = usersList.find(u => u.id === userId);
             if (!user) return;
-            user.active = user.active===false ? true : false;
+            user.active = user.active === false ? true : false;
             saveUsers(); loadUsersTable();
         }
         function showAddUserModal() {
             document.getElementById('userModalTitle').textContent = 'إضافة مستخدم جديد';
             document.getElementById('editUserId').value = '';
-            document.getElementById('userUsername').value=''; document.getElementById('userFullName').value='';
-            document.getElementById('userRole').value='center_manager'; document.getElementById('userPassword').value='';
-            toggleCenterForUser(); populateCenterSelect(document.getElementById('userCenter'));
+            document.getElementById('userUsername').value = ''; document.getElementById('userFullName').value = '';
+            document.getElementById('userRole').value = 'center_manager'; document.getElementById('userPassword').value = '';
+            document.getElementById('passwordFieldWrapper').classList.remove('obscured'); // عادي للإضافة
+            document.getElementById('userPassword').disabled = false;
+            document.getElementById('passwordUnlockArea').style.display = 'none';
+            toggleCenterForUser();
+            populateCenterSelect(document.getElementById('userCenter'));
             new bootstrap.Modal(document.getElementById('userModal')).show();
         }
-        function editUser(userId) { /* ... */ }
-        function toggleCenterForUser() { document.getElementById('userCenterGroup').style.display = document.getElementById('userRole').value==='center_manager'?'block':'none'; }
-        function saveUser() { /* ... مع إضافة active: true للمستخدم الجديد */ }
+        function editUser(userId) {
+            const user = usersList.find(u => u.id === userId); if (!user) return;
+            document.getElementById('userModalTitle').textContent = 'تعديل بيانات المستخدم';
+            document.getElementById('editUserId').value = user.id;
+            document.getElementById('userUsername').value = user.username; document.getElementById('userFullName').value = user.name;
+            document.getElementById('userRole').value = user.role;
+            document.getElementById('userPassword').value = '';
+            toggleCenterForUser();
+            populateCenterSelect(document.getElementById('userCenter'), user.centerId);
+
+            // إذا كان المسؤول يعدل نفسه، قم بتعتيم حقل كلمة المرور
+            if (currentUser && currentUser.id === user.id && currentUser.role === 'admin') {
+                document.getElementById('passwordFieldWrapper').classList.add('obscured');
+                document.getElementById('userPassword').disabled = true;
+                document.getElementById('passwordUnlockArea').style.display = 'block';
+                document.getElementById('passwordSecurityAnswer').value = '';
+                isEditingAdminPassword = true;
+            } else {
+                document.getElementById('passwordFieldWrapper').classList.remove('obscured');
+                document.getElementById('userPassword').disabled = false;
+                document.getElementById('passwordUnlockArea').style.display = 'none';
+                isEditingAdminPassword = false;
+            }
+            new bootstrap.Modal(document.getElementById('userModal')).show();
+        }
+        function unlockPasswordField() {
+            const answer = document.getElementById('passwordSecurityAnswer').value.trim();
+            if (!answer) return alert('أدخل الإجابة');
+            if (answer !== currentUser.resetAnswer) return alert('الإجابة غير صحيحة');
+            document.getElementById('passwordFieldWrapper').classList.remove('obscured');
+            document.getElementById('passwordFieldWrapper').classList.add('unlocked');
+            document.getElementById('userPassword').disabled = false;
+            document.getElementById('passwordUnlockArea').style.display = 'none';
+        }
+        function toggleCenterForUser() {
+            document.getElementById('userCenterGroup').style.display = document.getElementById('userRole').value === 'center_manager' ? 'block' : 'none';
+        }
+        function saveUser() {
+            const editId = document.getElementById('editUserId').value;
+            const username = document.getElementById('userUsername').value.trim();
+            const fullName = document.getElementById('userFullName').value.trim();
+            const role = document.getElementById('userRole').value;
+            const centerId = role === 'center_manager' ? document.getElementById('userCenter').value : null;
+            const password = document.getElementById('userPassword').value.trim();
+
+            if (!username || !fullName) { alert('الرجاء إدخال اسم المستخدم والاسم الكامل'); return; }
+            const existingUser = usersList.find(u => u.username === username);
+
+            if (editId) {
+                const userId = parseInt(editId);
+                const user = usersList.find(u => u.id === userId);
+                if (!user) return;
+                if (existingUser && existingUser.id !== userId) { alert('اسم المستخدم موجود مسبقاً'); return; }
+                user.username = username; user.name = fullName; user.role = role; user.centerId = centerId;
+                if (password !== '') {
+                    // إذا كان المسؤول يعدل نفسه، تأكد من أنه تم فتح الحقل
+                    if (isEditingAdminPassword && document.getElementById('userPassword').disabled) {
+                        alert('يجب فتح قفل كلمة المرور أولاً بإجابة سؤال الأمان');
+                        return;
+                    }
+                    user.password = password;
+                }
+                alert('تم تعديل بيانات المستخدم بنجاح');
+            } else {
+                if (existingUser) { alert('اسم المستخدم موجود مسبقاً'); return; }
+                if (password === '') { alert('يجب إدخال كلمة مرور للمستخدم الجديد'); return; }
+                const newId = nextUserId++;
+                usersList.push({ id: newId, username, password, role, name: fullName, centerId, active: true });
+                saveMetadata();
+                alert('تم إضافة المستخدم بنجاح');
+            }
+            saveUsers();
+            bootstrap.Modal.getInstance(document.getElementById('userModal')).hide();
+            loadUsersTable();
+        }
         function deleteUser(userId) {
             if (currentUser && currentUser.id === userId) { alert('لا يمكنك حذف حسابك الحالي'); return; }
-            if (!confirm('متأكد من حذف هذا المستخدم؟')) return;
+            if (!confirm('هل أنت متأكد من حذف هذا المستخدم؟')) return;
             usersList = usersList.filter(u => u.id !== userId);
             saveUsers(); loadUsersTable();
         }
 
         // ========== إدارة المراكز ==========
-        function loadCentersTable() { /* ... */ }
-        function showAddCenterModal() { /* ... */ }
-        function editCenter(centerId) { /* ... */ }
-        function saveCenter() { /* ... */ }
-        function deleteCenter(centerId) { /* ... */ }
+        function loadCentersTable() {
+            const tbody = document.getElementById('centersTableBody'); if (!tbody) return; tbody.innerHTML = '';
+            centers.forEach(center => {
+                const empCount = employees.filter(e => e.centerId === center.id).length;
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${center.id}</td><td>${center.name}</td><td>${empCount}</td>
+                <td><button class="btn btn-sm btn-outline-primary me-1" onclick="editCenter('${center.id}')">✏️ تعديل</button><button class="btn btn-sm btn-outline-danger" onclick="deleteCenter('${center.id}')">🗑️ حذف</button></td>`;
+                tbody.appendChild(row);
+            });
+        }
+        function showAddCenterModal() {
+            document.getElementById('centerModalTitle').textContent = 'إضافة مركز جديد';
+            document.getElementById('editCenterId').value = '';
+            document.getElementById('centerIdInput').value = ''; document.getElementById('centerNameInput').value = '';
+            document.getElementById('centerIdInput').disabled = false;
+            new bootstrap.Modal(document.getElementById('centerModal')).show();
+        }
+        function editCenter(centerId) {
+            const center = centers.find(c => c.id === centerId); if (!center) return;
+            document.getElementById('centerModalTitle').textContent = 'تعديل بيانات المركز';
+            document.getElementById('editCenterId').value = center.id;
+            document.getElementById('centerIdInput').value = center.id; document.getElementById('centerIdInput').disabled = true;
+            document.getElementById('centerNameInput').value = center.name;
+            new bootstrap.Modal(document.getElementById('centerModal')).show();
+        }
+        function saveCenter() {
+            const editId = document.getElementById('editCenterId').value;
+            const centerIdInput = document.getElementById('centerIdInput').value.trim();
+            const centerName = document.getElementById('centerNameInput').value.trim();
+            if (!centerIdInput || !centerName) { alert('الرجاء إدخال معرف المركز واسمه'); return; }
+            if (!editId) {
+                if (centers.some(c => c.id === centerIdInput)) { alert('معرف المركز موجود مسبقاً'); return; }
+                centers.push({ id: centerIdInput, name: centerName });
+            } else {
+                const center = centers.find(c => c.id === editId);
+                if (!center) return;
+                center.name = centerName;
+            }
+            saveCenters();
+            bootstrap.Modal.getInstance(document.getElementById('centerModal')).hide();
+        }
+        function deleteCenter(centerId) {
+            const empCount = employees.filter(e => e.centerId === centerId).length;
+            const userCount = usersList.filter(u => u.centerId === centerId).length;
+            if (empCount > 0 || userCount > 0) { alert(`لا يمكن حذف المركز لأنه مرتبط بـ ${empCount} موظف و ${userCount} مستخدم.`); return; }
+            if (!confirm('هل أنت متأكد من حذف المركز؟')) return;
+            centers = centers.filter(c => c.id !== centerId);
+            saveCenters();
+        }
 
         // ========== إعدادات مدير النظام ==========
         function loadAdminSettings() {
@@ -523,14 +715,77 @@
             document.getElementById('emailFieldWrapper').classList.remove('unlocked');
             document.getElementById('adminEmail').disabled = true;
         }
-        function unlockEmail() { /* ... */ }
-        function saveAdminSettings() { /* ... */ }
+        function unlockEmail() {
+            const answer = document.getElementById('settingsSecurityAnswer').value.trim();
+            const admin = usersList.find(u => u.id === currentUser.id);
+            if (!admin) return;
+            if (answer !== admin.resetAnswer) { alert('الإجابة غير صحيحة'); return; }
+            document.getElementById('emailFieldWrapper').classList.remove('obscured');
+            document.getElementById('emailFieldWrapper').classList.add('unlocked');
+            document.getElementById('adminEmail').disabled = false;
+            document.getElementById('settingsSecurityAnswer').value = '';
+        }
+        function saveAdminSettings() {
+            const admin = usersList.find(u => u.id === currentUser.id);
+            if (!admin) return;
+            const newEmail = document.getElementById('adminEmail').value.trim();
+            const newQuestion = document.getElementById('settingsSecurityQuestion').value.trim();
+            const newAnswer = document.getElementById('settingsSecurityAnswerNew').value.trim();
+            if (!newQuestion) { alert('يجب إدخال سؤال الأمان'); return; }
+            admin.email = newEmail;
+            admin.resetQuestion = newQuestion;
+            if (newAnswer) admin.resetAnswer = newAnswer;
+            saveUsers();
+            alert('تم حفظ الإعدادات');
+            loadAdminSettings();
+        }
 
         // ========== نسيت كلمة المرور ==========
-        function showForgotPassword() { /* ... */ }
-        function checkUsernameForReset() { /* ... */ }
-        function verifyAnswerAndShowReset() { /* ... */ }
-        function resetPassword() { /* ... */ }
+        function showForgotPassword() {
+            document.getElementById('forgotStep1').classList.remove('hidden');
+            document.getElementById('forgotStep2').classList.add('hidden');
+            document.getElementById('forgotStep3').classList.add('hidden');
+            document.getElementById('forgotNoRecovery').classList.add('hidden');
+            document.getElementById('forgotUsername').value = '';
+            document.getElementById('securityAnswerInput').value = '';
+            document.getElementById('newPassword1').value = '';
+            document.getElementById('newPassword2').value = '';
+            forgotTargetUser = null;
+            new bootstrap.Modal(document.getElementById('forgotPasswordModal')).show();
+        }
+        function checkUsernameForReset() {
+            const username = document.getElementById('forgotUsername').value.trim();
+            if (!username) { alert('أدخل اسم المستخدم'); return; }
+            const user = usersList.find(u => u.username === username);
+            if (!user) { alert('المستخدم غير موجود'); return; }
+            forgotTargetUser = user;
+            if (user.resetQuestion) {
+                document.getElementById('securityQuestionText').textContent = user.resetQuestion;
+                document.getElementById('forgotStep1').classList.add('hidden');
+                document.getElementById('forgotStep2').classList.remove('hidden');
+            } else {
+                document.getElementById('forgotStep1').classList.add('hidden');
+                document.getElementById('forgotNoRecovery').classList.remove('hidden');
+            }
+        }
+        function verifyAnswerAndShowReset() {
+            const answer = document.getElementById('securityAnswerInput').value.trim();
+            if (!answer) { alert('أدخل الإجابة'); return; }
+            if (forgotTargetUser.resetAnswer !== answer) { alert('الإجابة غير صحيحة'); return; }
+            document.getElementById('forgotStep2').classList.add('hidden');
+            document.getElementById('forgotStep3').classList.remove('hidden');
+        }
+        function resetPassword() {
+            const p1 = document.getElementById('newPassword1').value;
+            const p2 = document.getElementById('newPassword2').value;
+            if (!p1 || !p2) { alert('أدخل كلمة المرور الجديدة وتأكيدها'); return; }
+            if (p1 !== p2) { alert('كلمتا المرور غير متطابقتين'); return; }
+            const user = usersList.find(u => u.id === forgotTargetUser.id);
+            if (user) { user.password = p1; saveUsers(); }
+            alert('تم تغيير كلمة المرور بنجاح');
+            bootstrap.Modal.getInstance(document.getElementById('forgotPasswordModal')).hide();
+            forgotTargetUser = null;
+        }
 
         loadInitialData();
     </script>
