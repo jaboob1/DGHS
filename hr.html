@@ -103,7 +103,7 @@
                             <div class="col-md-3"><label>تصفية حسب الشهر</label><input type="month" id="hrFilterMonth" class="form-control" onchange="loadHRData()"></div>
                             <div class="col-md-3 mt-2 mt-md-0"><button class="btn btn-print w-100" onclick="printReport()">🖨️ طباعة التقرير</button></div>
                             <div class="col-md-3 mt-2 mt-md-0"><button class="btn btn-export w-100" onclick="exportSalaryFile()">📥 تصدير ملف الرواتب (Excel)</button></div>
-                            <div class="col-md-3 mt-2 mt-md-0"><button class="btn btn-primary w-100" onclick="approveAll()">اعتماد جميع التأكيدات الظاهرة</button></div>
+                            <div class="col-md-3 mt-2 mt-md-0"><button class="btn btn-primary w-100" onclick="approveAll()">اعتماد نهائي لجميع الرواتب</button></div>
                         </div>
                         <div id="printArea"><table class="table table-striped table-bordered" id="hrTable"><thead class="table-dark"><tr><th>المركز</th><th>الموظف</th><th>الشهر</th><th>الغياب</th><th>الإجازات</th><th>الحالة</th><th>موثق من</th><th>اعتماد</th></tr></thead><tbody id="hrTableBody"></tbody></table></div>
                     </div>
@@ -138,7 +138,7 @@
         </div>
     </div>
 
-    <!-- مودالات -->
+    <!-- المودالات -->
     <div class="modal fade" id="employeeModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5 class="modal-title" id="employeeModalTitle"></h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="editEmpId"><div class="mb-3"><label>الرقم الوظيفي</label><input type="text" id="empNo" class="form-control"></div><div class="mb-3"><label>الاسم الكامل</label><input type="text" id="empName" class="form-control"></div><div class="mb-3"><label>المسمى الوظيفي</label><input type="text" id="empTitle" class="form-control"></div><div class="mb-3"><label>المركز</label><select id="empCenter" class="form-select"></select></div><div class="mb-3"><label>رقم الحساب البنكي</label><input type="text" id="empBankAccount" class="form-control"></div><div class="mb-3"><label>اسم البنك</label><input type="text" id="empBankName" class="form-control"></div></div><div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button class="btn btn-primary" onclick="saveEmployee()">حفظ</button></div></div></div></div>
     <div class="modal fade" id="transferModal" tabindex="-1"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header bg-warning"><h5 class="modal-title">نقل موظف</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="transferEmpId"><p>الموظف: <strong id="transferEmpName"></strong></p><div class="mb-3"><label>المركز الجديد</label><select id="transferNewCenter" class="form-select"></select></div></div><div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button class="btn btn-warning" onclick="transferEmployee()">نقل</button></div></div></div></div>
     <div class="modal fade" id="userModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5 class="modal-title" id="userModalTitle"></h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="editUserId"><div class="mb-3"><label>اسم المستخدم</label><input type="text" id="userUsername" class="form-control"></div><div class="mb-3"><label>الاسم الكامل</label><input type="text" id="userFullName" class="form-control"></div><div class="mb-3"><label>الدور</label><select id="userRole" class="form-select" onchange="toggleCenterForUser()"><option value="center_manager">مدير مركز</option><option value="hr_officer">موارد بشرية</option><option value="admin">مدير نظام</option></select></div><div class="mb-3" id="userCenterGroup"><label>المركز</label><select id="userCenter" class="form-select"></select></div>
@@ -161,9 +161,7 @@
         <div id="forgotStep3" class="hidden"><div class="mb-3"><label>كلمة مرور جديدة</label><input type="password" id="newPassword1" class="form-control"></div><div class="mb-3"><label>تأكيد كلمة المرور</label><input type="password" id="newPassword2" class="form-control"></div><button class="btn btn-success w-100" onclick="resetPassword()">حفظ</button></div>
         <div id="forgotNoRecovery" class="hidden text-center text-danger">لا توجد وسيلة استعادة. راجع مدير النظام.</div>
     </div></div></div></div>
-    <!-- تحقق سؤال الأمان (للإجراءات الحساسة) -->
-    <div class="modal fade" id="adminVerifyModal" tabindex="-1"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5>تأكيد هوية مدير النظام</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><p id="adminVerifyQuestion" class="fw-bold"></p><input type="text" id="adminVerifyAnswer" class="form-control" placeholder="الإجابة"><p id="adminVerifyError" class="text-danger small mt-1 hidden">الإجابة غير صحيحة</p></div><div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button class="btn btn-primary" onclick="verifyAdminAnswer()">تأكيد</button></div></div></div></div>
-    <!-- تحقق كلمة مرور المسؤول (للإضافة) -->
+    <!-- مودال إدخال كلمة مرور المسؤول -->
     <div class="modal fade" id="adminPasswordModal" tabindex="-1"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5>تأكيد كلمة مرور المسؤول</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><p>أدخل كلمة مرور مدير النظام للمتابعة:</p><input type="password" id="adminPasswordInput" class="form-control" placeholder="كلمة المرور"><p id="adminPasswordError" class="text-danger small mt-1 hidden">كلمة المرور غير صحيحة</p></div><div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button class="btn btn-primary" onclick="verifyAdminPassword()">تأكيد</button></div></div></div></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -205,7 +203,7 @@
         let centers = [], employees = [], confirmations = {}, usersList = [], nextEmployeeId = 1, nextUserId = 1, currentUser = null;
         let forgotTargetUser = null;
         let pendingAction = null, pendingArgs = null;
-        let isEditingAdminPassword = false; // for user modal
+        let isEditingAdminPassword = false;
 
         function firebaseObjectToArray(fbObj) {
             if (!fbObj) return [];
@@ -303,28 +301,6 @@
                 return;
             }
             bootstrap.Modal.getInstance(document.getElementById('adminPasswordModal')).hide();
-            if (pendingAction) { pendingAction(...pendingArgs); pendingAction = null; pendingArgs = null; }
-        }
-
-        // ========== تحقق سؤال الأمان ==========
-        function requireAdminVerification(actionCallback, ...args) {
-            if (!currentUser || currentUser.role !== 'admin') { actionCallback(...args); return; }
-            if (!currentUser.resetQuestion) { alert('لم يتم تعيين سؤال أمان للمسؤول. يرجى تعيينه في الإعدادات.'); return; }
-            document.getElementById('adminVerifyQuestion').textContent = currentUser.resetQuestion;
-            document.getElementById('adminVerifyAnswer').value = '';
-            document.getElementById('adminVerifyError').classList.add('hidden');
-            pendingAction = actionCallback;
-            pendingArgs = args;
-            new bootstrap.Modal(document.getElementById('adminVerifyModal')).show();
-        }
-        function verifyAdminAnswer() {
-            const answer = document.getElementById('adminVerifyAnswer').value.trim();
-            if (!answer) return;
-            if (answer !== currentUser.resetAnswer) {
-                document.getElementById('adminVerifyError').classList.remove('hidden');
-                return;
-            }
-            bootstrap.Modal.getInstance(document.getElementById('adminVerifyModal')).hide();
             if (pendingAction) { pendingAction(...pendingArgs); pendingAction = null; pendingArgs = null; }
         }
 
@@ -538,14 +514,14 @@
                 const centerName = user.centerId ? (centers.find(c => c.id === user.centerId)?.name || '') : '—';
                 const statusBadge = user.active !== false ? '<span class="badge bg-success">نشط</span>' : '<span class="badge bg-danger">معلق</span>';
                 const toggleBtn = user.active !== false
-                    ? `<button class="btn btn-sm btn-outline-warning" onclick="requireAdminVerification(toggleSuspendUser, ${user.id})">تعليق</button>`
-                    : `<button class="btn btn-sm btn-outline-success" onclick="requireAdminVerification(toggleSuspendUser, ${user.id})">تفعيل</button>`;
+                    ? `<button class="btn btn-sm btn-outline-warning" onclick="requireAdminPassword(toggleSuspendUser, ${user.id})">تعليق</button>`
+                    : `<button class="btn btn-sm btn-outline-success" onclick="requireAdminPassword(toggleSuspendUser, ${user.id})">تفعيل</button>`;
                 const row = document.createElement('tr');
                 row.innerHTML = `<td>${user.username}</td><td>${user.name}</td><td>${getRoleArabic(user.role)}</td><td>${centerName}</td><td>${statusBadge}</td>
                 <td>
-                    <button class="btn btn-sm btn-outline-primary me-1" onclick="requireAdminVerification(editUser, ${user.id})">✏️ تعديل</button>
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="requireAdminPassword(editUser, ${user.id})">✏️ تعديل</button>
                     ${toggleBtn}
-                    <button class="btn btn-sm btn-outline-danger" onclick="requireAdminVerification(deleteUser, ${user.id})">🗑️ حذف</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="requireAdminPassword(deleteUser, ${user.id})">🗑️ حذف</button>
                 </td>`;
                 tbody.appendChild(row);
             });
@@ -562,7 +538,7 @@
             document.getElementById('editUserId').value = '';
             document.getElementById('userUsername').value = ''; document.getElementById('userFullName').value = '';
             document.getElementById('userRole').value = 'center_manager'; document.getElementById('userPassword').value = '';
-            document.getElementById('passwordFieldWrapper').classList.remove('obscured'); // عادي للإضافة
+            document.getElementById('passwordFieldWrapper').classList.remove('obscured');
             document.getElementById('userPassword').disabled = false;
             document.getElementById('passwordUnlockArea').style.display = 'none';
             toggleCenterForUser();
@@ -579,7 +555,6 @@
             toggleCenterForUser();
             populateCenterSelect(document.getElementById('userCenter'), user.centerId);
 
-            // إذا كان المسؤول يعدل نفسه، قم بتعتيم حقل كلمة المرور
             if (currentUser && currentUser.id === user.id && currentUser.role === 'admin') {
                 document.getElementById('passwordFieldWrapper').classList.add('obscured');
                 document.getElementById('userPassword').disabled = true;
@@ -624,7 +599,6 @@
                 if (existingUser && existingUser.id !== userId) { alert('اسم المستخدم موجود مسبقاً'); return; }
                 user.username = username; user.name = fullName; user.role = role; user.centerId = centerId;
                 if (password !== '') {
-                    // إذا كان المسؤول يعدل نفسه، تأكد من أنه تم فتح الحقل
                     if (isEditingAdminPassword && document.getElementById('userPassword').disabled) {
                         alert('يجب فتح قفل كلمة المرور أولاً بإجابة سؤال الأمان');
                         return;
