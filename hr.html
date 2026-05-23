@@ -443,7 +443,7 @@
                 const center = centers.find(c => c.id === emp.centerId);
                 const row = document.createElement('tr');
                 row.innerHTML = `<td>${emp.empNo}</td><td>${emp.name}</td><td>${emp.title}</td><td>${center?.name||''}</td><td>${emp.bankAccount||''}</td><td>${emp.bankName||''}</td>
-                <td><button class="btn btn-sm btn-outline-primary me-1" onclick="editEmployee(${emp.id})">✏️ تعديل</button><button class="btn btn-sm btn-outline-warning" onclick="showTransferModal(${emp.id})">🚚 نقل</button></td>`;
+                <td><button class="btn btn-sm btn-outline-primary me-1" onclick="editEmployee(${emp.id})">✏️ تعديل</button><button class="btn btn-sm btn-outline-warning" onclick="showTransferModal(${emp.id})"> نقل</button></td>`;
                 tbody.appendChild(row);
             });
         }
