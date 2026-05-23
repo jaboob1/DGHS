@@ -89,7 +89,7 @@
                 <button class="btn btn-outline-danger btn-sm" onclick="logout()">تسجيل الخروج</button>
             </div>
             <ul class="nav nav-tabs hr-tabs mb-3" id="hrTabs" role="tablist">
-                <li class="nav-item"><button class="nav-link active" id="confirmations-tab" data-bs-toggle="tab" data-bs-target="#confirmations-pane">أعتماد الرواتب</button></li>
+                <li class="nav-item"><button class="nav-link active" id="confirmations-tab" data-bs-toggle="tab" data-bs-target="#confirmations-pane">كشف الرواتب</button></li>
                 <li class="nav-item"><button class="nav-link" id="employees-tab" data-bs-toggle="tab" data-bs-target="#employees-pane">إدارة الموظفين</button></li>
                 <li class="nav-item hidden" id="users-tab-item"><button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users-pane">المستخدمين</button></li>
                 <li class="nav-item hidden" id="centers-tab-item"><button class="nav-link" id="centers-tab" data-bs-toggle="tab" data-bs-target="#centers-pane">المراكز</button></li>
@@ -103,7 +103,7 @@
                             <div class="col-md-3"><label>تصفية حسب الشهر</label><input type="month" id="hrFilterMonth" class="form-control" onchange="loadHRData()"></div>
                             <div class="col-md-3 mt-2 mt-md-0"><button class="btn btn-print w-100" onclick="printReport()">🖨️ طباعة التقرير</button></div>
                             <div class="col-md-3 mt-2 mt-md-0"><button class="btn btn-export w-100" onclick="exportSalaryFile()">📥 تصدير ملف الرواتب (Excel)</button></div>
-                            <div class="col-md-3 mt-2 mt-md-0"><button class="btn btn-primary w-100" onclick="approveAll()">اعتماد نهائي لجميع الرواتب</button></div>
+                            <div class="col-md-3 mt-2 mt-md-0"><button class="btn btn-primary w-100" onclick="approveAll()">اعتماد كشف الرواتب</button></div>
                         </div>
                         <div id="printArea"><table class="table table-striped table-bordered" id="hrTable"><thead class="table-dark"><tr><th>المركز</th><th>الموظف</th><th>الشهر</th><th>الغياب</th><th>الإجازات</th><th>الحالة</th><th>موثق من</th><th>اعتماد</th></tr></thead><tbody id="hrTableBody"></tbody></table></div>
                     </div>
