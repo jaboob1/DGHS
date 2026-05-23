@@ -89,7 +89,7 @@
                 <button class="btn btn-outline-danger btn-sm" onclick="logout()">تسجيل الخروج</button>
             </div>
             <ul class="nav nav-tabs hr-tabs mb-3" id="hrTabs" role="tablist">
-                <li class="nav-item"><button class="nav-link active" id="confirmations-tab" data-bs-toggle="tab" data-bs-target="#confirmations-pane">تأكيدات الحضور</button></li>
+                <li class="nav-item"><button class="nav-link active" id="confirmations-tab" data-bs-toggle="tab" data-bs-target="#confirmations-pane">أعتماد الرواتب</button></li>
                 <li class="nav-item"><button class="nav-link" id="employees-tab" data-bs-toggle="tab" data-bs-target="#employees-pane">إدارة الموظفين</button></li>
                 <li class="nav-item hidden" id="users-tab-item"><button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users-pane">المستخدمين</button></li>
                 <li class="nav-item hidden" id="centers-tab-item"><button class="nav-link" id="centers-tab" data-bs-toggle="tab" data-bs-target="#centers-pane">المراكز</button></li>
@@ -397,7 +397,7 @@
                 <td>${!item.hrApproved ? `<button class="btn btn-sm btn-success" onclick="approveConfirmation('${item.key}')">اعتماد</button>` : (currentUser.role==='admin' ? `<button class="btn btn-sm btn-danger" onclick="revokeConfirmation('${item.key}')">إلغاء وإرجاع</button>` : '<span class="badge bg-success">معتمد</span>')}</td>`;
                 tbody.appendChild(row);
             });
-            if (list.length===0) tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">لا توجد تأكيدات</td></tr>';
+            if (list.length===0) tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">لا توجد أعتمادات</td></tr>';
         }
         function approveConfirmation(key) { let conf = confirmations[key]; if (conf) { conf.hrApproved = true; saveConfirmation(key, conf); } }
         function revokeConfirmation(key) { if (!confirm('إلغاء الاعتماد وإرجاع التأكيد للمدير؟')) return; let conf = confirmations[key]; if (conf) { conf.hrApproved = false; conf.submitted = false; saveConfirmation(key, conf); } }
@@ -413,7 +413,7 @@
             const filterMonth = document.getElementById('hrFilterMonth').value;
             if (!filterMonth) return alert('اختر الشهر');
             const printWindow = window.open('', '_blank', 'width=900,height=600');
-            printWindow.document.write(`<html dir="rtl"><head><title>تقرير ${filterMonth}</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet"><style>body{padding:20px}table{width:100%}@media print{.no-print{display:none}}</style></head><body><h3>تقرير تأكيدات الحضور - ${filterMonth}</h3>${document.getElementById('hrTable').outerHTML}<script>window.onload=function(){window.print();setTimeout(function(){window.close()},200)}<\/script></body></html>`);
+            printWindow.document.write(`<html dir="rtl"><head><title>تقرير ${filterMonth}</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet"><style>body{padding:20px}table{width:100%}@media print{.no-print{display:none}}</style></head><body><h3>تقرير كشف الرواتب - ${filterMonth}</h3>${document.getElementById('hrTable').outerHTML}<script>window.onload=function(){window.print();setTimeout(function(){window.close()},200)}<\/script></body></html>`);
             printWindow.document.close();
         }
         function exportSalaryFile() {
