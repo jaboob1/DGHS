@@ -79,13 +79,27 @@
             <div class="card p-3 mb-3">
                 <div class="row align-items-center">
                     <div class="col-md-3"><label>شهر التأكيد</label><input type="month" id="confirmMonth" class="form-control" onchange="loadManagerData()"></div>
-                    <!-- ✅ حقل البحث عن موظف في صفحة المدير -->
                     <div class="col-md-3 mt-2 mt-md-0"><label>بحث عن موظف</label><div class="search-box"><span class="search-icon">🔍</span><input type="text" id="managerSearchInput" class="form-control" placeholder="رقم الموظف أو الاسم..." oninput="loadManagerData()"></div></div>
                     <div class="col-md-3 mt-2 mt-md-0"><button class="btn btn-success w-100" onclick="submitToHR()">✔ اعتماد وتسليم للموارد البشرية</button></div>
                     <div class="col-md-3 text-md-end mt-2 mt-md-0"><span class="text-muted">إجمالي الموظفين: <span id="empCount"></span></span></div>
                 </div>
             </div>
-            <div class="card p-3"><table class="table table-striped table-bordered"><thead class="table-dark"><tr><th>الرقم الوظيفي</th><th>الاسم</th><th>المسمى</th><th>أيام الغياب</th><th>أيام الإجازة</th><th>ملاحظات</th></tr></thead><tbody id="managerTableBody"></tbody></table></div>
+            <div class="card p-3">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>الرقم الوظيفي</th>
+                            <th>الاسم</th>
+                            <th>المسمى</th>
+                            <th>أيام الغياب</th>
+                            <th>أيام الإجازة</th>
+                            <th>ملاحظات</th>
+                            <th>إجراءات</th> <!-- ✅ عمود جديد للإلغاء -->
+                        </tr>
+                    </thead>
+                    <tbody id="managerTableBody"></tbody>
+                </table>
+            </div>
             <p id="managerNoResults" class="text-center text-muted mt-2 hidden">لا يوجد موظفين مطابقين لبحثك.</p>
         </div>
 
@@ -122,7 +136,6 @@
                             <h5 class="mb-0">قائمة الموظفين</h5>
                             <button class="btn btn-add" onclick="requireAdminPassword(showAddEmployeeModal)">+ إضافة موظف جديد</button>
                         </div>
-                        <!-- ✅ حقل البحث في إدارة الموظفين -->
                         <div class="row mb-3">
                             <div class="col-md-4"><label>بحث عن موظف</label><div class="search-box"><span class="search-icon">🔍</span><input type="text" id="employeeSearchInput" class="form-control" placeholder="رقم الموظف أو الاسم..." oninput="loadEmployeesTable()"></div></div>
                             <div class="col-md-4 mt-2 mt-md-0 d-flex align-items-end"><button class="btn btn-outline-secondary" onclick="document.getElementById('employeeSearchInput').value=''; loadEmployeesTable();">✖ مسح البحث</button></div>
@@ -172,7 +185,6 @@
                     </div>
                 </div>
             </div><div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button class="btn btn-primary" onclick="saveUser()">حفظ</button></div></div></div></div>
-    <!-- ✅ مودال المركز - تم تمكين تعديل معرف المركز -->
     <div class="modal fade" id="centerModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5 class="modal-title" id="centerModalTitle"></h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="hidden" id="editCenterId" value=""><div class="mb-3"><label>معرف المركز <span class="text-muted small">(يمكن تعديله - سيتم تحديث جميع الارتباطات تلقائياً)</span></label><input type="text" id="centerIdInput" class="form-control"></div><div class="mb-3"><label>اسم المركز</label><input type="text" id="centerNameInput" class="form-control"></div></div><div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button class="btn btn-primary" onclick="saveCenter()">حفظ</button></div></div></div></div>
     <!-- نسيت كلمة المرور -->
     <div class="modal fade" id="forgotPasswordModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header bg-moh text-white"><h5 class="modal-title">استعادة كلمة المرور</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div><div class="modal-body">
@@ -358,7 +370,6 @@
         }
         function logout() { currentUser = null; showPage('loginPage'); document.getElementById('usernameInput').value = ''; document.getElementById('passwordInput').value = ''; }
 
-        // ✅ دالة مساعدة للبحث عن الموظفين (رقم وظيفي أو اسم)
         function filterEmployees(list, searchText) {
             if (!searchText || !searchText.trim()) return list;
             const q = searchText.trim().toLowerCase();
@@ -373,7 +384,6 @@
             const centerId = currentUser.centerId, month = document.getElementById('confirmMonth').value;
             if (!month) return;
             let centerEmps = employees.filter(e => e.centerId === centerId);
-            // ✅ تطبيق البحث
             const searchText = document.getElementById('managerSearchInput')?.value || '';
             centerEmps = filterEmployees(centerEmps, searchText);
             
@@ -391,12 +401,24 @@
                 const key = `${emp.id}_${month}`;
                 let conf = confirmations[key] || { absentDays: 0, leaveDays: 0, remarks: '', submitted: false };
                 const row = document.createElement('tr');
-                // ✅ تمييز الصف إذا كان البحث نشطاً ومطابقاً
                 if (searchText.trim()) row.classList.add('highlight-row');
+                
+                // تحديد حالة الإجراءات
+                let actionCell = '';
+                if (conf.submitted && !conf.hrApproved) {
+                    // يمكن للمدير إلغاء التسليم
+                    actionCell = `<button class="btn btn-sm btn-outline-danger" onclick="revokeManagerSubmission('${key}')">🚫 إلغاء التسليم</button>`;
+                } else if (conf.submitted && conf.hrApproved) {
+                    actionCell = '<span class="text-muted small">✅ معتمد</span>';
+                } else {
+                    actionCell = '<span class="text-muted small">—</span>';
+                }
+                
                 row.innerHTML = `<td>${emp.empNo}</td><td>${emp.name}</td><td>${emp.title}</td>
                     <td><input type="number" class="form-control form-control-sm" min="0" max="31" value="${conf.absentDays}" data-emp="${emp.id}" data-month="${month}" data-field="absentDays" ${conf.submitted?'disabled':''}></td>
                     <td><input type="number" class="form-control form-control-sm" min="0" max="31" value="${conf.leaveDays}" data-emp="${emp.id}" data-month="${month}" data-field="leaveDays" ${conf.submitted?'disabled':''}></td>
-                    <td><input type="text" class="form-control form-control-sm" value="${conf.remarks||''}" data-emp="${emp.id}" data-month="${month}" data-field="remarks" ${conf.submitted?'disabled':''}></td>`;
+                    <td><input type="text" class="form-control form-control-sm" value="${conf.remarks||''}" data-emp="${emp.id}" data-month="${month}" data-field="remarks" ${conf.submitted?'disabled':''}></td>
+                    <td>${actionCell}</td>`;
                 tbody.appendChild(row);
                 if (!conf.submitted) {
                     row.querySelectorAll('input').forEach(inp => inp.addEventListener('change', function() {
@@ -409,16 +431,35 @@
                 }
             });
         }
+
+        // ✅ دالة إلغاء تسليم مدير المركز (قبل اعتماد الموارد البشرية)
+        function revokeManagerSubmission(key) {
+            if (!confirm('هل أنت متأكد من إلغاء التسليم؟ سيتم فتح الحقول للتعديل مرة أخرى.')) return;
+            let conf = confirmations[key];
+            if (conf && conf.submitted && !conf.hrApproved) {
+                conf.submitted = false;
+                delete conf.submittedBy;
+                delete conf.submittedAt;
+                saveConfirmation(key, conf);
+                // ستقوم التحديثات التلقائية بإعادة تحميل البيانات
+            } else {
+                alert('لا يمكن إلغاء التسليم، إما أنه لم يتم التسليم بعد أو تم اعتماده من الموارد البشرية.');
+            }
+        }
+
         function submitToHR() {
             const month = document.getElementById('confirmMonth').value;
             if (!month) return alert('اختر الشهر');
-            // التأكيد على جميع موظفي المركز بغض النظر عن البحث
             const allCenterEmps = employees.filter(e => e.centerId === currentUser.centerId);
             allCenterEmps.forEach(emp => {
                 const key = `${emp.id}_${month}`;
                 let conf = confirmations[key] || { absentDays:0, leaveDays:0, remarks:'', submitted:false };
-                conf.submitted = true; conf.submittedBy = currentUser.username; conf.submittedAt = new Date().toISOString();
-                saveConfirmation(key, conf);
+                if (!conf.submitted) { // فقط إذا لم يكن مسلماً مسبقاً
+                    conf.submitted = true; 
+                    conf.submittedBy = currentUser.username; 
+                    conf.submittedAt = new Date().toISOString();
+                    saveConfirmation(key, conf);
+                }
             });
             alert('تم التسليم للموارد البشرية');
         }
@@ -490,7 +531,6 @@
             if (!tbody) return;
             tbody.innerHTML = '';
             const noResults = document.getElementById('employeesNoResults');
-            // ✅ تطبيق البحث
             const searchText = document.getElementById('employeeSearchInput')?.value || '';
             let filteredEmployees = filterEmployees(employees, searchText);
             
@@ -710,7 +750,6 @@
             const center = centers.find(c => c.id === centerId); if (!center) return;
             document.getElementById('centerModalTitle').textContent = 'تعديل بيانات المركز';
             document.getElementById('editCenterId').value = center.id;
-            // ✅ تمكين تعديل معرف المركز
             document.getElementById('centerIdInput').value = center.id; 
             document.getElementById('centerIdInput').disabled = false;
             document.getElementById('centerNameInput').value = center.name;
@@ -723,16 +762,13 @@
             if (!centerIdInput || !centerName) { alert('الرجاء إدخال معرف المركز واسمه'); return; }
             
             if (!editId) {
-                // إضافة مركز جديد
                 if (centers.some(c => c.id === centerIdInput)) { alert('معرف المركز موجود مسبقاً'); return; }
                 centers.push({ id: centerIdInput, name: centerName });
                 saveCenters();
             } else {
-                // تعديل مركز موجود
                 const center = centers.find(c => c.id === editId);
                 if (!center) return;
                 
-                // ✅ إذا تغير معرف المركز، تحديث جميع الارتباطات
                 if (editId !== centerIdInput) {
                     if (centers.some(c => c.id === centerIdInput)) { 
                         alert('معرف المركز الجديد موجود مسبقاً'); 
@@ -740,27 +776,22 @@
                     }
                     if (!confirm(`سيتم تغيير معرف المركز من "${editId}" إلى "${centerIdInput}". سيتم تحديث جميع الموظفين والمستخدمين المرتبطين بهذا المركز تلقائياً. هل تريد المتابعة؟`)) return;
                     
-                    // تحديث centerId في الموظفين
                     employees.forEach(emp => {
                         if (emp.centerId === editId) emp.centerId = centerIdInput;
                     });
                     
-                    // تحديث centerId في المستخدمين
                     usersList.forEach(user => {
                         if (user.centerId === editId) user.centerId = centerIdInput;
                     });
                     
-                    // تحديث بيانات المركز
                     centers = centers.filter(c => c.id !== editId);
                     centers.push({ id: centerIdInput, name: centerName });
                     
-                    // حفظ جميع التغييرات
                     saveCenters();
                     saveEmployees();
                     saveUsers();
                     alert('تم تحديث معرف المركز وجميع الارتباطات بنجاح');
                 } else {
-                    // لم يتغير المعرف، فقط تحديث الاسم
                     center.name = centerName;
                     saveCenters();
                 }
