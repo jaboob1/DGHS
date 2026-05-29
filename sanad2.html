@@ -36,7 +36,7 @@
             border: 2px solid #8B0000;
             border-radius: 8px;
             width: 95%;
-            max-width: 750px;
+            max-width: 800px;
             margin: 10px auto;
             background: white;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -102,6 +102,7 @@
             border-radius: 4px;
         }
 
+        /* حاوية العرض العمودي */
         .input-section {
             display: flex;
             flex-direction: column;
@@ -113,13 +114,12 @@
         .input-row {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             width: 100%;
             justify-content: flex-start;
         }
 
         .allowance-label {
-            display: inline-block;
             width: 160px;
             margin-left: 8px;
             font-weight: bold;
@@ -128,7 +128,19 @@
             font-size: 13px;
         }
 
-        .allowance-value {
+        .column-title {
+            font-size: 12px;
+            color: #8B0000;
+            margin: 0 3px;
+            text-align: center;
+            width: 160px;
+            font-weight: bold;
+            padding: 5px;
+            border: 1px solid #ddd;
+            background-color: #f8f8f8;
+        }
+
+        .amount-value {
             width: 160px;
             padding: 8px;
             margin: 3px;
@@ -143,10 +155,10 @@
         }
 
         .total-row {
-            background-color: #f0f0f0;
-            border-color: #8B0000;
+            background-color: #f0f0f0 !important;
             font-weight: bold;
             color: #8B0000;
+            border-color: #8B0000;
         }
 
         .separator {
@@ -251,12 +263,8 @@
         }
 
         @keyframes marquee {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(100%, 0);
-            }
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100%, 0); }
         }
 
         .disclaimer {
@@ -289,7 +297,6 @@
                 height: auto;
                 display: block;
             }
-
             .container {
                 border: 2px solid #8B0000 !important;
                 box-shadow: none;
@@ -298,17 +305,18 @@
                 width: 100%;
                 max-width: 100%;
             }
-
             .allowance-label {
-                width: 140px;
-                font-size: 11px;
+                width: 130px;
+                font-size: 10px;
             }
-
-            .allowance-value {
-                width: 140px;
-                font-size: 11px;
+            .column-title {
+                width: 130px;
+                font-size: 10px;
             }
-
+            .amount-value {
+                width: 130px;
+                font-size: 10px;
+            }
             .button-container,
             .footer-animation,
             .disclaimer {
@@ -335,65 +343,85 @@
 
         <h3>سند الصرف</h3>
 
-        <!-- ملخص عدد السجلات -->
         <div class="summary-line" id="summaryLine">عدد السجلات المحفوظة: 0</div>
 
-        <!-- منطقة العرض العمودي للبدلات المجمعة -->
+        <!-- منطقة العرض العمودي مع 3 أعمدة -->
         <div class="input-section" id="allowanceDisplay">
+            <!-- صف العناوين -->
+            <div class="input-row">
+                <span class="allowance-label"></span>
+                <span class="column-title">إجمالي قبل الخصم</span>
+                <span class="column-title">الخصم (8%)</span>
+                <span class="column-title">إجمالي بعد الخصم</span>
+            </div>
+
+            <!-- صفوف البدلات -->
             <div class="input-row">
                 <span class="allowance-label">البدل الأساسي:</span>
-                <span class="allowance-value" id="totalBasic">0.000</span>
+                <span class="amount-value" id="basicBefore">0.000</span>
+                <span class="amount-value" id="basicDeduction">0.000</span>
+                <span class="amount-value" id="basicAfter">0.000</span>
             </div>
             <div class="input-row">
                 <span class="allowance-label">بدل السكن:</span>
-                <span class="allowance-value" id="totalHousing">0.000</span>
+                <span class="amount-value" id="housingBefore">0.000</span>
+                <span class="amount-value" id="housingDeduction">0.000</span>
+                <span class="amount-value" id="housingAfter">0.000</span>
             </div>
             <div class="input-row">
                 <span class="allowance-label">بدل الكهرباء:</span>
-                <span class="allowance-value" id="totalElectricity">0.000</span>
+                <span class="amount-value" id="electricityBefore">0.000</span>
+                <span class="amount-value" id="electricityDeduction">0.000</span>
+                <span class="amount-value" id="electricityAfter">0.000</span>
             </div>
             <div class="input-row">
                 <span class="allowance-label">بدل الماء:</span>
-                <span class="allowance-value" id="totalWater">0.000</span>
+                <span class="amount-value" id="waterBefore">0.000</span>
+                <span class="amount-value" id="waterDeduction">0.000</span>
+                <span class="amount-value" id="waterAfter">0.000</span>
             </div>
             <div class="input-row">
                 <span class="allowance-label">بدل الهاتف:</span>
-                <span class="allowance-value" id="totalPhone">0.000</span>
+                <span class="amount-value" id="phoneBefore">0.000</span>
+                <span class="amount-value" id="phoneDeduction">0.000</span>
+                <span class="amount-value" id="phoneAfter">0.000</span>
             </div>
             <div class="input-row">
                 <span class="allowance-label">بدل النقل:</span>
-                <span class="allowance-value" id="totalTransport">0.000</span>
+                <span class="amount-value" id="transportBefore">0.000</span>
+                <span class="amount-value" id="transportDeduction">0.000</span>
+                <span class="amount-value" id="transportAfter">0.000</span>
             </div>
             <div class="input-row">
                 <span class="allowance-label">بدل مهني:</span>
-                <span class="allowance-value" id="totalProfessional">0.000</span>
+                <span class="amount-value" id="professionalBefore">0.000</span>
+                <span class="amount-value" id="professionalDeduction">0.000</span>
+                <span class="amount-value" id="professionalAfter">0.000</span>
             </div>
             <div class="input-row">
                 <span class="allowance-label">بدلات أخرى:</span>
-                <span class="allowance-value" id="totalOtherAllowances">0.000</span>
+                <span class="amount-value" id="otherAllowancesBefore">0.000</span>
+                <span class="amount-value" id="otherAllowancesDeduction">0.000</span>
+                <span class="amount-value" id="otherAllowancesAfter">0.000</span>
             </div>
             <div class="input-row">
                 <span class="allowance-label">بدل غلاء معيشة:</span>
-                <span class="allowance-value" id="totalCostLiving">0.000</span>
+                <span class="amount-value" id="costLivingBefore">0.000</span>
+                <span class="amount-value" id="costLivingDeduction">0.000</span>
+                <span class="amount-value" id="costLivingAfter">0.000</span>
             </div>
 
             <div class="separator"></div>
 
+            <!-- صفوف الإجماليات -->
             <div class="input-row">
-                <span class="allowance-label">إجمالي قبل الخصم:</span>
-                <span class="allowance-value total-row" id="totalBeforeDeduction">0.000</span>
-            </div>
-            <div class="input-row">
-                <span class="allowance-label">الخصم (8%):</span>
-                <span class="allowance-value total-row" id="totalDeduction">0.000</span>
-            </div>
-            <div class="input-row">
-                <span class="allowance-label">الإجمالي بعد الخصم:</span>
-                <span class="allowance-value total-row" id="totalAfterDeduction">0.000</span>
+                <span class="allowance-label">الإجمالي العام:</span>
+                <span class="amount-value total-row" id="totalBefore">0.000</span>
+                <span class="amount-value total-row" id="totalDeduction">0.000</span>
+                <span class="amount-value total-row" id="totalAfter">0.000</span>
             </div>
         </div>
 
-        <!-- في حال عدم وجود بيانات -->
         <div class="no-data-message" id="noDataMessage" style="display: none;">
             لا توجد بيانات محفوظة حالياً. قم بالحفظ من صفحة حاسبة الرواتب أولاً.
         </div>
@@ -430,7 +458,6 @@
         document.addEventListener('DOMContentLoaded', function () {
             loadAndDisplayTotals();
 
-            // الاستماع لتغييرات localStorage من النوافذ الأخرى
             window.addEventListener('storage', function (e) {
                 if (e.key === 'salaryVoucherRecords') {
                     loadAndDisplayTotals();
@@ -443,17 +470,17 @@
             'transport', 'professional', 'otherAllowances', 'costLiving'
         ];
 
-        // معرفات عناصر HTML للبدلات
-        const elementIds = {
-            basic: 'totalBasic',
-            housing: 'totalHousing',
-            electricity: 'totalElectricity',
-            water: 'totalWater',
-            phone: 'totalPhone',
-            transport: 'totalTransport',
-            professional: 'totalProfessional',
-            otherAllowances: 'totalOtherAllowances',
-            costLiving: 'totalCostLiving'
+        // ربط المفاتيح بمعرفات العناصر للـ Before, Deduction, After
+        const elementMap = {
+            basic: { before: 'basicBefore', deduction: 'basicDeduction', after: 'basicAfter' },
+            housing: { before: 'housingBefore', deduction: 'housingDeduction', after: 'housingAfter' },
+            electricity: { before: 'electricityBefore', deduction: 'electricityDeduction', after: 'electricityAfter' },
+            water: { before: 'waterBefore', deduction: 'waterDeduction', after: 'waterAfter' },
+            phone: { before: 'phoneBefore', deduction: 'phoneDeduction', after: 'phoneAfter' },
+            transport: { before: 'transportBefore', deduction: 'transportDeduction', after: 'transportAfter' },
+            professional: { before: 'professionalBefore', deduction: 'professionalDeduction', after: 'professionalAfter' },
+            otherAllowances: { before: 'otherAllowancesBefore', deduction: 'otherAllowancesDeduction', after: 'otherAllowancesAfter' },
+            costLiving: { before: 'costLivingBefore', deduction: 'costLivingDeduction', after: 'costLivingAfter' }
         };
 
         function loadAndDisplayTotals() {
@@ -472,67 +499,77 @@
             const noDataMessage = document.getElementById('noDataMessage');
 
             if (records.length === 0) {
-                // إخفاء قسم البدلات وإظهار رسالة "لا توجد بيانات"
                 allowanceDisplay.style.display = 'none';
                 noDataMessage.style.display = 'block';
                 summaryLine.textContent = 'عدد السجلات المحفوظة: 0';
                 return;
             }
 
-            // إظهار القسم وإخفاء رسالة عدم وجود بيانات
             allowanceDisplay.style.display = 'flex';
             noDataMessage.style.display = 'none';
             summaryLine.textContent = `عدد السجلات المحفوظة: ${records.length}`;
 
-            // كائن لتجميع المجاميع
+            // كائنات لتجميع القيم
             const totals = {
-                basic: 0,
-                housing: 0,
-                electricity: 0,
-                water: 0,
-                phone: 0,
-                transport: 0,
-                professional: 0,
-                otherAllowances: 0,
-                costLiving: 0,
-                totalBefore: 0,
-                totalAfter: 0
+                before: {},
+                after: {},
+                deduction: {}
             };
+            let grandTotalBefore = 0;
+            let grandTotalAfter = 0;
 
-            // تجميع القيم من جميع السجلات
+            // تهيئة المجاميع
+            allowanceKeys.forEach(key => {
+                totals.before[key] = 0;
+                totals.after[key] = 0;
+            });
+
+            // تجميع البيانات من جميع السجلات
             records.forEach(record => {
                 const allowances = record.allowances || {};
+                const allowancesAfter = record.allowancesAfter || {};
+
                 allowanceKeys.forEach(key => {
-                    totals[key] += allowances[key] || 0;
+                    // القيم قبل الخصم (من allowances)
+                    totals.before[key] += allowances[key] || 0;
+                    // القيم بعد الخصم (من allowancesAfter إن وجدت، أو نحسبها من before)
+                    if (allowancesAfter[key] !== undefined) {
+                        totals.after[key] += allowancesAfter[key];
+                    } else {
+                        totals.after[key] += (allowances[key] || 0) * 0.92;
+                    }
                 });
-                totals.totalBefore += record.totalBeforeDeduction || 0;
-                // يمكن استخدام الإجمالي بعد الخصم المسجل مباشرة إذا كان موجوداً
-                totals.totalAfter += record.totalAfterDeduction || ((record.totalBeforeDeduction || 0) * 0.92);
+
+                grandTotalBefore += record.totalBeforeDeduction || 0;
+                // الإجمالي بعد الخصم - يمكن أخذه مباشرة إذا كان موجوداً
+                grandTotalAfter += record.totalAfterDeduction || ((record.totalBeforeDeduction || 0) * 0.92);
             });
 
-            // تقريب القيم إلى 3 خانات
+            // حساب الخصم لكل بدل (8% من before)
             allowanceKeys.forEach(key => {
-                totals[key] = Math.round(totals[key] * 1000) / 1000;
+                totals.deduction[key] = Math.round(totals.before[key] * 0.08 * 1000) / 1000;
+                // تقريب القيم
+                totals.before[key] = Math.round(totals.before[key] * 1000) / 1000;
+                totals.after[key] = Math.round(totals.after[key] * 1000) / 1000;
             });
-            totals.totalBefore = Math.round(totals.totalBefore * 1000) / 1000;
-            totals.totalAfter = Math.round(totals.totalAfter * 1000) / 1000;
 
-            // حساب الخصم 8% من إجمالي قبل الخصم
-            const totalDeduction = Math.round(totals.totalBefore * 0.08 * 1000) / 1000;
-            // الإجمالي بعد الخصم يمكن حسابه أيضاً: totalBefore - totalDeduction
-            const computedTotalAfter = Math.round((totals.totalBefore - totalDeduction) * 1000) / 1000;
+            // تقريب الإجماليات العامة
+            grandTotalBefore = Math.round(grandTotalBefore * 1000) / 1000;
+            grandTotalAfter = Math.round(grandTotalAfter * 1000) / 1000;
+            const grandTotalDeduction = Math.round(grandTotalBefore * 0.08 * 1000) / 1000;
 
-            // عرض القيم في الحقول المخصصة
+            // تحديث واجهة المستخدم
             allowanceKeys.forEach(key => {
-                const el = document.getElementById(elementIds[key]);
-                if (el) {
-                    el.textContent = totals[key].toFixed(3);
-                }
+                const els = elementMap[key];
+                document.getElementById(els.before).textContent = totals.before[key].toFixed(3);
+                document.getElementById(els.deduction).textContent = totals.deduction[key].toFixed(3);
+                document.getElementById(els.after).textContent = totals.after[key].toFixed(3);
             });
 
-            document.getElementById('totalBeforeDeduction').textContent = totals.totalBefore.toFixed(3);
-            document.getElementById('totalDeduction').textContent = totalDeduction.toFixed(3);
-            document.getElementById('totalAfterDeduction').textContent = computedTotalAfter.toFixed(3);
+            // تحديث صف الإجمالي العام
+            document.getElementById('totalBefore').textContent = grandTotalBefore.toFixed(3);
+            document.getElementById('totalDeduction').textContent = grandTotalDeduction.toFixed(3);
+            document.getElementById('totalAfter').textContent = grandTotalAfter.toFixed(3);
         }
 
         function clearAllRecords() {
