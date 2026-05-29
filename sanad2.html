@@ -134,7 +134,18 @@
             font-size: 11px;
             position: sticky;
             top: 0;
+            z-index: 3;
+        }
+
+        .voucher-table .account-col {
+            background-color: #e6e6e6;
+            font-weight: bold;
+            color: #000;
+            text-align: center;
+            position: sticky;
+            right: 0;
             z-index: 2;
+            min-width: 100px;
         }
 
         .voucher-table .allowance-name {
@@ -144,8 +155,8 @@
             text-align: right;
             padding-right: 10px;
             position: sticky;
-            right: 0;
-            z-index: 1;
+            right: 100px; /* عرض عمود رقم الحساب */
+            z-index: 2;
             min-width: 140px;
         }
 
@@ -334,8 +345,12 @@
                 font-size: 8px;
                 min-width: 50px;
             }
+            .voucher-table .account-col {
+                min-width: 70px;
+            }
             .voucher-table .allowance-name {
                 min-width: 100px;
+                right: 70px;
             }
             .button-container,
             .footer-animation,
@@ -365,7 +380,7 @@
             </div>
         </div>
 
-        <h3>سند الصرف</h3>
+        <h3> سند صرف يدوي</h3>
 
         <div class="summary-line" id="summaryLine">عدد السجلات المحفوظة: 0</div>
 
@@ -373,8 +388,9 @@
             <table class="voucher-table" id="voucherTable">
                 <thead>
                     <tr>
+                        <th class="account-col">رقم الحساب</th>
                         <th class="allowance-name">البدلات</th>
-                        <!-- يتم إضافة أعمدة الموظفين ديناميكياً هنا -->
+                        <!-- أعمدة الموظفين ستضاف هنا -->
                         <th class="summary-col">إجمالي قبل الخصم</th>
                         <th class="summary-col">الخصم (8%)</th>
                         <th class="summary-col">إجمالي بعد الخصم</th>
@@ -447,6 +463,19 @@
             costLiving: 'بدل غلاء معيشة'
         };
 
+        // أرقام الحسابات لكل بدل (حسب الترتيب المطلوب)
+        const accountNumbers = {
+            basic: '21011101',
+            housing: '21011201',
+            electricity: '21011202',
+            water: '21011203',
+            phone: '21011204',
+            transport: '21011207',
+            professional: '21011205',
+            otherAllowances: '21011208',
+            costLiving: '21011209'
+        };
+
         function loadAndDisplayRecords() {
             let records = [];
             const stored = localStorage.getItem('salaryVoucherRecords');
@@ -464,11 +493,11 @@
             const summaryLine = document.getElementById('summaryLine');
             const table = document.getElementById('voucherTable');
 
-            // إعادة بناء رأس الجدول (إزالة أعمدة الموظفين القديمة)
-            while (thead.children.length > 1) {
-                // حذف جميع الأعمدة ما عدا العمود الأول (البدلات) والثلاثة الأخيرة (الملخص)
-                if (thead.children.length <= 4) break; // عمود البدلات + 3 أعمدة ملخص
-                thead.removeChild(thead.children[1]); // إزالة العمود الذي يلي عمود البدلات
+            // إزالة أعمدة الموظفين القديمة من الرأس (مع الاحتفاظ بأول عمودين + الثلاثة الأخيرة)
+            while (thead.children.length > 5) {
+                // سنحذف العمود الثالث (بعد رقم الحساب والبدلات) حتى يتبقى 5 أعمدة
+                if (thead.children.length === 5) break; // عمودي الحساب والبدلات + 3 ملخص
+                thead.removeChild(thead.children[2]); // إزالة العمود الذي يلي عمود البدلات
             }
 
             tbody.innerHTML = '';
@@ -484,12 +513,12 @@
             noDataMessage.style.display = 'none';
             summaryLine.textContent = `عدد السجلات المحفوظة: ${records.length}`;
 
-            // إضافة أعمدة الموظفين إلى رأس الجدول (بين عمود البدلات والأعمدة الثلاثة)
+            // إضافة أعمدة الموظفين إلى الرأس
             records.forEach(record => {
                 const th = document.createElement('th');
                 th.textContent = record.employeeNumber || 'غير محدد';
                 th.title = `الموظف: ${record.employeeName || ''} - التاريخ: ${record.date || ''}`;
-                // إدراج العمود الجديد قبل الأعمدة الثلاثة الأخيرة (في المكان الصحيح)
+                // إدراج قبل الأعمدة الثلاثة الأخيرة
                 const summaryCols = thead.querySelectorAll('.summary-col');
                 if (summaryCols.length > 0) {
                     thead.insertBefore(th, summaryCols[0]);
@@ -498,16 +527,15 @@
                 }
             });
 
-            // مصفوفات لتجميع القيم لكل بدل عبر كل الموظفين
-            const totalBefore = {}; // مجموع قبل الخصم
-            const totalAfter = {};  // مجموع بعد الخصم
+            // تجميع القيم لكل بدل
+            const totalBefore = {};
+            const totalAfter = {};
 
             allowanceKeys.forEach(key => {
                 totalBefore[key] = 0;
                 totalAfter[key] = 0;
             });
 
-            // حساب المجاميع
             records.forEach(record => {
                 const allowances = record.allowances || {};
                 const allowancesAfter = record.allowancesAfter || {};
@@ -517,17 +545,23 @@
                 });
             });
 
-            // بناء صفوف الجدول (كل بدل صف)
+            // بناء صفوف البدلات
             allowanceKeys.forEach(key => {
                 const row = document.createElement('tr');
 
-                // عمود اسم البدل (ثابت على اليمين)
+                // خلية رقم الحساب (أقصى اليمين)
+                const accountCell = document.createElement('td');
+                accountCell.className = 'account-col';
+                accountCell.textContent = accountNumbers[key] || '';
+                row.appendChild(accountCell);
+
+                // خلية اسم البدل
                 const nameCell = document.createElement('td');
                 nameCell.className = 'allowance-name';
                 nameCell.textContent = allowanceNames[key] || key;
                 row.appendChild(nameCell);
 
-                // خلايا لكل موظف (قيمة قبل الخصم)
+                // خلايا قيم الموظفين (قبل الخصم)
                 records.forEach(record => {
                     const cell = document.createElement('td');
                     const val = (record.allowances && record.allowances[key]) ? record.allowances[key] : 0;
@@ -535,7 +569,7 @@
                     row.appendChild(cell);
                 });
 
-                // خلايا الملخص الثلاثة (إجمالي قبل الخصم، الخصم، إجمالي بعد الخصم)
+                // الأعمدة الثلاثة
                 const before = totalBefore[key] || 0;
                 const deduction = before * 0.08;
                 const after = totalAfter[key] || 0;
@@ -559,16 +593,22 @@
                 tbody.appendChild(row);
             });
 
-            // صف إجمالي عام (اختياري) - مجموع الأعمدة
+            // صف الإجمالي العام (اختياري)
             const totalRow = document.createElement('tr');
             totalRow.className = 'total-row';
 
+            // خلية رقم الحساب (فارغة أو 'الإجمالي')
+            const totalAccountCell = document.createElement('td');
+            totalAccountCell.className = 'account-col';
+            totalAccountCell.textContent = 'الإجمالي';
+            totalRow.appendChild(totalAccountCell);
+
             const totalNameCell = document.createElement('td');
-            totalNameCell.textContent = 'الإجمالي العام';
+            totalNameCell.textContent = 'الإجمالي ';
             totalNameCell.className = 'allowance-name';
             totalRow.appendChild(totalNameCell);
 
-            // لكل موظف: إجمالي قيمة العمود (مجموع كل البدلات)
+            // لكل موظف: إجمالي قيمته
             records.forEach(record => {
                 const cell = document.createElement('td');
                 let sum = 0;
@@ -579,7 +619,6 @@
                 totalRow.appendChild(cell);
             });
 
-            // إجمالي الأعمدة الثلاثة الأخيرة
             const grandTotalBefore = allowanceKeys.reduce((acc, key) => acc + (totalBefore[key] || 0), 0);
             const grandTotalDeduction = grandTotalBefore * 0.08;
             const grandTotalAfter = allowanceKeys.reduce((acc, key) => acc + (totalAfter[key] || 0), 0);
