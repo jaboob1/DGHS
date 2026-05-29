@@ -25,7 +25,7 @@
             background: #f5f5f5;
             min-height: 100vh;
             padding-bottom: 25px;
-            font-size: 13px;
+            font-size: 12px;
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -35,11 +35,12 @@
             padding: 15px;
             border: 2px solid #8B0000;
             border-radius: 8px;
-            width: 95%;
-            max-width: 800px;
+            width: fit-content;
+            max-width: 95vw;
             margin: 10px auto;
             background: white;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
         }
 
         .inner-header {
@@ -102,63 +103,81 @@
             border-radius: 4px;
         }
 
-        /* حاوية العرض العمودي */
-        .input-section {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: 100%;
-            margin-bottom: 8px;
+        .table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            max-width: 100%;
         }
 
-        .input-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
+        .voucher-table {
             width: 100%;
-            justify-content: flex-start;
+            border-collapse: collapse;
+            font-size: 11px;
+            white-space: nowrap;
+            min-width: max-content;
         }
 
-        .allowance-label {
-            width: 160px;
-            margin-left: 8px;
+        .voucher-table th,
+        .voucher-table td {
+            border: 1px solid #8B0000;
+            padding: 6px 8px;
+            text-align: center;
+            vertical-align: middle;
+            min-width: 80px;
+        }
+
+        .voucher-table thead th {
+            background-color: #8B0000;
+            color: white;
             font-weight: bold;
-            text-align: right;
-            padding-right: 25px;
-            font-size: 13px;
+            font-size: 11px;
+            position: sticky;
+            top: 0;
+            z-index: 2;
         }
 
-        .column-title {
+        .voucher-table .allowance-name {
+            background-color: #f8f8f8;
+            font-weight: bold;
+            color: #8B0000;
+            text-align: right;
+            padding-right: 10px;
+            position: sticky;
+            right: 0;
+            z-index: 1;
+            min-width: 140px;
+        }
+
+        .voucher-table .total-row {
+            background-color: #fff3cd !important;
+            font-weight: bold;
             font-size: 12px;
             color: #8B0000;
-            margin: 0 3px;
-            text-align: center;
-            width: 160px;
-            font-weight: bold;
-            padding: 5px;
-            border: 1px solid #ddd;
-            background-color: #f8f8f8;
         }
 
-        .amount-value {
-            width: 160px;
-            padding: 8px;
-            margin: 3px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 13px;
-            height: 36px;
-            background-color: #f9f9f9;
-            text-align: center;
-            font-weight: bold;
-            color: #333;
+        .voucher-table .total-row td {
+            border: 2px solid #8B0000;
         }
 
-        .total-row {
-            background-color: #f0f0f0 !important;
+        .voucher-table .summary-col {
+            background-color: #f0f8ff;
             font-weight: bold;
-            color: #8B0000;
-            border-color: #8B0000;
+            color: #004080;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .no-data .icon {
+            font-size: 50px;
+            display: block;
+            margin-bottom: 10px;
         }
 
         .separator {
@@ -279,20 +298,23 @@
             direction: rtl;
         }
 
-        .no-data-message {
+        .record-count {
             text-align: center;
-            padding: 30px;
-            color: #888;
-            font-size: 15px;
-            font-weight: bold;
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 8px;
         }
 
         @media print {
+            @page {
+                size: landscape;
+                margin: 10mm;
+            }
             body {
                 margin: 0;
                 padding: 0;
                 background: white;
-                font-size: 10px;
+                font-size: 8px;
                 width: 100%;
                 height: auto;
                 display: block;
@@ -304,23 +326,25 @@
                 padding: 5px;
                 width: 100%;
                 max-width: 100%;
+                overflow-x: visible;
             }
-            .allowance-label {
-                width: 130px;
-                font-size: 10px;
+            .voucher-table th,
+            .voucher-table td {
+                padding: 3px 4px;
+                font-size: 8px;
+                min-width: 50px;
             }
-            .column-title {
-                width: 130px;
-                font-size: 10px;
-            }
-            .amount-value {
-                width: 130px;
-                font-size: 10px;
+            .voucher-table .allowance-name {
+                min-width: 100px;
             }
             .button-container,
             .footer-animation,
             .disclaimer {
                 display: none;
+            }
+            .no-data {
+                padding: 20px;
+                font-size: 14px;
             }
         }
     </style>
@@ -345,85 +369,26 @@
 
         <div class="summary-line" id="summaryLine">عدد السجلات المحفوظة: 0</div>
 
-        <!-- منطقة العرض العمودي مع 3 أعمدة -->
-        <div class="input-section" id="allowanceDisplay">
-            <!-- صف العناوين -->
-            <div class="input-row">
-                <span class="allowance-label"></span>
-                <span class="column-title">إجمالي قبل الخصم</span>
-                <span class="column-title">الخصم (8%)</span>
-                <span class="column-title">إجمالي بعد الخصم</span>
+        <div class="table-wrapper">
+            <table class="voucher-table" id="voucherTable">
+                <thead>
+                    <tr>
+                        <th class="allowance-name">البدلات</th>
+                        <!-- يتم إضافة أعمدة الموظفين ديناميكياً هنا -->
+                        <th class="summary-col">إجمالي قبل الخصم</th>
+                        <th class="summary-col">الخصم (8%)</th>
+                        <th class="summary-col">إجمالي بعد الخصم</th>
+                    </tr>
+                </thead>
+                <tbody id="voucherTableBody">
+                    <!-- يتم ملؤها ديناميكياً -->
+                </tbody>
+            </table>
+            <div class="no-data" id="noDataMessage">
+                <span class="icon">📭</span>
+                لا توجد بيانات محفوظة حالياً
+                <br><small>قم بحفظ البيانات من صفحة حاسبة الرواتب أولاً</small>
             </div>
-
-            <!-- صفوف البدلات -->
-            <div class="input-row">
-                <span class="allowance-label">البدل الأساسي:</span>
-                <span class="amount-value" id="basicBefore">0.000</span>
-                <span class="amount-value" id="basicDeduction">0.000</span>
-                <span class="amount-value" id="basicAfter">0.000</span>
-            </div>
-            <div class="input-row">
-                <span class="allowance-label">بدل السكن:</span>
-                <span class="amount-value" id="housingBefore">0.000</span>
-                <span class="amount-value" id="housingDeduction">0.000</span>
-                <span class="amount-value" id="housingAfter">0.000</span>
-            </div>
-            <div class="input-row">
-                <span class="allowance-label">بدل الكهرباء:</span>
-                <span class="amount-value" id="electricityBefore">0.000</span>
-                <span class="amount-value" id="electricityDeduction">0.000</span>
-                <span class="amount-value" id="electricityAfter">0.000</span>
-            </div>
-            <div class="input-row">
-                <span class="allowance-label">بدل الماء:</span>
-                <span class="amount-value" id="waterBefore">0.000</span>
-                <span class="amount-value" id="waterDeduction">0.000</span>
-                <span class="amount-value" id="waterAfter">0.000</span>
-            </div>
-            <div class="input-row">
-                <span class="allowance-label">بدل الهاتف:</span>
-                <span class="amount-value" id="phoneBefore">0.000</span>
-                <span class="amount-value" id="phoneDeduction">0.000</span>
-                <span class="amount-value" id="phoneAfter">0.000</span>
-            </div>
-            <div class="input-row">
-                <span class="allowance-label">بدل النقل:</span>
-                <span class="amount-value" id="transportBefore">0.000</span>
-                <span class="amount-value" id="transportDeduction">0.000</span>
-                <span class="amount-value" id="transportAfter">0.000</span>
-            </div>
-            <div class="input-row">
-                <span class="allowance-label">بدل مهني:</span>
-                <span class="amount-value" id="professionalBefore">0.000</span>
-                <span class="amount-value" id="professionalDeduction">0.000</span>
-                <span class="amount-value" id="professionalAfter">0.000</span>
-            </div>
-            <div class="input-row">
-                <span class="allowance-label">بدلات أخرى:</span>
-                <span class="amount-value" id="otherAllowancesBefore">0.000</span>
-                <span class="amount-value" id="otherAllowancesDeduction">0.000</span>
-                <span class="amount-value" id="otherAllowancesAfter">0.000</span>
-            </div>
-            <div class="input-row">
-                <span class="allowance-label">بدل غلاء معيشة:</span>
-                <span class="amount-value" id="costLivingBefore">0.000</span>
-                <span class="amount-value" id="costLivingDeduction">0.000</span>
-                <span class="amount-value" id="costLivingAfter">0.000</span>
-            </div>
-
-            <div class="separator"></div>
-
-            <!-- صفوف الإجماليات -->
-            <div class="input-row">
-                <span class="allowance-label">الإجمالي العام:</span>
-                <span class="amount-value total-row" id="totalBefore">0.000</span>
-                <span class="amount-value total-row" id="totalDeduction">0.000</span>
-                <span class="amount-value total-row" id="totalAfter">0.000</span>
-            </div>
-        </div>
-
-        <div class="no-data-message" id="noDataMessage" style="display: none;">
-            لا توجد بيانات محفوظة حالياً. قم بالحفظ من صفحة حاسبة الرواتب أولاً.
         </div>
 
         <div class="separator"></div>
@@ -456,11 +421,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            loadAndDisplayTotals();
+            loadAndDisplayRecords();
 
             window.addEventListener('storage', function (e) {
                 if (e.key === 'salaryVoucherRecords') {
-                    loadAndDisplayTotals();
+                    loadAndDisplayRecords();
                 }
             });
         });
@@ -470,20 +435,19 @@
             'transport', 'professional', 'otherAllowances', 'costLiving'
         ];
 
-        // ربط المفاتيح بمعرفات العناصر للـ Before, Deduction, After
-        const elementMap = {
-            basic: { before: 'basicBefore', deduction: 'basicDeduction', after: 'basicAfter' },
-            housing: { before: 'housingBefore', deduction: 'housingDeduction', after: 'housingAfter' },
-            electricity: { before: 'electricityBefore', deduction: 'electricityDeduction', after: 'electricityAfter' },
-            water: { before: 'waterBefore', deduction: 'waterDeduction', after: 'waterAfter' },
-            phone: { before: 'phoneBefore', deduction: 'phoneDeduction', after: 'phoneAfter' },
-            transport: { before: 'transportBefore', deduction: 'transportDeduction', after: 'transportAfter' },
-            professional: { before: 'professionalBefore', deduction: 'professionalDeduction', after: 'professionalAfter' },
-            otherAllowances: { before: 'otherAllowancesBefore', deduction: 'otherAllowancesDeduction', after: 'otherAllowancesAfter' },
-            costLiving: { before: 'costLivingBefore', deduction: 'costLivingDeduction', after: 'costLivingAfter' }
+        const allowanceNames = {
+            basic: 'البدل الأساسي',
+            housing: 'بدل السكن',
+            electricity: 'بدل الكهرباء',
+            water: 'بدل الماء',
+            phone: 'بدل الهاتف',
+            transport: 'بدل النقل',
+            professional: 'بدل مهني',
+            otherAllowances: 'بدلات أخرى',
+            costLiving: 'بدل غلاء معيشة'
         };
 
-        function loadAndDisplayTotals() {
+        function loadAndDisplayRecords() {
             let records = [];
             const stored = localStorage.getItem('salaryVoucherRecords');
             if (stored) {
@@ -494,88 +458,155 @@
                 }
             }
 
-            const summaryLine = document.getElementById('summaryLine');
-            const allowanceDisplay = document.getElementById('allowanceDisplay');
+            const thead = document.querySelector('#voucherTable thead tr');
+            const tbody = document.getElementById('voucherTableBody');
             const noDataMessage = document.getElementById('noDataMessage');
+            const summaryLine = document.getElementById('summaryLine');
+            const table = document.getElementById('voucherTable');
+
+            // إعادة بناء رأس الجدول (إزالة أعمدة الموظفين القديمة)
+            while (thead.children.length > 1) {
+                // حذف جميع الأعمدة ما عدا العمود الأول (البدلات) والثلاثة الأخيرة (الملخص)
+                if (thead.children.length <= 4) break; // عمود البدلات + 3 أعمدة ملخص
+                thead.removeChild(thead.children[1]); // إزالة العمود الذي يلي عمود البدلات
+            }
+
+            tbody.innerHTML = '';
 
             if (records.length === 0) {
-                allowanceDisplay.style.display = 'none';
+                table.style.display = 'none';
                 noDataMessage.style.display = 'block';
                 summaryLine.textContent = 'عدد السجلات المحفوظة: 0';
                 return;
             }
 
-            allowanceDisplay.style.display = 'flex';
+            table.style.display = 'table';
             noDataMessage.style.display = 'none';
             summaryLine.textContent = `عدد السجلات المحفوظة: ${records.length}`;
 
-            // كائنات لتجميع القيم
-            const totals = {
-                before: {},
-                after: {},
-                deduction: {}
-            };
-            let grandTotalBefore = 0;
-            let grandTotalAfter = 0;
-
-            // تهيئة المجاميع
-            allowanceKeys.forEach(key => {
-                totals.before[key] = 0;
-                totals.after[key] = 0;
+            // إضافة أعمدة الموظفين إلى رأس الجدول (بين عمود البدلات والأعمدة الثلاثة)
+            records.forEach(record => {
+                const th = document.createElement('th');
+                th.textContent = record.employeeNumber || 'غير محدد';
+                th.title = `الموظف: ${record.employeeName || ''} - التاريخ: ${record.date || ''}`;
+                // إدراج العمود الجديد قبل الأعمدة الثلاثة الأخيرة (في المكان الصحيح)
+                const summaryCols = thead.querySelectorAll('.summary-col');
+                if (summaryCols.length > 0) {
+                    thead.insertBefore(th, summaryCols[0]);
+                } else {
+                    thead.appendChild(th);
+                }
             });
 
-            // تجميع البيانات من جميع السجلات
+            // مصفوفات لتجميع القيم لكل بدل عبر كل الموظفين
+            const totalBefore = {}; // مجموع قبل الخصم
+            const totalAfter = {};  // مجموع بعد الخصم
+
+            allowanceKeys.forEach(key => {
+                totalBefore[key] = 0;
+                totalAfter[key] = 0;
+            });
+
+            // حساب المجاميع
             records.forEach(record => {
                 const allowances = record.allowances || {};
                 const allowancesAfter = record.allowancesAfter || {};
-
                 allowanceKeys.forEach(key => {
-                    // القيم قبل الخصم (من allowances)
-                    totals.before[key] += allowances[key] || 0;
-                    // القيم بعد الخصم (من allowancesAfter إن وجدت، أو نحسبها من before)
-                    if (allowancesAfter[key] !== undefined) {
-                        totals.after[key] += allowancesAfter[key];
-                    } else {
-                        totals.after[key] += (allowances[key] || 0) * 0.92;
-                    }
+                    totalBefore[key] += allowances[key] || 0;
+                    totalAfter[key] += (allowancesAfter[key] !== undefined ? allowancesAfter[key] : (allowances[key] || 0) * 0.92);
+                });
+            });
+
+            // بناء صفوف الجدول (كل بدل صف)
+            allowanceKeys.forEach(key => {
+                const row = document.createElement('tr');
+
+                // عمود اسم البدل (ثابت على اليمين)
+                const nameCell = document.createElement('td');
+                nameCell.className = 'allowance-name';
+                nameCell.textContent = allowanceNames[key] || key;
+                row.appendChild(nameCell);
+
+                // خلايا لكل موظف (قيمة قبل الخصم)
+                records.forEach(record => {
+                    const cell = document.createElement('td');
+                    const val = (record.allowances && record.allowances[key]) ? record.allowances[key] : 0;
+                    cell.textContent = val.toFixed(3);
+                    row.appendChild(cell);
                 });
 
-                grandTotalBefore += record.totalBeforeDeduction || 0;
-                // الإجمالي بعد الخصم - يمكن أخذه مباشرة إذا كان موجوداً
-                grandTotalAfter += record.totalAfterDeduction || ((record.totalBeforeDeduction || 0) * 0.92);
+                // خلايا الملخص الثلاثة (إجمالي قبل الخصم، الخصم، إجمالي بعد الخصم)
+                const before = totalBefore[key] || 0;
+                const deduction = before * 0.08;
+                const after = totalAfter[key] || 0;
+
+                const beforeCell = document.createElement('td');
+                beforeCell.className = 'summary-col';
+                beforeCell.textContent = before.toFixed(3);
+
+                const deductionCell = document.createElement('td');
+                deductionCell.className = 'summary-col';
+                deductionCell.textContent = deduction.toFixed(3);
+
+                const afterCell = document.createElement('td');
+                afterCell.className = 'summary-col';
+                afterCell.textContent = after.toFixed(3);
+
+                row.appendChild(beforeCell);
+                row.appendChild(deductionCell);
+                row.appendChild(afterCell);
+
+                tbody.appendChild(row);
             });
 
-            // حساب الخصم لكل بدل (8% من before)
-            allowanceKeys.forEach(key => {
-                totals.deduction[key] = Math.round(totals.before[key] * 0.08 * 1000) / 1000;
-                // تقريب القيم
-                totals.before[key] = Math.round(totals.before[key] * 1000) / 1000;
-                totals.after[key] = Math.round(totals.after[key] * 1000) / 1000;
+            // صف إجمالي عام (اختياري) - مجموع الأعمدة
+            const totalRow = document.createElement('tr');
+            totalRow.className = 'total-row';
+
+            const totalNameCell = document.createElement('td');
+            totalNameCell.textContent = 'الإجمالي العام';
+            totalNameCell.className = 'allowance-name';
+            totalRow.appendChild(totalNameCell);
+
+            // لكل موظف: إجمالي قيمة العمود (مجموع كل البدلات)
+            records.forEach(record => {
+                const cell = document.createElement('td');
+                let sum = 0;
+                allowanceKeys.forEach(key => {
+                    sum += (record.allowances && record.allowances[key]) ? record.allowances[key] : 0;
+                });
+                cell.textContent = sum.toFixed(3);
+                totalRow.appendChild(cell);
             });
 
-            // تقريب الإجماليات العامة
-            grandTotalBefore = Math.round(grandTotalBefore * 1000) / 1000;
-            grandTotalAfter = Math.round(grandTotalAfter * 1000) / 1000;
-            const grandTotalDeduction = Math.round(grandTotalBefore * 0.08 * 1000) / 1000;
+            // إجمالي الأعمدة الثلاثة الأخيرة
+            const grandTotalBefore = allowanceKeys.reduce((acc, key) => acc + (totalBefore[key] || 0), 0);
+            const grandTotalDeduction = grandTotalBefore * 0.08;
+            const grandTotalAfter = allowanceKeys.reduce((acc, key) => acc + (totalAfter[key] || 0), 0);
 
-            // تحديث واجهة المستخدم
-            allowanceKeys.forEach(key => {
-                const els = elementMap[key];
-                document.getElementById(els.before).textContent = totals.before[key].toFixed(3);
-                document.getElementById(els.deduction).textContent = totals.deduction[key].toFixed(3);
-                document.getElementById(els.after).textContent = totals.after[key].toFixed(3);
-            });
+            const gtBeforeCell = document.createElement('td');
+            gtBeforeCell.className = 'summary-col total-row';
+            gtBeforeCell.textContent = grandTotalBefore.toFixed(3);
 
-            // تحديث صف الإجمالي العام
-            document.getElementById('totalBefore').textContent = grandTotalBefore.toFixed(3);
-            document.getElementById('totalDeduction').textContent = grandTotalDeduction.toFixed(3);
-            document.getElementById('totalAfter').textContent = grandTotalAfter.toFixed(3);
+            const gtDeductionCell = document.createElement('td');
+            gtDeductionCell.className = 'summary-col total-row';
+            gtDeductionCell.textContent = grandTotalDeduction.toFixed(3);
+
+            const gtAfterCell = document.createElement('td');
+            gtAfterCell.className = 'summary-col total-row';
+            gtAfterCell.textContent = grandTotalAfter.toFixed(3);
+
+            totalRow.appendChild(gtBeforeCell);
+            totalRow.appendChild(gtDeductionCell);
+            totalRow.appendChild(gtAfterCell);
+
+            tbody.appendChild(totalRow);
         }
 
         function clearAllRecords() {
             if (confirm('هل أنت متأكد من رغبتك في تفريغ جميع بيانات سند الصرف؟ لا يمكن التراجع عن هذا الإجراء.')) {
                 localStorage.removeItem('salaryVoucherRecords');
-                loadAndDisplayTotals();
+                loadAndDisplayRecords();
                 alert('✅ تم تفريغ جميع البيانات بنجاح.');
             }
         }
