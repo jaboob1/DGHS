@@ -11,11 +11,7 @@
             font-style: normal;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: Arial, sans-serif;
@@ -35,11 +31,11 @@
             padding: 15px;
             border: 2px solid #8B0000;
             border-radius: 8px;
-            width: 95%;
-            max-width: 800px;
+            width: 98%;
+            max-width: 1300px;
             margin: 10px auto;
             background: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
         .inner-header {
@@ -51,57 +47,41 @@
             border-bottom: 2px solid #8B0000;
         }
 
-        .inner-logo {
-            flex: 0 0 auto;
-        }
-
-        .inner-logo img {
-            height: 50px;
-            width: auto;
-        }
-
-        .inner-title {
-            text-align: center;
-            flex: 1;
-        }
+        .inner-logo { flex: 0 0 auto; }
+        .inner-logo img { height: 50px; width: auto; }
+        .inner-title { text-align: center; flex: 1; }
 
         .directorate-title {
             font-family: 'Diwani', 'Lateef', serif;
-            font-size: 16px;
-            color: #8B0000;
-            margin: 0;
-            font-weight: bold;
+            font-size: 16px; color: #8B0000; margin: 0; font-weight: bold;
         }
-
         .department-title {
             font-family: 'Diwani', 'Lateef', serif;
-            font-size: 13px;
-            color: #8B0000;
-            margin: 2px 0 0 0;
+            font-size: 13px; color: #8B0000; margin: 2px 0 0 0;
         }
 
         h3 {
-            text-align: center;
-            color: #8B0000;
-            margin: 0 0 15px 0;
-            font-size: 18px;
-            padding: 8px;
-            background-color: #f8f8f8;
-            border-radius: 4px;
-            border: 1px solid #8B0000;
+            text-align: center; color: #8B0000; margin: 0 0 15px 0; font-size: 18px;
+            padding: 8px; background-color: #f8f8f8; border-radius: 4px; border: 1px solid #8B0000;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
         }
 
         .voucher-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15px;
-            font-size: 13px;
+            font-size: 11px;
+            white-space: nowrap;
         }
 
         .voucher-table th,
         .voucher-table td {
             border: 1px solid #8B0000;
-            padding: 10px 8px;
+            padding: 6px 4px;
             text-align: center;
             vertical-align: middle;
         }
@@ -110,374 +90,250 @@
             background-color: #8B0000;
             color: white;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 10px;
         }
 
-        .voucher-table tbody tr:nth-child(even) {
-            background-color: #fdf5f5;
-        }
-
-        .voucher-table tbody tr:hover {
-            background-color: #fff0f0;
-        }
+        .voucher-table tbody tr:nth-child(even) { background-color: #fdf5f5; }
+        .voucher-table tbody tr:hover { background-color: #fff0f0; }
 
         .voucher-table .total-row {
             background-color: #fff3cd !important;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 12px;
             color: #8B0000;
         }
-
-        .voucher-table .total-row td {
-            border: 2px solid #8B0000;
-        }
+        .voucher-table .total-row td { border: 2px solid #8B0000; }
 
         .no-data {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-            font-size: 16px;
-            font-weight: bold;
+            text-align: center; padding: 40px; color: #999; font-size: 16px; font-weight: bold;
         }
+        .no-data .icon { font-size: 50px; display: block; margin-bottom: 10px; }
 
-        .no-data .icon {
-            font-size: 50px;
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        .separator {
-            border-top: 2px solid #8B0000;
-            margin: 12px 0;
-            width: 100%;
-        }
+        .separator { border-top: 2px solid #8B0000; margin: 12px 0; width: 100%; }
 
         .approval-section {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-            padding: 15px 0 15px 0;
-            border-top: 2px solid #8B0000;
-            font-size: 13px;
-            font-weight: bold;
-            min-height: 45px;
+            display: flex; justify-content: space-between; margin-top: 10px;
+            padding: 15px 0; border-top: 2px solid #8B0000; font-size: 13px; font-weight: bold; min-height: 45px;
         }
+        .approval-right { text-align: right; flex: 2; }
+        .preparation { text-align: right; margin-right: 5ch; }
 
-        .approval-right {
-            text-align: right;
-            flex: 2;
-        }
+        .button-container { display: flex; justify-content: center; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
 
-        .preparation {
-            text-align: right;
-            margin-right: 5ch;
+        .print-btn, .reset-btn, .back-btn {
+            padding: 8px 16px; font-size: 13px; color: white; border: none; cursor: pointer;
+            border-radius: 4px; transition: background 0.3s;
         }
-
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .print-btn,
-        .reset-btn,
-        .back-btn {
-            padding: 8px 16px;
-            font-size: 13px;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background 0.3s;
-        }
-
-        .print-btn {
-            background: #8B0000;
-        }
-
-        .print-btn:hover {
-            background: #700000;
-        }
-
-        .reset-btn {
-            background: #dc3545;
-        }
-
-        .reset-btn:hover {
-            background: #c82333;
-        }
-
-        .back-btn {
-            background: #1E90FF;
-        }
-
-        .back-btn:hover {
-            background: #0077CC;
-        }
+        .print-btn { background: #8B0000; }
+        .print-btn:hover { background: #700000; }
+        .reset-btn { background: #dc3545; }
+        .reset-btn:hover { background: #c82333; }
+        .back-btn { background: #1E90FF; }
+        .back-btn:hover { background: #0077CC; }
 
         .footer-animation {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #8B0000;
-            color: white;
-            padding: 6px 0;
-            text-align: center;
-            overflow: hidden;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
+            position: fixed; bottom: 0; left: 0; width: 100%; background-color: #8B0000;
+            color: white; padding: 6px 0; text-align: center; overflow: hidden;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.3); z-index: 1000;
         }
 
-        .marquee {
-            display: block;
-            width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-
+        .marquee { display: block; width: 100%; white-space: nowrap; overflow: hidden; box-sizing: border-box; }
         .marquee span {
-            display: inline-block;
-            padding-right: 100%;
-            animation: marquee 20s linear infinite;
-            font-weight: bold;
-            font-size: 16px;
+            display: inline-block; padding-right: 100%; animation: marquee 20s linear infinite;
+            font-weight: bold; font-size: 16px;
         }
-
         @keyframes marquee {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(100%, 0);
-            }
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100%, 0); }
         }
 
         .disclaimer {
-            text-align: center;
-            margin-top: 15px;
-            padding: 6px;
-            background-color: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 4px;
-            color: #856404;
-            font-size: 11px;
-            direction: rtl;
+            text-align: center; margin-top: 15px; padding: 6px; background-color: #fff3cd;
+            border: 1px solid #ffeaa7; border-radius: 4px; color: #856404; font-size: 11px; direction: rtl;
         }
-
-        .record-count {
-            text-align: center;
-            color: #666;
-            font-size: 12px;
-            margin-bottom: 8px;
-        }
+        .record-count { text-align: center; color: #666; font-size: 12px; margin-bottom: 8px; }
 
         @media print {
-            body {
-                margin: 0;
-                padding: 0;
-                background: white;
-                font-size: 10px;
-                width: 100%;
-                height: auto;
-                display: block;
-            }
-
-            .container {
-                border: 2px solid #8B0000 !important;
-                box-shadow: none;
-                margin: 0;
-                padding: 5px;
-                width: 100%;
-                max-width: 100%;
-            }
-
-            .voucher-table th,
-            .voucher-table td {
-                padding: 5px 4px;
-                font-size: 10px;
-            }
-
-            .button-container,
-            .footer-animation,
-            .disclaimer {
-                display: none;
-            }
-
-            .no-data {
-                padding: 20px;
-                font-size: 14px;
-            }
+            body { margin: 0; padding: 0; background: white; font-size: 8px; width: 100%; height: auto; display: block; }
+            .container { border: 2px solid #8B0000 !important; box-shadow: none; margin: 0; padding: 5px; width: 100%; max-width: 100%; }
+            .voucher-table th, .voucher-table td { padding: 2px 1px; font-size: 7px; }
+            .button-container, .footer-animation, .disclaimer { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="inner-header">
-            <div class="inner-logo">
-                <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="شعار وزارة الصحة">
-            </div>
-
-            <div class="inner-title">
-                <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
-                <div class="department-title">دائرة الشؤون المالية - قسم الايرادات والمصروفات</div>
-            </div>
-
-            <div class="inner-logo">
-                <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="شعار عمان فيجن">
-            </div>
+<div class="container">
+    <div class="inner-header">
+        <div class="inner-logo">
+            <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="شعار وزارة الصحة">
         </div>
-
-        <h3>سند الصرف</h3>
-
-        <!-- جدول البيانات المجمعة -->
-        <div id="tableContainer">
-            <table class="voucher-table" id="voucherTable">
-                <thead>
-                    <tr>
-                        <th style="width: 10%;">م</th>
-                        <th style="width: 25%;">اجمالي قبل الخصم</th>
-                        <th style="width: 25%;">الخصم (8%)</th>
-                        <th style="width: 25%;">اجمالي بعد الخصم</th>
-                    </tr>
-                </thead>
-                <tbody id="voucherTableBody">
-                    <!-- يتم ملء البيانات ديناميكياً -->
-                </tbody>
-            </table>
-            <div class="no-data" id="noDataMessage">
-                <span class="icon">📭</span>
-                لا توجد بيانات محفوظة حالياً
-                <br><small>قم بحفظ البيانات من صفحة حاسبة الرواتب أولاً</small>
-            </div>
+        <div class="inner-title">
+            <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
+            <div class="department-title">دائرة الشؤون المالية - قسم الايرادات والمصروفات</div>
         </div>
-
-        <div class="record-count" id="recordCount"></div>
-
-        <div class="separator"></div>
-
-        <div class="approval-section">
-            <div class="approval-right preparation">
-                إعداد ومراجعة: _______________
-            </div>
-            <div class="approval-right">
-                اعتمده: _______________
-            </div>
-        </div>
-
-        <div class="button-container">
-            <button class="print-btn" onclick="window.print()">🖨️ طباعة سند الصرف</button>
-            <button class="reset-btn" onclick="clearAllRecords()">🗑️ تفريغ سند الصرف</button>
-            <button class="back-btn" onclick="window.location.href='sanad1.html'">↩️ العودة للحاسبة</button>
-        </div>
-
-        <div class="disclaimer">
-            إخلاء المسؤولية : تم تصميم هذا الموقع لأغراض تسهيل وتبسيط المعلومات فقط، وتصميم الموقع لا يعني بأي حال من
-            الأحوال أنه موقع حكومي رسمي.
+        <div class="inner-logo">
+            <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="شعار عمان فيجن">
         </div>
     </div>
 
-    <div class="footer-animation">
-        <div class="marquee">
-            <span> جميع الحقوق محفوظة © 2025 محمد جعبوب - قسم الايرادات والمصروفات - دائرة الشؤون المالية</span>
+    <h3>سند الصرف</h3>
+
+    <div class="table-wrapper">
+        <table class="voucher-table" id="voucherTable">
+            <thead>
+                <tr>
+                    <th>م</th>
+                    <th>بدل أساسي</th>
+                    <th>بدل سكن</th>
+                    <th>بدل كهرباء</th>
+                    <th>بدل ماء</th>
+                    <th>بدل هاتف</th>
+                    <th>بدل نقل</th>
+                    <th>بدل مهني</th>
+                    <th>بدلات أخرى</th>
+                    <th>بدل غلاء معيشة</th>
+                    <th>إجمالي قبل الخصم</th>
+                    <th>الخصم (8%)</th>
+                    <th>الإجمالي بعد الخصم</th>
+                </tr>
+            </thead>
+            <tbody id="voucherTableBody">
+                <!-- يتم ملؤها ديناميكياً -->
+            </tbody>
+        </table>
+        <div class="no-data" id="noDataMessage">
+            <span class="icon">📭</span>
+            لا توجد بيانات محفوظة حالياً
+            <br><small>قم بحفظ البيانات من صفحة حاسبة الرواتب أولاً</small>
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            loadAndDisplayRecords();
+    <div class="record-count" id="recordCount"></div>
 
-            // الاستماع لتغييرات localStorage من النوافذ الأخرى
-            window.addEventListener('storage', function(e) {
-                if (e.key === 'salaryVoucherRecords') {
-                    loadAndDisplayRecords();
-                }
+    <div class="separator"></div>
+
+    <div class="approval-section">
+        <div class="approval-right preparation">إعداد ومراجعة: _______________</div>
+        <div class="approval-right">اعتمده: _______________</div>
+    </div>
+
+    <div class="button-container">
+        <button class="print-btn" onclick="window.print()">🖨️ طباعة سند الصرف</button>
+        <button class="reset-btn" onclick="clearAllRecords()">🗑️ تفريغ سند الصرف</button>
+        <button class="back-btn" onclick="window.location.href='sanad1.html'">↩️ العودة للحاسبة</button>
+    </div>
+
+    <div class="disclaimer">
+        إخلاء المسؤولية : تم تصميم هذا الموقع لأغراض تسهيل وتبسيط المعلومات فقط، وتصميم الموقع لا يعني بأي حال من الأحوال أنه موقع حكومي رسمي.
+    </div>
+</div>
+
+<div class="footer-animation">
+    <div class="marquee">
+        <span> جميع الحقوق محفوظة © 2025 محمد جعبوب - قسم الايرادات والمصروفات - دائرة الشؤون المالية</span>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        loadAndDisplayRecords();
+
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'salaryVoucherRecords') {
+                loadAndDisplayRecords();
+            }
+        });
+    });
+
+    // أسماء البدلات كما تظهر في المفاتيح
+    const allowanceKeys = [
+        'basic', 'housing', 'electricity', 'water', 'phone',
+        'transport', 'professional', 'otherAllowances', 'costLiving'
+    ];
+
+    function loadAndDisplayRecords() {
+        const tbody = document.getElementById('voucherTableBody');
+        const noDataMessage = document.getElementById('noDataMessage');
+        const recordCount = document.getElementById('recordCount');
+        const table = document.getElementById('voucherTable');
+
+        let records = [];
+        const stored = localStorage.getItem('salaryVoucherRecords');
+        if (stored) {
+            try { records = JSON.parse(stored); } catch (e) { records = []; }
+        }
+
+        tbody.innerHTML = '';
+
+        if (records.length === 0) {
+            table.style.display = 'none';
+            noDataMessage.style.display = 'block';
+            recordCount.textContent = '';
+            return;
+        }
+
+        table.style.display = 'table';
+        noDataMessage.style.display = 'none';
+        recordCount.textContent = `عدد السجلات: ${records.length}`;
+
+        // متغيرات لتجميع الإجماليات
+        let totals = {
+            basic: 0, housing: 0, electricity: 0, water: 0, phone: 0,
+            transport: 0, professional: 0, otherAllowances: 0, costLiving: 0,
+            totalBefore: 0, totalDeduction: 0, totalAfter: 0
+        };
+
+        records.forEach((record, index) => {
+            const allowances = record.allowances || {};
+            const totalBefore = record.totalBeforeDeduction || 0;
+            const deduction8Percent = Math.round(totalBefore * 0.08 * 1000) / 1000;
+            const totalAfter = Math.round((totalBefore - deduction8Percent) * 1000) / 1000;
+
+            // تجميع القيم
+            allowanceKeys.forEach(key => {
+                totals[key] += allowances[key] || 0;
             });
+            totals.totalBefore += totalBefore;
+            totals.totalDeduction += deduction8Percent;
+            totals.totalAfter += totalAfter;
+
+            const row = document.createElement('tr');
+            let cells = `<td>${index + 1}</td>`;
+            allowanceKeys.forEach(key => {
+                const val = allowances[key] || 0;
+                cells += `<td>${val.toFixed(3)}</td>`;
+            });
+            cells += `<td>${totalBefore.toFixed(3)}</td>`;
+            cells += `<td>${deduction8Percent.toFixed(3)}</td>`;
+            cells += `<td>${totalAfter.toFixed(3)}</td>`;
+            row.innerHTML = cells;
+            tbody.appendChild(row);
         });
 
-        function loadAndDisplayRecords() {
-            const tbody = document.getElementById('voucherTableBody');
-            const noDataMessage = document.getElementById('noDataMessage');
-            const recordCount = document.getElementById('recordCount');
-            const table = document.getElementById('voucherTable');
+        // صف الإجمالي
+        const totalRow = document.createElement('tr');
+        totalRow.classList.add('total-row');
+        let totalCells = '<td><strong>الإجمالي</strong></td>';
+        allowanceKeys.forEach(key => {
+            totalCells += `<td><strong>${totals[key].toFixed(3)}</strong></td>`;
+        });
+        totalCells += `<td><strong>${totals.totalBefore.toFixed(3)}</strong></td>`;
+        totalCells += `<td><strong>${totals.totalDeduction.toFixed(3)}</strong></td>`;
+        totalCells += `<td><strong>${totals.totalAfter.toFixed(3)}</strong></td>`;
+        totalRow.innerHTML = totalCells;
+        tbody.appendChild(totalRow);
+    }
 
-            // استرجاع البيانات
-            let records = [];
-            const stored = localStorage.getItem('salaryVoucherRecords');
-            if (stored) {
-                try {
-                    records = JSON.parse(stored);
-                } catch (e) {
-                    records = [];
-                }
-            }
-
-            // تفريغ الجدول
-            tbody.innerHTML = '';
-
-            if (records.length === 0) {
-                // لا توجد بيانات
-                table.style.display = 'none';
-                noDataMessage.style.display = 'block';
-                recordCount.textContent = '';
-            } else {
-                // عرض البيانات
-                table.style.display = 'table';
-                noDataMessage.style.display = 'none';
-                recordCount.textContent = `عدد السجلات: ${records.length}`;
-
-                let grandTotalBefore = 0;
-                let grandTotalDeduction = 0;
-                let grandTotalAfter = 0;
-
-                records.forEach((record, index) => {
-                    const beforeDeduction = record.totalBeforeDeduction || 0;
-                    const deduction8Percent = Math.round(beforeDeduction * 0.08 * 1000) / 1000;
-                    const afterDeduction = Math.round((beforeDeduction - deduction8Percent) *
-                        1000) / 1000;
-
-                    grandTotalBefore += beforeDeduction;
-                    grandTotalDeduction += deduction8Percent;
-                    grandTotalAfter += afterDeduction;
-
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                                <td>${index + 1}</td>
-                                <td>${beforeDeduction.toFixed(3)}</td>
-                                <td>${deduction8Percent.toFixed(3)}</td>
-                                <td>${afterDeduction.toFixed(3)}</td>
-                            `;
-                    tbody.appendChild(row);
-                });
-
-                // إضافة صف الإجمالي
-                const totalRow = document.createElement('tr');
-                totalRow.classList.add('total-row');
-                totalRow.innerHTML = `
-                            <td><strong>الإجمالي</strong></td>
-                            <td><strong>${grandTotalBefore.toFixed(3)}</strong></td>
-                            <td><strong>${grandTotalDeduction.toFixed(3)}</strong></td>
-                            <td><strong>${grandTotalAfter.toFixed(3)}</strong></td>
-                        `;
-                tbody.appendChild(totalRow);
-            }
+    function clearAllRecords() {
+        if (confirm('هل أنت متأكد من رغبتك في تفريغ جميع بيانات سند الصرف؟ لا يمكن التراجع عن هذا الإجراء.')) {
+            localStorage.removeItem('salaryVoucherRecords');
+            loadAndDisplayRecords();
+            alert('✅ تم تفريغ جميع البيانات بنجاح.');
         }
+    }
 
-        function clearAllRecords() {
-            if (confirm('هل أنت متأكد من رغبتك في تفريغ جميع بيانات سند الصرف؟ لا يمكن التراجع عن هذا الإجراء.')) {
-                localStorage.removeItem('salaryVoucherRecords');
-                loadAndDisplayRecords();
-                alert('✅ تم تفريغ جميع البيانات بنجاح.');
-            }
-        }
-
-        // تعريض الدالة للنطاق العام
-        window.clearAllRecords = clearAllRecords;
-    </script>
-
+    window.clearAllRecords = clearAllRecords;
+</script>
 </body>
 </html>
