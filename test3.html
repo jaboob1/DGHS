@@ -194,13 +194,13 @@
         if (records.length === 0) {
             table.style.display = 'none';
             noDataMsg.style.display = 'block';
-            summaryLine.textContent = 'عدد السجلات المحفوظة: 0';
+            summaryLine.textContent = 'عدد الموظفين: 0';
             return;
         }
 
         table.style.display = 'table';
         noDataMsg.style.display = 'none';
-        summaryLine.textContent = 'عدد السجلات المحفوظة: ' + records.length;
+        summaryLine.textContent = 'عدد الموظفين: ' + records.length;
 
         // إضافة أعمدة الموظفين مع زر الحذف
         records.forEach(record => {
