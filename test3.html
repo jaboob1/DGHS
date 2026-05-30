@@ -188,6 +188,7 @@
         const summaryLine = document.getElementById('summaryLine');
         const table = document.getElementById('voucherTable');
 
+        // إعادة تعيين الرأس (إزالة أعمدة الموظفين القديمة)
         while (thead.children.length > 5) {
             thead.removeChild(thead.children[2]);
         }
@@ -204,7 +205,7 @@
         noDataMsg.style.display = 'none';
         summaryLine.textContent = 'عدد السجلات المحفوظة: ' + records.length;
 
-        // إضافة أعمدة الموظفين
+        // إضافة أعمدة الموظفين مع زر الحذف
         records.forEach(record => {
             const th = document.createElement('th');
             th.innerHTML = record.employeeNumber + ' <button class="delete-col-btn" data-employee="' + record.employeeNumber + '" title="حذف العمود">🗑️</button>';
@@ -242,7 +243,7 @@
         const totalRow = document.createElement('tr');
         totalRow.className = 'total-row';
         totalRow.innerHTML = '<td class="account-col">الإجمالي</td><td class="allowance-name">إجمالي البدلات</td>';
-        const employeeTotals = []; // تخزين إجمالي كل موظف لاستخدامه لاحقاً
+        const employeeTotals = [];
         records.forEach(record => {
             let sum = 0;
             allowanceKeys.forEach(k => { sum += (record.allowances && record.allowances[k]) ? record.allowances[k] : 0; });
@@ -255,7 +256,7 @@
         totalRow.innerHTML += `<td class="summary-col">${gBefore.toFixed(3)}</td><td class="summary-col">${gDed.toFixed(3)}</td><td class="summary-col">${gAfter.toFixed(3)}</td>`;
         tbody.appendChild(totalRow);
 
-        // صف اشتراكات صندوق الحماية (8% من إجمالي كل موظف)
+        // صف اشتراكات صندوق الحماية (8% في عمود الخصم فقط)
         const insuranceRow = document.createElement('tr');
         insuranceRow.style.backgroundColor = '#fef9e7';
         insuranceRow.innerHTML = '<td colspan="2" class="merged-cell">صندوق الحماية (8%)</td>';
@@ -263,13 +264,17 @@
         records.forEach((record, idx) => {
             const ins = employeeTotals[idx] * 0.08;
             insuranceValues.push(ins);
+            // قيمة الاشتراك توضع في العمود الثاني (الخصم) للخلية، ولكن هنا الخلية مخصصة للموظف ولا تخص العمود الملخص.
+            // سنضيف خلية الموظف ثم الأعمدة الثلاثة الملخصة.
             insuranceRow.innerHTML += `<td>${ins.toFixed(3)}</td>`;
         });
-        const totalInsurance = insuranceValues.reduce((a,b)=>a+b,0);
-        insuranceRow.innerHTML += `<td class="summary-col">${totalInsurance.toFixed(3)}</td><td class="summary-col">${(totalInsurance).toFixed(3)}</td><td class="summary-col">${(gAfter - totalInsurance).toFixed(3)}</td>`;
+        // الأعمدة الثلاثة: قبل الخصم (فارغ)، الخصم (الإجمالي)، بعد الخصم (فارغ)
+        insuranceRow.innerHTML += `<td class="summary-col"></td>`;
+        insuranceRow.innerHTML += `<td class="summary-col">${insuranceValues.reduce((a,b)=>a+b,0).toFixed(3)}</td>`;
+        insuranceRow.innerHTML += `<td class="summary-col"></td>`;
         tbody.appendChild(insuranceRow);
 
-        // صف الصافي بعد الاشتراك (الإجمالي - الاشتراك)
+        // صف الصافي بعد الاشتراك (في عمود بعد الخصم فقط)
         const netRow = document.createElement('tr');
         netRow.style.backgroundColor = '#eafaf1';
         netRow.innerHTML = '<td colspan="2" class="merged-cell">الصافي بعد الاشتراك</td>';
@@ -279,8 +284,10 @@
             netValues.push(netVal);
             netRow.innerHTML += `<td>${netVal.toFixed(3)}</td>`;
         });
-        const totalNet = gBefore - totalInsurance;
-        netRow.innerHTML += `<td class="summary-col">${totalNet.toFixed(3)}</td><td class="summary-col">${(totalNet*0.08).toFixed(3)}</td><td class="summary-col">${(totalNet*0.92).toFixed(3)}</td>`;
+        // الأعمدة الثلاثة: قبل الخصم (فارغ)، الخصم (فارغ)، بعد الخصم (الإجمالي)
+        netRow.innerHTML += `<td class="summary-col"></td>`;
+        netRow.innerHTML += `<td class="summary-col"></td>`;
+        netRow.innerHTML += `<td class="summary-col">${netValues.reduce((a,b)=>a+b,0).toFixed(3)}</td>`;
         tbody.appendChild(netRow);
     }
 
