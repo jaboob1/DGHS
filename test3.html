@@ -100,15 +100,15 @@
 <body>
 <div class="container">
     <div class="inner-header">
-        <div class="inner-logo">شعار الوزارة</div>
+        <div class="inner-logo">وزارة الصحة</div>
         <div class="inner-title">
             <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
             <div class="department-title">دائرة الشؤون المالية - قسم الايرادات والمصروفات</div>
         </div>
-        <div class="inner-logo">شعار الرؤية</div>
+        <div class="inner-logo"></div>
     </div>
-    <h3>سند الصرف</h3>
-    <div class="summary-line" id="summaryLine">عدد السجلات المحفوظة: 0</div>
+    <h3>سند صرف يدوي</h3>
+    <div class="summary-line" id="summaryLine">عدد الموظفين: 0</div>
     <div class="table-wrapper">
         <table class="voucher-table" id="voucherTable">
             <thead>
@@ -116,7 +116,7 @@
                     <th class="account-col">رقم الحساب</th>
                     <th class="allowance-name">البدلات</th>
                     <th class="summary-col">إجمالي قبل الخصم</th>
-                    <th class="summary-col">الخصم (8%)</th>
+                    <th class="summary-col">الأشتراكات</th>
                     <th class="summary-col">إجمالي بعد الخصم</th>
                 </tr>
             </thead>
@@ -242,7 +242,7 @@
         // صف الإجمالي (إجمالي البدلات لكل موظف)
         const totalRow = document.createElement('tr');
         totalRow.className = 'total-row';
-        totalRow.innerHTML = '<td class="account-col">الإجمالي</td><td class="allowance-name">إجمالي البدلات</td>';
+        totalRow.innerHTML = '<td class="account-col">-</td><td class="allowance-name">إجمالي البدلات</td>';
         const employeeTotals = [];
         records.forEach(record => {
             let sum = 0;
@@ -259,7 +259,7 @@
         // صف اشتراكات صندوق الحماية (8% في عمود الخصم فقط)
         const insuranceRow = document.createElement('tr');
         insuranceRow.style.backgroundColor = '#fef9e7';
-        insuranceRow.innerHTML = '<td colspan="2" class="merged-cell">صندوق الحماية (8%)</td>';
+        insuranceRow.innerHTML = '<td colspan="2" class="merged-cell">اشتراكات صندوق الحماية</td>';
         const insuranceValues = [];
         records.forEach((record, idx) => {
             const ins = employeeTotals[idx] * 0.08;
@@ -277,7 +277,7 @@
         // صف الصافي بعد الاشتراك (في عمود بعد الخصم فقط)
         const netRow = document.createElement('tr');
         netRow.style.backgroundColor = '#eafaf1';
-        netRow.innerHTML = '<td colspan="2" class="merged-cell">الصافي بعد الاشتراك</td>';
+        netRow.innerHTML = '<td colspan="2" class="merged-cell">الصافي المستحق</td>';
         const netValues = [];
         records.forEach((record, idx) => {
             const netVal = employeeTotals[idx] - insuranceValues[idx];
