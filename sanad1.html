@@ -4,962 +4,420 @@
     <meta charset="UTF-8">
     <title>حاسبة الرواتب</title>
     <style>
-        @font-face {
-            font-family: 'Diwani';
-            src: url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial, Tahoma, sans-serif;
             direction: rtl;
-            margin: 0;
-            padding: 10px;
+            margin: 0; padding: 10px;
             background: #f5f5f5;
-            position: relative;
-            min-height: 100vh;
-            padding-bottom: 25px;
+            min-height: 100vh; padding-bottom: 25px;
             font-size: 13px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
         }
-
         .container {
-            padding: 15px;
-            border: 2px solid #8B0000;
-            border-radius: 8px;
-            width: 95%;
-            max-width: 750px;
-            margin: 10px auto;
-            background: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: relative;
+            padding: 15px; border: 2px solid #000; border-radius: 8px;
+            width: 95%; max-width: 750px; margin: 10px auto;
+            background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-
         .inner-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #8B0000;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #000;
         }
-
-        .inner-logo {
-            flex: 0 0 auto;
-        }
-
-        .inner-logo img {
-            height: 50px;
-            width: auto;
-        }
-
-        .inner-title {
-            text-align: center;
-            flex: 1;
-        }
-
-        .directorate-title {
-            font-family: 'Diwani', 'Lateef', serif;
-            font-size: 16px;
-            color: #8B0000;
-            margin: 0;
-            font-weight: bold;
-        }
-
-        .department-title {
-            font-family: 'Diwani', 'Lateef', serif;
-            font-size: 13px;
-            color: #8B0000;
-            margin: 2px 0 0 0;
-        }
-
+        .inner-logo { flex: 0 0 auto; font-size: 12px; color: #333; font-weight: bold; padding: 0 10px; }
+        .inner-title { text-align: center; flex: 1; }
+        .directorate-title { font-size: 16px; color: #000; font-weight: bold; }
+        .department-title { font-size: 13px; color: #000; }
         h3 {
-            text-align: center;
-            color: #8B0000;
-            margin: 0 0 12px 0;
-            font-size: 18px;
-            padding: 8px;
-            background-color: #f8f8f8;
-            border-radius: 4px;
-            border: 1px solid #8B0000;
+            text-align: center; color: #000; margin: 0 0 12px; font-size: 18px;
+            padding: 8px; background: #f0f0f0; border-radius: 4px; border: 1px solid #000;
         }
-
-        .input-section {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: 100%;
-            margin-bottom: 8px;
-        }
-
-        .input-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 6px;
-            width: 100%;
-        }
-
-        label {
-            display: inline-block;
-            width: 160px;
-            margin-left: 8px;
-            font-weight: bold;
-            text-align: right;
-            padding-right: 25px;
-            font-size: 13px;
-        }
-
-        input {
-            padding: 5px;
-            margin: 3px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 12px;
-            height: 30px;
-        }
-
-        input.employee-input {
-            width: 210px;
-        }
-
-        input.amount-input {
-            width: 120px;
-            border: 1px solid #ddd;
-        }
-
-        select.contract-type {
-            padding: 5px;
-            width: 120px;
-            margin: 3px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 12px;
-            height: 30px;
-        }
-
-        input[readonly] {
-            background-color: #f5f5f5;
-            color: #333;
-            width: 120px;
-            border: 1px solid #ddd;
-        }
-
-        input.after-deduction {
-            background-color: #f0f9f0;
-            color: #2E8B57;
-            width: 120px;
-            font-weight: bold;
-            border: 1px solid #ddd;
-        }
-
+        .input-section { display: flex; flex-direction: column; align-items: flex-start; width: 100%; margin-bottom: 8px; }
+        .input-row { display: flex; align-items: center; margin-bottom: 6px; width: 100%; }
+        label { display: inline-block; width: 160px; margin-left: 8px; font-weight: bold; text-align: right; padding-right: 25px; font-size: 13px; }
+        input { padding: 5px; margin: 3px; border: 1px solid #666; border-radius: 3px; font-size: 12px; height: 30px; }
+        input.employee-input { width: 210px; }
+        input.amount-input { width: 120px; }
+        select.contract-type { padding: 5px; width: 120px; margin: 3px; border: 1px solid #666; border-radius: 3px; font-size: 12px; height: 30px; }
+        input[readonly] { background-color: #f5f5f5; color: #333; width: 120px; border: 1px solid #999; }
+        input.after-deduction { background-color: #f9f9f9; color: #000; width: 120px; font-weight: bold; border: 1px solid #999; }
         .column-title {
-            font-size: 12px;
-            color: #8B0000;
-            margin: 0 3px;
-            text-align: center;
-            width: 120px;
-            font-weight: bold;
-            padding: 5px;
-            border: 1px solid #ddd;
-            background-color: #f8f8f8;
+            font-size: 12px; color: #000; margin: 0 3px; text-align: center; width: 120px;
+            font-weight: bold; padding: 5px; border: 1px solid #999; background-color: #eee;
         }
-
         .result {
-            margin-top: 10px;
-            font-weight: bold;
-            color: green;
-            line-height: 1.5;
-            padding: 20px;
-            font-size: 11px;
-            background-color: #f0f9f0;
-            border-radius: 8px;
-            border: 1px solid #c3e6c3;
+            margin-top: 10px; font-weight: bold; color: #000; line-height: 1.5;
+            padding: 20px; font-size: 11px; background-color: #f9f9f9; border-radius: 8px; border: 1px solid #ccc;
         }
-
-        .separator {
-            border-top: 2px solid #8B0000;
-            margin: 12px 0;
-            width: 100%;
-        }
-
+        .separator { border-top: 2px solid #000; margin: 12px 0; width: 100%; }
         .approval-section {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-            padding: 15px 0 15px 0;
-            border-top: 2px solid #8B0000;
-            font-size: 13px;
-            font-weight: bold;
-            min-height: 45px;
+            display: flex; justify-content: space-between; margin-top: 10px;
+            padding: 15px 0; border-top: 2px solid #000; font-size: 13px; font-weight: bold; min-height: 45px;
         }
-
-        .approval-right {
-            text-align: right;
-            flex: 2;
+        .approval-right { text-align: right; flex: 2; }
+        .preparation { text-align: right; margin-right: 5ch; }
+        .button-container { display: flex; justify-content: center; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+        .print-btn, .reset-btn, .site-btn, .save-btn, .voucher-btn {
+            padding: 8px 16px; font-size: 13px; color: white; border: none; cursor: pointer; border-radius: 4px;
         }
-
-        .preparation {
-            text-align: right;
-            margin-right: 5ch;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .print-btn,
-        .reset-btn,
-        .site-btn,
-        .save-btn,
-        .voucher-btn {
-            padding: 8px 16px;
-            font-size: 13px;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background 0.3s;
-        }
-
-        .print-btn {
-            background: #8B0000;
-        }
-
-        .print-btn:hover {
-            background: #700000;
-        }
-
-        .reset-btn {
-            background: #2E8B57;
-        }
-
-        .reset-btn:hover {
-            background: #267349;
-        }
-
-        .site-btn {
-            background: #1E90FF;
-        }
-
-        .site-btn:hover {
-            background: #0077CC;
-        }
-
-        .save-btn {
-            background: #DAA520;
-        }
-
-        .save-btn:hover {
-            background: #B8860B;
-        }
-
-        .voucher-btn {
-            background: #6A0DAD;
-        }
-
-        .voucher-btn:hover {
-            background: #4B0082;
-        }
-
+        .print-btn { background: #333; } .print-btn:hover { background: #555; }
+        .reset-btn { background: #666; } .reset-btn:hover { background: #888; }
+        .site-btn { background: #444; } .site-btn:hover { background: #666; }
+        .save-btn { background: #2c3e50; } .save-btn:hover { background: #34495e; }
+        .voucher-btn { background: #555; } .voucher-btn:hover { background: #777; }
         .save-notification {
-            display: none;
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #28a745;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            z-index: 9999;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: #2ecc71; color: white; padding: 12px 24px; border-radius: 8px;
+            font-size: 14px; font-weight: bold; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             animation: fadeInOut 2.5s ease;
         }
-
         @keyframes fadeInOut {
-            0% {
-                opacity: 0;
-                top: 0;
-            }
-            10% {
-                opacity: 1;
-                top: 20px;
-            }
-            80% {
-                opacity: 1;
-                top: 20px;
-            }
-            100% {
-                opacity: 0;
-                top: 0;
-            }
+            0% { opacity: 0; top: 0; } 10% { opacity: 1; top: 20px; }
+            80% { opacity: 1; top: 20px; } 100% { opacity: 0; top: 0; }
         }
-
         .footer-animation {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #8B0000;
-            color: white;
-            padding: 6px 0;
-            text-align: center;
-            overflow: hidden;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
+            position: fixed; bottom: 0; left: 0; width: 100%; background-color: #000;
+            color: white; padding: 6px 0; text-align: center; overflow: hidden;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.3); z-index: 1000;
         }
-
-        .marquee {
-            display: block;
-            width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-
+        .marquee { display: block; width: 100%; white-space: nowrap; overflow: hidden; }
         .marquee span {
-            display: inline-block;
-            padding-right: 100%;
-            animation: marquee 20s linear infinite;
-            font-weight: bold;
-            font-size: 16px;
+            display: inline-block; padding-right: 100%; animation: marquee 20s linear infinite;
+            font-weight: bold; font-size: 16px;
         }
-
-        @keyframes marquee {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(100%, 0);
-            }
-        }
-
+        @keyframes marquee { 0% { transform: translate(0,0); } 100% { transform: translate(100%,0); } }
         .disclaimer {
-            text-align: center;
-            margin-top: 15px;
-            padding: 6px;
-            background-color: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 4px;
-            color: #856404;
-            font-size: 11px;
-            direction: rtl;
+            text-align: center; margin-top: 15px; padding: 6px; background-color: #fff;
+            border: 1px solid #ccc; border-radius: 4px; color: #333; font-size: 11px;
         }
-
-        .date-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            width: 100%;
-            flex-wrap: wrap;
-        }
-
-        .date-label {
-            width: 160px;
-            margin-left: 5px;
-            font-weight: bold;
-            text-align: right;
-            padding-right: 25px;
-            font-size: 13px;
-            flex-shrink: 0;
-        }
-
-        .date-input-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .date-input {
-            width: 140px;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 12px;
-            height: 30px;
-            text-align: center;
-        }
-
-        .date-separator {
-            font-weight: bold;
-            color: #000000;
-        }
-
-        .column-total {
-            font-weight: bold;
-            background-color: #f0f0f0;
-            color: #8B0000;
-            border: 1px solid #ddd;
-        }
-
-        .temporary-allowances {
-            display: none;
-        }
-
-        .temporary-contract .after-deduction-column,
-        .temporary-contract .after-deduction {
-            color: white !important;
-            background-color: white !important;
-            border-color: white !important;
-        }
+        .date-row { display: flex; align-items: center; margin-bottom: 8px; width: 100%; flex-wrap: wrap; }
+        .date-label { width: 160px; margin-left: 5px; font-weight: bold; text-align: right; padding-right: 25px; font-size: 13px; }
+        .date-input-container { display: flex; align-items: center; gap: 8px; }
+        .date-input { width: 140px; padding: 5px; border: 1px solid #666; border-radius: 3px; font-size: 12px; height: 30px; text-align: center; }
+        .date-separator { font-weight: bold; color: #000; }
+        .column-total { font-weight: bold; background-color: #eee; color: #000; border: 1px solid #999; }
+        .temporary-allowances { display: none; }
 
         @media print {
-            body {
-                margin: 0;
-                padding: 0;
-                background: white;
-                font-size: 10px;
-                width: 100%;
-                height: auto;
-                display: block;
-            }
-
-            .container {
-                border: 2px solid #8B0000 !important;
-                box-shadow: none;
-                margin: 0;
-                padding: 5px;
-                width: 100%;
-                max-width: 100%;
-                page-break-inside: avoid;
-                break-inside: avoid;
-            }
-
-            .inner-header {
-                margin-bottom: 8px;
-                padding-bottom: 6px;
-            }
-
-            .inner-logo img {
-                height: 40px;
-            }
-
-            .directorate-title {
-                font-size: 14px;
-            }
-
-            .department-title {
-                font-size: 11px;
-            }
-
-            h3 {
-                font-size: 16px;
-                margin: 3px 0 8px 0;
-                padding: 6px;
-            }
-
-            label {
-                width: 140px;
-                margin-left: 8px;
-                padding-right: 20px;
-                font-size: 11px;
-            }
-
-            input,
-            select {
-                padding: 3px;
-                margin: 3px;
-                font-size: 10px;
-                height: 26px;
-            }
-
-            input.employee-input {
-                width: 180px;
-            }
-
-            input.amount-input,
-            input[readonly],
-            input.after-deduction {
-                width: 100px;
-            }
-
-            select.contract-type {
-                width: 100px;
-            }
-
-            .column-title {
-                font-size: 10px;
-                width: 100px;
-            }
-
-            .result {
-                font-size: 11px;
-                padding: 6px;
-                line-height: 1.3;
-                margin: 8px 0;
-            }
-
-            .separator {
-                margin: 8px 0;
-            }
-
-            .approval-section {
-                margin-top: 12px;
-                padding-top: 15px;
-                font-size: 11px;
-                min-height: 60px;
-            }
-
-            .date-input {
-                width: 110px;
-                font-size: 10px;
-                height: 26px;
-            }
-
-            .button-container,
-            .footer-animation,
-            .disclaimer,
-            .save-notification {
-                display: none;
-            }
-
-            .container,
-            .inner-header,
-            .result,
-            .approval-section,
-            .input-row {
-                page-break-before: avoid;
-                page-break-after: avoid;
-                page-break-inside: avoid;
-            }
-
-            .temporary-contract .after-deduction-column,
-            .temporary-contract .after-deduction {
-                color: white !important;
-                background-color: white !important;
-                border-color: white !important;
-            }
-
-            .preparation {
-                margin-right: 5ch !important;
-                text-align: right;
-            }
+            body { margin: 0; padding: 0; background: white; font-size: 10px; }
+            .container { border: 2px solid #000 !important; box-shadow: none; padding: 5px; }
+            .button-container, .footer-animation, .disclaimer, .save-notification { display: none; }
         }
     </style>
 </head>
 <body>
-
-    <!-- إشعار الحفظ -->
-    <div class="save-notification" id="saveNotification">✅ تم الحفظ بنجاح إلى سند الصرف</div>
-
-    <div class="container">
-        <div class="inner-header">
-            <div class="inner-logo">
-                <img src="https://moh.gov.om/images/logo-ministry-en.png" alt="شعار وزارة الصحة">
-            </div>
-            <div class="inner-title">
-                <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
-                <div class="department-title">دائرة الشؤون المالية - قسم الايرادات والمصروفات</div>
-            </div>
-            <div class="inner-logo">
-                <img src="https://moh.gov.om/images/Oman-Vision-Logo.png" alt="شعار عمان فيجن">
+<div class="save-notification" id="saveNotification">✅ تم الحفظ بنجاح إلى سند الصرف</div>
+<div class="container">
+    <div class="inner-header">
+        <div class="inner-logo">شعار الوزارة</div>
+        <div class="inner-title">
+            <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
+            <div class="department-title">دائرة الشؤون المالية - قسم الايرادات والمصروفات</div>
+        </div>
+        <div class="inner-logo">شعار الرؤية</div>
+    </div>
+    <h3>حاسبة الرواتب</h3>
+    <div class="input-section">
+        <div class="input-row">
+            <label for="employeeName">اسم الموظف:</label>
+            <input type="text" id="employeeName" class="employee-input" placeholder="أسم الموظف">
+        </div>
+        <div class="input-row">
+            <label for="employeeNumber">رقم الموظف:</label>
+            <input type="text" id="employeeNumber" class="employee-input" placeholder="رقم الموظف">
+        </div>
+        <div class="input-row">
+            <label for="contractType">نوع العقد:</label>
+            <select id="contractType" class="contract-type">
+                <option value="permanent">عقود دائمة</option>
+                <option value="temporary">عقود موقتة</option>
+            </select>
+        </div>
+        <div class="date-row">
+            <span class="date-label">تاريخ الاحتساب من:</span>
+            <div class="date-input-container">
+                <input type="date" id="startDate" class="date-input">
+                <span class="date-separator">إلى</span>
+                <input type="date" id="endDate" class="date-input">
             </div>
         </div>
-
-        <h3>حاسبة الرواتب</h3>
-
-        <div class="input-section">
-            <div class="input-row">
-                <label for="employeeName">اسم الموظف:</label>
-                <input type="text" id="employeeName" class="employee-input" placeholder="أسم الموظف">
-            </div>
-            <div class="input-row">
-                <label for="employeeNumber">رقم الموظف:</label>
-                <input type="text" id="employeeNumber" class="employee-input" placeholder="رقم الموظف">
-            </div>
-            <div class="input-row">
-                <label for="contractType">نوع العقد:</label>
-                <select id="contractType" class="contract-type">
-                    <option value="permanent">عقود دائمة</option>
-                    <option value="temporary">عقود موقتة</option>
-                </select>
-            </div>
-            <div class="date-row">
-                <span class="date-label">تاريخ الاحتساب من:</span>
-                <div class="date-input-container">
-                    <input type="date" id="startDate" class="date-input">
-                    <span class="date-separator">إلى</span>
-                    <input type="date" id="endDate" class="date-input">
-                </div>
-            </div>
-
-            <div class="input-row">
-                <label></label>
-                <span class="column-title">بدلات التعيين</span>
-                <span class="column-title">اجمالي قبل الخصم</span>
-                <span class="column-title after-deduction-column">اجمالي بعد الخصم</span>
-            </div>
-
-            <div class="input-row">
-                <label for="basic">البدل الأساسي:</label>
-                <input type="number" id="basic" class="amount-input" placeholder="أدخل المبلغ">
-                <input type="text" id="basicResult" readonly>
-                <input type="text" id="basicAfterDeduction" class="after-deduction" readonly>
-            </div>
-
-            <div id="temporaryAllowances" class="temporary-allowances">
-                <div class="input-row">
-                    <label for="otherAllowances">بدلات أخرى:</label>
-                    <input type="number" id="otherAllowances" class="amount-input" placeholder="أدخل المبلغ">
-                    <input type="text" id="otherAllowancesResult" readonly>
-                    <input type="text" id="otherAllowancesAfterDeduction" class="after-deduction" readonly>
-                </div>
-            </div>
-
-            <div id="permanentAllowances">
-                <div class="input-row">
-                    <label for="housing">بدل السكن:</label>
-                    <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
-                    <input type="text" id="housingResult" readonly>
-                    <input type="text" id="housingAfterDeduction" class="after-deduction" readonly>
-                </div>
-                <div class="input-row">
-                    <label for="electricity">بدل الكهرباء:</label>
-                    <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
-                    <input type="text" id="electricityResult" readonly>
-                    <input type="text" id="electricityAfterDeduction" class="after-deduction" readonly>
-                </div>
-                <div class="input-row">
-                    <label for="water">بدل الماء:</label>
-                    <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
-                    <input type="text" id="waterResult" readonly>
-                    <input type="text" id="waterAfterDeduction" class="after-deduction" readonly>
-                </div>
-                <div class="input-row">
-                    <label for="phone">بدل الهاتف:</label>
-                    <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
-                    <input type="text" id="phoneResult" readonly>
-                    <input type="text" id="phoneAfterDeduction" class="after-deduction" readonly>
-                </div>
-                <div class="input-row">
-                    <label for="transport">بدل النقل:</label>
-                    <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
-                    <input type="text" id="transportResult" readonly>
-                    <input type="text" id="transportAfterDeduction" class="after-deduction" readonly>
-                </div>
-                <div class="input-row">
-                    <label for="professional">بدل مهني:</label>
-                    <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
-                    <input type="text" id="professionalResult" readonly>
-                    <input type="text" id="professionalAfterDeduction" class="after-deduction" readonly>
-                </div>
-                <div class="input-row">
-                    <label for="costLiving">بدل غلاء معيشة:</label>
-                    <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
-                    <input type="text" id="costLivingResult" readonly>
-                    <input type="text" id="costLivingAfterDeduction" class="after-deduction" readonly>
-                </div>
-                <div class="input-row">
-                    <label>الإجمالي:</label>
-                    <input type="text" id="monthlyTotal" class="amount-input column-total" readonly>
-                    <input type="text" id="periodTotal" class="column-total" readonly>
-                    <input type="text" id="afterDeductionTotal" class="after-deduction column-total" readonly>
-                </div>
-            </div>
+        <div class="input-row">
+            <label></label>
+            <span class="column-title">بدلات التعيين</span>
+            <span class="column-title">اجمالي قبل الخصم</span>
+            <span class="column-title after-deduction-column">اجمالي بعد الخصم</span>
         </div>
-
-        <div class="separator"></div>
-
-        <div class="result">
-            عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
-            إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
-            إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
-            <span id="deductionLine">أستقطاع اشتراكات صندوق الحماية الاجتماعية حصة الموظف (8%): <span id="deduction">0</span><br></span>
-            <span id="netLine"> صافي المستحق: <span id="net">0</span></span>
+        <div class="input-row">
+            <label for="basic">البدل الأساسي:</label>
+            <input type="number" id="basic" class="amount-input" placeholder="أدخل المبلغ">
+            <input type="text" id="basicResult" readonly>
+            <input type="text" id="basicAfterDeduction" class="after-deduction" readonly>
         </div>
-
-        <div class="approval-section">
-            <div class="approval-right preparation">إعداد ومراجعة: _______________</div>
-            <div class="approval-right">اعتمده: _______________</div>
-        </div>
-
-        <div class="button-container">
-            <button class="save-btn" onclick="saveToVoucher()">💾 حفظ إلى سند الصرف</button>
-            <button class="voucher-btn" onclick="window.open('sanad2.html', '_blank')">📄 عرض سند الصرف</button>
-            <button class="print-btn" onclick="window.print()">🖨️ طباعة المستند</button>
-            <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ الحقول</button>
-            <button class="site-btn" onclick="window.open('https://jaboob.com', '_blank')">الصفحة الرئيسية</button>
-        </div>
-
-        <div class="disclaimer">
-            إخلاء المسؤولية : تم تصميم هذا الموقع لأغراض تسهيل وتبسيط المعلومات فقط، وتصميم الموقع لا يعني بأي حال من الأحوال أنه موقع حكومي رسمي.
+        <div id="permanentAllowances">
+            <div class="input-row">
+                <label for="housing">بدل السكن:</label>
+                <input type="number" id="housing" class="amount-input" placeholder="أدخل المبلغ">
+                <input type="text" id="housingResult" readonly>
+                <input type="text" id="housingAfterDeduction" class="after-deduction" readonly>
+            </div>
+            <div class="input-row">
+                <label for="electricity">بدل الكهرباء:</label>
+                <input type="number" id="electricity" class="amount-input" placeholder="أدخل المبلغ">
+                <input type="text" id="electricityResult" readonly>
+                <input type="text" id="electricityAfterDeduction" class="after-deduction" readonly>
+            </div>
+            <div class="input-row">
+                <label for="water">بدل الماء:</label>
+                <input type="number" id="water" class="amount-input" placeholder="أدخل المبلغ">
+                <input type="text" id="waterResult" readonly>
+                <input type="text" id="waterAfterDeduction" class="after-deduction" readonly>
+            </div>
+            <div class="input-row">
+                <label for="phone">بدل الهاتف:</label>
+                <input type="number" id="phone" class="amount-input" placeholder="أدخل المبلغ">
+                <input type="text" id="phoneResult" readonly>
+                <input type="text" id="phoneAfterDeduction" class="after-deduction" readonly>
+            </div>
+            <div class="input-row">
+                <label for="transport">بدل النقل:</label>
+                <input type="number" id="transport" class="amount-input" placeholder="أدخل المبلغ">
+                <input type="text" id="transportResult" readonly>
+                <input type="text" id="transportAfterDeduction" class="after-deduction" readonly>
+            </div>
+            <div class="input-row">
+                <label for="professional">بدل مهني:</label>
+                <input type="number" id="professional" class="amount-input" placeholder="أدخل المبلغ">
+                <input type="text" id="professionalResult" readonly>
+                <input type="text" id="professionalAfterDeduction" class="after-deduction" readonly>
+            </div>
+            <div class="input-row">
+                <label for="costLiving">بدل غلاء معيشة:</label>
+                <input type="number" id="costLiving" class="amount-input" placeholder="أدخل المبلغ">
+                <input type="text" id="costLivingResult" readonly>
+                <input type="text" id="costLivingAfterDeduction" class="after-deduction" readonly>
+            </div>
+            <div class="input-row">
+                <label>الإجمالي:</label>
+                <input type="text" id="monthlyTotal" class="amount-input column-total" readonly>
+                <input type="text" id="periodTotal" class="column-total" readonly>
+                <input type="text" id="afterDeductionTotal" class="after-deduction column-total" readonly>
+            </div>
         </div>
     </div>
-
-    <div class="footer-animation">
-        <div class="marquee">
-            <span> جميع الحقوق محفوظة © 2025 محمد جعبوب - قسم الايرادات والمصروفات - دائرة الشؤون المالية</span>
-        </div>
+    <div class="separator"></div>
+    <div class="result">
+        عدد الأيام المحتسبة: <span id="daysCount">0</span><br>
+        إجمالي الراتب الشهري: <span id="totalAllowances">0</span><br>
+        إجمالي الأستحقاق لفترة الأحتساب: <span id="totalPeriod">0</span><br>
+        <span id="deductionLine">أستقطاع (8%): <span id="deduction">0</span><br></span>
+        <span id="netLine"> صافي المستحق: <span id="net">0</span></span>
     </div>
+    <div class="approval-section">
+        <div class="approval-right preparation">إعداد ومراجعة: _______________</div>
+        <div class="approval-right">اعتمده: _______________</div>
+    </div>
+    <div class="button-container">
+        <button class="save-btn" onclick="saveToVoucher()">💾 حفظ إلى سند الصرف</button>
+        <button class="voucher-btn" onclick="window.open('sanad2.html', '_blank')">📄 عرض سند الصرف</button>
+        <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
+        <button class="reset-btn" onclick="resetForm()">🗑️ تفريغ</button>
+        <button class="site-btn" onclick="window.open('https://jaboob.com', '_blank')">الصفحة الرئيسية</button>
+    </div>
+    <div class="disclaimer">إخلاء المسؤولية : تم تصميم هذا الموقع لأغراض تسهيل المعلومات فقط.</div>
+</div>
+<div class="footer-animation">
+    <div class="marquee"><span> جميع الحقوق محفوظة © 2025 محمد جعبوب - قسم الايرادات والمصروفات</span></div>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const startDate = document.getElementById("startDate");
-            const endDate = document.getElementById("endDate");
-            const contractType = document.getElementById("contractType");
-            const container = document.querySelector('.container');
-            const permanentAllowances = document.getElementById("permanentAllowances");
-            const temporaryAllowances = document.getElementById("temporaryAllowances");
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const startDate = document.getElementById("startDate");
+        const endDate = document.getElementById("endDate");
+        const contractType = document.getElementById("contractType");
+        const container = document.querySelector('.container');
+        const permanentAllowances = document.getElementById("permanentAllowances");
 
-            const today = new Date();
-            const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-            const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        const today = new Date();
+        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
-            function formatDate(date) {
-                const year = date.getFullYear();
-                const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                const day = date.getDate().toString().padStart(2, '0');
-                return `${year}-${month}-${day}`;
+        function formatDate(date) {
+            return date.getFullYear() + '-' + String(date.getMonth()+1).padStart(2,'0') + '-' + String(date.getDate()).padStart(2,'0');
+        }
+        startDate.value = formatDate(firstDayOfMonth);
+        endDate.value = formatDate(lastDayOfMonth);
+
+        // بدون otherAllowances
+        const allowanceFields = [
+            { id: "basic", result: "basicResult", afterDeduction: "basicAfterDeduction" },
+            { id: "housing", result: "housingResult", afterDeduction: "housingAfterDeduction" },
+            { id: "electricity", result: "electricityResult", afterDeduction: "electricityAfterDeduction" },
+            { id: "water", result: "waterResult", afterDeduction: "waterAfterDeduction" },
+            { id: "phone", result: "phoneResult", afterDeduction: "phoneAfterDeduction" },
+            { id: "transport", result: "transportResult", afterDeduction: "transportAfterDeduction" },
+            { id: "professional", result: "professionalResult", afterDeduction: "professionalAfterDeduction" },
+            { id: "costLiving", result: "costLivingResult", afterDeduction: "costLivingAfterDeduction" }
+        ];
+
+        const totalAllowances = document.getElementById("totalAllowances");
+        const totalPeriod = document.getElementById("totalPeriod");
+        const deduction = document.getElementById("deduction");
+        const net = document.getElementById("net");
+        const daysCount = document.getElementById("daysCount");
+        const monthlyTotal = document.getElementById("monthlyTotal");
+        const periodTotal = document.getElementById("periodTotal");
+        const afterDeductionTotal = document.getElementById("afterDeductionTotal");
+        const deductionLine = document.getElementById("deductionLine");
+        const netLine = document.getElementById("netLine");
+
+        function daysInMonth(year, month) { return new Date(year, month+1, 0).getDate(); }
+
+        function updateContractDisplay() {
+            // لا حاجة لإظهار/إخفاء بدلات أخرى الآن
+            deductionLine.style.display = contractType.value === "temporary" ? "none" : "block";
+            netLine.style.display = contractType.value === "temporary" ? "none" : "block";
+        }
+
+        function calculate() {
+            if (!(startDate.value && endDate.value)) return;
+            let start = new Date(startDate.value);
+            let end = new Date(endDate.value);
+            if (end < start) {
+                totalPeriod.textContent = "❌ تاريخ النهاية قبل البداية";
+                daysCount.textContent = "0";
+                return;
             }
+            let days = Math.floor((end - start) / 86400000) + 1;
+            daysCount.textContent = days;
 
-            startDate.value = formatDate(firstDayOfMonth);
-            endDate.value = formatDate(lastDayOfMonth);
+            let totalBase = 0, totalCalc = 0, totalAfterDeduction = 0;
+            allowanceFields.forEach(item => {
+                let input = document.getElementById(item.id);
+                let resultBox = document.getElementById(item.result);
+                let afterBox = document.getElementById(item.afterDeduction);
+                let monthly = parseFloat(input.value) || 0;
 
-            // تعريف البدلات
-            const allowanceFields = [
-                { id: "basic", result: "basicResult", afterDeduction: "basicAfterDeduction" },
-                { id: "housing", result: "housingResult", afterDeduction: "housingAfterDeduction" },
-                { id: "electricity", result: "electricityResult", afterDeduction: "electricityAfterDeduction" },
-                { id: "water", result: "waterResult", afterDeduction: "waterAfterDeduction" },
-                { id: "phone", result: "phoneResult", afterDeduction: "phoneAfterDeduction" },
-                { id: "transport", result: "transportResult", afterDeduction: "transportAfterDeduction" },
-                { id: "professional", result: "professionalResult", afterDeduction: "professionalAfterDeduction" },
-                { id: "otherAllowances", result: "otherAllowancesResult", afterDeduction: "otherAllowancesAfterDeduction" },
-                { id: "costLiving", result: "costLivingResult", afterDeduction: "costLivingAfterDeduction" }
-            ];
-
-            const totalAllowances = document.getElementById("totalAllowances");
-            const totalPeriod = document.getElementById("totalPeriod");
-            const deduction = document.getElementById("deduction");
-            const net = document.getElementById("net");
-            const daysCount = document.getElementById("daysCount");
-            const monthlyTotal = document.getElementById("monthlyTotal");
-            const periodTotal = document.getElementById("periodTotal");
-            const afterDeductionTotal = document.getElementById("afterDeductionTotal");
-            const deductionLine = document.getElementById("deductionLine");
-            const netLine = document.getElementById("netLine");
-
-            function daysInMonth(year, month) {
-                return new Date(year, month + 1, 0).getDate();
-            }
-
-            function updateContractDisplay() {
-                if (contractType.value === "temporary") {
-                    permanentAllowances.style.display = "none";
-                    temporaryAllowances.style.display = "block";
-                    deductionLine.style.display = "none";
-                    netLine.style.display = "none";
-                    container.classList.add('temporary-contract');
-                } else {
-                    permanentAllowances.style.display = "block";
-                    temporaryAllowances.style.display = "none";
-                    deductionLine.style.display = "block";
-                    netLine.style.display = "block";
-                    container.classList.remove('temporary-contract');
+                totalBase += monthly;
+                let sum = 0;
+                let d = new Date(start);
+                while (d <= end) {
+                    sum += monthly / daysInMonth(d.getFullYear(), d.getMonth());
+                    d.setDate(d.getDate() + 1);
                 }
-            }
-
-            function calculate() {
-                if (!(startDate.value && endDate.value)) return;
-
-                let start = new Date(startDate.value);
-                let end = new Date(endDate.value);
-
-                if (end < start) {
-                    totalPeriod.textContent = "❌ تاريخ النهاية قبل البداية";
-                    daysCount.textContent = "0";
-                    return;
-                }
-
-                let diffTime = end - start;
-                let days = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-                daysCount.textContent = days;
-
-                let totalBase = 0;
-                let totalCalc = 0;
-                let totalAfterDeduction = 0;
-
-                allowanceFields.forEach(item => {
-                    let input = document.getElementById(item.id);
-                    let resultBox = document.getElementById(item.result);
-                    let afterDeductionBox = document.getElementById(item.afterDeduction);
-                    let monthly = parseFloat(input.value) || 0;
-
-                    if (contractType.value === "temporary" && item.id !== "basic" && item.id !== "otherAllowances") {
-                        resultBox.value = "";
-                        afterDeductionBox.value = "";
-                        return;
-                    }
-                    if (contractType.value === "permanent" && item.id === "otherAllowances") {
-                        resultBox.value = "";
-                        afterDeductionBox.value = "";
-                        return;
-                    }
-
-                    totalBase += monthly;
-
-                    let current = new Date(start);
-                    let sum = 0;
-                    while (current <= end) {
-                        let year = current.getFullYear();
-                        let month = current.getMonth();
-                        let daysInThisMonth = daysInMonth(year, month);
-                        let daily = monthly / daysInThisMonth;
-                        sum += daily;
-                        current.setDate(current.getDate() + 1);
-                    }
-
-                    let sumRounded = Math.round(sum * 1000) / 1000;
-                    resultBox.value = sumRounded.toFixed(3);
-                    totalCalc += sumRounded;
-
-                    if (contractType.value === "permanent") {
-                        let afterDeductionValue = sumRounded * 0.92;
-                        let afterDeductionRounded = Math.round(afterDeductionValue * 1000) / 1000;
-                        afterDeductionBox.value = afterDeductionRounded.toFixed(3);
-                        totalAfterDeduction += afterDeductionRounded;
-                    } else {
-                        afterDeductionBox.value = sumRounded.toFixed(3);
-                        totalAfterDeduction += sumRounded;
-                    }
-                });
-
-                monthlyTotal.value = totalBase.toFixed(3);
-                periodTotal.value = totalCalc.toFixed(3);
-                afterDeductionTotal.value = totalAfterDeduction.toFixed(3);
-
-                totalAllowances.textContent = totalBase.toFixed(3);
-                totalPeriod.textContent = totalCalc.toFixed(3);
+                let sumRounded = Math.round(sum * 1000) / 1000;
+                resultBox.value = sumRounded.toFixed(3);
+                totalCalc += sumRounded;
 
                 if (contractType.value === "permanent") {
-                    let ded = totalCalc * 0.08;
-                    deduction.textContent = (Math.round(ded * 1000) / 1000).toFixed(3);
-                    let netValue = totalCalc - ded;
-                    net.textContent = (Math.round(netValue * 1000) / 1000).toFixed(3);
+                    let after = Math.round(sumRounded * 0.92 * 1000) / 1000;
+                    afterBox.value = after.toFixed(3);
+                    totalAfterDeduction += after;
                 } else {
-                    deduction.textContent = "0.000";
-                    net.textContent = totalCalc.toFixed(3);
+                    afterBox.value = sumRounded.toFixed(3);
+                    totalAfterDeduction += sumRounded;
                 }
-
-                updateContractDisplay();
-            }
-
-            function resetForm() {
-                document.getElementById("employeeName").value = "";
-                document.getElementById("employeeNumber").value = "";
-                document.getElementById("startDate").value = formatDate(firstDayOfMonth);
-                document.getElementById("endDate").value = formatDate(lastDayOfMonth);
-                allowanceFields.forEach(item => {
-                    document.getElementById(item.id).value = "";
-                    document.getElementById(item.result).value = "";
-                    document.getElementById(item.afterDeduction).value = "";
-                });
-                contractType.value = "permanent";
-                monthlyTotal.value = "";
-                periodTotal.value = "";
-                afterDeductionTotal.value = "";
-                totalAllowances.textContent = "0";
-                totalPeriod.textContent = "0";
-                deduction.textContent = "0.000";
-                net.textContent = "0.000";
-                daysCount.textContent = "0";
-                container.classList.remove('temporary-contract');
-                updateContractDisplay();
-            }
-
-            // ============ حفظ البيانات مع قيم بعد الخصم لكل بدل ============
-            function saveToVoucher() {
-                const periodTotalValue = parseFloat(periodTotal.value);
-                if (!periodTotalValue || periodTotalValue <= 0 || isNaN(periodTotalValue)) {
-                    alert("⚠️ الرجاء إدخال بيانات البدلات أولاً واحتساب القيم قبل الحفظ.");
-                    return;
-                }
-
-                const employeeName = document.getElementById("employeeName").value || "غير محدد";
-                const employeeNumber = document.getElementById("employeeNumber").value || "غير محدد";
-
-                // قيم قبل الخصم
-                const allowanceValues = {};
-                allowanceFields.forEach(item => {
-                    const resultBox = document.getElementById(item.result);
-                    allowanceValues[item.id] = resultBox.value ? parseFloat(resultBox.value) : 0;
-                });
-
-                // قيم بعد الخصم
-                const allowanceAfterValues = {};
-                allowanceFields.forEach(item => {
-                    const afterBox = document.getElementById(item.afterDeduction);
-                    allowanceAfterValues[item.id] = afterBox.value ? parseFloat(afterBox.value) : 0;
-                });
-
-                const now = new Date();
-                const newRecord = {
-                    id: Date.now(),
-                    date: now.toLocaleDateString('ar-SA'),
-                    time: now.toLocaleTimeString('ar-SA'),
-                    employeeName: employeeName,
-                    employeeNumber: employeeNumber,
-                    allowances: allowanceValues,
-                    allowancesAfter: allowanceAfterValues,
-                    totalBeforeDeduction: periodTotalValue,
-                    totalAfterDeduction: parseFloat(afterDeductionTotal.value) || 0,
-                    contractType: contractType.value,
-                    startDate: startDate.value,
-                    endDate: endDate.value,
-                    timestamp: now.getTime()
-                };
-
-                let records = [];
-                const stored = localStorage.getItem('salaryVoucherRecords');
-                if (stored) {
-                    try { records = JSON.parse(stored); } catch (e) { records = []; }
-                }
-                records.push(newRecord);
-                localStorage.setItem('salaryVoucherRecords', JSON.stringify(records));
-
-                showSaveNotification();
-                console.log('✅ تم حفظ السجل مع البدلات:', newRecord);
-            }
-
-            function showSaveNotification() {
-                const notification = document.getElementById('saveNotification');
-                notification.style.display = 'block';
-                notification.style.animation = 'none';
-                notification.offsetHeight;
-                notification.style.animation = 'fadeInOut 2.5s ease';
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                }, 2500);
-            }
-
-            window.resetForm = resetForm;
-            window.saveToVoucher = saveToVoucher;
-
-            startDate.addEventListener("change", calculate);
-            endDate.addEventListener("change", calculate);
-            contractType.addEventListener("change", () => { updateContractDisplay(); calculate(); });
-            allowanceFields.forEach(item => {
-                document.getElementById(item.id).addEventListener("input", calculate);
             });
 
-            calculate();
+            monthlyTotal.value = totalBase.toFixed(3);
+            periodTotal.value = totalCalc.toFixed(3);
+            afterDeductionTotal.value = totalAfterDeduction.toFixed(3);
+            totalAllowances.textContent = totalBase.toFixed(3);
+            totalPeriod.textContent = totalCalc.toFixed(3);
+
+            if (contractType.value === "permanent") {
+                let ded = Math.round(totalCalc * 0.08 * 1000) / 1000;
+                deduction.textContent = ded.toFixed(3);
+                net.textContent = (totalCalc - ded).toFixed(3);
+            } else {
+                deduction.textContent = "0.000";
+                net.textContent = totalCalc.toFixed(3);
+            }
             updateContractDisplay();
+        }
+
+        function resetForm() {
+            document.getElementById("employeeName").value = "";
+            document.getElementById("employeeNumber").value = "";
+            startDate.value = formatDate(firstDayOfMonth);
+            endDate.value = formatDate(lastDayOfMonth);
+            allowanceFields.forEach(item => {
+                document.getElementById(item.id).value = "";
+                document.getElementById(item.result).value = "";
+                document.getElementById(item.afterDeduction).value = "";
+            });
+            contractType.value = "permanent";
+            monthlyTotal.value = periodTotal.value = afterDeductionTotal.value = "";
+            totalAllowances.textContent = totalPeriod.textContent = "0";
+            deduction.textContent = net.textContent = "0.000";
+            daysCount.textContent = "0";
+            updateContractDisplay();
+        }
+
+        function saveToVoucher() {
+            const periodTotalValue = parseFloat(periodTotal.value);
+            if (!periodTotalValue || periodTotalValue <= 0 || isNaN(periodTotalValue)) {
+                alert("⚠️ الرجاء إدخال بيانات البدلات أولاً واحتساب القيم.");
+                return;
+            }
+            const employeeName = document.getElementById("employeeName").value || "غير محدد";
+            const employeeNumber = document.getElementById("employeeNumber").value.trim() || "غير محدد";
+
+            let records = [];
+            const stored = localStorage.getItem('salaryVoucherRecords');
+            if (stored) {
+                try { records = JSON.parse(stored); } catch (e) { records = []; }
+            }
+            if (records.some(rec => rec.employeeNumber === employeeNumber)) {
+                alert("⚠️ رقم الموظف '" + employeeNumber + "' موجود مسبقاً في سند الصرف. لا يمكن تكرار الحفظ.");
+                return;
+            }
+
+            const allowanceValues = {};
+            const allowanceAfterValues = {};
+            allowanceFields.forEach(item => {
+                allowanceValues[item.id] = parseFloat(document.getElementById(item.result).value) || 0;
+                allowanceAfterValues[item.id] = parseFloat(document.getElementById(item.afterDeduction).value) || 0;
+            });
+
+            const now = new Date();
+            records.push({
+                id: Date.now(),
+                date: now.toLocaleDateString('ar-SA'),
+                time: now.toLocaleTimeString('ar-SA'),
+                employeeName, employeeNumber,
+                allowances: allowanceValues,
+                allowancesAfter: allowanceAfterValues,
+                totalBeforeDeduction: periodTotalValue,
+                totalAfterDeduction: parseFloat(afterDeductionTotal.value) || 0,
+                contractType: contractType.value,
+                startDate: startDate.value,
+                endDate: endDate.value,
+                timestamp: now.getTime()
+            });
+            localStorage.setItem('salaryVoucherRecords', JSON.stringify(records));
+            showSaveNotification();
+        }
+
+        function showSaveNotification() {
+            const notif = document.getElementById('saveNotification');
+            notif.style.display = 'block';
+            notif.style.animation = 'none';
+            notif.offsetHeight;
+            notif.style.animation = 'fadeInOut 2.5s ease';
+            setTimeout(() => { notif.style.display = 'none'; }, 2500);
+        }
+
+        window.resetForm = resetForm;
+        window.saveToVoucher = saveToVoucher;
+
+        startDate.addEventListener("change", calculate);
+        endDate.addEventListener("change", calculate);
+        contractType.addEventListener("change", () => { updateContractDisplay(); calculate(); });
+        allowanceFields.forEach(item => {
+            document.getElementById(item.id).addEventListener("input", calculate);
         });
-    </script>
+        calculate();
+        updateContractDisplay();
+    });
+</script>
 </body>
 </html>
