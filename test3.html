@@ -7,89 +7,83 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: Arial, Tahoma, sans-serif;
-            direction: rtl; margin: 0; padding: 10px;
-            background: #f5f5f5; min-height: 100vh; padding-bottom: 25px;
-            font-size: 12px; display: flex; justify-content: center; align-items: flex-start;
+            direction: rtl; margin: 0; padding: 15px;
+            background: #f0f4f8; min-height: 100vh;
+            font-size: 13px; display: flex; justify-content: center; align-items: flex-start;
         }
         .container {
-            padding: 15px; border: 2px solid #000; border-radius: 8px;
-            width: fit-content; max-width: 95vw; margin: 10px auto;
-            background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); overflow-x: auto;
+            padding: 20px; border: 1px solid #d1d9e0; border-radius: 10px;
+            width: fit-content; max-width: 98vw; margin: 10px auto;
+            background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow-x: auto;
         }
         .inner-header {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #000;
+            margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e3edf7;
         }
-        .inner-logo { flex: 0 0 auto; font-size: 12px; color: #333; font-weight: bold; padding: 0 10px; }
+        .inner-logo { font-size: 13px; color: #2c3e50; font-weight: bold; }
         .inner-title { text-align: center; flex: 1; }
-        .directorate-title { font-size: 16px; color: #000; font-weight: bold; }
-        .department-title { font-size: 13px; color: #000; }
+        .directorate-title { font-size: 18px; color: #1e6f9f; font-weight: bold; }
+        .department-title { font-size: 14px; color: #2c3e50; margin-top: 4px; }
         h3 {
-            text-align: center; color: #000; margin: 0 0 12px; font-size: 18px;
-            padding: 8px; background: #f0f0f0; border-radius: 4px; border: 1px solid #000;
+            text-align: center; color: #1e6f9f; margin: 0 0 15px; font-size: 20px;
+            padding: 10px; background: #e3edf7; border-radius: 6px; border: 1px solid #b8d0e0;
         }
         .summary-line {
-            text-align: center; color: #333; font-size: 14px; font-weight: bold;
-            margin-bottom: 15px; background: #f9f9f9; padding: 6px; border-radius: 4px;
+            text-align: center; color: #2c3e50; font-size: 14px; font-weight: bold;
+            margin-bottom: 15px; background: #f0f7ff; padding: 8px; border-radius: 6px;
         }
-        .table-wrapper { overflow-x: auto; margin-bottom: 15px; border: 1px solid #000; max-width: 100%; }
+        .table-wrapper { overflow-x: auto; margin-bottom: 15px; border: 1px solid #dce4ec; border-radius: 6px; }
         .voucher-table {
-            width: 100%; border-collapse: collapse; font-size: 11px; white-space: nowrap;
+            width: 100%; border-collapse: collapse; font-size: 12px; white-space: nowrap;
         }
         .voucher-table th, .voucher-table td {
-            border: 1px solid #000; padding: 4px 6px; text-align: center; vertical-align: middle;
-            min-width: 0; width: 1%;
+            border: 1px solid #d1d9e0; padding: 6px 8px; text-align: center; vertical-align: middle;
         }
         .voucher-table thead th {
-            background-color: #ddd; color: #000; font-weight: bold; position: sticky; top: 0; z-index: 3;
+            background: #e3edf7; color: #1e6f9f; font-weight: bold; position: sticky; top: 0; z-index: 3;
         }
         .voucher-table .account-col {
-            background-color: #e0e0e0; font-weight: bold; color: #000;
+            background: #f2f6fa; font-weight: bold; color: #2c3e50;
             position: sticky; right: 0; z-index: 2; min-width: 70px; max-width: 70px; width: 70px;
         }
         .voucher-table .allowance-name {
-            background-color: #f0f0f0; font-weight: bold; color: #000; text-align: right;
-            padding-right: 8px; position: sticky; right: 70px; z-index: 2;
-            min-width: 90px; max-width: 90px; width: 90px;
+            background: #f8fafc; font-weight: bold; color: #2c3e50; text-align: right;
+            padding-right: 10px; position: sticky; right: 70px; z-index: 2;
+            min-width: 100px; max-width: 100px; width: 100px;
         }
-        .voucher-table .total-row { background-color: #e8e8e8 !important; font-weight: bold; color: #000; }
-        .voucher-table .summary-col { background-color: #f5f5f5; font-weight: bold; color: #000; min-width: 90px; }
+        .voucher-table .summary-col { background: #f4f8fc; font-weight: bold; color: #1e6f9f; }
+        .total-row { background: #e8f0fe !important; }
         .delete-col-btn {
-            background: none; border: none; color: #c00; font-size: 14px; font-weight: bold;
-            cursor: pointer; margin-right: 4px; vertical-align: middle;
+            background: none; border: none; color: #e74c3c; font-size: 15px; cursor: pointer;
         }
-        .delete-col-btn:hover { color: #f00; }
-        .merged-cell {
-            text-align: center; font-weight: bold; background: #fafafa;
-        }
-        .no-data { text-align: center; padding: 40px; color: #666; font-size: 16px; font-weight: bold; }
-        .separator { border-top: 2px solid #000; margin: 15px 0; width: 100%; }
+        .merged-cell { background: #f9fbfd; font-weight: bold; }
+        .no-data { text-align: center; padding: 40px; color: #7f8c8d; font-size: 16px; }
+        .separator { border-top: 2px solid #e0e8f0; margin: 15px 0; }
         .approval-section {
-            display: flex; justify-content: space-between; margin-top: 10px;
-            padding: 15px 0; border-top: 2px solid #000; font-size: 13px; font-weight: bold; min-height: 45px;
+            display: flex; justify-content: space-between; margin-top: 15px;
+            padding: 15px 0; border-top: 2px solid #e0e8f0; color: #2c3e50; font-weight: bold;
         }
-        .approval-right { text-align: right; flex: 2; }
-        .preparation { text-align: right; margin-right: 5ch; }
-        .button-container { display: flex; justify-content: center; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
-        .print-btn, .reset-btn, .back-btn {
-            padding: 8px 16px; font-size: 13px; color: white; border: none; cursor: pointer; border-radius: 4px;
+        .button-container { display: flex; justify-content: center; gap: 12px; margin-top: 15px; flex-wrap: wrap; }
+        .btn {
+            padding: 10px 18px; font-size: 14px; color: white; border: none; border-radius: 6px;
+            cursor: pointer; font-weight: bold;
         }
-        .print-btn { background: #333; } .print-btn:hover { background: #555; }
-        .reset-btn { background: #666; } .reset-btn:hover { background: #888; }
-        .back-btn { background: #444; } .back-btn:hover { background: #666; }
-        
-        .marquee span {
-            display: inline-block; padding-right: 100%; animation: marquee 20s linear infinite;
-            font-weight: bold; font-size: 16px;
+        .btn-print { background: #607d8b; } .btn-print:hover { background: #455a64; }
+        .btn-reset { background: #95a5a6; } .btn-reset:hover { background: #7f8c8d; }
+        .btn-back { background: #5dade2; } .btn-back:hover { background: #3498db; }
+        .disclaimer {
+            text-align: center; margin-top: 20px; padding: 8px; background: #fff9e6;
+            border: 1px solid #f0d060; border-radius: 6px; color: #7d6608; font-size: 12px;
         }
-        @keyframes marquee { 0% { transform: translate(0,0); } 100% { transform: translate(100%,0); } }
-        .disclaimer { text-align: center; margin-top: 15px; padding: 6px; background: #fff; border: 1px solid #ccc; color: #333; font-size: 11px; }
-
+        .footer-animation {
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #1e6f9f;
+            color: white; padding: 6px; text-align: center; font-size: 13px;
+        }
         @media print {
             @page { size: landscape; margin: 10mm; }
-            body { margin: 0; padding: 0; background: white; font-size: 8px; }
-            .container { border: 2px solid #000 !important; box-shadow: none; padding: 5px; overflow-x: visible; }
-            .button-container, .footer-animation, .disclaimer { display: none; }
+            body { background: white; }
+            .container { border: 1px solid #ccc; box-shadow: none; }
+            .btn, .footer-animation, .disclaimer { display: none; }
             .delete-col-btn { display: none; }
         }
     </style>
@@ -97,205 +91,171 @@
 <body>
 <div class="container">
     <div class="inner-header">
-        <div class="inner-logo">وزارة الصحة</div>
+        <div class="inner-logo">شعار الوزارة</div>
         <div class="inner-title">
             <div class="directorate-title">المديرية العامة للخدمات الصحية لمحافظة ظفار</div>
             <div class="department-title">دائرة الشؤون المالية - قسم الايرادات والمصروفات</div>
         </div>
-        <div class="inner-logo"></div>
+        <div class="inner-logo">رؤية 2040</div>
     </div>
-    <h3>سند صرف يدوي</h3>
-    <div class="summary-line" id="summaryLine">عدد الموظفين: 0</div>
+    <h3>سند الصرف</h3>
+    <div class="summary-line" id="summaryLine">عدد السجلات: 0</div>
+
     <div class="table-wrapper">
         <table class="voucher-table" id="voucherTable">
             <thead>
                 <tr>
                     <th class="account-col">رقم الحساب</th>
                     <th class="allowance-name">البدلات</th>
-                    <th class="summary-col">إجمالي قبل الخصم</th>
-                    <th class="summary-col">الأشتراكات</th>
-                    <th class="summary-col">إجمالي بعد الخصم</th>
+                    <th class="summary-col">قبل الخصم</th>
+                    <th class="summary-col">الخصم (8%)</th>
+                    <th class="summary-col">بعد الخصم</th>
                 </tr>
             </thead>
             <tbody id="voucherTableBody"></tbody>
         </table>
-        <div class="no-data" id="noDataMessage">📭 لا توجد بيانات محفوظة حالياً</div>
+        <div class="no-data" id="noDataMessage">لا توجد بيانات محفوظة</div>
     </div>
+
     <div class="separator"></div>
     <div class="approval-section">
         <div class="approval-right preparation">إعداد ومراجعة: _______________</div>
         <div class="approval-right">اعتمده: _______________</div>
     </div>
-    <div class="button-container">
-        <button class="print-btn" onclick="window.print()">🖨️ طباعة</button>
-        <button class="reset-btn" onclick="clearAllRecords()">🗑️ تفريغ الكل</button>
-        <button class="back-btn" onclick="window.location.href='sanad1.html'">↩️ العودة للحاسبة</button>
-    </div>
-    <div class="disclaimer">إخلاء المسؤولية : تم تصميم هذا الموقع لأغراض تسهيل المعلومات فقط.</div>
-</div>
 
+    <div class="button-container">
+        <button class="btn btn-print" onclick="window.print()">🖨️ طباعة</button>
+        <button class="btn btn-reset" onclick="clearAllRecords()">🗑️ تفريغ الكل</button>
+        <button class="btn btn-back" onclick="window.location.href='sanad1.html'">↩️ العودة للحاسبة</button>
+    </div>
+    <div class="disclaimer">إخلاء المسؤولية: هذه الأداة للمساعدة فقط وليست جهة رسمية.</div>
+</div>
+<div class="footer-animation">جميع الحقوق محفوظة © 2025 محمد جعبوب - قسم الايرادات والمصروفات</div>
 
 <script>
     const allowanceKeys = ['basic','housing','electricity','water','phone','transport','professional','costLiving'];
-    const allowanceNames = {
+    const names = {
         basic:'البدل الأساسي', housing:'بدل السكن', electricity:'بدل الكهرباء', water:'بدل الماء',
-        phone:'بدل الهاتف', transport:'بدل النقل', professional:'بدل مهني',
-        costLiving:'بدل غلاء معيشة'
+        phone:'بدل الهاتف', transport:'بدل النقل', professional:'بدل مهني', costLiving:'غلاء معيشة'
     };
-    const accountNumbers = {
+    const accounts = {
         basic:'21011101', housing:'21011201', electricity:'21011202', water:'21011203',
-        phone:'21011204', transport:'21011207', professional:'21011205',
-        costLiving:'21011209'
+        phone:'21011204', transport:'21011207', professional:'21011205', costLiving:'21011209'
     };
 
-    document.addEventListener('DOMContentLoaded', function () {
-        loadAndDisplayRecords();
-        window.addEventListener('storage', e => { if (e.key === 'salaryVoucherRecords') loadAndDisplayRecords(); });
-        document.getElementById('voucherTable').addEventListener('click', function(e) {
-            if (e.target.classList.contains('delete-col-btn')) {
-                const empNum = e.target.getAttribute('data-employee');
-                if (empNum && confirm('هل تريد حذف جميع بيانات الموظف رقم ' + empNum + '؟')) {
-                    deleteRecordByEmployeeNumber(empNum);
-                }
-            }
-        });
-    });
-
-    function deleteRecordByEmployeeNumber(empNum) {
-        let records = [];
-        const stored = localStorage.getItem('salaryVoucherRecords');
-        if (stored) {
-            try { records = JSON.parse(stored); } catch(e) { records = []; }
-        }
-        records = records.filter(rec => rec.employeeNumber !== empNum);
-        localStorage.setItem('salaryVoucherRecords', JSON.stringify(records));
-        loadAndDisplayRecords();
-    }
-
-    function loadAndDisplayRecords() {
-        let records = [];
-        const stored = localStorage.getItem('salaryVoucherRecords');
-        if (stored) {
-            try { records = JSON.parse(stored); } catch(e) { records = []; }
-        }
-
+    function loadData() {
+        let records = JSON.parse(localStorage.getItem('salaryVoucherRecords') || '[]');
         const thead = document.querySelector('#voucherTable thead tr');
         const tbody = document.getElementById('voucherTableBody');
-        const noDataMsg = document.getElementById('noDataMessage');
-        const summaryLine = document.getElementById('summaryLine');
+        const noData = document.getElementById('noDataMessage');
         const table = document.getElementById('voucherTable');
+        const summary = document.getElementById('summaryLine');
 
-        // إعادة تعيين الرأس (إزالة أعمدة الموظفين القديمة)
-        while (thead.children.length > 5) {
-            thead.removeChild(thead.children[2]);
-        }
+        while (thead.children.length > 5) thead.removeChild(thead.children[2]);
         tbody.innerHTML = '';
 
         if (records.length === 0) {
             table.style.display = 'none';
-            noDataMsg.style.display = 'block';
-            summaryLine.textContent = 'عدد الموظفين: 0';
+            noData.style.display = 'block';
+            summary.textContent = 'عدد السجلات: 0';
             return;
         }
-
         table.style.display = 'table';
-        noDataMsg.style.display = 'none';
-        summaryLine.textContent = 'عدد الموظفين: ' + records.length;
+        noData.style.display = 'none';
+        summary.textContent = `عدد السجلات: ${records.length}`;
 
-        // إضافة أعمدة الموظفين مع زر الحذف
-        records.forEach(record => {
-            const th = document.createElement('th');
-            th.innerHTML = record.employeeNumber + ' <button class="delete-col-btn" data-employee="' + record.employeeNumber + '" title="حذف العمود">🗑️</button>';
-            const summaryCols = thead.querySelectorAll('.summary-col');
-            thead.insertBefore(th, summaryCols[0]);
+        records.forEach(r => {
+            let th = document.createElement('th');
+            th.innerHTML = `${r.employeeNumber} <button class="delete-col-btn" data-emp="${r.employeeNumber}">🗑️</button>`;
+            thead.insertBefore(th, thead.children[2]);
         });
 
-        const totalBefore = {}, totalAfter = {};
-        allowanceKeys.forEach(k => { totalBefore[k] = 0; totalAfter[k] = 0; });
-        records.forEach(record => {
-            const al = record.allowances || {};
-            const alAfter = record.allowancesAfter || {};
+        const totals = { before: {}, after: {} };
+        allowanceKeys.forEach(k => { totals.before[k] = 0; totals.after[k] = 0; });
+        records.forEach(r => {
+            const al = r.allowances || {};
+            const alAfter = r.allowancesAfter || {};
             allowanceKeys.forEach(k => {
-                totalBefore[k] += al[k] || 0;
-                totalAfter[k] += (alAfter[k] !== undefined ? alAfter[k] : (al[k] || 0)*0.92);
+                totals.before[k] += al[k] || 0;
+                totals.after[k] += (alAfter[k] !== undefined ? alAfter[k] : (al[k]||0)*0.92);
             });
         });
 
-        // صفوف البدلات
         allowanceKeys.forEach(key => {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td class="account-col">${accountNumbers[key]}</td><td class="allowance-name">${allowanceNames[key]}</td>`;
-            records.forEach(record => {
-                const val = (record.allowances && record.allowances[key]) ? record.allowances[key] : 0;
+            let row = document.createElement('tr');
+            row.innerHTML = `<td class="account-col">${accounts[key]}</td><td class="allowance-name">${names[key]}</td>`;
+            records.forEach(r => {
+                let val = (r.allowances && r.allowances[key]) ? r.allowances[key] : 0;
                 row.innerHTML += `<td>${val.toFixed(3)}</td>`;
             });
-            const before = totalBefore[key];
-            const ded = before * 0.08;
-            const after = totalAfter[key];
-            row.innerHTML += `<td class="summary-col">${before.toFixed(3)}</td><td class="summary-col">${ded.toFixed(3)}</td><td class="summary-col">${after.toFixed(3)}</td>`;
+            row.innerHTML += `<td class="summary-col">${totals.before[key].toFixed(3)}</td>`;
+            row.innerHTML += `<td class="summary-col">${(totals.before[key]*0.08).toFixed(3)}</td>`;
+            row.innerHTML += `<td class="summary-col">${totals.after[key].toFixed(3)}</td>`;
             tbody.appendChild(row);
         });
 
-        // صف الإجمالي (إجمالي البدلات لكل موظف)
-        const totalRow = document.createElement('tr');
+        // إجمالي البدلات
+        let totalRow = document.createElement('tr');
         totalRow.className = 'total-row';
-        totalRow.innerHTML = '<td class="account-col">-</td><td class="allowance-name">إجمالي البدلات</td>';
-        const employeeTotals = [];
-        records.forEach(record => {
+        totalRow.innerHTML = '<td class="account-col">الإجمالي</td><td class="allowance-name">إجمالي البدلات</td>';
+        let empTotals = [];
+        records.forEach(r => {
             let sum = 0;
-            allowanceKeys.forEach(k => { sum += (record.allowances && record.allowances[k]) ? record.allowances[k] : 0; });
-            employeeTotals.push(sum);
+            allowanceKeys.forEach(k => sum += (r.allowances && r.allowances[k]) ? r.allowances[k] : 0);
+            empTotals.push(sum);
             totalRow.innerHTML += `<td>${sum.toFixed(3)}</td>`;
         });
-        const gBefore = allowanceKeys.reduce((acc,k) => acc + totalBefore[k], 0);
-        const gDed = gBefore * 0.08;
-        const gAfter = allowanceKeys.reduce((acc,k) => acc + totalAfter[k], 0);
-        totalRow.innerHTML += `<td class="summary-col">${gBefore.toFixed(3)}</td><td class="summary-col">${gDed.toFixed(3)}</td><td class="summary-col">${gAfter.toFixed(3)}</td>`;
+        let gBefore = allowanceKeys.reduce((a,k)=>a+totals.before[k],0);
+        totalRow.innerHTML += `<td class="summary-col">${gBefore.toFixed(3)}</td><td class="summary-col">${(gBefore*0.08).toFixed(3)}</td><td class="summary-col">${allowanceKeys.reduce((a,k)=>a+totals.after[k],0).toFixed(3)}</td>`;
         tbody.appendChild(totalRow);
 
-        // صف اشتراكات صندوق الحماية (8% في عمود الخصم فقط)
-        const insuranceRow = document.createElement('tr');
-        insuranceRow.style.backgroundColor = '#fef9e7';
-        insuranceRow.innerHTML = '<td colspan="2" class="merged-cell">اشتراكات صندوق الحماية</td>';
-        const insuranceValues = [];
-        records.forEach((record, idx) => {
-            const ins = employeeTotals[idx] * 0.08;
-            insuranceValues.push(ins);
-            // قيمة الاشتراك توضع في العمود الثاني (الخصم) للخلية، ولكن هنا الخلية مخصصة للموظف ولا تخص العمود الملخص.
-            // سنضيف خلية الموظف ثم الأعمدة الثلاثة الملخصة.
+        // صف الاشتراكات
+        let insuranceRow = document.createElement('tr');
+        insuranceRow.style.background = '#fcf8e8';
+        insuranceRow.innerHTML = '<td colspan="2" class="merged-cell">صندوق الحماية (8%)</td>';
+        let insTotal = 0;
+        records.forEach((r,i) => {
+            let ins = empTotals[i] * 0.08;
+            insTotal += ins;
             insuranceRow.innerHTML += `<td>${ins.toFixed(3)}</td>`;
         });
-        // الأعمدة الثلاثة: قبل الخصم (فارغ)، الخصم (الإجمالي)، بعد الخصم (فارغ)
-        insuranceRow.innerHTML += `<td class="summary-col"></td>`;
-        insuranceRow.innerHTML += `<td class="summary-col">${insuranceValues.reduce((a,b)=>a+b,0).toFixed(3)}</td>`;
-        insuranceRow.innerHTML += `<td class="summary-col"></td>`;
+        insuranceRow.innerHTML += `<td class="summary-col"></td><td class="summary-col">${insTotal.toFixed(3)}</td><td class="summary-col"></td>`;
         tbody.appendChild(insuranceRow);
 
-        // صف الصافي بعد الاشتراك (في عمود بعد الخصم فقط)
-        const netRow = document.createElement('tr');
-        netRow.style.backgroundColor = '#eafaf1';
-        netRow.innerHTML = '<td colspan="2" class="merged-cell">الصافي المستحق</td>';
-        const netValues = [];
-        records.forEach((record, idx) => {
-            const netVal = employeeTotals[idx] - insuranceValues[idx];
-            netValues.push(netVal);
+        // صف الصافي
+        let netRow = document.createElement('tr');
+        netRow.style.background = '#eafaf1';
+        netRow.innerHTML = '<td colspan="2" class="merged-cell">الصافي بعد الاشتراك</td>';
+        let netTotal = 0;
+        records.forEach((r,i) => {
+            let netVal = empTotals[i] - empTotals[i]*0.08;
+            netTotal += netVal;
             netRow.innerHTML += `<td>${netVal.toFixed(3)}</td>`;
         });
-        // الأعمدة الثلاثة: قبل الخصم (فارغ)، الخصم (فارغ)، بعد الخصم (الإجمالي)
-        netRow.innerHTML += `<td class="summary-col"></td>`;
-        netRow.innerHTML += `<td class="summary-col"></td>`;
-        netRow.innerHTML += `<td class="summary-col">${netValues.reduce((a,b)=>a+b,0).toFixed(3)}</td>`;
+        netRow.innerHTML += `<td class="summary-col"></td><td class="summary-col"></td><td class="summary-col">${netTotal.toFixed(3)}</td>`;
         tbody.appendChild(netRow);
     }
 
+    document.getElementById('voucherTable').addEventListener('click', e => {
+        if (e.target.classList.contains('delete-col-btn')) {
+            let emp = e.target.dataset.emp;
+            if (confirm(`حذف بيانات الموظف ${emp}؟`)) {
+                let records = JSON.parse(localStorage.getItem('salaryVoucherRecords') || '[]');
+                records = records.filter(r => r.employeeNumber !== emp);
+                localStorage.setItem('salaryVoucherRecords', JSON.stringify(records));
+                loadData();
+            }
+        }
+    });
+
     function clearAllRecords() {
-        if (confirm('هل تريد حذف جميع بيانات سند الصرف؟')) {
+        if (confirm('حذف جميع البيانات؟')) {
             localStorage.removeItem('salaryVoucherRecords');
-            loadAndDisplayRecords();
-            alert('تم التفريغ.');
+            loadData();
         }
     }
     window.clearAllRecords = clearAllRecords;
+    loadData();
 </script>
 </body>
 </html>
